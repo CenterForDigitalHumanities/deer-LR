@@ -1,31 +1,110 @@
 <!DOCTYPE html>
 <!--
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
-
-    Attempt a Lived Relogion questionnairre through DEER.  Perhaps create a supported template called
-    questionnairre or something back into DEER proper in the end.
-
-    At any rate, expand the DEER here to have a questionnaire template type and gear that for the interface here
-    for the Lived Relogions project.  The questionnairre can be found at https://docs.google.com/document/d/1WrvyBG8QZtLMIwmtyc-w5jcR5vgsM7hTYl_LoQ-pSgQ/
-
-
     -->
 <html>
 
 <head>
-    <title>DEER Lived Religion</title>
+    <title>Lived Religions questionnaire encoder</title>
     <meta charset="UTF-8">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/chota@latest"> -->
 </head>
 
 <body>
-    <!-- <script src="./releases/alpha/deer.js" type="module"></script> -->
-    <script src="./js/deer.js" type="module"></script>
+    <form deer-type="Thing" deer-context="http://schema.org" deer-id="https://example.com/id/001">
+        <label>Label:</label>
+        <input type="text" deer-key="name" deer-source="https://example.com/id/001">
+        <input type="hidden" deer-key="creator" value="demoAgent">
+        <input type="date" deer-key="date" deer-source="https://example.com/id/001">
+        <select>
+            <option>Example choice</option>
+            <option>Unknown to DEER</option>
+            <option>Use as usual</option>
+        </select>
+        <textarea deer-key="description" deer-source="https://example.com/id/001"></textarea>
+        <input type="submit">
+    </form>
+
+    <form deer-type="Sense" deer-context="http://schema.org" deer-id="https://example.com/id/002">
+        <label>Label:</label>
+        <input type="submit">
+    </form>
+
+    <form deer-type="Space" deer-context="http://schema.org" deer-id="https://example.com/id/003">
+        <label>Label:</label>
+        <input type="submit">
+    </form>
+
+    <form deer-type="Word" deer-context="http://schema.org" deer-id="https://example.com/id/004">
+        <label>Label:</label>
+        <input type="submit">
+    </form>
+
+    <form deer-type="Practice" deer-context="http://schema.org" deer-id="https://example.com/id/005">
+        <label>Label:</label>
+        <input type="submit">
+    </form>
+
+
+
+
+
+
+
+
+
+
+    <!-- <header>Person Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
+        deer-template="person"></div>
+    
+    <header>JSON Template</header>
+    <deer-view deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"></deer-view>
+
+    <header>Entity Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
+        deer-template="entity"></div>
+    <header>List Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d15afe4b0a44e13e6170c"
+        deer-list="itemListElement" deer-template="list"></div>
+    <header>Property Template</header>
+    <div class="deer-view" title="Sample Prop" deer-key="name"
+        deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706" deer-template="prop"></div>
+    <header>Cat Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
+        deer-template="cat"></div>
+    <header>List Template with Links</header>
+    <div class="deer-view" deer-link="#" deer-id="http://devstore.rerum.io/v1/id/5c9d15afe4b0a44e13e6170c"
+        deer-list="itemListElement" deer-template="list"></div>
+    <header>Load from Hash</header>
+    <div class="col deer-view" id="hashExample" deer-template="entity">
+        no hash
+    </div>
+    <header>Listening to the Form</header>
+    <div class="col deer-view" deer-listening="formExample" deer-template="entity"></div> -->
+
+
+
+    <!-- RELEASED master branch code -->
+    <!-- <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-utils.js" type="module"></script>
+    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-render.js" type="module"></script>
+    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-record.js" type="module"></script>
+    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-config.js" type="module"></script>
+    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer.js" type="module"></script> -->
+
+    <!-- WORKING local deer code -->
+    <script src="./deer-lr-working/deer-utils.js" type="module"></script>
+    <script src="./deer-lr-working/deer-render.js" type="module"></script>
+    <script src="./deer-lr-working/deer-record.js" type="module"></script>
+    <script src="./deer-lr-working/deer-config.js" type="module"></script>
+    <script src="./deer-lr-working/deer.js" type="module"></script>
+    
     <script>
         window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
 
         document.onscroll = () => {
-            //badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
-            //tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
+            badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
+            tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
         }
     </script>
 </body>
