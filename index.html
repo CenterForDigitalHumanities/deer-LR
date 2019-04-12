@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    -->
+<html>
+
+<head>
+    <title>Lived Religions questionnaire encoder</title>
+    <meta charset="UTF-8">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/chota@latest"> -->
+</head>
+
+<body>
+    <header>Person Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
+        deer-template="person"></div>
+    
+    <header>JSON Template</header>
+    <deer-view deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"></deer-view>
+
+    <header>Entity Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
+        deer-template="entity"></div>
+    <header>List Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d15afe4b0a44e13e6170c"
+        deer-list="itemListElement" deer-template="list"></div>
+    <header>Property Template</header>
+    <div class="deer-view" title="Sample Prop" deer-key="name"
+        deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706" deer-template="prop"></div>
+    <header>Cat Template</header>
+    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
+        deer-template="cat"></div>
+    <header>List Template with Links</header>
+    <div class="deer-view" deer-link="#" deer-id="http://devstore.rerum.io/v1/id/5c9d15afe4b0a44e13e6170c"
+        deer-list="itemListElement" deer-template="list"></div>
+    <header>Load from Hash</header>
+    <div class="col deer-view" id="hashExample" deer-template="entity">
+        no hash
+    </div>
+    <header>Listening to the Form</header>
+    <div class="col deer-view" deer-listening="formExample" deer-template="entity"></div>
+    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer.js" type="module"></script>
+    <!-- <script src="./js/deer.js" type="module"></script> -->
+    <script>
+        window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
+
+        document.onscroll = () => {
+            badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
+            tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
+        }
+    </script>
+</body>
+
+</html>

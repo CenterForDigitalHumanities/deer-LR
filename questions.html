@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+
+    Attempt a Lived Relogion questionnairre through DEER.  Perhaps create a supported template called
+    questionnairre or something back into DEER proper in the end.
+
+    At any rate, expand the DEER here to have a questionnaire template type and gear that for the interface here
+    for the Lived Relogions project.  The questionnairre can be found at https://docs.google.com/document/d/1WrvyBG8QZtLMIwmtyc-w5jcR5vgsM7hTYl_LoQ-pSgQ/
+
+
+    -->
+<html>
+
+<head>
+    <title>DEER Lived Religion</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <!-- <script src="./releases/alpha/deer.js" type="module"></script> -->
+    <script src="./js/deer.js" type="module"></script>
+    <script>
+        window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
+
+        document.onscroll = () => {
+            //badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
+            //tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
+        }
+    </script>
+</body>
+
+</html>
