@@ -37,3 +37,7 @@ import { default as record, initializeDeerForms } from './deer-record.js'
 // fire up the element detection as needed
 initializeDeerViews(DEER) 
 initializeDeerForms(DEER)
+
+//For other devs to use DEER without altering these files, we need to export DEER 
+export {DEER}
+
