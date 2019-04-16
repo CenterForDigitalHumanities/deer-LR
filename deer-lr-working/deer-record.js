@@ -79,7 +79,7 @@ export default class DeerReport {
             UTILS.broadcast(undefined,DEER.EVENTS.CREATED,this.elem,record)
         }
         formAction.then((function(entity) {
-            let annotations = Array.from(this.inputs).map(input => {
+            let annotations = Array.from(this.elem.querySelectorAll(DEER.INPUTS.map(s=>s+"["+DEER.KEY+"]").join(","))).map(input => {
                 let inputId = input.getAttribute(DEER.SOURCE)
                 let action = (inputId) ? "UPDATE" : "CREATE"
                 let annotation = {
@@ -90,6 +90,10 @@ export default class DeerReport {
                 if(inputId) { annotation["@id"] = inputId }
                 annotation.body[input.getAttribute(DEER.KEY)] = {
                     value: input.value
+                }
+                // TODO: maybe we need a deer-value to assign things here... or some option...
+                if(input.getAttribute(DEER.KEY)==="targetCollection"){
+                    annotation.body.targetCollection = input.value
                 }
                 let ev = input.getAttribute(DEER.EVIDENCE) || this.evidence
                 if(ev) { annotation.body[input.getAttribute(DEER.KEY)].evidence = ev }
