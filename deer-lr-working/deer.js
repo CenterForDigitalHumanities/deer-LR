@@ -28,8 +28,8 @@ DEER.URLS = {
     QUERY: "http://tinydev.rerum.io/app/query",
     SINCE: "http://devstore.rerum.io/v1/since"
 }
-
-Object.assign(DEER.UTILS, UTILS)
+//Assign utility functions as the DEER level which a user can overwrite or extend if they choose.
+DEER.UTILS = UTILS
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
