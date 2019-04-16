@@ -90,12 +90,24 @@ export default {
     /**
      * Attempt to discover a readable label from the object
      */
+     /*
+     @Deprecated?  
     get getLabel() {
         return (obj,noLabel="[ unlabeled ]",options={}) => {
             if(typeof obj === "string") { return obj }
             let label = obj[options.label]||obj.name||obj.label||obj.title
             return (label)?this.getValue(label):noLabel
         }
+    },
+    */
+    /**
+     * Attempt to discover a readable label from the object
+     */
+     getLabel: function(obj,noLabel="[ unlabeled ]",options={}) {
+        if(typeof obj === "string") { return obj }
+        let label = obj[options.label]||obj.name||obj.label||obj.title
+        return (label)?this.getValue(label):noLabel
+        
     },
     /**
      * Take a known object with an id and query for annotations targeting it.

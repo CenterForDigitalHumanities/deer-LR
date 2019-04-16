@@ -10,95 +10,73 @@
     <!-- <link rel="stylesheet" href="https://unpkg.com/chota@latest"> -->
 </head>
 
+<style>
+    #POCpart2{
+        display : none;
+    }
+</style>
+
 <body>
-    <div class="thingForms">
-        <!-- Only put questions about things in here -->
-        <form deer-type="Thing" deer-context="http://schema.org" deer-id="https://example.com/id/001">
-        <label>Label:</label>
-        <input type="text" deer-key="name" deer-source="https://example.com/id/001">
-        <input type="hidden" deer-key="creator" value="demoAgent">
-        <input type="date" deer-key="date" deer-source="https://example.com/id/001">
-        <select>
-            <option>Example choice</option>
-            <option>Unknown to DEER</option>
-            <option>Use as usual</option>
-        </select>
-        <textarea deer-key="description" deer-source="https://example.com/id/001"></textarea>
-        <input type="submit">
-        </form>
+
+    <div id="POCpart1">
+        <header>JSON Template</header>
+        <deer-view deer-id="http://devstore.rerum.io/v1/id/11111"></deer-view>
+
+        <header>Entity Template</header>
+        <div class="deer-view" deer-template="entity" deer-id="http://devstore.rerum.io/v1/id/5c6302efe4b0ee72dfa56843"
+            deer-template="entity"></div>
+
+        <header>Person Template</header>
+        <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c66ea43e4b022c367220499"
+            deer-template="person"></div>
+
+        <header>My SENSE Template</header>
+        <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a"
+            deer-template="sense"></div>
+
+        <div class="deer-view" id="hashExample" deer-template="entity">
+            no hash
+        </div>
     </div>
     
-    <div class="senseForms">
-        <!-- Only put questions about senses in here -->
-        <form deer-type="Sense" deer-context="http://schema.org" deer-id="https://example.com/id/002">
+    <div id="POCpart2">
+
+        <header>A form for a PERSON</header>
+        <form deer-type="Person" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
             <label>Label:</label>
+            <input type="text" deer-key="name" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+            <input type="hidden" deer-key="creator" value="demoAgent">
+            <input type="date" deer-key="date" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+            <select>
+                <option>Example choice</option>
+                <option>Unknown to DEER</option>
+                <option>Use as usual</option>
+            </select>
+            <textarea deer-key="description" deer-source=""></textarea>
             <input type="submit">
         </form>
 
-    </div>
-    
-    <div class="spaceForms">
-        <!-- Only put questions about spaces in here -->
-        <form deer-type="Space" deer-context="http://schema.org" deer-id="https://example.com/id/003">
+        <header>A form for a SENSE</header>
+        <form deer-type="Sense" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
             <label>Label:</label>
+            <input type="text" deer-key="name" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+            <input type="hidden" deer-key="creator" value="demoAgent">
+
+            <label>Kind:</label>
+            <select deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                <option>Sight</option>
+                <option>Smell</option>
+                <option>Taste</option>
+                <option>Touch</option>
+                <option>Sound</option>
+            </select>
+
             <input type="submit">
         </form>
+
+
     </div>
     
-    <div class="wordForms"> 
-        <!-- Only put questions about words in here -->
-        <form deer-type="Word" deer-context="http://schema.org" deer-id="https://example.com/id/004">
-            <label>Label:</label>
-            <input type="submit">
-        </form>
-    </div>
-    
-    <div class="practiceForms">
-        <!-- Only put questions about words in here -->
-        <form deer-type="Practice" deer-context="http://schema.org" deer-id="https://example.com/id/005">
-            <label>Label:</label>
-            <input type="submit">
-        </form>
-    </div>
-
-    <div class="deer-view" id="hashExample" deer-template="entity">
-        no hash
-    </div>
-    
-
-
-
-
-    <!-- <header>Person Template</header>
-    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
-        deer-template="person"></div>
-    
-    <header>JSON Template</header>
-    <deer-view deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"></deer-view>
-
-    <header>Entity Template</header>
-    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
-        deer-template="entity"></div>
-    <header>List Template</header>
-    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d15afe4b0a44e13e6170c"
-        deer-list="itemListElement" deer-template="list"></div>
-    <header>Property Template</header>
-    <div class="deer-view" title="Sample Prop" deer-key="name"
-        deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706" deer-template="prop"></div>
-    <header>Cat Template</header>
-    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706"
-        deer-template="cat"></div>
-    <header>List Template with Links</header>
-    <div class="deer-view" deer-link="#" deer-id="http://devstore.rerum.io/v1/id/5c9d15afe4b0a44e13e6170c"
-        deer-list="itemListElement" deer-template="list"></div>
-    <header>Load from Hash</header>
-    <div class="col deer-view" id="hashExample" deer-template="entity">
-        no hash
-    </div>
-    <header>Listening to the Form</header>
-    <div class="col deer-view" deer-listening="formExample" deer-template="entity"></div> -->
-
-
 
     <!-- RELEASED master branch code -->
     <!-- <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-utils.js" type="module"></script>
