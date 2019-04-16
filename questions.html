@@ -11,7 +11,9 @@
 </head>
 
 <body>
-    <form deer-type="Thing" deer-context="http://schema.org" deer-id="https://example.com/id/001">
+    <div class="thingForms">
+        <!-- Only put questions about things in here -->
+        <form deer-type="Thing" deer-context="http://schema.org" deer-id="https://example.com/id/001">
         <label>Label:</label>
         <input type="text" deer-key="name" deer-source="https://example.com/id/001">
         <input type="hidden" deer-key="creator" value="demoAgent">
@@ -23,33 +25,46 @@
         </select>
         <textarea deer-key="description" deer-source="https://example.com/id/001"></textarea>
         <input type="submit">
-    </form>
+        </form>
+    </div>
+    
+    <div class="senseForms">
+        <!-- Only put questions about senses in here -->
+        <form deer-type="Sense" deer-context="http://schema.org" deer-id="https://example.com/id/002">
+            <label>Label:</label>
+            <input type="submit">
+        </form>
 
-    <form deer-type="Sense" deer-context="http://schema.org" deer-id="https://example.com/id/002">
-        <label>Label:</label>
-        <input type="submit">
-    </form>
+    </div>
+    
+    <div class="spaceForms">
+        <!-- Only put questions about spaces in here -->
+        <form deer-type="Space" deer-context="http://schema.org" deer-id="https://example.com/id/003">
+            <label>Label:</label>
+            <input type="submit">
+        </form>
+    </div>
+    
+    <div class="wordForms"> 
+        <!-- Only put questions about words in here -->
+        <form deer-type="Word" deer-context="http://schema.org" deer-id="https://example.com/id/004">
+            <label>Label:</label>
+            <input type="submit">
+        </form>
+    </div>
+    
+    <div class="practiceForms">
+        <!-- Only put questions about words in here -->
+        <form deer-type="Practice" deer-context="http://schema.org" deer-id="https://example.com/id/005">
+            <label>Label:</label>
+            <input type="submit">
+        </form>
+    </div>
 
-    <form deer-type="Space" deer-context="http://schema.org" deer-id="https://example.com/id/003">
-        <label>Label:</label>
-        <input type="submit">
-    </form>
-
-    <form deer-type="Word" deer-context="http://schema.org" deer-id="https://example.com/id/004">
-        <label>Label:</label>
-        <input type="submit">
-    </form>
-
-    <form deer-type="Practice" deer-context="http://schema.org" deer-id="https://example.com/id/005">
-        <label>Label:</label>
-        <input type="submit">
-    </form>
-
-
-
-
-
-
+    <div class="deer-view" id="hashExample" deer-template="entity">
+        no hash
+    </div>
+    
 
 
 
@@ -93,10 +108,10 @@
     <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer.js" type="module"></script> -->
 
     <!-- WORKING local deer code -->
-    <script src="./deer-lr-working/deer-utils.js" type="module"></script>
+<!--     <script src="./deer-lr-working/deer-utils.js" type="module"></script>
     <script src="./deer-lr-working/deer-render.js" type="module"></script>
     <script src="./deer-lr-working/deer-record.js" type="module"></script>
-    <script src="./deer-lr-working/deer-config.js" type="module"></script>
+    <script src="./deer-lr-working/deer-config.js" type="module"></script> -->
     <script src="./deer-lr-working/deer.js" type="module"></script>
     
     <script>
