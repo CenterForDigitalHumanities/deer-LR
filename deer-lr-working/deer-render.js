@@ -92,6 +92,7 @@ RENDER.element = function(elem,obj) {
  * @param {Object} options additional properties to draw with the JSON
  */
 DEER.TEMPLATES.json = function(obj, options={}) {
+    console.log("json template")
     let indent = options.indent || 4
     let replacer = (k,v) => {
         if(DEER.SUPPRESS.indexOf(k) !== -1) return
@@ -111,6 +112,7 @@ DEER.TEMPLATES.json = function(obj, options={}) {
  * @param {String} label The label to be displayed when drawn
  */
 DEER.TEMPLATES.prop= function(obj, options = {}) {
+    console.log("prop template")
     let key = options.key || "@id"
     let prop = obj[key]
     let label = options.label || UTILS.getLabel(obj,prop)
@@ -127,6 +129,7 @@ DEER.TEMPLATES.prop= function(obj, options = {}) {
  * @param {Object} options additional properties to draw with the Entity
  */
 DEER.TEMPLATES.entity= function(obj, options = {}) {
+    console.log("entity template")
     let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
     let list = ``
     
@@ -161,6 +164,7 @@ DEER.TEMPLATES.entity= function(obj, options = {}) {
 }
 
 DEER.TEMPLATES.list= function(obj, options={}) {
+    console.log("list template")
     let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
     if(options.list){
         tmpl += `<ul>`
@@ -179,6 +183,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
  * @param {Object} options additional properties to draw with the Person
  */
 DEER.TEMPLATES.person= function(obj, options={}) {
+    console.log("person template")
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
         let dob = DEER.TEMPLATES.prop(obj, {key:"birthDate", title:"Birth Date"}) || ``
@@ -200,6 +205,7 @@ DEER.TEMPLATES.person= function(obj, options={}) {
  * @param {Object} options additional properties to draw with the Event
  */
 DEER.TEMPLATES.event= function(obj, options={}) {
+    console.log("event template")
     try {
         let tmpl = `<h1>${UTILS.getLabel(obj)}</h1>`
         return tmpl
