@@ -7,6 +7,10 @@
 <head>
     <title>Lived Religions questionnaire encoder</title>
     <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- <link rel="stylesheet" href="https://unpkg.com/chota@latest"> -->
 </head>
 
@@ -17,75 +21,86 @@
 </style>
 
 <body>
-
-    <div id="POCpart1">
-        <header>JSON Template</header>
-        <deer-view deer-id="http://devstore.rerum.io/v1/id/11111"></deer-view>
-
-        <header>Entity Template</header>
-        <div class="deer-view" deer-template="entity" deer-id="http://devstore.rerum.io/v1/id/5c6302efe4b0ee72dfa56843"
-            deer-template="entity"></div>
-
-        <header>Person Template</header>
-        <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c66ea43e4b022c367220499"
-            deer-template="person"></div>
-
-        <header>My SENSE Template</header>
-        <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a"
-            deer-template="sense"></div>
-
-        <div class="deer-view" id="hashExample" deer-template="entity">
-            no hash
+    <div class="container-fluid">
+        <div class="container" id="POCpart1">
+            <div class="row">
+                <div class="col-lg-6">
+                    <header>JSON Template</header>
+                    <deer-view deer-id="http://devstore.rerum.io/v1/id/11111"></deer-view>
+                </div>
+                <div class="col-lg-6">
+                    <header>Entity Template</header>
+                    <div class="deer-view" deer-template="entity" deer-id="http://devstore.rerum.io/v1/id/5c6302efe4b0ee72dfa56843"
+                    deer-template="entity"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <header>Person Template</header>
+                    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c66ea43e4b022c367220499"
+                    deer-template="person"></div>
+                </div>
+                <div class="col-lg-6">
+                    <header>My SENSE Template</header>
+                    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a"
+                    deer-template="sense"></div>
+                </div> 
+            </div>
+            <div class="row">
+                <header>My HASH</header>
+                <deer-view id="hashExample" deer-template="entity">
+                no hash
+                </deer-view>
+            </div>
+        </div>
+        
+        <div class="row" id="POCpart2">
+            <div class="col-md-4">
+                <header>A form for a PERSON</header>
+                <form deer-type="Person" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+                    <label>Label:</label>
+                    <input type="text" deer-key="name" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+                    <input type="hidden" deer-key="creator" value="demoAgent">
+                    <input type="date" deer-key="date" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+                    <select>
+                        <option>Example choice</option>
+                        <option>Unknown to DEER</option>
+                        <option>Use as usual</option>
+                    </select>
+                    <textarea deer-key="description" deer-source=""></textarea>
+                    <input type="submit">
+                </form>
+            </div>
+            <div class="col-md-4">
+                <header>A form for a SENSE</header>
+                <form deer-type="Sense" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                    <label>Label:</label>
+                    <input type="text" deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                    <input type="hidden" deer-key="creator" value="demoAgent">
+                    <label>Kind:</label>
+                    <select deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                        <option>Sight</option>
+                        <option>Smell</option>
+                        <option>Taste</option>
+                        <option>Touch</option>
+                        <option>Sound</option>
+                    </select>
+                    <select deer-key="religious_tradition" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                        <option>Muslim</option>
+                        <option>Christian</option>
+                        <option>Jewish</option>
+                        <option>Zoroastrian</option>
+                        <option>Agnostic</option>
+                    </select>
+                    <label>Location:</label>
+                    <input type="text" deer-key="location" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                    <label>Typical User:</label>
+                    <input type="text" deer-key="typical_use" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
+                    <input type="submit">
+                </form>
+            </div>
         </div>
     </div>
-    
-    <div id="POCpart2">
-
-        <header>A form for a PERSON</header>
-        <form deer-type="Person" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
-            <label>Label:</label>
-            <input type="text" deer-key="name" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
-            <input type="hidden" deer-key="creator" value="demoAgent">
-            <input type="date" deer-key="date" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
-            <select>
-                <option>Example choice</option>
-                <option>Unknown to DEER</option>
-                <option>Use as usual</option>
-            </select>
-            <textarea deer-key="description" deer-source=""></textarea>
-            <input type="submit">
-        </form>
-
-        <header>A form for a SENSE</header>
-        <form deer-type="Sense" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-            <label>Label:</label>
-            <input type="text" deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-            <input type="hidden" deer-key="creator" value="demoAgent">
-            <label>Kind:</label>
-            <select deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                <option>Sight</option>
-                <option>Smell</option>
-                <option>Taste</option>
-                <option>Touch</option>
-                <option>Sound</option>
-            </select>
-            <select deer-key="religious_tradition" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                <option>Muslim</option>
-                <option>Christian</option>
-                <option>Jewish</option>
-                <option>Zoroastrian</option>
-                <option>Agnostic</option>
-            </select>
-            <label>Location:</label>
-            <input type="text" deer-key="location" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-            <label>Typical User:</label>
-            <input type="text" deer-key="typical_use" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-            <input type="submit">
-        </form>
-
-
-    </div>
-    
 
     <!-- RELEASED master branch code -->
     <!-- <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-utils.js" type="module"></script>
