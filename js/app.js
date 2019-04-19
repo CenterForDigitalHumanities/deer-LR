@@ -51,7 +51,7 @@ MYDEER.TEMPLATES.person= function(obj, options={}) {
      	let cod = `<lbl>Cause of Death</lbl> <theval>${MYDEER.UTILS.getValue(obj.causeOfDeath, [], "string")}</theval>`
       	let aad = `<lbl>Age at Death</lbl> <theval>${MYDEER.UTILS.getValue(obj.deathAge, [], "string")}</theval>`
        	let dod = `<lbl>Date of Death</lbl> <theval>${MYDEER.UTILS.getValue(obj.deathDeate, [], "number")}</theval>`
-        let depiction = `<lbl>Photo</lbl> <theval>${MYDEER.UTILS.getValue(obj.depiction, [], "string")}</theval>`
+        let depiction = `<lbl>Photo</lbl> <theval><img src="${MYDEER.UTILS.getValue(obj.depiction, [], "string")}"/></theval>`
      	let familyName = `<lbl>Family Name</lbl> <theval>${MYDEER.UTILS.getValue(obj.familyName, [], "string")}</theval>`
       	let givenName = `<lbl>Given Name</lbl> <theval>${MYDEER.UTILS.getValue(obj.givenName, [], "string")}</theval>`
         let gender = `<lbl>Gender</lbl> <theval>${MYDEER.UTILS.getValue(obj.gender, [], "string")}</theval>`

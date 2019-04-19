@@ -174,21 +174,20 @@ export default {
                         
                         if (typeof discoveredValue === "string" || !discoveredValue.source) {
                             // include an origin for this property, placehold madsrdf:Source
+                            let source = {
+                                citationSource: annos[i]["@id"],
+                                citationNote: annos[i].label || "Composed object from DEER",
+                                comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
+                            }
                             if(typeof discoveredValue === "string"){
+                                //Then the value we discovered is a string and we want it to be an object with value and source
                                 valToAssign["value"] = discoveredValue
-                                valToAssign["source"] = {
-                                    citationSource: annos[i]["@id"],
-                                    citationNote: annos[i].label || "Composed object from DEER",
-                                    comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
-                                }
+                                valToAssign["source"] = source
 
                             }
                             else{
-                                discoveredValue["source"] = {
-                                    citationSource: annos[i]["@id"],
-                                    citationNote: annos[i].label || "Composed object from DEER",
-                                    comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
-                                }
+                                //Then the value we discovered is already an object, we want it to have a source
+                                discoveredValue["source"] = source
                                 valToAssign = discoveredValue
                             }
                         }
@@ -199,7 +198,8 @@ export default {
                         } 
                         else {
                             let assignObj = {}
-                            assignObj[annoLabel] = valToAssign
+                            //Now we can assign these annos targeting this object like objTargeted[annoLabel] = annoValueObject
+                            assignObj[annoLabel] = valToAssign //Notice valToAssign is never a string even if the original value was.
                             obj = Object.assign(obj, assignObj)
                         }
                     } catch(err){}
