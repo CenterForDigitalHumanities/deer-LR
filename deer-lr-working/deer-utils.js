@@ -36,6 +36,9 @@ export default {
     getValue: function(property, alsoPeek = [], asType) {
         // TODO: There must be a best way to do this...
         let prop;
+        if(property===undefined || property === ""){
+            return "[Unknown]"
+        }
         if (Array.isArray(property)) {
             prop = property.map(this.getValue.bind(this))
         }
@@ -50,11 +53,13 @@ export default {
                 if (property.hasOwnProperty(k)) {
                     prop = property[k]
                     break
-                } else {
+                } 
+                else {
                     prop = property
                 }
             }
-        } else {
+        } 
+        else {
             prop = property
         }
         // JSON-LD says no nested arrays, but we know people.
@@ -125,41 +130,80 @@ export default {
         .then(function(annos){
             for (let i = 0; i < annos.length; i++) {
                 let body
+                let anno = annos[i]
                 try {
-                    body = annos[i].body
+                    body = anno.body
                 } catch(err){ continue }
                 if (!body) { continue }
                 if (!Array.isArray(body)) {
                     body = [body]
                 }
+                let annoLabel = anno.label ? anno.label : anno.title ? anno.title : anno.purpose ? anno.purpose : "untitledAnno"
                 Leaf: for (let j = 0; j < body.length; j++) {
+                    //expand() is not doing what I expect.  If it finds evidence here, it does not continuing building
+                    // out the obj.  
                     if (body[j].evidence) {
                         obj.evidence = (typeof body[j].evidence === "object") ? body[j].evidence["@id"] : body[j].evidence
-                    } else {
-                        try{
-                            let val = body[j]
-                            let k = Object.keys(val)[0]
-                            if (!val.source) {
-                                // include an origin for this property, placehold madsrdf:Source
-                                let aVal = getValue(val[k])
-                                val[k] = {
-                                    value: aVal,
-                                    source: {
-                                        citationSource: annos[i]["@id"],
-                                        citationNote: annos[i].label || "Composed object from DEER",
-                                        comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
-                                    }
+                    } 
+                    //else {
+                    try{
+                        let valToAssign = {}
+                        let discoveredValue
+                        if(typeof body[j] === "object"){
+                            //Then it is like {some:"data", value:"What we want"} hopefully
+                            let alsoPeek = ["@value", "value", "$value", "val"]
+                            let foundVal = false;
+                            for (let k of alsoPeek) {
+                                if (body[j].hasOwnProperty(k)) {
+                                    foundVal = true;
+                                    break
+                                } 
+                            }
+                            if (foundVal){
+                                discoveredValue = body[j]
+                            }
+                            else{
+                                //I don't think we will be able to pull a value for this down the line...
+                                discoveredValue = body[j]
+                            }
+                        }
+                        else{
+                            //Presumably it is a string which is the value we were looking for
+                            discoveredValue = body[j]
+                        }
+                        
+                        if (typeof discoveredValue === "string" || !discoveredValue.source) {
+                            // include an origin for this property, placehold madsrdf:Source
+                            if(typeof discoveredValue === "string"){
+                                valToAssign["value"] = discoveredValue
+                                valToAssign["source"] = {
+                                    citationSource: annos[i]["@id"],
+                                    citationNote: annos[i].label || "Composed object from DEER",
+                                    comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
                                 }
+
                             }
-                            if (obj[k] !== undefined && annos[i].__rerum && annos[i].__rerum.history.next.length) {
-                                // this is not the most recent available
-                                // TODO: maybe check generator, etc.
-                                continue Leaf
-                            } else {
-                                obj = Object.assign(obj, val)
+                            else{
+                                discoveredValue["source"] = {
+                                    citationSource: annos[i]["@id"],
+                                    citationNote: annos[i].label || "Composed object from DEER",
+                                    comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
+                                }
+                                valToAssign = discoveredValue
                             }
-                        } catch(err){}
-                    }
+                        }
+                        if (annos[i].__rerum && annos[i].__rerum.history.next.length) {
+                            // this is not the most recent available
+                            // TODO: maybe check generator, etc.
+                            continue Leaf
+                        } 
+                        else {
+                            let assignObj = {}
+                            assignObj[annoLabel] = valToAssign
+                            obj = Object.assign(obj, assignObj)
+                        }
+                    } catch(err){}
+                    //}
                 }
             }
             return obj

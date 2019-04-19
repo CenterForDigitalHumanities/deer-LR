@@ -4,7 +4,9 @@ import {DEER as MYDEER} from "../deer-lr-working/deer.js"
 //Note that deer.js fired initializeDeerViews(DEER) and initializeDeerForms(DEER)
 import {default as MYUTILS} from "./utils.js" 
 Object.assign(MYDEER.UTILS, MYUTILS); //Be careful, if your own utils have the same name as a DEER util it will be overwritten
-//Make you own template
+//Note we should handle this by name scope DEER urtils with DU_ or something ridiculous. 
+
+//Add one of my own templates
 MYDEER.TEMPLATES.sense = function(obj){
     console.log("sense template")
     try {
@@ -40,5 +42,25 @@ MYDEER.TEMPLATES.sense = function(obj){
     return null
 }
 
-//Note we should handle this by name scope DEER urtils with DU_ or something ridiculous.  
-window.onload = function(){MYDEER.UTILS.myFirst()}
+//Overwrite the internal person template with a more robust one
+MYDEER.TEMPLATES.person= function(obj, options={}) {
+    console.log("person template")
+    try {
+        let tmpl = `<h2>${MYDEER.UTILS.getLabel(obj)}</h2>`
+        let dob = `<lbl>Birth Date</lbl> <theval>${MYDEER.UTILS.getValue(obj.birthDate, [], "string")}</theval>`
+     	let cod = `<lbl>Cause of Death</lbl> <theval>${MYDEER.UTILS.getValue(obj.causeOfDeath, [], "string")}</theval>`
+      	let aad = `<lbl>Age at Death</lbl> <theval>${MYDEER.UTILS.getValue(obj.deathAge, [], "string")}</theval>`
+       	let dod = `<lbl>Date of Death</lbl> <theval>${MYDEER.UTILS.getValue(obj.deathDeate, [], "number")}</theval>`
+        let depiction = `<lbl>Photo</lbl> <theval>${MYDEER.UTILS.getValue(obj.depiction, [], "string")}</theval>`
+     	let familyName = `<lbl>Family Name</lbl> <theval>${MYDEER.UTILS.getValue(obj.familyName, [], "string")}</theval>`
+      	let givenName = `<lbl>Given Name</lbl> <theval>${MYDEER.UTILS.getValue(obj.givenName, [], "string")}</theval>`
+        let gender = `<lbl>Gender</lbl> <theval>${MYDEER.UTILS.getValue(obj.gender, [], "string")}</theval>`
+        let url = `<lbl>Identity Link</lbl> <theval>http://cemetery.rerum.io/mcelwee/annotationPage.html${MYDEER.UTILS.getValue(obj.myURL, [], "string")}</theval>`
+        tmpl += (depiction+dob+dod+aad+cod+familyName+givenName+gender+url)
+        return tmpl
+    } catch (err) {
+        return null
+    }
+
+}
+

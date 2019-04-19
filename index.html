@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title>Lived Religions questionnaire encoder</title>
+    <title>Lived Religions</title>
     <meta charset="UTF-8">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
@@ -15,53 +15,75 @@
 </head>
 
 <style>
+
     #POCpart2{
-        display : none;
+        display:none;
     }
+
+    deer-view, .deer-view{
+        border: 2px solid green;
+    }
+
+    /* For MY custom templates.  Otherwise, I am just using what DEER has */
+    lbl{
+        display: inline-block;
+        margin-right:5px;
+        font-family:"sans-serif";
+    }
+    theval{
+        display:block; 
+    }
+    lbl::after { 
+        content: ":";
+    }
+    theval{
+        font-family:"serif";
+    }
+
 </style>
 
 <body>
     <div class="container-fluid">
-        <div class="container" id="POCpart1">
-            <div class="row">
-                <div class="col-lg-6">
+        <div id="POCpart1">
+            <!-- <div class="row">
+                <div   class="col-lg-6">
                     <header>JSON Template</header>
-                    <deer-view deer-id="http://devstore.rerum.io/v1/id/11111"></deer-view>
+                    <deer-view id="aa" deer-listening="bb" deer-id="http://devstore.rerum.io/v1/id/11111"></deer-view>
                 </div>
-                <div class="col-lg-6">
+                <div  class="col-lg-6">
                     <header>Entity Template</header>
-                    <div class="deer-view" deer-template="entity" deer-id="http://devstore.rerum.io/v1/id/5c6302efe4b0ee72dfa56843"
-                    deer-template="entity"></div>
+                    <div id="bb" class="deer-view" deer-listening="aa" deer-template="entity" 
+                    deer-id="http://devstore.rerum.io/v1/id/5c6302efe4b0ee72dfa56843"></div>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col-lg-6">
                     <header>Person Template</header>
-                    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5c66ea43e4b022c367220499"
+                    <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cba0941e4b0511ce8252532"
                     deer-template="person"></div>
                 </div>
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6">
                     <header>My SENSE Template</header>
                     <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a"
                     deer-template="sense"></div>
-                </div> 
+                </div>  -->
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <header>My HASH</header>
                 <deer-view id="hashExample" deer-template="entity">
                 no hash
                 </deer-view>
-            </div>
+            </div> -->
         </div>
         
-        <div class="row" id="POCpart2">
-            <div class="col-md-4">
+        <!-- <div class="row" id="POCpart2">
+            <div class="col-lg-6">
                 <header>A form for a PERSON</header>
-                <form deer-type="Person" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
-                    <label>Label:</label>
-                    <input type="text" deer-key="name" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+                <form deer-type="Person" deer-context="http://schema.org" deer-id="">
+                    <label>Name:</label>
+                    <input type="text" deer-key="name" deer-source="">
                     <input type="hidden" deer-key="creator" value="demoAgent">
-                    <input type="date" deer-key="date" deer-source="http://devstore.rerum.io/v1/id/5c9d155fe4b0a44e13e61706">
+                    <input type="date" deer-key="date" deer-source="">
                     <select>
                         <option>Example choice</option>
                         <option>Unknown to DEER</option>
@@ -71,7 +93,7 @@
                     <input type="submit">
                 </form>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-6">
                 <header>A form for a SENSE</header>
                 <form deer-type="Sense" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
                     <label>Label:</label>
@@ -99,7 +121,7 @@
                     <input type="submit">
                 </form>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- RELEASED master branch code -->
@@ -119,7 +141,7 @@
     <script src="./js/utils.js" type="module"></script>
     
     <script>
-        window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
+        //window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
 
         document.onscroll = () => {
             badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2

@@ -48,7 +48,7 @@ async function renderChange(mutationsList) {
             case DEER.LISTENING:
             let listensTo = mutation.target.getAttribute(DEER.LISTENING)
             if(listensTo){
-                mutation.target.addEventListener('deer-clicked',e=>{
+                mutation.target.addEventListener(DEER.EVENTS.CLICKED,e=>{
                     let loadId = e.detail["@id"]
                     if(loadId===listensTo) { mutation.target.setAttribute("deer-id",loadId) }
                 })
@@ -284,7 +284,12 @@ export default class DeerRender {
                     if(e.detail.target.closest(DEER.VIEW+","+DEER.FORM).getAttribute("id")===listensTo) elem.setAttribute(DEER.ID,e.detail.target.closest('['+DEER.ID+']').getAttribute(DEER.ID))
                 } catch (err) {}
             })
-            window[listensTo].addEventListener("click", e => UTILS.broadcast(e,DEER.EVENTS.CLICKED,elem))
+            if(window[listensTo] !== undefined){
+                //Make sure it at least exists in the window.  DEER should not break because an element doesn't exist it was to put an event listener on. 
+                //@FIXME: Should probably make sure it is of type HTMLElement as well, users suck
+                window[listensTo].addEventListener("click", e => UTILS.broadcast(e,DEER.EVENTS.CLICKED,elem))
+            }
+            
         }
         
     }
