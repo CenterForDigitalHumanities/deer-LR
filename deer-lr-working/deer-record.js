@@ -37,6 +37,8 @@ export default class DeerReport {
         if (this.id) {
             //Do we want to expand for all types?
             UTILS.expand({"@id":this.id})
+            //What if there are no annotations on it and the things I need to know are already in the object?
+            //Expand only returned an object like {"@id": "http://an/id"} instead of resolving it, which is what I expected. 
             .then((function(obj){
                 Object.keys(obj).forEach((function(key){
                     try {
