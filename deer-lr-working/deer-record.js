@@ -35,6 +35,7 @@ export default class DeerReport {
         elem.onsubmit = this.processRecord.bind(this)
         
         if (this.id) {
+            //Do we want to expand for all types?
             UTILS.expand({"@id":this.id})
             .then((function(obj){
                 Object.keys(obj).forEach((function(key){

@@ -138,6 +138,7 @@ export default {
                 if (!Array.isArray(body)) {
                     body = [body]
                 }
+                //^^ FIXME what if it doesn't have anno.body?  What if it is anno.resource or anno.value?
                 let annoLabel = anno.label ? anno.label : anno.title ? anno.title : anno.purpose ? anno.purpose : "untitledAnno"
                 Leaf: for (let j = 0; j < body.length; j++) {
                     //expand() is not doing what I expect.  If it finds evidence here, it does not continuing building
@@ -148,7 +149,7 @@ export default {
                     //else {
                     try{
                         let valToAssign = {}
-                        let discoveredValue
+                        let discoveredBody
                         if(typeof body[j] === "object"){
                             //Then it is like {some:"data", value:"What we want"} hopefully
                             let alsoPeek = ["@value", "value", "$value", "val"]
@@ -160,35 +161,35 @@ export default {
                                 } 
                             }
                             if (foundVal){
-                                discoveredValue = body[j]
+                                discoveredBody = body[j]
                             }
                             else{
                                 //I don't think we will be able to pull a value for this down the line...
-                                discoveredValue = body[j]
+                                discoveredBody = body[j]
                             }
                         }
                         else{
                             //Presumably it is a string which is the value we were looking for
-                            discoveredValue = body[j]
+                            discoveredBody = body[j]
                         }
                         
-                        if (typeof discoveredValue === "string" || !discoveredValue.source) {
+                        if (typeof discoveredBody === "string" || !discoveredBody.source) {
                             // include an origin for this property, placehold madsrdf:Source
                             let source = {
                                 citationSource: annos[i]["@id"],
                                 citationNote: annos[i].label || "Composed object from DEER",
                                 comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
                             }
-                            if(typeof discoveredValue === "string"){
+                            if(typeof discoveredBody === "string"){
                                 //Then the value we discovered is a string and we want it to be an object with value and source
-                                valToAssign["value"] = discoveredValue
+                                valToAssign["value"] = discoveredBody
                                 valToAssign["source"] = source
 
                             }
                             else{
                                 //Then the value we discovered is already an object, we want it to have a source
-                                discoveredValue["source"] = source
-                                valToAssign = discoveredValue
+                                discoveredBody["source"] = source
+                                valToAssign = discoveredBody
                             }
                         }
                         if (annos[i].__rerum && annos[i].__rerum.history.next.length) {
