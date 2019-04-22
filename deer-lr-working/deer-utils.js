@@ -114,7 +114,7 @@ export default {
         let getValue = this.getValue
         // If an expand like {"@id":"idToExapnd"} where idToExpand has no annotations, {"@id":"idToExapnd"} is returned unresolved...
         // At minimum, this function should resolve the object to properly expand it unless we have a local copy that isn't dirty.
-        obj = await fetch(findId).then(response=>response.json()).catch(err){console.log(err)}
+        obj = await fetch(findId).then(response=>response.json()).catch((err)=>console.log(err))
         return this.findByTargetId(findId)
         // TODO: attach evidence to each property value
         // add each value in a predictable way
