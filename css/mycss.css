@@ -1,0 +1,22 @@
+    deer-view, .deer-view{
+        border: 2px solid green;
+    }
+
+    /* For MY custom templates.  Otherwise, I am just using what DEER has */
+    lbl{
+        display: inline-block;
+        margin-right:5px;
+        font-family:"sans-serif";
+    }
+    theval{
+        display:block; 
+    }
+    lbl::after { 
+        content: ":";
+    }
+    theval{
+        font-family:"serif";
+    }
+    form{
+        border: 2px solid blue;
+    }

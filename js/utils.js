@@ -12,5 +12,9 @@ export default {
 		let id = obj["@id"] ? obj["@id"] : obj.id ? obj.id : ""
 		return id
 	}
+
+	async resolveForJSON:function(id){
+
+	}
 }
 

@@ -119,15 +119,20 @@ export default {
      * Discovered annotations are attached to the original object and returned.
      * @param {Object} obj Target object to search for description
      */
-    expand(obj) {
+    async expand(obj) {
         let findId = obj["@id"]
         if(!findId) return Promise.resolve(obj)
         let getValue = this.getValue
+        // If an expand like {"@id":"idToExapnd"} where idToExpand has no annotations, {"@id":"idToExapnd"} is returned unresolved...
+        // At minimum, this function should resolve the object to properly expand it unless we have a local copy that isn't dirty.
+        //TODO catch a fetch failure?
+        obj = await fetch(findId).then(response=>response.json())
         return this.findByTargetId(findId)
         // TODO: attach evidence to each property value
         // add each value in a predictable way
         // type properties for possible rendering?
         .then(function(annos){
+            
             for (let i = 0; i < annos.length; i++) {
                 let body
                 let anno = annos[i]
@@ -164,7 +169,7 @@ export default {
                                 discoveredBody = body[j]
                             }
                             else{
-                                //I don't think we will be able to pull a value for this down the line...
+                                //I don't think we will be able to pull a value from this down the line...
                                 discoveredBody = body[j]
                             }
                         }

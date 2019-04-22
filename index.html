@@ -10,41 +10,16 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/mycss.css">
 
     <!-- <link rel="stylesheet" href="https://unpkg.com/chota@latest"> -->
 </head>
 
-<style>
-
-    #POCpart2{
-    }
-
-    deer-view, .deer-view{
-        border: 2px solid green;
-    }
-
-    /* For MY custom templates.  Otherwise, I am just using what DEER has */
-    lbl{
-        display: inline-block;
-        margin-right:5px;
-        font-family:"sans-serif";
-    }
-    theval{
-        display:block; 
-    }
-    lbl::after { 
-        content: ":";
-    }
-    theval{
-        font-family:"serif";
-    }
-
-</style>
 
 <body>
     <div class="container-fluid">
         <div id="POCpart1">
-            <!-- <div class="row">
+            <div class="row">
                 <div   class="col-lg-6">
                     <header>JSON Template</header>
                     <deer-view id="aa" deer-listening="bb" deer-id="http://devstore.rerum.io/v1/id/11111"></deer-view>
@@ -54,72 +29,24 @@
                     <div id="bb" class="deer-view" deer-listening="aa" deer-template="entity" 
                     deer-id="http://devstore.rerum.io/v1/id/5c6302efe4b0ee72dfa56843"></div>
                 </div>
-            </div> -->
+            </div>
             <div class="row">
-                <!-- <div class="col-lg-6">
+                <div class="col-lg-6">
                     <header>Person Template</header>
                     <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cba0941e4b0511ce8252532"
                     deer-template="person"></div>
-                </div> -->
-                <!-- <div class="col-lg-6">
+                </div>
+                <div class="col-lg-6">
                     <header>My SENSE Template</header>
                     <div class="deer-view" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a"
                     deer-template="sense"></div>
-                </div>  -->
+                </div> 
             </div>
-            <!-- <div class="row">
+            <div class="row">
                 <header>My HASH</header>
                 <deer-view id="hashExample" deer-template="entity">
                 no hash
                 </deer-view>
-            </div> -->
-        </div>
-        
-        <div class="row" id="POCpart2">
-<!--             <div class="col-lg-6">
-                <header>A form for a PERSON</header>
-                <form deer-type="Person" deer-context="http://schema.org" deer-id="">
-                    <label>Name:</label>
-                    <input type="text" deer-key="name" deer-source="">
-                    <input type="hidden" deer-key="creator" value="demoAgent">
-                    <input type="date" deer-key="date" deer-source="">
-                    <select>
-                        <option>Example choice</option>
-                        <option>Unknown to DEER</option>
-                        <option>Use as usual</option>
-                    </select>
-                    <textarea deer-key="description" deer-source=""></textarea>
-                    <input type="submit">
-                </form>
-            </div> -->
-            <div class="col-lg-6">
-                <header>A form for a SENSE</header>
-                <form deer-type="Sense" deer-context="http://schema.org" deer-id="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                    <label>Label:</label>
-                    <input type="text" deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                    <input type="hidden" deer-key="creator" value="demoAgent">
-                    <label>Kind:</label>
-                    <select deer-key="kind" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                        <option>Sight</option>
-                        <option>Smell</option>
-                        <option>Taste</option>
-                        <option>Touch</option>
-                        <option>Sound</option>
-                    </select>
-                    <label>Religion:</label>
-                    <select deer-key="religious_tradition" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                        <option>Muslim</option>
-                        <option>Christian</option>
-                        <option>Jewish</option>
-                        <option>Zoroastrian</option>
-                        <option>Agnostic</option>
-                    </select>
-                    <label>Location:</label>
-                    <input type="text" deer-key="location" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                    <label>Typical User:</label>
-                    <input type="text" deer-key="typical_use" deer-source="http://devstore.rerum.io/v1/id/5cb63b7fe4b0511ce825250a">
-                    <input type="submit">
-                </form>
             </div>
         </div>
     </div>
@@ -129,13 +56,10 @@
     <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-render.js" type="module"></script>
     <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-record.js" type="module"></script>
     <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer-config.js" type="module"></script>
-    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer.js" type="module"></script> -->
+    <script src="https://centerfordigitalhumanities.github.io/deer/releases/alpha/deer.js" type="module"></script> 
+    -->
 
-    <!-- WORKING local deer code -->
-<!--     <script src="./deer-lr-working/deer-utils.js" type="module"></script>
-    <script src="./deer-lr-working/deer-render.js" type="module"></script>
-    <script src="./deer-lr-working/deer-record.js" type="module"></script>
-    <script src="./deer-lr-working/deer-config.js" type="module"></script> -->
+    <!-- local working code -->
     <script src="./deer-lr-working/deer.js" type="module"></script>
     <script src="./js/app.js" type="module"></script>
     <script src="./js/utils.js" type="module"></script>
