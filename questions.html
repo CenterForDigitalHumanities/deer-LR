@@ -22,12 +22,13 @@
                 <label>Label:</label>
                 <input type="text" deer-key="name" deer-source="http://devstore.rerum.io/v1/id/5cbdd3ace4b0511ce825256e">
                 <input type="hidden" deer-key="creator" value="demoAgent">
-                <input type="date" deer-key="date" deer-source="http://devstore.rerum.io/v1/id/5cbdd3ace4b0511ce825256e">
-                <select>
-                    <option>Example choice</option>
-                    <option>Unknown to DEER</option>
-                    <option>Use as usual</option>
-                </select>
+                <label>Birth Date</label>
+                <input type="date" deer-key="birthDate" deer-source="http://devstore.rerum.io/v1/id/5cbdd3ace4b0511ce825256e">
+                <label>Death Date</label>
+                <input type="date" deer-key="deathDate" deer-source="http://devstore.rerum.io/v1/id/5cbdd3ace4b0511ce825256e">
+                <label>Job</label>
+                <input type="date" deer-key="hasOccupation" deer-source="http://devstore.rerum.io/v1/id/5cbdd3ace4b0511ce825256e">
+                <label>Description</label>
                 <textarea deer-key="description" deer-source=""></textarea>
                 <input type="submit">
             </form>
@@ -66,7 +67,7 @@
     <script src="./js/deerInitializer.js" type="module"></script>   
     <script src="./js/app.js" type="text/javascript"></script>  
     <script>
-        window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
+        //window.onhashchange = onload = () => hashExample.setAttribute("deer-id", window.location.hash.substr(1))
 
         document.onscroll = () => {
             badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
