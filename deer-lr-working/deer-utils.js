@@ -150,6 +150,8 @@ export default {
                                         continue Leaf;
                                     }
                                     else {
+                                        //This is not doing what I want.  obj is your standard person object, which is right.
+                                        //val is {format:"a", langauge"b", value:{source:{citationSource:"x", citationNote:"y", comment:"z"}, value:"d"}}
                                         obj = Object.assign(obj, val);
                                     }
                                 }

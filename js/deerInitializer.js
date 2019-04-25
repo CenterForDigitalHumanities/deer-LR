@@ -62,11 +62,11 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
         let dob = `<lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval>`
-     	let cod = `<lbl>Cause of Death</lbl> <theval>${UTILS.getValue(obj.causeOfDeath, [], "string")}</theval>`
+     	  let cod = `<lbl>Cause of Death</lbl> <theval>${UTILS.getValue(obj.causeOfDeath, [], "string")}</theval>`
       	let aad = `<lbl>Age at Death</lbl> <theval>${UTILS.getValue(obj.deathAge, [], "string")}</theval>`
        	let dod = `<lbl>Date of Death</lbl> <theval>${UTILS.getValue(obj.deathDeate, [], "number")}</theval>`
         let depiction = `<lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval>`
-     	let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
+     	  let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
       	let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
         let gender = `<lbl>Gender</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval>`
         let url = `<lbl>Identity Link</lbl> <theval>http://cemetery.rerum.io/mcelwee/annotationPage.html${UTILS.getValue(obj.myURL, [], "string")}</theval>`
