@@ -106,11 +106,14 @@ export default {
     /**
      * Take a known object with an id and query for annotations targeting it.
      * Discovered annotations are attached to the original object and returned.
-     * @param {Object} obj Target object to search for description
+     * @param {Object} entity Target object to search for description
      */
-    async expand(obj) {
-        let findId = obj["@id"]
-        if (!findId) return Promise.resolve(obj)
+    async expand(entity) {
+        let findId = entity["@id"] || entity.id || entity
+        if (typeof findId !== "string") {
+            console.warn("Unable to find URI in object:",entity)
+            return entity
+        }
         let getValue = this.getValue
         return fetch(findId).then(response => response.json())
             .then(obj => this.findByTargetId(findId)
@@ -150,8 +153,6 @@ export default {
                                         continue Leaf;
                                     }
                                     else {
-                                        //This is not doing what I want.  obj is your standard person object, which is right.
-                                        //val is {format:"a", langauge"b", value:{source:{citationSource:"x", citationNote:"y", comment:"z"}, value:"d"}}
                                         obj = Object.assign(obj, val);
                                     }
                                 }
@@ -172,11 +173,9 @@ export default {
      */
     findByTargetId: async function (id) {
         let everything = Object.keys(localStorage).map(k => JSON.parse(localStorage.getItem(k)))
-        let obj = {"$or":[]}
-        obj["$or"].push({"target":id})
-        obj["$or"].push({"target.id" : id})
-        obj["$or"].push({"target.@id" : id})
-        //obj["$or"].push({"target.source" : id})
+        let obj = {
+            target: id
+        }
         let matches = await fetch(DEER.URLS.QUERY, {
             method: "POST",
             body: JSON.stringify(obj),

@@ -21,7 +21,7 @@ import { default as UTILS } from '../deer-lr-working/deer-utils.js'
 DEER.TEMPLATES.cat = (obj) => `<h5>${obj.name}</h5><img src="http://placekitten.com/300/150" style="width:100%;">`
 
 //Add one of my own templates
-DEER.TEMPLATES.sense = function(obj){
+DEER.TEMPLATES.sense = function(obj, options={}){
     console.log("sense template")
     try {
     	// let kind = DEER.TEMPLATES.prop(obj, {key:"kind", label:"Type"}) || ``
