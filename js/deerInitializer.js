@@ -62,15 +62,17 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
         let dob = `<lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval>`
-     	  let cod = `<lbl>Cause of Death</lbl> <theval>${UTILS.getValue(obj.causeOfDeath, [], "string")}</theval>`
-      	let aad = `<lbl>Age at Death</lbl> <theval>${UTILS.getValue(obj.deathAge, [], "string")}</theval>`
-       	let dod = `<lbl>Date of Death</lbl> <theval>${UTILS.getValue(obj.deathDeate, [], "number")}</theval>`
+     	  let email = `<lbl>Email</lbl> <theval>${UTILS.getValue(obj.email, [], "string")}</theval>`
+      	let phone = `<lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval>`
+       	let religion = `<lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval>`
         let depiction = `<lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval>`
-     	  let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
-      	let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
-        let gender = `<lbl>Gender</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval>`
-        let url = `<lbl>Identity Link</lbl> <theval>http://cemetery.rerum.io/mcelwee/annotationPage.html${UTILS.getValue(obj.myURL, [], "string")}</theval>`
-        tmpl += (depiction+dob+dod+aad+cod+familyName+givenName+gender+url)
+     	  // let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
+      	// let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
+        let gender = `<lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval>`
+        let edu  = `<lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval>`
+        let nationality = `<lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval>`
+        let description = `<lbl>Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval>`
+        tmpl += (depiction+dob+email+phone+religion+gender+edu+nationality+description)
         return tmpl
     } catch (err) {
         return null

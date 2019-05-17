@@ -153,7 +153,25 @@ export default {
                                         continue Leaf;
                                     }
                                     else {
-                                        obj = Object.assign(obj, val);
+                                        // Assign this to the main object.
+                                        if(obj[k]) {
+                                            // It may be already there as an Array with some various labels
+                                            if (Array.isArray(obj[k])){
+                                                let deepMatch = false
+                                                for(const e of obj[k]) {
+                                                    if(e.name===val.name){
+                                                        deepMatch = true
+                                                        break
+                                                    }
+                                                }
+                                                if(!deepMatch) { obj[k].push(val) }
+                                            } else if (obj[k].name !== val.name) { // often undefined
+                                                obj[k] = [obj[k],val]
+                                            }
+                                        } else {
+                                            // or just tack it on
+                                            obj = Object.assign(obj, val);
+                                        }
                                     }
                                 }
                                 catch (err_1) { }
@@ -170,11 +188,23 @@ export default {
      * Execute query for any annotations in RERUM which target the
      * id passed in. Promise resolves to an array of annotations.
      * @param {String} id URI for the targeted entity
+     * @param [String] targetStyle other formats of resource targeting.  May be null
      */
-    findByTargetId: async function (id) {
+    findByTargetId: async function (id, targetStyle=[]) {
         let everything = Object.keys(localStorage).map(k => JSON.parse(localStorage.getItem(k)))
-        let obj = {
-            target: id
+        if (!Array.isArray(targetStyle)) {
+            targetStyle = [targetStyle]
+        }
+        targetStyle = targetStyle.concat(["target", "target.@id", "target.id"]) //target.source?
+        let obj = {"$or":[]}
+        for (let target of targetStyle) {
+            //Entries that are not strings are not supported.  Ignore those entries.  
+            //TODO: should we we let the user know we had to ignore something here?
+            if(typeof target === "string"){
+                let o = {}
+                o[target] = id
+                obj["$or"].push(o)
+            }
         }
         let matches = await fetch(DEER.URLS.QUERY, {
             method: "POST",
