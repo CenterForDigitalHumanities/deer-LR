@@ -71,7 +71,7 @@ DEER.TEMPLATES.person= function(obj, options={}) {
         let gender = `<lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval>`
         let edu  = `<lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval>`
         let nationality = `<lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval>`
-        let description = `<lbl>Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval>`
+        let description = `<lbl>Further Person Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval>`
         tmpl += (depiction+dob+email+phone+religion+gender+edu+nationality+description)
         return tmpl
     } catch (err) {
