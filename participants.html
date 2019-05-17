@@ -11,12 +11,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./css/mycss.css">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        .hidden{
+            display: none;
+        }
+        .curserPointer{
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
     <div class="card">
-        <header> Add New Participant </header>
-        <form deer-type="Person" deer-context="http://schema.org" deer-id="">
+        <header class="cursorPointer" onclick="togglePersonAdditionUI()"> Add New Participant </header>
+        <form id="newPersonForm" class="hidden" deer-type="Person" deer-context="http://schema.org">
             <label>Name:</label>
             <input type="text" deer-key="name" deer-source="">
             <input type="hidden" deer-key="creator" value="demoAgent">
@@ -115,7 +123,7 @@
             <label>Description</label>
             <textarea deer-key="description" deer-source=""></textarea>
             <footer>
-                <input class="button primary" type="submit">
+                <input class="button primary" type="submit" onclick="addNewParticipant(event)">
             </footer>
         </form>
    </div>
@@ -134,6 +142,30 @@
 
 <script src="./js/deerInitializer.js" type="module"></script>   
 <script src="./js/app.js" type="text/javascript"></script>  
+<script>
+    function togglePersonAdditionUI(){
+        let personForm = document.getElementById("newPersonForm")
+        let hidden = false
+        if (personForm.classList.contains("hidden")){
+            personForm.classList.remove("hidden")
+            hidden = false
+        }
+        else{
+            personForm.classList.add("hidden")
+            hidden = true
+        }
+        return hidden
+    }
+
+    async function addNewParticipant(event){
+        //I am assuming deer-report.js is saving this item.  I wan the new person to show up in the list on the page.  
+        //I want that UI to be clickable to take me to the questions.html for that person
+        //I would like to avoid repeat names, a participant should not be in here twice, but that may be tough to check for. 
+        //Upon successful submission, I want the form to reset
+        //TODO: How can I attach to the save/update complete state from DEER for this create?
+        let deer_callback = event.deerCallback //TODO FIXME LOL
+    }
+</script>
 </body>
 
 </html>
