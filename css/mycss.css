@@ -20,3 +20,9 @@
     form{
         border: 2px solid blue;
     }
+    input[type="text"], textarea{
+        width: 30em;
+    }
+    textarea{
+        height: 6em;
+    }
