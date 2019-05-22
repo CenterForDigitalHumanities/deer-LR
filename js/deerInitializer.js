@@ -78,6 +78,16 @@ DEER.TEMPLATES.person= function(obj, options={}) {
         return null
     }
 }
+
+DEER.TEMPLATES.survey= function(obj, options={}) {
+    console.log("Survey template")
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
 // sandbox repository URLS
 DEER.URLS = {
     BASE_ID: "http://devstore.rerum.io/v1",

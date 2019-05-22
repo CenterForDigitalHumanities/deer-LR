@@ -181,7 +181,7 @@ export default {
                     return obj
                 })).catch(err => {
                     console.log("Error expanding object:" + err)
-                    return obj
+                    return err
                 })
     },
     /**

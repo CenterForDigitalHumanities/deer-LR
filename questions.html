@@ -44,87 +44,107 @@
                 <input class="btn btn-primary" onclick="loadUp(event)" type="button" value="Begin">
             </div>
         </div>
+
+        <!-- What EventID is the survey attached to.  Pull LocationID from that -->
+        <!-- <div id="interviewee" class="hidden card interviewee">
+            <div class="card-body">
+                <header class="card-title">Inteviewee Information</header>
+                <div id="iid" class="deer-view" deer-template="person" deer-id="">Loading interviewee data...</div>
+            </div>
+        </div>
+        <div id="noInterviewee" class="card">
+            <div class="card-body">
+                <header class="card-title">No Inteviewee Provided</header>
+                <label>Interviewee ID:</label><input id="iid_val" type="text" value="http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908">
+                <input class="btn btn-primary" onclick="loadUp(event)" type="button" value="Begin">
+            </div>
+        </div> -->
+        
         <!-- Questions should be one per line or perhaps something like card style -->
-            
-            <form deer-type="Location" deer-context="http://schema.org" deer-id="" class="container question">
+            <form deer-type="Survey" deer-context="http://schema.org" deer-id="SurveyID" class="container question">
                 <h3>Location</h3>
                 <!-- <div> Describe the location this event occurred</div> -->
                 <input type="hidden" deer-key="creator" value="demoAgent">
+                <input type="hidden" deer-key="PersonInvolved" value="PersonID">
+                <input type="hidden" deer-key="EventInvolved" value="EventID">
+                <input type="hidden" deer-key="LocationInvolved" value="LocationID">
+
+                <!-- If the survey is distince, then all of these are targeting the Survey.  A lot of these questions are about a Location. -->
                 <label>What is the name of this location?</label>
-                <input type="text" deer-key="name" deer-source="">
+                <input type="text" deer-key="name" deer-source="SurveyID">
                 <label>What is the address of this location?</label>
-                <input type="text" deer-key="address" deer-source="">
+                <input type="text" deer-key="address" deer-source="SurveyID">
                 <label>Do you live near this location?</label>
-                <input type="text" deer-key="IDK_1" deer-source="">
+                <input type="text" deer-key="IDK_1" deer-source="SurveyID">
                 <label>What are some of the places that surround this location?</label>
-                <input type="text" deer-key="IDK_2" deer-source="">
+                <input type="text" deer-key="IDK_2" deer-source="SurveyID">
                 <label>Provide a description of this location in your own words.</label>
-                <textarea deer-key="description" deer-source=""></textarea>
+                <textarea deer-key="description" deer-source="SurveyID"></textarea>
                 <label>How does this location interact with the neighborhood.</label>
-                <textarea deer-key="IDK_4" deer-source=""></textarea>
+                <textarea deer-key="IDK_4" deer-source="SurveyID"></textarea>
 
                 <h3>History/Background</h3>
                 <!-- <div class="card-text">Help describe the history of this location.</div> -->
                 <label>What is the history of this location</label>
-                <textarea deer-key="IDK_5" deer-source=""></textarea>
+                <textarea deer-key="IDK_5" deer-source="SurveyID"></textarea>
                 <label>How would you describe others who affiliate/work at/attend/visit/patronize this location?</label>
-                <textarea deer-key="IDK_6" deer-source=""></textarea>
+                <textarea deer-key="IDK_6" deer-source="SurveyID"></textarea>
                 <label>What would you like other people nearby to know about this location?</label>
-                <textarea deer-key="IDK_7" deer-source=""></textarea>
+                <textarea deer-key="IDK_7" deer-source="SurveyID"></textarea>
 
                 <h3>Space</h3>
                 <!-- <div class="card-text">Help describe the space in this location.</div> -->
                 <label>How would you describe the physical and social space at this location?</label>
-                <textarea deer-key="IDK_8" deer-source=""></textarea>
+                <textarea deer-key="IDK_8" deer-source="SurveyID"></textarea>
                 <label>How would you describe others who affiliate/work at/attend/visit/patronize this location?</label>
-                <textarea deer-key="IDK_09" deer-source=""></textarea>
+                <textarea deer-key="IDK_09" deer-source="SurveyID"></textarea>
                 <label>What would you like other people nearby to know about this location?</label>
-                <textarea deer-key="IDK_10" deer-source=""></textarea>
+                <textarea deer-key="IDK_10" deer-source="SurveyID"></textarea>
                 <label>What does this space mean to you?</label>
-                <textarea deer-key="IDK_11" deer-source=""></textarea>
+                <textarea deer-key="IDK_11" deer-source="SurveyID"></textarea>
                 <label>Is there anything about the physical or social space of this location that a casual observer or first time visitor may not recognize?</label>
-                <textarea deer-key="IDK_12" deer-source=""></textarea>
+                <textarea deer-key="IDK_12" deer-source="SurveyID"></textarea>
                 <label>How does the physical or social space relate to broader communities?</label>
-                <textarea deer-key="IDK_13" deer-source=""></textarea>
+                <textarea deer-key="IDK_13" deer-source="SurveyID"></textarea>
                 <label> Do you think physical space matters to public understandings of religion?</label>
-                <textarea deer-key="IDK_14" deer-source=""></textarea>
+                <textarea deer-key="IDK_14" deer-source="SurveyID"></textarea>
 
                 <h3>Belief</h3>
                 <!-- <div class="card-text">Help describe beliefs that relate to this location.</div> -->
                 <label>Are there any guiding beliegs or creeds that you associate with this location?</label>
-                <textarea deer-key="IDK_15" deer-source=""></textarea>
+                <textarea deer-key="IDK_15" deer-source="SurveyID"></textarea>
                 <label>Does this location have a stated mission?</label>
-                <textarea deer-key="IDK_16" deer-source=""></textarea>
+                <textarea deer-key="IDK_16" deer-source="SurveyID"></textarea>
                 <label>How do these things relate to the people that affiliate/work/attend/patronize this location?</label>
-                <textarea deer-key="IDK_17" deer-source=""></textarea>
+                <textarea deer-key="IDK_17" deer-source="SurveyID"></textarea>
                 <label>Are there any unspoken beliefs that shape or motivate experiences at this location?</label>
-                <textarea deer-key="IDK_18" deer-source=""></textarea>
+                <textarea deer-key="IDK_18" deer-source="SurveyID"></textarea>
 
                 <h3>Practices</h3>
                 <!-- <div class="card-text">Help describe some of the day to day goings on at this location</div> -->
                 <label>What is a typical schedule like at this location?</label>
-                <textarea deer-key="IDK_19" deer-source=""></textarea>
+                <textarea deer-key="IDK_19" deer-source="SurveyID"></textarea>
                 <label>What are the events that occur here that best represent this community, if any at all?</label>
-                <textarea deer-key="IDK_20" deer-source=""></textarea>
+                <textarea deer-key="IDK_20" deer-source="SurveyID"></textarea>
                 <label>Are there any unofficial or vernacular practices you associate with this location?</label>
-                <textarea deer-key="IDK_21" deer-source=""></textarea>
+                <textarea deer-key="IDK_21" deer-source="SurveyID"></textarea>
                 <label>Are there any objects or images at this location that are important to you?</label>
-                <textarea deer-key="IDK_22" deer-source=""></textarea>
+                <textarea deer-key="IDK_22" deer-source="SurveyID"></textarea>
                 <label>Do any of these practices have an effect on, or are they affected by, your location in the city?</label>
-                <textarea deer-key="IDK_23" deer-source=""></textarea>
+                <textarea deer-key="IDK_23" deer-source="SurveyID"></textarea>
 
                 <h3>Wrap up</h3>
                 <!-- <div class="card-text">Personal Questions</div> -->
                 <label>How would you describe religion in St. Louis?</label>
-                <textarea deer-key="IDK_24" deer-source=""></textarea>
+                <textarea deer-key="IDK_24" deer-source="SurveyID"></textarea>
                 <label>Do you feel relogion matters to people outside of specific faith communities?</label>
-                <textarea deer-key="IDK_25" deer-source=""></textarea>
+                <textarea deer-key="IDK_25" deer-source="SurveyID"></textarea>
                 <label>Do you feel that religious ideas/beliefs/objects/attitudes/representations affect people living in St. Louis?</label>
-                <textarea deer-key="IDK_26" deer-source=""></textarea>
+                <textarea deer-key="IDK_26" deer-source="SurveyID"></textarea>
                 <label>Do you have any other questions or comments about this location?</label>
-                <textarea deer-key="IDK_27" deer-source=""></textarea>
+                <textarea deer-key="IDK_27" deer-source="SurveyID"></textarea>
                 <label>Do you have ideas about other people, places, or topics to explore as part of this study of relogion in St. Louis?</label>
-                <textarea deer-key="IDK_28" deer-source=""></textarea>
+                <textarea deer-key="IDK_28" deer-source="SurveyID"></textarea>
 
             </form>
         </div>

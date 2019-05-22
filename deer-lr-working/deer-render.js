@@ -170,7 +170,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
     if(options.list){
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
-            let name = UTILS.getLabel(val,(val.type || val['@type'] || label+index))
+            let name = UTILS.getLabel(val,(val.type || val['@type'] || index))
             tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a></li>` : `<li ${DEER.ID}="${val["@id"]}">${name}</li>`
         })
         tmpl += `</ul>`
@@ -240,10 +240,13 @@ export default class DeerRender {
                 if(this.id) {
                     fetch(this.id).then(response=>response.json()).then(obj=>RENDER.element(this.elem,obj)).catch(err=>err)
                 } else if (this.collection) {
+                    // Look not only for direct objects, but also collection annotations
                     let queryObj = {
-                        body: {
-                            targetCollection: this.collection
-                        }
+                        $or: [{
+                            "targetCollection": this.collection
+                        },{
+                            "body.targetCollection": this.collection
+                        }]
                     }
                     fetch(DEER.URLS.QUERY, {
                         method: "POST",
@@ -252,7 +255,7 @@ export default class DeerRender {
                     }).then(response => response.json())
                     .then(pointers => {
                         let list = []
-                        pointers.map(tc => list.push(fetch(tc.target).then(response=>response.json().catch(err=>{__deleted:console.log(err)}))))
+                        pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response=>response.json().catch(err=>{__deleted:console.log(err)}))))
                          return Promise.all(list).then(l=>l.filter(i=>!i.hasOwnProperty("__deleted")))
 
                     })
