@@ -231,7 +231,7 @@
             let answers = makeTheAnswers(); //Or we don't have to track these individually, maybe solely existing in a Reply Action directly is good nuff.
             let qaSet = makeReplyActionsFrom(questions, answers)
             conversations.hasPart = qaSet;
-            
+
             let a={
               "id":"http://example.org/Question1",
               "@context": "https://schema.org",
@@ -307,7 +307,7 @@
               ],
               "about/isPartOf":"http://example.org/Event1",
               "contentLocation":"http://example.org/Location1",
-              "author/creator":"http://example.org/Person1", //Perhaps the interviewer?
+              "author":"http://example.org/Person1", //Perhaps the interviewer?
               "contributor":"http://example.org/Person2", //Perhaps the interviewee?
               "editor":"http://example.org/Person13321aee454",
               "inLanguage":"en"
