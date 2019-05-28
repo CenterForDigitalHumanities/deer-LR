@@ -102,6 +102,108 @@ LR.tricks.replaceURLVariable = function (variable, value){
        return(location + "?"+variables)
 }
 
+LR.tricks.makeQuestions = async function(interviewerID, intervieweeID){
+    let questionObjs = []
+    let elems = document.querySelectorAll(".QA")
+    for(let i=0; i<elems.length; i++){
+        let qtext = elems[i][0].value
+        let q={
+          "@context": "https://schema.org",
+          "@type":"Question",
+          "text":qtext,
+          "about/isPartOf":"http://example.org/Event1",
+          "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
+          "author/creator":interviewerID, //Perhaps the interviewer
+          "contributor":intervieweeID, //Perhaps the interviewee
+          "editor":"Some other person",
+          "inLanguage":"en"
+        }
+        let newq = await LR.crud.create(q)
+        questionObjs.push(newq.new_obj_state)
+    }
+    return questionObjs
+}
+
+LR.tricks.makeAnswers = async function(interviewerID, intervieweeID, questions){
+    let answerObjs = []
+    let elems = document.querySelectorAll(".QA")
+    for(let i=0; i<elems.length; i++){
+        let atext = elems[i][1].value
+        let a={
+          "@context": "https://schema.org",
+          "@type":"Answer",
+          "text":atext,
+          "parentItem":questions[i].id,
+          "about/isPartOf":"http://example.org/Event1",
+          "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
+          "author/creator":interviewerID, //Perhaps the interviewer
+          "contributor":intervieweeID, //Perhaps the interviewee
+          "editor":"Some other person",
+          "inLanguage":"en"
+        }
+        let newq = await LR.crud.create(q)
+        questionObjs.push(newq.new_obj_state)
+    }
+    return questionObjs
+}
+
+LR.tricks.makeReplyActions = async function(interviewerID, intervieweeID, questions, answers){
+    let RAobjs = []
+    if(questions.length !== answers.length){
+        return Error("The parameters' lengths do not match.")
+    }
+    for(let i=0; i<questions.length; i++){
+        let question = questions[i]
+        let answer = answers[i]
+        let interviewerID = ""
+        let intervieweeID = ""
+        let RA = {
+          "@context": "https://schema.org",
+          "@type": "ReplyAction",
+          "agent": {
+            "@type": "Person",
+            "id": interviewerID
+          },
+          "recipient": {
+            "@type": "Person",
+            "id": intervieweeID
+          },
+          "resultComment": {
+            "@type":"Answer",
+            "id":answer.id
+            "parentItem":{
+               "@type":"Question",
+               "id":question.id,
+               "text":question.text
+            }   
+          },
+          "text":answer.text
+        }
+        let newRAObj = await LR.crud.create(RA)
+        RAobjs.push(newRAObj.new_obj_state)
+    }
+    
+    return RAobjs
+}
+
+LR.tricks.startNewConversation = async function(interviewerID, intervieweeID, QAset){
+    let elems = document.querySelectorAll(".convoMetadata")
+    let c={
+      "id":"http://example.org/Survey1",
+      "@context": "https://schema.org/",
+      "@type": "Conversation",
+      "hasPart":QAset
+    }
+    //map hidden inputs to the conversation object as simple key - val pairs
+    for(let i=0; i<elems.length; i++){
+       let k = elems[i].getAttribute("my-key")
+       let v = elems[i].value
+       c.k=v
+    let newconvo = LR.crud.create(c)
+    return newconvo.new_obj_state
+    
+}
+
 
 
 
@@ -258,118 +360,70 @@ LR.crud.createOrUpdate = async function(conversation){
 LR.ui.submitSurvey = async function(){
      //Question
     //Is a schema.org JSON-LD Question and/or AskAction
-    let conversation - {};
-    conversation = gatherMetadataAboutConversation()
-    let questions = makeTheQuestions(); //Or we don't have to track these individually, maybe solely existing in a Reply Action directly is good nuff.
-    let answers = makeTheAnswers(); //Or we don't have to track these individually, maybe solely existing in a Reply Action directly is good nuff.
-    let qaSet = makeReplyActionsFrom(questions, answers)
-    conversation.hasPart = qaSet;
-
-    let a={
-      "id":"http://example.org/Question1",
-      "@context": "https://schema.org",
-      "@type":"Question",
-      "text":"Do you feel having the event at the Vatican made any extra impact?",
-      "about/isPartOf":"http://example.org/Event1",
-      "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
-      "author/creator":"http://example.org/Person1", //Perhaps the interviewer
-      "contributor":"http://example.org/Person2", //Perhaps the interviewee
-      "editor":"Some other person",
-      "inLanguage":"en"
-    }
-
-    //Answer
-    //Is a schema.org JSON-LD Answer or ReplyAction
-    let b = {
-      "id":"http://example.org/Answer1",
-      "@context": "https://schema.org",
-      "@type":"Answer",
-      "text":"Being able to connect with the artifacts was really important for my experience.",
-      "parentItem":"http://example.org/Question1",
-      "about/isPartOf":"http://example.org/Event1",
-      "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
-      "author/creator":"http://example.org/Person2", 
-      "contributor":"http://example.org/Person1", //Perhaps the interviewee
-      "editor":"Some other person",
-      "inLanguage":"en"
-    }
-
-    //ReplyAction :: Aggregation technique
-    //Patrick replies to Bryan's question during a survey about Religion in Place at the Vatican
-    let c={
-      "id":"http://example.org/QA01",
-      "@context": "https://schema.org",
-      "@type": "ReplyAction",
-      "agent": {
-        "@type": "Person",
-        "id": "http://example.org/Person1"
-      },
-      "recipient": {
-        "@type": "Person",
-        "id": "http://example.org/Person2"
-      },
-      "resultComment": {
-        "@type":"Answer",
-        "id":"http://example.org/Answer1",
-        "parentItem":{
-           "@type":"Question",
-           "id":"http://example.org/Question1",
-           "text":"You can cheat and put the text content of the question here"
-        }   
-      },
-      "text":"You can cheat and put the text content of the answer here"
-    }
-
+    let interviewerID = document.getElementById("meta_author").value
+    let intervieweeID = document.getElementById("meta_contributor").value
+    let conversation - {}
+    let questions = await LR.tricks.makeQuestions(interviewerID, intervieweeID) 
+    let answers = await LR.tricks.makeTheAnswers(interviewerID, intervieweeID, questions) 
+    let qaSet = await LR.tricks.makeReplyActions(interviewerID, intervieweeID, questions, answers)
+    conversation = await startNewConversation(interviewerID, intervieweeID, qaSet)
     //Is a Survey a https://schema.org/Conversation/ ?  I think that would be fair to say.  A conversation aggregates Comments like
-    let d={
-      "id":"http://example.org/Survey1",
-      "@context": "https://schema.org/",
-      "@type": "Conversation",
-      "name": "Lived Religion First Event Survey",
-       //Can I cheat and reference the people involved in Q/A without digging into 'hasPart' objs?
-       //I am thinking of queries like "Give me conversation from Event1 involving Bryan"
-      "hasPart/itemListElem":[ //If the conversation has all the metadata descriptors, then these can be super simple.  
-           "http://example.org/Question1",
-           "http://example.org/Answer1"
-                  //OR
-           "http://example.org/AskAction1",
-           "http://example.org/ReplyAction1"
-                //OR MAYBE
-           "http://example.org/QA01",
-           "http://example.org/QA02"
-      ],
-      "about/isPartOf":"http://example.org/Event1",
-      "contentLocation":"http://example.org/Location1",
-      "author":"http://example.org/Person1", //Perhaps the interviewer?
-      "contributor":"http://example.org/Person2", //Perhaps the interviewee?
-      "editor":"http://example.org/Person13321aee454",
-      "inLanguage":"en"
-    }
 
     let newConversation = await LR.crud.createOrUpdate(conversation)
     return newConversation 
 }
 
-LR.ui.loadUp = async function(event){
+LR.ui.startSurvey = async function(event){
+    //Make sure we have all prerequisite information, then hide/show next pieces
     let id = document.getElementById("iid_val").value
+    let id2 = document.getElementById("irid_val").value
+    let id3 = document.getElementById("eid_val").value
     if(typeof id !== "string" || "" === id){
         return false
     }
+    if(typeof id2 !== "string" || "" === id2){
+        return false
+    }
+    if(typeof id3 !== "string" || "" === id3){
+        return false
+    }
+
+    document.getElementById("interviewee").classList.remove("hidden")
+    document.getElementById("noInterviewee").classList.add("hidden")
+
+    document.getElementById("interviewer").classList.remove("hidden")
+    document.getElementById("noInterviewer").classList.add("hidden")
+
+    document.getElementById("event").classList.remove("hidden")
+    document.getElementById("noEvent").classList.add("hidden")
+
+    document.getElementById("theSurvey").classList.remove("hidden")
+
+    document.getElementById("meta_about").value = id3
+    document.getElementById("meta_author").value = id2
+    document.getElementById("meta_contributor").value = id
+    //Should probably store interviewer and interviewee id somewhere easy to gather.  
+    return true
+}
+
+LR.ui.loadSurvey = async function(surveyID){
+    let surveyObj = await LR.tricks.resolveForJSON(surveyID)
+    let surveyInfo = surveyObj.hasPart
+    let elems = document.querySelectorAll(".QA")
+    //Probably not reliable, should maybe check this is the right field (check against questions text??)
+    //This would mean we are preserving order??
+    for(let i=0; i<surveyInfo.length; i++){
+        elems[i][1].value = surveyInfo[i].text
+    }
+    //Make sure to hijack the interface because we don't need prerequisite info to start a survey, we already have one
     let questions = document.getElementsByClassName("question")
     for(let elem=0; elem<questions.length; elem++){
         questions[elem].style.display = "block"
     }
-    document.getElementById("interviewee").classList.remove("hidden")
     document.getElementById("noInterviewee").classList.add("hidden")
-    document.getElementById("iid").setAttribute("my-id", id)
-    // let forms = document.querySelectorAll("form[my-type]")
-    // for(let form =0; form<forms.length; form++){
-    //     forms[form].setAttribute("my-id", id)
-    // }
-    // let targets = document.querySelectorAll("input[my-key='target']")
-    // for(let target =0; target<targets.length; target++){
-    //     targets[target].setAttribute("value", id)
-    // }
+    document.getElementById("noInterviewer").classList.add("hidden")
+    document.getElementById("noEvent").classList.add("hidden")
+    document.getElementById("theSurvey").classList.remove("hidden")
     return true
 }
 
