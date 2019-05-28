@@ -41,7 +41,7 @@
             <div class="card-body">
                 <header class="card-title">No Inteviewee Provided</header>
                 <label>Interviewee ID:</label><input id="iid_val" type="text" value="http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908">
-                <input class="btn btn-primary" onclick="loadUp(event)" type="button" value="Begin">
+                <input class="btn btn-primary" onclick="LR.ui.loadUp(event)" type="button" value="Begin">
             </div>
         </div>
 
@@ -202,7 +202,7 @@
                     <input class="question" type="text"  value="Do you have ideas about other people, places, or topics to explore as part of this study of relogion in St. Louis?"/>
                     <textarea my-key="IDK_28" ></textarea>
                 </div>
-                <input type="submit" value="Save Changes" onclick="survey()" />
+                <input type="submit" value="Save Changes" onclick="LR.ui.submitSurvey()" />
             </form>
         </div>
 
@@ -218,126 +218,12 @@
         //     badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
         //     tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
         // }
+
         // document.onload = () => {
 
         // }
 
-        function survey(){
-            //Question
-            //Is a schema.org JSON-LD Question and/or AskAction
-            let conversations - {};
-            conversations = gatherMetadataAboutConversation()
-            let questions = makeTheQuestions(); //Or we don't have to track these individually, maybe solely existing in a Reply Action directly is good nuff.
-            let answers = makeTheAnswers(); //Or we don't have to track these individually, maybe solely existing in a Reply Action directly is good nuff.
-            let qaSet = makeReplyActionsFrom(questions, answers)
-            conversations.hasPart = qaSet;
 
-            let a={
-              "id":"http://example.org/Question1",
-              "@context": "https://schema.org",
-              "@type":"Question",
-              "text":"Do you feel having the event at the Vatican made any extra impact?",
-              "about/isPartOf":"http://example.org/Event1",
-              "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
-              "author/creator":"http://example.org/Person1", //Perhaps the interviewer
-              "contributor":"http://example.org/Person2", //Perhaps the interviewee
-              "editor":"Some other person",
-              "inLanguage":"en"
-            }
-
-            //Answer
-            //Is a schema.org JSON-LD Answer or ReplyAction
-            let b = {
-              "id":"http://example.org/Answer1",
-              "@context": "https://schema.org",
-              "@type":"Answer",
-              "text":"Being able to connect with the artifacts was really important for my experience.",
-              "parentItem":"http://example.org/Question1",
-              "about/isPartOf":"http://example.org/Event1",
-              "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
-              "author/creator":"http://example.org/Person2", 
-              "contributor":"http://example.org/Person1", //Perhaps the interviewee
-              "editor":"Some other person",
-              "inLanguage":"en"
-            }
-
-            //ReplyAction :: Aggregation technique
-            //Patrick replies to Bryan's question during a survey about Religion in Place at the Vatican
-            let c={
-              "id":"http://example.org/QA01",
-              "@context": "https://schema.org",
-              "@type": "ReplyAction",
-              "agent": {
-                "@type": "Person",
-                "id": "http://example.org/Person1"
-              },
-              "recipient": {
-                "@type": "Person",
-                "id": "http://example.org/Person2"
-              },
-              "resultComment": {
-                "@type":"Answer",
-                "id":"http://example.org/Answer1",
-                "parentItem":{
-                   "@type":"Question",
-                   "id":"http://example.org/Question1",
-                   "text":"You can cheat and put the text content of the question here"
-                }   
-              },
-              "text":"You can cheat and put the text content of the answer here"
-            }
-
-            //Is a Survey a https://schema.org/Conversation/ ?  I think that would be fair to say.  A conversation aggregates Comments like
-            let d={
-              "id":"http://example.org/Survey1",
-              "@context": "https://schema.org/",
-              "@type": "Conversation",
-              "name": "Lived Religion First Event Survey",
-               //Can I cheat and reference the people involved in Q/A without digging into 'hasPart' objs?
-               //I am thinking of queries like "Give me conversations from Event1 involving Bryan"
-              "hasPart/itemListElem":[ //If the conversation has all the metadata descriptors, then these can be super simple.  
-                   "http://example.org/Question1",
-                   "http://example.org/Answer1"
-                          //OR
-                   "http://example.org/AskAction1",
-                   "http://example.org/ReplyAction1"
-                        //OR MAYBE
-                   "http://example.org/QA01",
-                   "http://example.org/QA02"
-              ],
-              "about/isPartOf":"http://example.org/Event1",
-              "contentLocation":"http://example.org/Location1",
-              "author":"http://example.org/Person1", //Perhaps the interviewer?
-              "contributor":"http://example.org/Person2", //Perhaps the interviewee?
-              "editor":"http://example.org/Person13321aee454",
-              "inLanguage":"en"
-            }
-
-
-
-        }
-
-        function loadUp(event){
-            let id = document.getElementById("iid_val").value
-            if(typeof id !== "string" || "" === id){
-                return false
-            }
-            let questions = document.getElementsByClassName("question")
-            for(let elem=0; elem<questions.length; elem++){
-                questions[elem].style.display = "block"
-            }
-            document.getElementById("interviewee").classList.remove("hidden")
-            document.getElementById("noInterviewee").classList.add("hidden")
-            document.getElementById("iid").setAttribute("my-id", id)
-            // let forms = document.querySelectorAll("form[my-type]")
-            // for(let form =0; form<forms.length; form++){
-            //     forms[form].setAttribute("my-id", id)
-            // }
-            // let targets = document.querySelectorAll("input[my-key='target']")
-            // for(let target =0; target<targets.length; target++){
-            //     targets[target].setAttribute("value", id)
-            // }
-        }
     </script>
 </body>
 
