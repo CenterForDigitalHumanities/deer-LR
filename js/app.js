@@ -5,15 +5,15 @@
  */
 
 const LR = {}
+LR.local = {}
+LR.local.survey={}
+LR.crud = {}
 LR.crud.URL = {
     BASE_ID: "http://devstore.rerum.io/v1",
     CREATE: "http://tinydev.rerum.io/app/create",
     UPDATE: "http://tinydev.rerum.io/app/update",
     DELETE:"http://tinydev.rerum.io/app/delete"
 }
-LR.local = {}
-LR.local.survey={}
-LR.crud = {}
 LR.err = {}
 LR.tricks = {}
 LR.ui = {}
@@ -139,16 +139,15 @@ LR.tricks.makeQuestions = async function(interviewerID, intervieweeID){
           "@context": "https://schema.org",
           "@type":"Question",
           "text":qtext,
-          "about/isPartOf":"http://example.org/Event1",
+          "about":"http://example.org/Event1",
           "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
-          "author/creator":interviewerID, //Perhaps the interviewer
+          "author":interviewerID, //Perhaps the interviewer
           "contributor":intervieweeID, //Perhaps the interviewee
           "editor":"Some other person",
           "inLanguage":"en",
           "testing":"LR"
         }
-        let newq = await LR.crud.create(q)
-        questionObjs.push(newq.new_obj_state)
+        questionObjs.push(q)
     }
     return questionObjs
 }
@@ -163,20 +162,20 @@ LR.tricks.makeAnswers = async function(interviewerID, intervieweeID, questions){
           "@type":"Answer",
           "text":atext,
           "parentItem":questions[i]["@id"],
-          "about/isPartOf":"http://example.org/Event1",
+          "about":"http://example.org/Event1",
           "contentLocation":"http://example.org/Location1", //Although the Event would know this, it may make querying easier
-          "author/creator":interviewerID, //Perhaps the interviewer
+          "author":interviewerID, //Perhaps the interviewer
           "contributor":intervieweeID, //Perhaps the interviewee
           "editor":"Some other person",
           "inLanguage":"en",
           "testing":"LR"
         }
-        answerObjs.push(newa)
+        answerObjs.push(a)
     }
     return answerObjs
 }
 
-LR.tricks.makeReplyActions = async function(interviewerID, intervieweeID, questions, answers){
+LR.tricks.makeReplyActions = function(interviewerID, intervieweeID, questions, answers){
     let RAobjs = []
     if(questions.length !== answers.length){
         return Error("The parameters' lengths do not match.")
@@ -184,8 +183,6 @@ LR.tricks.makeReplyActions = async function(interviewerID, intervieweeID, questi
     for(let i=0; i<questions.length; i++){
         let question = questions[i]
         let answer = answers[i]
-        let interviewerID = ""
-        let intervieweeID = ""
         let RA = {
           "@context": "https://schema.org",
           "@type": "ReplyAction",
@@ -209,13 +206,13 @@ LR.tricks.makeReplyActions = async function(interviewerID, intervieweeID, questi
           "text":answer.text,
           "testing":"LR"
         }
-        RAobjs.push(newRAObj)
+        RAobjs.push(RA)
     }
     
     return RAobjs
 }
 
-LR.tricks.makeConversation = async function(interviewerID, intervieweeID, QAset){
+LR.tricks.makeConversation = function(interviewerID, intervieweeID, QAset){
     let newConvo
     if(LR.local.survey["@id"]){
         //One is already made and in memory
@@ -224,7 +221,7 @@ LR.tricks.makeConversation = async function(interviewerID, intervieweeID, QAset)
     else{
         //No conversation loaded up, this will be a new one.  Must construct.
         let elems = document.querySelectorAll(".convoMetadata")
-        let c={
+        newConvo={
           "@context": "https://schema.org/",
           "@type": "Conversation",
           "hasPart":QAset,
@@ -234,10 +231,10 @@ LR.tricks.makeConversation = async function(interviewerID, intervieweeID, QAset)
         for(let i=0; i<elems.length; i++){
            let k = elems[i].getAttribute("my-key")
            let v = elems[i].value
-           c.k=v
+           newConvo[k]=v
         }
     }
-    return newconvo
+    return newConvo
 }
 
 
@@ -252,7 +249,7 @@ LR.crud.create = async function (obj){
     delete obj.__isdirty
     let url = LR.crud.URL.CREATE
     let jsonReturn = {}
-    await fetch(url, {
+    return await fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         headers: {
             "Content-Type": "application/json; charset=utf-8"
@@ -260,9 +257,9 @@ LR.crud.create = async function (obj){
         body: JSON.stringify(obj) // body data type must match "Content-Type" header
     })
     .then(LR.handleHTTPError)
-    .then(resp => jsonReturn = resp.json().new_obj_state)
+    .then(resp => resp.json())
     .catch(error => LR.err.unhandled(error))
-    return jsonReturn
+    
 }
 
 /**
@@ -274,8 +271,7 @@ LR.crud.create = async function (obj){
 LR.crud.update = async function (obj){
     delete obj.__isdirty
     let url = LR.crud.URL.UPDATE
-    let jsonReturn = {}
-    await fetch(url, {
+    return await fetch(url, {
         method: "PUT", 
         headers: {
             "Content-Type": "application/json; charset=utf-8"
@@ -283,9 +279,8 @@ LR.crud.update = async function (obj){
         body: JSON.stringify(obj) // body data type must match "Content-Type" header
     })
     .then(LR.handleHTTPError)
-    .then(resp => jsonReturn = resp.json().new_obj_state)
+    .then(resp => resp.json())
     .catch(error => LR.err.unhandled(error))
-    return jsonReturn;
 }
 
 /**
@@ -319,7 +314,7 @@ LR.crud.update = async function (obj){
 LR.crud.delete = async function (obj){
     let url = LR.crud.URL.DELETE
     let jsonReturn = {};
-    await fetch(url, {
+    return await fetch(url, {
         method: "DELETE", 
         headers: {
             "Content-Type": "application/json; charset=utf-8"
@@ -327,9 +322,8 @@ LR.crud.delete = async function (obj){
         body: JSON.stringify(obj) // body data type must match "Content-Type" header
     })
     .then(LR.handleHTTPError)
-    .then(resp => jsonReturn = resp.json())
+    .then(resp => resp.json())
     .catch(error => LR.err.unhandled(error))
-    return jsonReturn
 }
 
 /**
@@ -359,44 +353,57 @@ LR.crud.createOrUpdate = async function(conversation){
     //A conversation will have Questions, Answers and ReplyActions that all need updating
     //Once complete, if there has been a create or update, the conversation needs created/updated. otherwise, do nothing. 
     let mustUpdateConvo = false
-    let isnew
+    let isnewQA
     let convo = JSON.parse(JSON.stringify(conversation))
+    let isnewconvo = !conversation.hasOwnProperty("@id") || conversation["@id"]!==""
     let update = document.getElementById("theSurvey").getAttribute("survey_id") !== ""
     //we are just waiting for them all to complete, each one isn't waiting on the last. 
-    for(item in convo.hasPart){
-        let elem = document.querySelectorAll(".QA")[item][1]
-        let QAorRA = convo.hasPart[item]
-        isnew = QAorRA.hasOwnProperty("@id") && QAorRA["@id"]!==""
-        if(isnew){
+    for(let x=0; x<convo.hasPart.length; x++){
+        let elem = document.querySelectorAll(".QA")[x].children[1]
+        let QAorRA = convo.hasPart[x]
+        isnewQA = !QAorRA.hasOwnProperty("@id") || QAorRA["@id"]!==""
+        if(isnewQA){
+            let newq = await LR.crud.create(QAorRA.resultComment.parentItem)
+            newq = newq.new_obj_state
+            QAorRA.resultComment.parentItem = newq
+            let newa = await LR.crud.create(QAorRA.resultComment)
+            newa=newa.new_obj_state
+            QAorRA.resultComment = newa
             let createdObj = await LR.crud.create(QAorRA)
-            createdObj = createObj.new_obj_state
-            createdOBj.__isdirty=false
-            elem.setAttribute("survey_id", createObj["@id"])
-            convo.hasPart[item] = createObj
-            conversation.__isdirty = true
+            createdObj = createdObj.new_obj_state
+            createdObj.__isdirty=false
+            elem.setAttribute("survey_id", createdObj["@id"])
+            convo.hasPart[x] = createdObj
+            conversation.__isnew = true
         }
         else{
             if(QAorRA.__isdirty){
+                let updatedA = await LR.crud.update(QAorRA.resultComment)
+                updatedA=updated.new_obj_state
+                QAorRA.resultComment = updatedA
                 let updatedObj = await LR.crud.update(QAorRA)
-                updatedObj = updatedObj.new_obj_state
+                updatedObj = updateObj.new_obj_state
                 elem.setAttribute("survey_id", updatedObj["@id"])
-                convo.hasPart[item] = updateObj
+                convo.hasPart[x] = updateObj
                 conversation.__isdirty = true
             }
         }
     }
-    if(conversation.__isdirty){
-        Promise.all(convo.hasPart).then(async function(){
-            let updatedConvo = await LR.crud.update(convo)
-            convo = updatedConvo.new_obj_state    
-            convo.__isdirty=false
-            LR.local.survey = convo
-            document.getElementById("theSurvey").setAttribute("survey_id", LR.local.survey["@id"])
-        })
-    }
-    else{
-        //There was no change or nothing happened or the convo was malformed or empty...
-    }
+    
+    await Promise.all(convo.hasPart).then(async function(){
+        if(isnewconvo){
+            convo = await LR.crud.create(convo)
+            convo = convo.new_obj_state
+        }
+        else{
+            convo = await LR.crud.update(convo)
+            convo = convo.new_obj_state
+        }
+        convo.__isdirty=false
+        LR.local.survey = convo
+        document.getElementById("theSurvey").setAttribute("survey_id", LR.local.survey["@id"])
+    })
+
     return convo
 }
 
@@ -404,16 +411,26 @@ LR.crud.createOrUpdate = async function(conversation){
 LR.ui.submitSurvey = async function(){
      //Question
     //Is a schema.org JSON-LD Question and/or AskAction
-    let interviewerID = document.getElementById("meta_author").value
-    let intervieweeID = document.getElementById("meta_contributor").value
-    let conversation = {}
-    let questions = await LR.tricks.makeQuestions(interviewerID, intervieweeID) 
-    let answers = await LR.tricks.makeAnswers(interviewerID, intervieweeID, questions) 
-    let qaSet = await LR.tricks.makeReplyActions(interviewerID, intervieweeID, questions, answers)
-    conversation = await makeConversation(interviewerID, intervieweeID, qaSet)
-    //Is a Survey a https://schema.org/Conversation/ ?  I think that would be fair to say.  A conversation aggregates Comments like
-
-    let newConversation = await LR.crud.createOrUpdate(conversation)
+    let newConversation
+    let interviewerID 
+    let intervieweeID 
+    let questions
+    let answers
+    let qaSet
+    if(LR.local.survey["@id"]){
+        newConversation = LR.local.survey
+    }
+    else{
+        interviewerID = document.getElementById("meta_author").value
+        intervieweeID = document.getElementById("meta_contributor").value
+        conversation = {}
+        questions = await LR.tricks.makeQuestions(interviewerID, intervieweeID) 
+        answers = await LR.tricks.makeAnswers(interviewerID, intervieweeID, questions) 
+        qaSet = await LR.tricks.makeReplyActions(interviewerID, intervieweeID, questions, answers)
+        conversation = await LR.tricks.makeConversation(interviewerID, intervieweeID, qaSet)
+        //Is a Survey a https://schema.org/Conversation/ ?  I think that would be fair to say.  A conversation aggregates Comments like
+        newConversation = await LR.crud.createOrUpdate(conversation)
+    }
     document.getElementById("theSurvey").setAttribute("survey_id", newConversation["@id"])
     LR.local.removeDirty()
     return newConversation 
@@ -483,8 +500,8 @@ LR.ui.loadSurvey = async function(surveyID){
     //Probably not reliable, should maybe check this is the right field (check against questions text??)
     //This would mean we are preserving order??
     for(let i=0; i<surveyInfo.length; i++){
-        elems[i][1].value = surveyInfo[i].text
-        elems[i][1].setAttribute("survey_id", surveyInfo[i]["@id"])
+        elems[i].children[1].value = surveyInfo[i].text
+        elems[i].children[1].setAttribute("survey_id", surveyInfo[i]["@id"])
     }
     //Make sure to hijack the interface because we don't need prerequisite info to start a survey, we already have one
     let questions = document.getElementsByClassName("question")
