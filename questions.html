@@ -47,10 +47,6 @@
             <deer-view id="intervieweeDeer" deer-id="" deer-template="person" class="card-body">
                 <div >Loading interviewee data...</div>
             </deer-view>
-            <!-- <div class="card-body">
-                <header class="card-title">Inteviewee Information</header>
-                <div id="interviewee_info">Loading interviewee data...</div>
-            </div> -->
         </div>
         <div id="noInterviewee" class="card">
             <div class="card-body">
@@ -64,10 +60,6 @@
             <deer-view id="interviewerDeer" deer-id="" deer-template="person" class="card-body">
                 <div >Loading interviewer data...</div>
             </deer-view>
-            <!-- <div class="card-body">
-                <header class="card-title">Inteviewer Information</header>
-                <div id="interviewer_info" >Loading interviewer data...</div>
-            </div> -->
         </div>
         <div id="noInterviewer" class="card">
             <div class="card-body">
@@ -82,10 +74,6 @@
             <deer-view id="eventDeer" deer-id="" deer-template="event" class="card-body">
                 <div >Loading event data...</div>
             </deer-view>
-            <!-- <div class="card-body">
-                <header class="card-title">Event Information</header>
-                <div id="event_info">Loading event data...</div>
-            </div> -->
         </div>
         <div id="noEvent" class="card">
             <div class="card-body">
@@ -234,7 +222,7 @@
                     <input class="question" type="text"  value="Do you have ideas about other people, places, or topics to explore as part of this study of relogion in St. Louis?"/>
                     <textarea class="answer"> </textarea>
                 </div>
-                <input type="submit" value="Save Changes" onclick="LR.ui.submitSurvey()" />
+                <input type="button" class="btn-primary" value="Save Changes" onclick="LR.ui.submitSurvey()" />
             </form>
         </div>
 
@@ -245,6 +233,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
+
+        //This could be a surveyID...
         //window.onhashchange = onload = () => hashExample.setAttribute("my-id", window.location.hash.substr(1))
         // document.onscroll = () => {
         //     badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
@@ -263,7 +253,7 @@
                 let area = answerAreas[e]
                 if (area.addEventListener) {
                   area.addEventListener('input', function() {
-                    if(area.getAttribute("dirty") === "false"){
+                    if(LR.local.survey["@id"]&&area.getAttribute("dirty") === "false"){
                          LR.local.makeDirty(area)   
                     }
                    
@@ -271,7 +261,7 @@
                 } 
                 else if (area.attachEvent) {
                   area.attachEvent('onpropertychange', function() {
-                    if(area.getAttribute("dirty") === "false"){
+                    if(LR.local.survey["@id"]&&area.getAttribute("dirty") === "false"){
                          LR.local.makeDirty(area)   
                     }
                   })

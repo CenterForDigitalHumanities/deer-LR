@@ -5,7 +5,14 @@
  */
 
 const LR = {}
+LR.crud.URL = {
+    BASE_ID: "http://devstore.rerum.io/v1",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    DELETE:"http://tinydev.rerum.io/app/delete"
+}
 LR.local = {}
+LR.local.survey={}
 LR.crud = {}
 LR.err = {}
 LR.tricks = {}
@@ -22,6 +29,13 @@ LR.test.interviewer = {
 
 LR.test.interviewee = {
     "@id":"http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908"
+}
+
+LR.test.fillTextAreas = function(){
+    let elems = document.querySelectorAll(".answer")
+    for(let l=0; l<elems.length; l++){
+        elems[l].value = "Answer "+l
+    }
 }
 
 
@@ -120,7 +134,7 @@ LR.tricks.makeQuestions = async function(interviewerID, intervieweeID){
     let questionObjs = []
     let elems = document.querySelectorAll(".QA")
     for(let i=0; i<elems.length; i++){
-        let qtext = elems[i][0].value
+        let qtext = elems[i].children[0].value
         let q={
           "@context": "https://schema.org",
           "@type":"Question",
@@ -130,7 +144,8 @@ LR.tricks.makeQuestions = async function(interviewerID, intervieweeID){
           "author/creator":interviewerID, //Perhaps the interviewer
           "contributor":intervieweeID, //Perhaps the interviewee
           "editor":"Some other person",
-          "inLanguage":"en"
+          "inLanguage":"en",
+          "testing":"LR"
         }
         let newq = await LR.crud.create(q)
         questionObjs.push(newq.new_obj_state)
@@ -142,7 +157,7 @@ LR.tricks.makeAnswers = async function(interviewerID, intervieweeID, questions){
     let answerObjs = []
     let elems = document.querySelectorAll(".QA")
     for(let i=0; i<elems.length; i++){
-        let atext = elems[i][1].value
+        let atext = elems[i].children[1].value
         let a={
           "@context": "https://schema.org",
           "@type":"Answer",
@@ -153,7 +168,8 @@ LR.tricks.makeAnswers = async function(interviewerID, intervieweeID, questions){
           "author/creator":interviewerID, //Perhaps the interviewer
           "contributor":intervieweeID, //Perhaps the interviewee
           "editor":"Some other person",
-          "inLanguage":"en"
+          "inLanguage":"en",
+          "testing":"LR"
         }
         answerObjs.push(newa)
     }
@@ -190,7 +206,8 @@ LR.tricks.makeReplyActions = async function(interviewerID, intervieweeID, questi
                "text":question.text
             }   
           },
-          "text":answer.text
+          "text":answer.text,
+          "testing":"LR"
         }
         RAobjs.push(newRAObj)
     }
@@ -210,7 +227,8 @@ LR.tricks.makeConversation = async function(interviewerID, intervieweeID, QAset)
         let c={
           "@context": "https://schema.org/",
           "@type": "Conversation",
-          "hasPart":QAset
+          "hasPart":QAset,
+          "testing":"LR"
         }
         //map hidden inputs to the conversation object as simple key - val pairs
         for(let i=0; i<elems.length; i++){
@@ -232,7 +250,7 @@ LR.tricks.makeConversation = async function(interviewerID, intervieweeID, QAset)
  */
 LR.crud.create = async function (obj){
     delete obj.__isdirty
-    let url = "create"
+    let url = LR.crud.URL.CREATE
     let jsonReturn = {}
     await fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -255,8 +273,8 @@ LR.crud.create = async function (obj){
  */
 LR.crud.update = async function (obj){
     delete obj.__isdirty
-    let url = "update"
-    let jsonReturn = {};
+    let url = LR.crud.URL.UPDATE
+    let jsonReturn = {}
     await fetch(url, {
         method: "PUT", 
         headers: {
@@ -277,21 +295,21 @@ LR.crud.update = async function (obj){
  * @param {type} obj
  * @return {JSON representing the new state of the object updated}
  */
-LR.crud.patchUpdate = async function (obj){
-    let url = "patch"
-    let jsonReturn = {}
-    await fetch(url, {
-        method: "PATCH", 
-        headers: {
-            "Content-Type": "application/json; charset=utf-8"
-        },
-        body: JSON.stringify(obj) // body data type must match "Content-Type" header
-    })
-    .then(LR.handleHTTPError)
-    .then(resp => jsonReturn = resp.json().new_obj_state)
-    .catch(error => LR.err.unhandled(error))
-    return jsonReturn
-}
+// LR.crud.patchUpdate = async function (obj){
+//     let url = "patch"
+//     let jsonReturn = {}
+//     await fetch(url, {
+//         method: "PATCH", 
+//         headers: {
+//             "Content-Type": "application/json; charset=utf-8"
+//         },
+//         body: JSON.stringify(obj) // body data type must match "Content-Type" header
+//     })
+//     .then(LR.handleHTTPError)
+//     .then(resp => jsonReturn = resp.json().new_obj_state)
+//     .catch(error => LR.err.unhandled(error))
+//     return jsonReturn
+// }
 
 /**
  * Call to the LR proxy API into RERUM API to mark this object as deleted in RERUM.
@@ -299,7 +317,7 @@ LR.crud.patchUpdate = async function (obj){
  * @return {JSON representing the new state of the object updated}
  */
 LR.crud.delete = async function (obj){
-    let url = "delete"
+    let url = LR.crud.URL.DELETE
     let jsonReturn = {};
     await fetch(url, {
         method: "DELETE", 
@@ -321,21 +339,21 @@ LR.crud.delete = async function (obj){
  * @param {type} obj
  * @return {JSON representing the new state of the object updated}
  */
-LR.crud.query = async function (obj){
-    let url = "query"
-    let jsonReturn = {}
-    await fetch(url, {
-        method: "POST", 
-        headers: {
-            "Content-Type": "application/json; charset=utf-8"
-        },
-        body: JSON.stringify(obj) // body data type must match "Content-Type" header
-    })
-    .then(LR.handleHTTPError)
-    .then(resp => jsonReturn = resp.json())
-    .catch(error => LR.err.unhandled(error))
-    return jsonReturn
-}
+// LR.crud.query = async function (obj){
+//     let url = "query"
+//     let jsonReturn = {}
+//     await fetch(url, {
+//         method: "POST", 
+//         headers: {
+//             "Content-Type": "application/json; charset=utf-8"
+//         },
+//         body: JSON.stringify(obj) // body data type must match "Content-Type" header
+//     })
+//     .then(LR.handleHTTPError)
+//     .then(resp => jsonReturn = resp.json())
+//     .catch(error => LR.err.unhandled(error))
+//     return jsonReturn
+// }
 
 LR.crud.createOrUpdate = async function(conversation){
     //A conversation will have Questions, Answers and ReplyActions that all need updating
@@ -390,7 +408,7 @@ LR.ui.submitSurvey = async function(){
     let intervieweeID = document.getElementById("meta_contributor").value
     let conversation = {}
     let questions = await LR.tricks.makeQuestions(interviewerID, intervieweeID) 
-    let answers = await LR.tricks.makeTheAnswers(interviewerID, intervieweeID, questions) 
+    let answers = await LR.tricks.makeAnswers(interviewerID, intervieweeID, questions) 
     let qaSet = await LR.tricks.makeReplyActions(interviewerID, intervieweeID, questions, answers)
     conversation = await makeConversation(interviewerID, intervieweeID, qaSet)
     //Is a Survey a https://schema.org/Conversation/ ?  I think that would be fair to say.  A conversation aggregates Comments like
