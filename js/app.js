@@ -355,13 +355,13 @@ LR.crud.createOrUpdate = async function(conversation){
     let mustUpdateConvo = false
     let isnewQA
     let convo = JSON.parse(JSON.stringify(conversation))
-    let isnewconvo = !conversation.hasOwnProperty("@id") || conversation["@id"]!==""
-    let update = document.getElementById("theSurvey").getAttribute("survey_id") !== ""
+    let isnewconvo = !conversation.hasOwnProperty("@id") || conversation["@id"]==""
+    let update = document.getElementById("theSurvey").getAttribute("survey_id")== ""
     //we are just waiting for them all to complete, each one isn't waiting on the last. 
     for(let x=0; x<convo.hasPart.length; x++){
         let elem = document.querySelectorAll(".QA")[x].children[1]
         let QAorRA = convo.hasPart[x]
-        isnewQA = !QAorRA.hasOwnProperty("@id") || QAorRA["@id"]!==""
+        isnewQA = !QAorRA.hasOwnProperty("@id") || QAorRA["@id"]==""
         if(isnewQA){
             let newq = await LR.crud.create(QAorRA.resultComment.parentItem)
             newq = newq.new_obj_state
@@ -378,13 +378,16 @@ LR.crud.createOrUpdate = async function(conversation){
         }
         else{
             if(QAorRA.__isdirty){
-                let updatedA = await LR.crud.update(QAorRA.resultComment)
-                updatedA=updated.new_obj_state
+                let newText = elem.value
+                let a2up = JSON.parse(JSON.stringify(QAorRA.resultComment))
+                a2up.text = newText
+                let updatedA = await LR.crud.update(a2up)
+                updatedA=updatedA.new_obj_state
                 QAorRA.resultComment = updatedA
                 let updatedObj = await LR.crud.update(QAorRA)
-                updatedObj = updateObj.new_obj_state
+                updatedObj = updatedObj.new_obj_state
                 elem.setAttribute("survey_id", updatedObj["@id"])
-                convo.hasPart[x] = updateObj
+                convo.hasPart[x] = updatedObj
                 conversation.__isdirty = true
             }
         }
@@ -407,6 +410,27 @@ LR.crud.createOrUpdate = async function(conversation){
     return convo
 }
 
+LR.ui.dirtyEvent = function(){
+    let answerAreas = document.getElementsByClassName("answer")
+    for(let e = 0; e<answerAreas.length; e++){
+        let area = answerAreas[e]
+        if (area.addEventListener) {
+          area.addEventListener('input', function() {
+            if(LR.local.survey["@id"]&&area.getAttribute("dirty") === "false"){
+                 LR.local.makeDirty(area)   
+            }
+           
+          }, false)
+        } 
+        else if (area.attachEvent) {
+          area.attachEvent('onpropertychange', function() {
+            if(LR.local.survey["@id"]&&area.getAttribute("dirty") === "false"){
+                 LR.local.makeDirty(area)   
+            }
+          })
+        }
+    }
+}
 
 LR.ui.submitSurvey = async function(){
      //Question
@@ -418,7 +442,7 @@ LR.ui.submitSurvey = async function(){
     let answers
     let qaSet
     if(LR.local.survey["@id"]){
-        newConversation = LR.local.survey
+        newConversation = await LR.crud.createOrUpdate(LR.local.survey)
     }
     else{
         interviewerID = document.getElementById("meta_author").value
@@ -440,14 +464,16 @@ LR.ui.populateQA = function(survey){
     let elems = document.querySelectorAll(".QA")
     let survey_QAs = survey.hasPart
     for(let l=0; l<elems.length; l++){
-        elems[l].setAttribute("dirty", "false")
+        elems[l].children[1].setAttribute("dirty", "false")
         elems[l].children[1].value = survey_QAs[l].resultComment.text
+        elems[l].children[1].setAttribute("survey_id",survey_QAs[l]["@id"])
     }
 }
 
 LR.ui.resumeSurvey = async function(surveyID){
 
     let surveyObj = await LR.tricks.resolveForJSON(surveyID)
+    LR.local.survey = surveyObj
     let eventID = surveyObj.about
     let interviewerID = surveyObj.author
     let intervieweeID = surveyObj.contributor
@@ -479,6 +505,8 @@ LR.ui.startSurvey = async function(event){
     let intervieweeID = document.getElementById("interviewee_id").value
     let interviewerID = document.getElementById("interviewer_id").value
     let eventID = document.getElementById("event_id").value
+    LR.local.removeDirty() // everything starts off clean
+    LR.ui.dirtyEvent()
 
     if(resumeID){
         LR.ui.resumeSurvey(resumeID)
