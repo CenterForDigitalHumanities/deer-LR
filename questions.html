@@ -81,6 +81,12 @@
                 <label>Event ID:</label><input id="event_id" type="text" value="http://devstore.rerum.io/v1/id/5cee987de4b07d216aab6bfc">
             </div>
         </div> 
+        <div id="provideSurvey" class="card">
+            <div class="card-body">
+                <header class="card-title">Resume a survey</header>
+                <label>Survey ID:</label><input id="survey_id" type="text" placeholder="http://devstore.rerum.io/v1/id/5ceec354e4b07d216aab70dc">
+            </div>
+        </div> 
         <input class="btn btn-primary" onclick="LR.ui.startSurvey(event)" type="button" value="Begin">
         <!-- Questions should be one per line or perhaps something like card style -->
             <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey_id="" class="container survey hidden">

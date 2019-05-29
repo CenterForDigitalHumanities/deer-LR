@@ -201,9 +201,9 @@ LR.tricks.makeReplyActions = function(interviewerID, intervieweeID, questions, a
                "@type":"Question",
                "id":question["@id"],
                "text":question.text
-            }   
+            },
+            "text":answer.text,   
           },
-          "text":answer.text,
           "testing":"LR"
         }
         RAobjs.push(RA)
@@ -436,21 +436,66 @@ LR.ui.submitSurvey = async function(){
     return newConversation 
 }
 
+LR.ui.populateQA = function(survey){
+    let elems = document.querySelectorAll(".QA")
+    let survey_QAs = survey.hasPart
+    for(let l=0; l<elems.length; l++){
+        elems[l].setAttribute("dirty", "false")
+        elems[l].children[1].value = survey_QAs[l].resultComment.text
+    }
+}
+
+LR.ui.resumeSurvey = async function(surveyID){
+
+    let surveyObj = await LR.tricks.resolveForJSON(surveyID)
+    let eventID = surveyObj.about
+    let interviewerID = surveyObj.author
+    let intervieweeID = surveyObj.contributor
+    document.getElementById("interviewee").classList.remove("hidden")
+    document.getElementById("noInterviewee").classList.add("hidden")
+
+    document.getElementById("interviewer").classList.remove("hidden")
+    document.getElementById("noInterviewer").classList.add("hidden")
+
+    document.getElementById("event").classList.remove("hidden")
+    document.getElementById("noEvent").classList.add("hidden")
+    document.getElementById("provideSurvey").classList.add("hidden")
+
+    document.getElementById("theSurvey").classList.remove("hidden")
+
+    document.getElementById("meta_about").value = eventID
+    document.getElementById("meta_author").value = interviewerID
+    document.getElementById("meta_contributor").value = intervieweeID
+    //Should probably store interviewer and interviewee id somewhere easy to gather.  
+    //Should probably display the event title
+    LR.ui.displayEventInfo(eventID)
+    LR.ui.displayNames(interviewerID, intervieweeID)
+    LR.ui.populateQA(surveyObj)
+}
+
 LR.ui.startSurvey = async function(event){
     //Make sure we have all prerequisite information, then hide/show next pieces
+    let resumeID = document.getElementById("survey_id").value
     let intervieweeID = document.getElementById("interviewee_id").value
     let interviewerID = document.getElementById("interviewer_id").value
     let eventID = document.getElementById("event_id").value
 
-    if(typeof intervieweeID !== "string" || "" === intervieweeID){
-        return false
+    if(resumeID){
+        LR.ui.resumeSurvey(resumeID)
+        return true
     }
-    if(typeof interviewerID !== "string" || "" === interviewerID){
-        return false
+    else{
+        if(typeof intervieweeID !== "string" || "" === intervieweeID){
+            return false
+        }
+        if(typeof interviewerID !== "string" || "" === interviewerID){
+            return false
+        }
+        if(typeof eventID !== "string" || "" === eventID){
+            return false
+        }
     }
-    if(typeof eventID !== "string" || "" === eventID){
-        return false
-    }
+    
 
     document.getElementById("interviewee").classList.remove("hidden")
     document.getElementById("noInterviewee").classList.add("hidden")
@@ -460,6 +505,7 @@ LR.ui.startSurvey = async function(event){
 
     document.getElementById("event").classList.remove("hidden")
     document.getElementById("noEvent").classList.add("hidden")
+    document.getElementById("provideSurvey").classList.add("hidden")
 
     document.getElementById("theSurvey").classList.remove("hidden")
 
@@ -493,27 +539,6 @@ LR.ui.displayNames = async function(interviewer, interviewee){
     document.getElementById("intervieweeDeer").setAttribute("deer-id", interviewee)
 }
 
-LR.ui.loadSurvey = async function(surveyID){
-    let surveyObj = await LR.tricks.resolveForJSON(surveyID)
-    let surveyInfo = surveyObj.hasPart
-    let elems = document.querySelectorAll(".QA")
-    //Probably not reliable, should maybe check this is the right field (check against questions text??)
-    //This would mean we are preserving order??
-    for(let i=0; i<surveyInfo.length; i++){
-        elems[i].children[1].value = surveyInfo[i].text
-        elems[i].children[1].setAttribute("survey_id", surveyInfo[i]["@id"])
-    }
-    //Make sure to hijack the interface because we don't need prerequisite info to start a survey, we already have one
-    let questions = document.getElementsByClassName("question")
-    // for(let elem=0; elem<questions.length; elem++){
-    //     questions[elem].style.display = "block"
-    // }
-    document.getElementById("noInterviewee").classList.add("hidden")
-    document.getElementById("noInterviewer").classList.add("hidden")
-    document.getElementById("noEvent").classList.add("hidden")
-    document.getElementById("theSurvey").classList.remove("hidden")
-    return true
-}
 
 LR.local.makeDirty = function(html){
     let items = LR.local.survey.hasPart
@@ -529,7 +554,7 @@ LR.local.makeDirty = function(html){
 }
 
 LR.local.removeDirty = function(){
-    let elems = document.querySelectorAll("answers")
+    let elems = document.querySelectorAll(".answer")
     for(let l=0; l<elems.length; l++){
         elems[l].setAttribute("dirty", "false")
     }
