@@ -37,26 +37,26 @@
         <div id="interviewee" class="hidden card interviewee">
             <div class="card-body">
                 <header class="card-title">Inteviewee Information</header>
-                <div id="iid">Loading interviewee data...</div>
+                <div id="interviewee_info">Loading interviewee data...</div>
             </div>
         </div>
         <div id="noInterviewee" class="card">
             <div class="card-body">
                 <header class="card-title">No Inteviewee Provided</header>
-                <label>Interviewee ID:</label><input id="iid_val" type="text" value="http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908">
+                <label>Interviewee ID:</label><input id="interviewee_id" type="text" value="http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908">
             </div>
         </div>
 
         <div id="interviewer" class="hidden card interviewer">
             <div class="card-body">
                 <header class="card-title">Inteviewer Information</header>
-                <div id="irid" >Loading interviewer data...</div>
+                <div id="interviewer_info" >Loading interviewer data...</div>
             </div>
         </div>
         <div id="noInterviewer" class="card">
             <div class="card-body">
                 <header class="card-title">No Inteviewer Provided</header>
-                <label>Interviewer ID:</label><input id="irid_val" type="text" value="">
+                <label>Interviewer ID:</label><input id="interviewer_id" type="text" value="">
             </div>
         </div>
 
@@ -64,18 +64,18 @@
          <div id="event" class="hidden card event">
             <div class="card-body">
                 <header class="card-title">Event Information</header>
-                <div id="eid">Loading event data...</div>
+                <div id="event_info">Loading event data...</div>
             </div>
         </div>
         <div id="noEvent" class="card">
             <div class="card-body">
                 <header class="card-title">No Event</header>
-                <label>Event ID:</label><input id="eid_val" type="text" value="">
+                <label>Event ID:</label><input id="event_id" type="text" value="">
             </div>
         </div> 
-        <input class="btn btn-primary" onclick="loadUp(event)" type="button" value="Begin">
+        <input class="btn btn-primary" onclick="LR.ui.startSurvey(event)" type="button" value="Begin">
         <!-- Questions should be one per line or perhaps something like card style -->
-            <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey-id="" class="container survey hidden">
+            <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey_id="" class="container survey hidden">
                 <input id="mata_about" class="convoMetadata" type="hidden" my-key="about" value="unknown">
                 <input id="meta_author" class="convoMetadata" type="hidden" my-key="author" value="unknown">
                 <input id="meta_contributor"class="convoMetadata" type="hidden" my-key="contributor" value="unknown">
@@ -230,9 +230,30 @@
         // }
 
          document.onload = () => {
+            LR.local.removeDirty() // everything starts off clean
             let surveyID = LR.tricks.getURLVariable(survey)
             if(surveyID){
 
+            }
+
+
+            let answerAreas = document.getElementsByClassName("answer")
+            for(let e = 0; e<answerAreas.length; e++){
+                let area = answerAreas[e]
+                if (area.addEventListener) {
+                  area.addEventListener('input', function() {
+                    if(area.getAttribute("dirty") === "false"){
+                         LR.local.makeDirty(area)   
+                    }
+                   
+                  }, false)
+                } else if (area.attachEvent) {
+                  area.attachEvent('onpropertychange', function() {
+                    if(area.getAttribute("dirty") === "false"){
+                         LR.local.makeDirty(area)   
+                    }
+                  })
+                }
             }
          }
 
