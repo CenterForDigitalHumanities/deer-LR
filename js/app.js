@@ -10,6 +10,20 @@ LR.crud = {}
 LR.err = {}
 LR.tricks = {}
 LR.ui = {}
+LR.test = {}
+
+LR.test.event = {
+   "@id": "http://devstore.rerum.io/v1/id/5cee987de4b07d216aab6bfc"
+}
+
+LR.test.interviewer = {
+    "@id": "http://devstore.rerum.io/v1/id/5cee975be4b07d216aab6bfa"
+}
+
+LR.test.interviewee = {
+    "@id":"http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908"
+}
+
 
 /** Various LR error handlers */
 LR.err.generic_error = function (msg){
@@ -78,28 +92,28 @@ LR.tricks.getURLVariable = function (variable){
     var query = window.location.search.substring(1);
     var vars = query.split("&");
     for (var i=0;i<vars.length;i++) {
-            var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){return pair[1];}
     }
     return(false);
 }
 
 LR.tricks.replaceURLVariable = function (variable, value){
-       var query = window.location.search.substring(1)
-       var location = window.location.origin + window.location.pathname
-       var vars = query.split("&");
-       var variables = ""
-       for (var i=0;i<vars.length;i++) {
+    var query = window.location.search.substring(1)
+    var location = window.location.origin + window.location.pathname
+    var vars = query.split("&");
+    var variables = ""
+    for (var i=0;i<vars.length;i++) {
         var pair = vars[i].split("=")
         if(pair[0] == variable){
             var newVar = pair[0]+"="+value;
             vars[i] = newVar;
             break;
         }
-       }
-       variables = vars.toString()
-       variables = variables.replace(/,/g, "&")
-       return(location + "?"+variables)
+    }
+    variables = vars.toString()
+    variables = variables.replace(/,/g, "&")
+    return(location + "?"+variables)
 }
 
 LR.tricks.makeQuestions = async function(interviewerID, intervieweeID){
@@ -415,10 +429,33 @@ LR.ui.startSurvey = async function(event){
     document.getElementById("theSurvey").classList.remove("hidden")
 
     document.getElementById("meta_about").value = eventID
-    document.getElementById("meta_author").value = interviwerID
+    document.getElementById("meta_author").value = interviewerID
     document.getElementById("meta_contributor").value = intervieweeID
     //Should probably store interviewer and interviewee id somewhere easy to gather.  
+    //Should probably display the event title
+    LR.ui.displayEventInfo(eventID)
+    LR.ui.displayNames(interviewerID, intervieweeID)
     return true
+}
+
+LR.ui.displayEventInfo = async function(id){
+    // let eventObj = await LR.tricks.resolveForJSON(id)
+    // LR.test.event = eventObj
+    // let eventTitle = eventObj.name
+    // let eventLoc = eventObj.location
+    // document.getElementById("eventTitle").innerHtml = eventTitle+" at "+location
+    document.getElementById("eventDeer").setAttribute("deer-id", id)
+}
+
+LR.ui.displayNames = async function(interviewer, interviewee){
+    // let interviewerObj = await LR.tricks.resolveForJSON(interviewer)
+    // let intervieweeObj = await LR.tricks.resolveForJSON(interviewee)
+    // LR.test.interviewer = interviewerObj
+    // LR.test.interviewee = intervieweeObj
+    // document.getElementById("interviewerName").innerHtml = "Interview performed by "+interviewerObj.name
+    // document.getElementById("intervieweeName").innerHtml = "asking "+intervieweeObj.name
+    document.getElementById("interviewerDeer").setAttribute("deer-id", interviewer)
+    document.getElementById("intervieweeDeer").setAttribute("deer-id", interviewee)
 }
 
 LR.ui.loadSurvey = async function(surveyID){
