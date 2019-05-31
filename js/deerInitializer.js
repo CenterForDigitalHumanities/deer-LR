@@ -61,17 +61,17 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     console.log("person template")
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
-        let dob = `<lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval>`
-     	  let email = `<lbl>Email</lbl> <theval>${UTILS.getValue(obj.email, [], "string")}</theval>`
-      	let phone = `<lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval>`
-       	let religion = `<lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval>`
-        let depiction = `<lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval>`
+        let dob = `<entry-line><lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval></entry-line/>`
+     	  let email = `<entry-line><lbl>Email</lbl> <theval>${UTILS.getValue(obj.email, [], "string")}</theval></entry-line/>`
+      	let phone = `<entry-line><lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval></entry-line/>`
+       	let religion = `<entry-line><lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval></entry-line/>`
+        let depiction = `<entry-line><lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval></entry-line/>`
      	  // let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
       	// let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
-        let gender = `<lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval>`
-        let edu  = `<lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval>`
-        let nationality = `<lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval>`
-        let description = `<lbl>Further Person Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval>`
+        let gender = `<entry-line><lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval></entry-line/>`
+        let edu  = `<entry-line><lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval></entry-line/>`
+        let nationality = `<entry-line><lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval></entry-line/>`
+        let description = `<entry-line><lbl>Further Person Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval></entry-line/>`
         tmpl += (depiction+dob+email+phone+religion+gender+edu+nationality+description)
         return tmpl
     } catch (err) {

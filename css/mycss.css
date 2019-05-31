@@ -1,5 +1,5 @@
     deer-view, .deer-view{
-        border: 2px solid green;
+        
     }
     survey-top{
         position: relative;
@@ -14,16 +14,13 @@
     lbl{
         display: inline-block;
         margin-right:5px;
-        font-family:"sans-serif";
+        font-size: 110%;
     }
     theval{
-        display:block; 
+        display:inline-block; 
     }
     lbl::after { 
         content: ":";
-    }
-    theval{
-        font-family:"serif";
     }
     form{
         border: 2px solid black;
@@ -48,13 +45,14 @@
         top: 4em;
         height: 20em;
         display: block;
-        background-color: blue;
+        background-color: lightgray;
         z-index: 10;
         position: fixed;
         padding-left: 3em;
         transition: width 1s;
         overflow-y: scroll;
         overflow-x: hidden;
+        text-align: left;
     }
     .info_collapsed{
          width: 3em;
@@ -86,6 +84,11 @@
     }
     html, body{
         background-color: #222;
+    }
+    entry-line{
+        position: relative;
+        display:block;
+
     }
 
     
