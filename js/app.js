@@ -212,29 +212,21 @@ LR.tricks.makeReplyActions = function(interviewerID, intervieweeID, questions, a
     return RAobjs
 }
 
-LR.tricks.makeConversation = function(interviewerID, intervieweeID, QAset){
-    let newConvo
-    if(LR.local.survey["@id"]){
-        //One is already made and in memory
-        newConvo = LR.local.survey
+LR.tricks.makeConversation = async function(interviewerID, intervieweeID, eventID, title){
+    //Generate a new conversation object to record the metadata required to have a Conversation
+    let convoObj={
+      "@context": "https://schema.org/",
+      "@type": "Conversation",
+      "hasPart":[],
+      "testing":"LR",
+      "about" : eventID,
+      "author" : interviewerID,
+      "contributor" : intervieweeID,
+      "inLanguage" : "en",
+      "name" : title
     }
-    else{
-        //No conversation loaded up, this will be a new one.  Must construct.
-        let elems = document.querySelectorAll(".convoMetadata")
-        newConvo={
-          "@context": "https://schema.org/",
-          "@type": "Conversation",
-          "hasPart":QAset,
-          "testing":"LR"
-        }
-        //map hidden inputs to the conversation object as simple key - val pairs
-        for(let i=0; i<elems.length; i++){
-           let k = elems[i].getAttribute("my-key")
-           let v = elems[i].value
-           newConvo[k]=v
-        }
-    }
-    return newConvo
+    let newConvo = await LR.crud.create(newConvo)
+    return newConvo.new_obj_state
 }
 
 
@@ -463,32 +455,32 @@ LR.ui.submitSurvey = async function(){
 LR.ui.populateQA = function(survey){
     let elems = document.querySelectorAll(".QA")
     let survey_QAs = survey.hasPart
-    for(let l=0; l<elems.length; l++){
+    let surveyName = survey.name
+    document.getElementById("surveyTitle").innerHTML = surveyName
+    for(let l=0; l<survey_QAs.length; l++){
         elems[l].children[1].setAttribute("dirty", "false")
         elems[l].children[1].value = survey_QAs[l].resultComment.text
         elems[l].children[1].setAttribute("survey_id",survey_QAs[l]["@id"])
     }
 }
 
-LR.ui.resumeSurvey = async function(surveyID){
-
+LR.ui.resumeSurvey = async function(redirect){
+    if(redirect){
+        let id = document.getElementById("survey_id").value
+        if(id){
+            return document.location.href = "interview.html?survey="+id
+        }
+        return false
+    }
+    let surveyID = LR.tricks.getURLVariable("survey")
     let surveyObj = await LR.tricks.resolveForJSON(surveyID)
     LR.local.survey = surveyObj
     let eventID = surveyObj.about
     let interviewerID = surveyObj.author
     let intervieweeID = surveyObj.contributor
-    document.getElementById("interviewee").classList.remove("hidden")
-    document.getElementById("noInterviewee").classList.add("hidden")
 
-    document.getElementById("interviewer").classList.remove("hidden")
-    document.getElementById("noInterviewer").classList.add("hidden")
-
-    document.getElementById("event").classList.remove("hidden")
-    document.getElementById("noEvent").classList.add("hidden")
-    document.getElementById("provideSurvey").classList.add("hidden")
-
-    document.getElementById("theSurvey").classList.remove("hidden")
-
+    document.getElementById("surveyContainer").classList.remove("hidden")
+    document.getElementById("surveyBegin").classList.add("hidden")
     document.getElementById("meta_about").value = eventID
     document.getElementById("meta_author").value = interviewerID
     document.getElementById("meta_contributor").value = intervieweeID
@@ -497,54 +489,31 @@ LR.ui.resumeSurvey = async function(surveyID){
     LR.ui.displayEventInfo(eventID)
     LR.ui.displayNames(interviewerID, intervieweeID)
     LR.ui.populateQA(surveyObj)
+    return true
 }
 
 LR.ui.startSurvey = async function(event){
     //Make sure we have all prerequisite information, then hide/show next pieces
-    let resumeID = document.getElementById("survey_id").value
+    
     let intervieweeID = document.getElementById("interviewee_id").value
     let interviewerID = document.getElementById("interviewer_id").value
     let eventID = document.getElementById("event_id").value
-    LR.local.removeDirty() // everything starts off clean
-    LR.ui.dirtyEvent()
 
-    if(resumeID){
-        LR.ui.resumeSurvey(resumeID)
-        return true
+    if(typeof intervieweeID !== "string" || "" === intervieweeID){
+        alert("You must tell us who is being interviewed")
+        return false
     }
-    else{
-        if(typeof intervieweeID !== "string" || "" === intervieweeID){
-            return false
-        }
-        if(typeof interviewerID !== "string" || "" === interviewerID){
-            return false
-        }
-        if(typeof eventID !== "string" || "" === eventID){
-            return false
-        }
+    if(typeof interviewerID !== "string" || "" === interviewerID){
+        alert("You must tell us who is performing the interview")
+        return false
     }
-    
-
-    document.getElementById("interviewee").classList.remove("hidden")
-    document.getElementById("noInterviewee").classList.add("hidden")
-
-    document.getElementById("interviewer").classList.remove("hidden")
-    document.getElementById("noInterviewer").classList.add("hidden")
-
-    document.getElementById("event").classList.remove("hidden")
-    document.getElementById("noEvent").classList.add("hidden")
-    document.getElementById("provideSurvey").classList.add("hidden")
-
-    document.getElementById("theSurvey").classList.remove("hidden")
-
-    document.getElementById("meta_about").value = eventID
-    document.getElementById("meta_author").value = interviewerID
-    document.getElementById("meta_contributor").value = intervieweeID
-    //Should probably store interviewer and interviewee id somewhere easy to gather.  
-    //Should probably display the event title
-    LR.ui.displayEventInfo(eventID)
-    LR.ui.displayNames(interviewerID, intervieweeID)
-    return true
+    if(typeof eventID !== "string" || "" === eventID){
+        alert("You must tell us what event this interview is about")
+        return false
+    }
+    let newConvo = await LR.ui.makeConversation(intervieweeID, interviewerID, eventID)
+    let id = newConvo["@id"]
+    return document.location.href = "interview.html?survey="+id
 }
 
 LR.ui.displayEventInfo = async function(id){
@@ -556,17 +525,41 @@ LR.ui.displayEventInfo = async function(id){
     document.getElementById("eventDeer").setAttribute("deer-id", id)
 }
 
-LR.ui.displayNames = async function(interviewer, interviewee){
-    // let interviewerObj = await LR.tricks.resolveForJSON(interviewer)
-    // let intervieweeObj = await LR.tricks.resolveForJSON(interviewee)
-    // LR.test.interviewer = interviewerObj
-    // LR.test.interviewee = intervieweeObj
-    // document.getElementById("interviewerName").innerHtml = "Interview performed by "+interviewerObj.name
-    // document.getElementById("intervieweeName").innerHtml = "asking "+intervieweeObj.name
-    document.getElementById("interviewerDeer").setAttribute("deer-id", interviewer)
-    document.getElementById("intervieweeDeer").setAttribute("deer-id", interviewee)
+LR.ui.displayNames = async function(interviewerID, intervieweeID){
+    document.getElementById("interviewerDeer").setAttribute("deer-id", interviewerID)
+    document.getElementById("intervieweeDeer").setAttribute("deer-id", intervieweeID)
+
 }
 
+LR.ui.showSurveyInfo = function(){
+    document.getElementById("surveyStart").classList.add("hidden")
+    document.getElementById("surveyInfo").classList.remove("hidden")
+}
+
+LR.ui.toggleSurveyInfo = function(){
+    if(document.getElementById("surveyMeta").classList.contains("info_expanded")){
+        document.getElementById("surveyMeta").classList.remove("info_expanded")
+        document.getElementById("surveyMeta").classList.add("info_collapsed")
+    }
+    else{
+        document.getElementById("surveyMeta").classList.remove("info_collapsed")
+        document.getElementById("surveyMeta").classList.add("info_expanded")
+    }
+}
+
+LR.ui.togglePersonAddition = function(){
+    let personForm = document.getElementById("newPersonForm")
+    let hidden = false
+    if (personForm.classList.contains("hidden")){
+        personForm.classList.remove("hidden")
+        hidden = false
+    }
+    else{
+        personForm.classList.add("hidden")
+        hidden = true
+    }
+    return hidden
+}
 
 LR.local.makeDirty = function(html){
     let items = LR.local.survey.hasPart

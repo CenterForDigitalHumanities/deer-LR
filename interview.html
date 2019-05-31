@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title>Lived Religions questionnaire encoder</title>
+    <title>Lived Religions Survey</title>
     <meta charset="UTF-8">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -16,85 +16,46 @@
         select[sub]{
             display: none;
         }
-        .hidden{
-            display: none;
-        }
         textarea{
             display: block;
-            width: 30em;
         }
-        input[type="text"]{
-            width: 30em;
-        }
-        .question{
-            display: inline-block;
-            text-decoration: none;
-            border: none;
-            width: 100%;
-            word-wrap: normal;
-        }
+        
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
-        <div>
-            Please provide the information below to begin a survey.  
-        </div>
-        <div id="interviewee" class="hidden card interviewee">
-            <header class="card-title">Interviewee Information</header>
-            <deer-view id="intervieweeDeer" deer-id="" deer-template="person" class="card-body">
-                <div >Loading interviewee data...</div>
-            </deer-view>
-        </div>
-        <div id="noInterviewee" class="card">
-            <div class="card-body">
-                <header class="card-title">No Inteviewee Provided</header>
-                <label>Interviewee ID:</label><input id="interviewee_id" type="text" value="http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908">
-            </div>
-        </div>
+    <div class="container_fluid">
+        <input id="surveyBegin" class="btn btn-primary" onclick="LR.ui.resumeSurvey()" type="button" value="Do The Interview">
+        <div id="surveyContainer" class="hidden">
+            <survey-top id="surveyTitle">begin or provide a survey below</survey-top>
+            <survey-info id="surveyMeta" class="info_collapsed" onclick="LR.ui.toggleSurveyInfo">
+                <info-toggle onclick="LR.ui.toggleSurveyInfo()">  </info-toggle>
+                <h3>
+                    Interviewer
+                </h3>
+                <deer-view id="interviewerDeer" deer-id="" deer-template="person" deer-id="">
+                    
+                </deer-view>
+                <h3>
+                    Interviewee
+                </h3>
+                <deer-view id="intervieweeDeer" deer-template="person" deer-id="">
+                   
+                </deer-view>
+                <h3>
+                    Event
+                </h3>
+                <deer-view id="eventDeer" deer-template="event" deer-id="">
 
-        <div id="interviewer" class="hidden card interviewer">
-            <header class="card-title">Interviewer Information</header>
-            <deer-view id="interviewerDeer" deer-id="" deer-template="person" class="card-body">
-                <div >Loading interviewer data...</div>
-            </deer-view>
-        </div>
-        <div id="noInterviewer" class="card">
-            <div class="card-body">
-                <header class="card-title">No Inteviewer Provided</header>
-                <label>Interviewer ID:</label><input id="interviewer_id" type="text" value="http://devstore.rerum.io/v1/id/5ceed1cfe4b07d216aab71b5">
-            </div>
-        </div>
-
-        <!-- What EventID is the survey attached to.  Pull LocationID from that -->
-         <div id="event" class="hidden card event">
-            <header class="card-title">Event Information</header>
-            <deer-view id="eventDeer" deer-id="" deer-template="event" class="card-body">
-                <div >Loading event data...</div>
-            </deer-view>
-        </div>
-        <div id="noEvent" class="card">
-            <div class="card-body">
-                <header class="card-title">No Event</header>
-                <label>Event ID:</label><input id="event_id" type="text" value="http://devstore.rerum.io/v1/id/5cee987de4b07d216aab6bfc">
-            </div>
-        </div> 
-        <div id="provideSurvey" class="card">
-            <div class="card-body">
-                <header class="card-title">Resume a survey</header>
-                <label>Survey ID:</label><input id="survey_id" type="text" placeholder="http://devstore.rerum.io/v1/id/5ceec354e4b07d216aab70dc">
-            </div>
-        </div> 
-        <input class="btn btn-primary" onclick="LR.ui.startSurvey(event)" type="button" value="Begin">
-        <!-- Questions should be one per line or perhaps something like card style -->
-            <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey_id="" class="container survey hidden">
+                </deer-view>
+            </survey-info>
+            <!-- too complext for DEER i believe which is why this is not templated -->
+            <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey_id="" class="container survey">
                 <input id="meta_about" class="convoMetadata" type="hidden" my-key="about" value="unknown">
                 <input id="meta_author" class="convoMetadata" type="hidden" my-key="author" value="unknown">
                 <input id="meta_contributor"class="convoMetadata" type="hidden" my-key="contributor" value="unknown">
                 <input class="convoMetadata" type="hidden" my-key="inLanguage" value="en">
-                <input id="meta_name" class="convoMetadata" type="hidden" my-key="name" value="Bryan Testing LR">
+                <input id="meta_name" class="convoMetadata" type="hidden" my-key="name" value="Lived Religion Survey Template">
                 <h2 id="eventTitle"></h2>
                 <h2><span id="intervieweeName"></span><span id="interviewerName"></span></h2>
                 <h3>Location</h3>
@@ -219,6 +180,7 @@
                 <div class="QA">
                     <input class="question" type="text"  value="Do you feel that religious ideas/beliefs/objects/attitudes/representations affect people living in St. Louis?"/>
                     <textarea class="answer"> </textarea>
+            <!-- Add ins -->
                 </div>
                 <div class="QA">
                     <input class="question" type="text"  value="Do you have any other questions or comments about this location?"/>
@@ -231,28 +193,19 @@
                 <input type="button" class="btn-primary" value="Save Changes" onclick="LR.ui.submitSurvey()" />
             </form>
         </div>
-
-    <!-- Add ins -->
+    </div>
     <script src="./js/deerInitializer.js" type="module"></script>   
     <script src="./js/app.js" type="text/javascript"></script>  
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
-
         //This could be a surveyID...
         //window.onhashchange = onload = () => hashExample.setAttribute("my-id", window.location.hash.substr(1))
         // document.onscroll = () => {
         //     badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
         //     tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
         // }
-
-         document.onload = () => {
-            
-         }
-
-
     </script>
 </body>
-
 </html>
