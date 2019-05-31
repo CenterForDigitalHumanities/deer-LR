@@ -61,9 +61,8 @@
         width: 27em;
         margin-bottom: 6px;
     }
-    .container-fluid{
+    .container{
         text-align:center;
-        width: 65em;
     }
     survey-info{
         right: 0px;
@@ -100,7 +99,7 @@
         display: inline-block;
         text-decoration: none;
         border: none;
-        width: 100%;
+        width: 100% !important;
         word-wrap: normal;
     }
     .card{

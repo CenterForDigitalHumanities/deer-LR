@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container">
         <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
         <survey-loader id="surveyLoader" class="hidden">Please wait while we create your survey.  You will be redirected.</survey-loader>
         <survey-top id="surveyTitle">begin or provide a survey below</survey-top>
@@ -46,7 +46,8 @@
             <div id="noInterviewer" class="card">
                 <div class="card-body">
                     <header class="card-title">Tell us who is performing this interview.</header>
-                    <label>Interviewer ID:</label><input id="interviewer_id" type="text" value="http://devstore.rerum.io/v1/id/5cef3d6ae4b07d216aab71c9">
+                    <label>Interviewer ID:</label><input id="interviewer_id" type="text" value="
+                    ">
                 </div>
             </div>
             <div id="noEvent" class="card">
@@ -65,6 +66,7 @@
         </div>
     </div>
 
+    <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
     <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey_id="" class="container survey hidden">
             <input id="meta_about" class="convoMetadata" type="hidden" my-key="about" value="unknown">
             <input id="meta_author" class="convoMetadata" type="hidden" my-key="author" value="unknown">
