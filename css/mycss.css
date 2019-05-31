@@ -25,9 +25,11 @@
     form{
         border: 2px solid black;
         background-color: white;
+        text-align: left;
     }
     textarea{
         height: 6em;
+        display: block;
     }
     .hidden{
         display: none;
