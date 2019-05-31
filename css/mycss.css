@@ -1,6 +1,29 @@
     deer-view, .deer-view{
         
     }
+    #surveyBegin{
+        display: block;
+        margin: 0 auto;
+        padding: 10em;
+        top: 2em;
+        position: relative;
+    }
+    #surveyLoader{
+        position: absolute;
+        width: 100em;
+        height: 100em;
+        display: block;
+        background-image: url(../icons/loading.gif);
+        background-size: 34em;
+        background-position: top;
+        background-repeat: no-repeat;
+        top: 0px;
+        left: 0px;
+        z-index: 10;
+        background-color: rgba(1,1,1,.7);
+        color: white;
+        font-weight: bold;
+    }
     survey-top{
         position: relative;
         display: block;
@@ -32,7 +55,7 @@
         display: block;
     }
     .hidden{
-        display: none;
+        display: none !important;
     }
     textarea, input[type="text"]{
         width: 27em;
@@ -93,5 +116,5 @@
 
     }
 
-    
+
 

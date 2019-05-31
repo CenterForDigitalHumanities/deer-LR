@@ -513,6 +513,7 @@ LR.ui.startSurvey = async function(event){
         alert("You must tell us what event this interview is about")
         return false
     }
+    document.getElementById("surveyLoader").classList.remove("hidden")
     let QA
     let newConvo = await LR.crud.makeConversation(intervieweeID, interviewerID, eventID, convoTitle, [])
     let id = newConvo["@id"]

@@ -16,12 +16,13 @@
 <body>
     <div class="container-fluid">
         <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
+        <survey-loader id="surveyLoader" class="hidden">Please wait while we create your survey.  You will be redirected.</survey-loader>
         <survey-top id="surveyTitle">begin or provide a survey below</survey-top>
         <div id="surveyStart">
             <div id="provideSurvey" class="card">
                 <div class="card-body">
                     <header class="card-title">If you would like to resume an existing survey, provide the Survey ID below</header>
-                    <input id="survey_id" type="text" placeholder="http://devstore.rerum.io/v1/id/5cf17149e4b07d216aab75ee"/><br>
+                    <input id="survey_id" type="text" value="http://devstore.rerum.io/v1/id/5cf17149e4b07d216aab75ee"/><br>
                     <input class="btn btn-primary" type="button" value="Resume Survey" onclick="LR.ui.resumeSurvey(true)" />
                 </div>
             </div> 
@@ -57,10 +58,10 @@
             <div id="noTitle" class="card">
                 <div class="card-body">
                     <header class="card-title">If you would like to give a title to this survey, provide one here</header>
-                    <label>Event ID:</label><input id="survey_title" type="text" value="http://devstore.rerum.io/v1/id/5cee987de4b07d216aab6bfc">
+                    <label>Title:</label><input id="survey_title" type="text" value="DEFAULT title">
                 </div>
             </div> 
-            <input class="btn btn-primary" onclick="LR.ui.startSurvey(event)" type="button" value="Begin Interview">
+            <input class="btn btn-primary" onclick="LR.ui.startSurvey(event)" type="button" value="Create Survey">
         </div>
     </div>
 
