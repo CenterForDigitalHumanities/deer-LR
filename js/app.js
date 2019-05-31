@@ -564,6 +564,20 @@ LR.ui.togglePersonAddition = function(){
     return hidden
 }
 
+LR.ui.toggleEventAddition = function(){
+    let personForm = document.getElementById("newEventForm")
+    let hidden = false
+    if (personForm.classList.contains("hidden")){
+        personForm.classList.remove("hidden")
+        hidden = false
+    }
+    else{
+        personForm.classList.add("hidden")
+        hidden = true
+    }
+    return hidden
+}
+
 LR.local.makeDirty = function(html){
     let items = LR.local.survey.hasPart
     let id = html.getAttribute("survey_id")
