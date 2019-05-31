@@ -20,6 +20,7 @@
 
 <body>
     <div class="container-fluid">
+        <survey-top id="surveyTitle">Add or Find Participants</survey-top>
         <div class="card">
             <div class="card_body">
                 <input type="button" class="btn btn-primary" value="Register New Participant" onclick="LR.ui.togglePersonAddition()"/>
@@ -126,8 +127,11 @@
                     <label>Description</label>
                     <textarea deer-key="description" deer-source=""></textarea>
                     <footer>
-                        <input class="button primary" type="submit" onclick="LR.crud.addNewParticipant(event)">
-                        <!-- After deer saves this, how can I show their new ID -->
+                        <input class="button primary" type="submit">
+                        <div id="participantResult"> 
+                            <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
+                        </div>
+                        
                     </footer>
                 </form>
             </div>
@@ -137,11 +141,11 @@
             <div class="card_body">
                 <input type="button" value="View Existing Participants" class="btn btn-primary" onclick="LR.tricks.populateExistingParticipants()"/>
                 <header>Existing Participants</header>
-                <form deer-type="List" deer-id="">
+                <!-- <deer-view  deer-type="List" deer-id=""> -->
                     <ul id="participants">
                         <li>Gathering Participant Data..TODO</li>
                     </ul>
-                </form>
+                <!-- </deer-view> -->
             </div>
         </div>
     </div>

@@ -35,6 +35,7 @@ LR.test.fillTextAreas = function(){
     let elems = document.querySelectorAll(".answer")
     for(let l=0; l<elems.length; l++){
         elems[l].value = "Answer "+l
+        LR.local.makeDirty(elems[l])
     }
 }
 
@@ -188,18 +189,18 @@ LR.tricks.makeReplyActions = function(interviewerID, intervieweeID, questions, a
           "@type": "ReplyAction",
           "agent": {
             "@type": "Person",
-            "id": interviewerID
+            "@id": interviewerID
           },
           "recipient": {
             "@type": "Person",
-            "id": intervieweeID
+            "@id": intervieweeID
           },
           "resultComment": {
             "@type":"Answer",
-            "id":answer["@id"],
+            "@id":answer["@id"],
             "parentItem":{
                "@type":"Question",
-               "id":question["@id"],
+               "@id":question["@id"],
                "text":question.text
             },
             "text":answer.text,   
@@ -212,12 +213,16 @@ LR.tricks.makeReplyActions = function(interviewerID, intervieweeID, questions, a
     return RAobjs
 }
 
-LR.tricks.makeConversation = async function(interviewerID, intervieweeID, eventID, title){
+LR.crud.makeConversation = async function(interviewerID, intervieweeID, eventID, title){
     //Generate a new conversation object to record the metadata required to have a Conversation
+
+    let questions = await LR.tricks.makeQuestions(interviewerID, intervieweeID) 
+    let answers = await LR.tricks.makeAnswers(interviewerID, intervieweeID, questions) 
+    let QAset = await LR.tricks.makeReplyActions(interviewerID, intervieweeID, questions, answers)
     let convoObj={
       "@context": "https://schema.org/",
       "@type": "Conversation",
-      "hasPart":[],
+      "hasPart":QAset,
       "testing":"LR",
       "about" : eventID,
       "author" : interviewerID,
@@ -225,8 +230,8 @@ LR.tricks.makeConversation = async function(interviewerID, intervieweeID, eventI
       "inLanguage" : "en",
       "name" : title
     }
-    let newConvo = await LR.crud.create(newConvo)
-    return newConvo.new_obj_state
+    let newConvo = await LR.crud.createOrUpdate(convoObj)
+    return newConvo
 }
 
 
@@ -433,21 +438,16 @@ LR.ui.submitSurvey = async function(){
     let questions
     let answers
     let qaSet
-    if(LR.local.survey["@id"]){
+    if(LR.local.survey.hasOwnProperty("@id")){
+        //One was created and put to memory or one was provided via the interface, no need to create anything.
         newConversation = await LR.crud.createOrUpdate(LR.local.survey)
     }
     else{
-        interviewerID = document.getElementById("meta_author").value
-        intervieweeID = document.getElementById("meta_contributor").value
-        conversation = {}
-        questions = await LR.tricks.makeQuestions(interviewerID, intervieweeID) 
-        answers = await LR.tricks.makeAnswers(interviewerID, intervieweeID, questions) 
-        qaSet = await LR.tricks.makeReplyActions(interviewerID, intervieweeID, questions, answers)
-        conversation = await LR.tricks.makeConversation(interviewerID, intervieweeID, qaSet)
-        //Is a Survey a https://schema.org/Conversation/ ?  I think that would be fair to say.  A conversation aggregates Comments like
-        newConversation = await LR.crud.createOrUpdate(conversation)
+        alert("BAD BAD BAD")
+        return false
     }
     document.getElementById("theSurvey").setAttribute("survey_id", newConversation["@id"])
+    LR.local.survey = newConversation
     LR.local.removeDirty()
     return newConversation 
 }
@@ -489,6 +489,7 @@ LR.ui.resumeSurvey = async function(redirect){
     LR.ui.displayEventInfo(eventID)
     LR.ui.displayNames(interviewerID, intervieweeID)
     LR.ui.populateQA(surveyObj)
+    LR.ui.dirtyEvent()
     return true
 }
 
@@ -498,6 +499,7 @@ LR.ui.startSurvey = async function(event){
     let intervieweeID = document.getElementById("interviewee_id").value
     let interviewerID = document.getElementById("interviewer_id").value
     let eventID = document.getElementById("event_id").value
+    let convoTitle = document.getElementById("survey_title").value
 
     if(typeof intervieweeID !== "string" || "" === intervieweeID){
         alert("You must tell us who is being interviewed")
@@ -511,7 +513,8 @@ LR.ui.startSurvey = async function(event){
         alert("You must tell us what event this interview is about")
         return false
     }
-    let newConvo = await LR.ui.makeConversation(intervieweeID, interviewerID, eventID)
+    let QA
+    let newConvo = await LR.crud.makeConversation(intervieweeID, interviewerID, eventID, convoTitle, [])
     let id = newConvo["@id"]
     return document.location.href = "interview.html?survey="+id
 }
