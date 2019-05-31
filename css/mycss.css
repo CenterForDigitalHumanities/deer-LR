@@ -1,22 +1,95 @@
     deer-view, .deer-view{
-        border: 2px solid green;
+        
     }
-
-    /* For MY custom templates.  Otherwise, I am just using what DEER has */
+    survey-top{
+        position: relative;
+        display: block;
+        top: 0px;
+        background-color: black;
+        color: white;
+        padding: 1em;
+        width: 100%;
+        text-align: center;
+    }
     lbl{
         display: inline-block;
         margin-right:5px;
-        font-family:"sans-serif";
+        font-size: 110%;
     }
     theval{
-        display:block; 
+        display:inline-block; 
     }
     lbl::after { 
         content: ":";
     }
-    theval{
-        font-family:"serif";
-    }
     form{
-        border: 2px solid blue;
+        border: 2px solid black;
+        background-color: white;
     }
+    textarea{
+        height: 6em;
+    }
+    .hidden{
+        display: none;
+    }
+    textarea, input[type="text"]{
+        width: 27em;
+        margin-bottom: 6px;
+    }
+    .container-fluid{
+        text-align:center;
+        width: 65em;
+    }
+    survey-info{
+        right: 0px;
+        top: 4em;
+        height: 20em;
+        display: block;
+        background-color: lightgray;
+        z-index: 10;
+        position: fixed;
+        padding-left: 3em;
+        transition: width 1s;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        text-align: left;
+    }
+    .info_collapsed{
+         width: 3em;
+         right: -18px;
+    }
+    .info_expanded{
+        width: 50em;
+        right: 0px;
+    }
+    info-toggle{
+        background-image: url(../icons/info.png);
+        background-size: 3em;
+        height: 3em;
+        width: 3em;
+        position: absolute;
+        left: 0px;
+        top: 8em;
+    }
+    .question{
+        display: inline-block;
+        text-decoration: none;
+        border: none;
+        width: 100%;
+        word-wrap: normal;
+    }
+    .card{
+        margin-bottom: 2px;
+        border: 1px solid black;
+    }
+    html, body{
+        background-color: #222;
+    }
+    entry-line{
+        position: relative;
+        display:block;
+
+    }
+
+    
+

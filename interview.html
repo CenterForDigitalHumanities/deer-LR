@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    -->
+<html>
+
+<head>
+    <title>Lived Religions Survey</title>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/mycss.css">
+
+    <style>
+        select[sub]{
+            display: none;
+        }
+        textarea{
+            display: block;
+        }
+        
+    </style>
+</head>
+
+<body>    
+    <input id="surveyBegin" class="btn btn-primary" onclick="LR.ui.resumeSurvey()" type="button" value="Do The Interview">
+    <div id="surveyContainer" class="hidden container-fluid">
+        <survey-top id="surveyTitle">begin or provide a survey below</survey-top>
+        <survey-info id="surveyMeta" class="info_collapsed" onclick="LR.ui.toggleSurveyInfo">
+            <info-toggle onclick="LR.ui.toggleSurveyInfo()">  </info-toggle>
+            <h3>
+                Interviewer
+            </h3>
+            <deer-view id="interviewerDeer" deer-id="" deer-template="person" deer-id="">
+                
+            </deer-view>
+            <h3>
+                Interviewee
+            </h3>
+            <deer-view id="intervieweeDeer" deer-template="person" deer-id="">
+               
+            </deer-view>
+            <h3>
+                Event
+            </h3>
+            <deer-view id="eventDeer" deer-template="event" deer-id="">
+
+            </deer-view>
+        </survey-info>
+        <!-- too complext for DEER i believe which is why this is not templated -->
+        <form id="theSurvey" my-type="Conversation" my-context="http://schema.org" survey_id="" class="container survey">
+            <input id="meta_about" class="convoMetadata" type="hidden" my-key="about" value="unknown">
+            <input id="meta_author" class="convoMetadata" type="hidden" my-key="author" value="unknown">
+            <input id="meta_contributor"class="convoMetadata" type="hidden" my-key="contributor" value="unknown">
+            <input class="convoMetadata" type="hidden" my-key="inLanguage" value="en">
+            <input id="meta_name" class="convoMetadata" type="hidden" my-key="name" value="Lived Religion Survey Template">
+            <h2 id="eventTitle"></h2>
+            <h2><span id="intervieweeName"></span><span id="interviewerName"></span></h2>
+            <h3>Location</h3>
+            <div class="QA">
+                <input class="question" type="text"  value="What is the name of this location?" />
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="What is the address of this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do you live near this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="What are some of the places that surround this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Provide a description of this location in your own words."/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="How does this location interact with the neighborhood."/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <h3>History/Background</h3>
+            <!-- <div class="card-text">Help describe the history of this location.</div> -->
+            <div class="QA">
+                <input class="question" type="text"  value="What is the history of this location"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="How would you describe others who affiliate/work at/attend/visit/patronize this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="What would you like other people nearby to know about this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <h3>Space</h3>
+            <!-- <div class="card-text">Help describe the space in this location.</div> -->
+            <div class="QA">
+                <input class="question" type="text"  value="How would you describe the physical and social space at this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="How would you describe others who affiliate/work at/attend/visit/patronize this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="What would you like other people nearby to know about this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="What does this space mean to you?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Is there anything about the physical or social space of this location that a casual observer or first time visitor may not recognize?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="How does the physical or social space relate to broader communities?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do you think physical space matters to public understandings of religion?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <h3>Belief</h3>
+            <!-- <div class="card-text">Help describe beliefs that relate to this location.</div> -->
+            <div class="QA">
+                <input class="question" type="text"  value="Are there any guiding beliefs or creeds that you associate with this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Does this location have a stated mission?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="How do these things relate to the people that affiliate/work/attend/patronize this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Are there any unspoken beliefs that shape or motivate experiences at this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <h3>Practices</h3>
+            <!-- <div class="card-text">Help describe some of the day to day goings on at this location</div> -->
+            <div class="QA">
+                <input class="question" type="text"  value="What is a typical schedule like at this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="What are the events that occur here that best represent this community, if any at all?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Are there any unofficial or vernacular practices you associate with this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Are there any objects or images at this location that are important to you?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do any of these practices have an effect on, or are they affected by, your location in the city?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <h3>Wrap up</h3>
+            <!-- <div class="card-text">Personal Questions</div> -->
+            <div class="QA">
+                <input class="question" type="text"  value="How would you describe religion in St. Louis?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do you feel relogion matters to people outside of specific faith communities?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do you feel that religious ideas/beliefs/objects/attitudes/representations affect people living in St. Louis?"/>
+                <textarea class="answer"> </textarea>
+        <!-- Add ins -->
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do you have any other questions or comments about this location?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <div class="QA">
+                <input class="question" type="text"  value="Do you have ideas about other people, places, or topics to explore as part of this study of relogion in St. Louis?"/>
+                <textarea class="answer"> </textarea>
+            </div>
+            <input type="button" class="btn-primary" value="Save Changes" onclick="LR.ui.submitSurvey()" />
+        </form>
+    </div>
+    <script src="./js/deerInitializer.js" type="module"></script>   
+    <script src="./js/app.js" type="text/javascript"></script>  
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        //This could be a surveyID...
+        //window.onhashchange = onload = () => hashExample.setAttribute("my-id", window.location.hash.substr(1))
+        // document.onscroll = () => {
+        //     badge.style.opacity = 1 - window.scrollY / window.innerHeight * 2
+        //     tagline.style.top = window.scrollY / window.innerHeight * -5 + "em"
+        // }
+    </script>
+</body>
+</html>

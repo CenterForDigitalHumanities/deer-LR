@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    -->
+<html>
+
+<head>
+    <title>Lived Religions Survey</title>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/mycss.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
+        <survey-top id="surveyTitle">begin or provide a survey below</survey-top>
+        <div id="surveyStart">
+            <div id="provideSurvey" class="card">
+                <div class="card-body">
+                    <header class="card-title">If you would like to resume an existing survey, provide the Survey ID below</header>
+                    <input id="survey_id" type="text" placeholder="http://devstore.rerum.io/v1/id/5ceec354e4b07d216aab70dc"/><br>
+                    <input class="btn btn-primary" type="button" value="Resume Survey" onclick="LR.ui.resumeSurvey(true)" />
+                </div>
+            </div> 
+            <div id="newSurvey" class="card">
+                <div class="card-body">
+                    <header class="card-title">If you would like to start a new survey, click below</header>
+                    <input type="button" class="btn btn-primary" value="Start New Survey" onclick="LR.ui.showSurveyInfo(event)" />
+                </div>
+            </div> 
+        </div>
+        <div id="surveyInfo" class="hidden">
+            <div>
+                To start a new survey there are a few things we need to know first.  Please provide the information below. 
+            </div>
+            <div id="noInterviewee" class="card">
+                <div class="card-body">
+                    <header class="card-title">Tell us who is taking this interview.</header>
+                    <label>Interviewee ID:</label><input id="interviewee_id" type="text" value="http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908">
+                </div>
+            </div>
+            <div id="noInterviewer" class="card">
+                <div class="card-body">
+                    <header class="card-title">Tell us who is performing this interview.</header>
+                    <label>Interviewer ID:</label><input id="interviewer_id" type="text" value="http://devstore.rerum.io/v1/id/5cef3d6ae4b07d216aab71c9">
+                </div>
+            </div>
+            <div id="noEvent" class="card">
+                <div class="card-body">
+                    <header class="card-title">Tell us which LR event this interview is about.</header>
+                    <label>Event ID:</label><input id="event_id" type="text" value="http://devstore.rerum.io/v1/id/5cee987de4b07d216aab6bfc">
+                </div>
+            </div> 
+            <input class="btn btn-primary" onclick="LR.ui.startSurvey(event)" type="button" value="Begin Interview">
+        </div>
+    </div>
+
+    <!-- Add ins -->
+    <script src="./js/deerInitializer.js" type="module"></script>   
+    <script src="./js/app.js" type="text/javascript"></script>  
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>

@@ -21,7 +21,7 @@ import { default as UTILS } from '../deer-lr-working/deer-utils.js'
 DEER.TEMPLATES.cat = (obj) => `<h5>${obj.name}</h5><img src="http://placekitten.com/300/150" style="width:100%;">`
 
 //Add one of my own templates
-DEER.TEMPLATES.sense = function(obj){
+DEER.TEMPLATES.sense = function(obj, options={}){
     console.log("sense template")
     try {
     	// let kind = DEER.TEMPLATES.prop(obj, {key:"kind", label:"Type"}) || ``
@@ -61,16 +61,28 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     console.log("person template")
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
-        let dob = `<lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval>`
-     	let cod = `<lbl>Cause of Death</lbl> <theval>${UTILS.getValue(obj.causeOfDeath, [], "string")}</theval>`
-      	let aad = `<lbl>Age at Death</lbl> <theval>${UTILS.getValue(obj.deathAge, [], "string")}</theval>`
-       	let dod = `<lbl>Date of Death</lbl> <theval>${UTILS.getValue(obj.deathDeate, [], "number")}</theval>`
-        let depiction = `<lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval>`
-     	let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
-      	let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
-        let gender = `<lbl>Gender</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval>`
-        let url = `<lbl>Identity Link</lbl> <theval>http://cemetery.rerum.io/mcelwee/annotationPage.html${UTILS.getValue(obj.myURL, [], "string")}</theval>`
-        tmpl += (depiction+dob+dod+aad+cod+familyName+givenName+gender+url)
+        let dob = `<entry-line><lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval></entry-line/>`
+     	  let email = `<entry-line><lbl>Email</lbl> <theval>${UTILS.getValue(obj.email, [], "string")}</theval></entry-line/>`
+      	let phone = `<entry-line><lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval></entry-line/>`
+       	let religion = `<entry-line><lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval></entry-line/>`
+        let depiction = `<entry-line><lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval></entry-line/>`
+     	  // let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
+      	// let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
+        let gender = `<entry-line><lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval></entry-line/>`
+        let edu  = `<entry-line><lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval></entry-line/>`
+        let nationality = `<entry-line><lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval></entry-line/>`
+        let description = `<entry-line><lbl>Further Person Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval></entry-line/>`
+        tmpl += (depiction+dob+email+phone+religion+gender+edu+nationality+description)
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+DEER.TEMPLATES.survey= function(obj, options={}) {
+    console.log("Survey template")
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
         return tmpl
     } catch (err) {
         return null
