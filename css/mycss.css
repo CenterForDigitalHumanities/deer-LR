@@ -100,7 +100,9 @@
         text-decoration: none;
         border: none;
         width: 100% !important;
-        word-wrap: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+        height: 2em;
     }
     .card{
         margin-bottom: 2px;
