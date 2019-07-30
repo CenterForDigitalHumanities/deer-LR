@@ -70,7 +70,7 @@
                         <li>We did not find any matching people. <input onclick="LR.ui.assignRelated(event)" type="button" class="me" value="This is me!"/></li>
                     </ul>
                 </div>
-                <input type="button" value="This is a new Person" onclick="LR.crud.createRelated(event)" /> <!-- Ask for Location infor -->
+                <input type="button" value="This is a new Person" onclick="LR.crud.createRelated(event)" /> <!-- Ask for Location infor.  Name, addr, geo -->
             </div>
         </generic-place>
 
@@ -87,23 +87,88 @@
             <generic-top-hierarchy>
                 <!-- Spaces, Things, Senses, Words, Practices,   -->
                 <header class="card-title">Please check all that apply to this experience.</header>
-                <input type="checkbox" name="Spaces" onchange="LR.ui.reactiveHierarchy(event)" /> 
-                <input type="checkbox" name="Things" onchange="LR.ui.reactiveHierarchy(event)" />
-                <input type="checkbox" name="Senses" onchange="LR.ui.reactiveHierarchy(event)" />
-                <input type="checkbox" name="Words" onchange="LR.ui.reactiveHierarchy(event)" />
-                <input type="checkbox" name="Practices" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /> 
+                <input type="checkbox" name="things" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="senses" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="words" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="practices" onchange="LR.ui.reactiveHierarchy(event)" />
             </generic-top-hierarchy>
 
             <generic-reactive-hierarchy>
+                <div class="dataWrap kind" for="spaces">
+                    <header>What kind of space is this?  Check all that apply.:</header>
+                    <input type="checkbox" deer-key="TODO" value="Accommodation"><span class="chk_lbl">Accommodation</span>
+                    <input type="checkbox" deer-key="TODO" value="Administrative Area"><span class="chk_lbl">Administrative Area</span>
+                    <input type="checkbox" deer-key="TODO" value="Civic Structure"><span class="chk_lbl">Civic Structure</span>
+                    <input type="checkbox" deer-key="TODO" value="Landform"><span class="chk_lbl">Landform</span>
+                    <input type="checkbox" deer-key="TODO" value="Landmarks or Historical Buildings"><span class="chk_lbl">Landmarks or Historical Buildings</span>
+                    <input type="checkbox" deer-key="TODO" value="Local Business"><span class="chk_lbl">Local Business</span>
+                    <input type="checkbox" deer-key="TODO" value="Residence"><span class="chk_lbl">Residence</span>
+                    <input type="checkbox" deer-key="TODO" value="School"><span class="chk_lbl">School</span>
+                    <input type="checkbox" deer-key="TODO" value="Tourist Destination"><span class="chk_lbl">Tourist Destination</span>
+                    <input type="checkbox" deer-key="TODO" value="Neighborhood"><span class="chk_lbl">Neighborhood</span>
+                    <input type="checkbox" deer-key="TODO" value="Home"><span class="chk_lbl">Home</span>
+                    <input type="checkbox" deer-key="TODO" value="Cemetery"><span class="chk_lbl">Cemetery</span>
+                    <input type="checkbox" deer-key="TODO" value="Hospital"><span class="chk_lbl">Hospital</span>
+                    <input type="checkbox" deer-key="TODO" value="Museum"><span class="chk_lbl">Museum</span>
+                    <input type="checkbox" deer-key="TODO" value="Park"><span class="chk_lbl">Park</span>
+                    <input type="checkbox" deer-key="TODO" value="Street"><span class="chk_lbl">Street</span>
+                    <input type="checkbox" deer-key="TODO" value="Zoo"><span class="chk_lbl">Zoo</span>
+                    <input type="checkbox" deer-key="TODO" value="Other Building"><span class="chk_lbl">Other Building</span>
+                    <input type="checkbox" deer-key="TODO" value="Imagined"><span class="chk_lbl">Imagined</span>
+                </div>
+                <div class="dataWrap kind" for="things">
+                    <header>What kind of thing is this?  Check all that apply(??):</header>
+                    <input type="checkbox" deer-key="TODO" value="Accommodation"><span class="chk_lbl">Sacred Object</span>
+                    <input type="checkbox" deer-key="TODO" value="Administrative Area"><span class="chk_lbl">Artwork</span>
+                    <input type="checkbox" deer-key="TODO" value="Civic Structure"><span class="chk_lbl">Clothing</span>
+                    <input type="checkbox" deer-key="TODO" value="Landform"><span class="chk_lbl">Food</span>
+                    <input type="checkbox" deer-key="TODO" value="Landmarks or Historical Buildings"><span class="chk_lbl">Other Material Culture</span>
+                </div>
+                <div class="dataWrap kind" for="senses">
+                    <header>What kind of senses are you having?  Submit as many as you would like one at a time.</header>
+                    <input type="checkbox" deer-key="TODO" value="Sight"><span class="chk_lbl">Sight</span>
+                    <input type="checkbox" deer-key="TODO" value="Smell"><span class="chk_lbl">Smell</span>
+                    <input type="checkbox" deer-key="TODO" value="Sound"><span class="chk_lbl">Sound</span>
+                    <input type="checkbox" deer-key="TODO" value="Touch"><span class="chk_lbl">Touch</span>
+                    <input type="checkbox" deer-key="TODO" value="Taste"><span class="chk_lbl">Taste</span>
+
+                    <header>Describe Sense Further:</header>
+                    <input type="text" deer-ley="TODO" />
+
+                    <input type="button" onclick="LR.ui.addProposedSenseAndReset(event)" />
+                </div>
+                <div class="dataWrap kind" for="words">
+                    <header>What kind of words are these? Check all that apply(??)</header>
+                    <input type="checkbox" deer-key="TODO" value="Text"><span class="chk_lbl">Text</span>
+                    <input type="checkbox" deer-key="TODO" value="Story"><span class="chk_lbl">Store</span>
+                    <input type="checkbox" deer-key="TODO" value="Written"><span class="chk_lbl">Written</span>
+                    <input type="checkbox" deer-key="TODO" value="Spoken"><span class="chk_lbl">Spoken</span>
+                    <input type="checkbox" deer-key="TODO" value="Political"><span class="chk_lbl">Political</span>
+                    <input type="checkbox" deer-key="TODO" value="Sacred"><span class="chk_lbl">Sacred</span>
+                </div>
+                <div class="dataWrap kind" for="practices">
+                    <header>What kind of practices are there?  Check all that apply(??)</header>
+                    <input type="checkbox" deer-key="TODO" value="Ritual"><span class="chk_lbl">Ritual</span>
+                    <input type="checkbox" deer-key="TODO" value="Emotion"><span class="chk_lbl">Emotion</span>
+                    <input type="checkbox" deer-key="TODO" value="Public"><span class="chk_lbl">Public</span>
+                    <input type="checkbox" deer-key="TODO" value="Private"><span class="chk_lbl">Private</span>
+                    <input type="checkbox" deer-key="TODO" value="Individual"><span class="chk_lbl">Individual</span>
+                    <input type="checkbox" deer-key="TODO" value="Collective"><span class="chk_lbl">Collective</span>
+                    <input type="checkbox" deer-key="TODO" value="Impromptu"><span class="chk_lbl">Impromptu</span>
+                    <input type="checkbox" deer-key="TODO" value="Planned"><span class="chk_lbl">Planned</span>
+                </div>
                 <!-- This should contain some way to gather the data in form of the hierarchy provided.  Hide/Show pieces as needed. -->
-                <div class="col">
+                <div class="dataWrap" for="all">
                     <label>Name (Can be anonymous):</label>
-                    <input type="text" deer-key="name" deer-source="">
+                    <input type="text" deer-key="name" value="">
                 </div>
 
-                <div class="traditionWrapper col">
+                <div class="dataWrap religiousTradition" for="all">
                     <label>Religious Tradition:</label>
-                    <select deer-key="religious_tradition" deer-source="">
+                    <select deer-key="religious_tradition" value="" onchange="LR.ui.subCatagoryCheck()">
+                        <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                        <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
                         <option value="Christian" sub="christianSub">Christian</option>
                         <option value="Jewish" sub="jewishSub">Jewish</option>
                         <option value="Muslim">Muslim</option>
@@ -123,28 +188,28 @@
                         <option value="Humanist">Humanist</option>
                         <option value="Nothing in particular">Nothing in particular</option>
                     </select>
-                    <select sub="christianSub" deer-key="religious_tradition" deer-source="">
-                        <option value="Evangelical Protestant">Evangelical Protestant</option>
-                        <option value="Mainline Protestant">Mainline Protestant</option>
-                        <option value="Historically Black Protestant">Historically Black Protestant</option>
-                        <option value="Catholic">Catholic</option>
-                        <option value="Mormon">Mormon</option>
-                        <option value="Othodox Christian">Orthodox Christian</option>
-                        <option value="Jehova's Witness">Jehovah’s Witness</option>
-                        <option value="Other Christian">Other Christian</option>
+                    <select sub="christianSub" deer-key="" value="">
+                        <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                        <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                        <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                        <option value="Christian: Catholic">Catholic</option>
+                        <option value="Christian: Mormon">Mormon</option>
+                        <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                        <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                        <option value="Christian: Other Christian">Other Christian</option>
                     </select>
-                    <select sub="jewishSub" deer-key="religious_tradition" deer-source="">
-                        <option value="Conservative">Conservative</option>
-                        <option value="Reform">Reform</option>
-                        <option value="Orthodox">Orthodox</option>
-                        <option value="Reconstructionist">Reconstructionist</option>
-                        <option value="Other">Other</option>
+                    <select sub="jewishSub" deer-key="" value="">
+                        <option value="Jewish: Conservative">Conservative</option>
+                        <option value="Jewish: Reform">Reform</option>
+                        <option value="Jewish: Orthodox">Orthodox</option>
+                        <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                        <option value="Jewish: Other">Other</option>
                     </select>
                 </div>
 
-                <div class="demographicsWrapper col">
+                <div class="dataWrap demographics" for="all">
                     <label>Race/Ethnicity:</label>
-                    <select deer-key="ethnicity" deer-source="">
+                    <select deer-key="ethnicity" value="">
                         <option value="African American/Black/African">African American/Black/African</option>
                         <option value="Bosniak">Bosniak</option>
                         <option value="Caribbean">Caribbean</option>
@@ -161,7 +226,7 @@
                
 
                     <label>Gender & Sexuality:</label>
-                    <select deer-key="gender" deer-source="">
+                    <select deer-key="gender" value="">
                         <option value="Female-presenting">Female-presenting</option>
                         <option value="Male-presenting">Male-presenting</option>
                         <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
@@ -174,7 +239,7 @@
                     </select>
 
                     <label>Education:</label>
-                    <select deer-key="education" deer-source="">
+                    <select deer-key="education" value="">
                         <option value="Some high school">Some high school</option>
                         <option value="High school graduate">High school graduate</option>
                         <option value="Some college">Some college</option>
@@ -184,11 +249,24 @@
                 
                 
                     <label>National Origin:</label>
-                    <input type="text" deer-key="nationality" deer-source="">
+                    <input type="text" deer-key="nationality" value="">
 
                     <label>Description</label>
-                    <textarea deer-key="description" deer-source=""></textarea>
+                    <textarea deer-key="description" value=""></textarea>
                 </div>
+
+                <div class="dataWrap" for="all">
+                    <label>Typical Use: </label>
+                     <select deer-key="typical_use" value="">
+                        <option value="Religious">Religious</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Educational">Educational</option>
+                        <option value="Civic">Civic</option>
+                        <option value="Other Public">Other Public</option>
+                    </select>
+                </div>
+
+                
             </generic-reactive-hierarchy>
                 
             <input type="button" class="btn-primary" value="Save Information" onclick="LR.ui.submitExperienceInfo(false)" />
