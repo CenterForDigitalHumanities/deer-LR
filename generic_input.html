@@ -13,7 +13,8 @@
 </head>
 
 <body>
-    <div class="container">
+    <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
+    <form id="theExperience" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience">
         <generic-top id="surveyTitle">If you would like to alter a previous entry, see your "My Entries" page.</generic-top>
         <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
         <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
@@ -74,27 +75,20 @@
             </div>
         </generic-place>
 
-        <generic-experience>
-            <generic-top id="">All things happen at a time and place.  Tell us about where this experience occurred.</generic-top>
-        </generic-experience>
-
-    <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
-        <form id="theExperience" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience hidden">
-            <generic-top id="">We want to hear from you <span id="theFirstName"></span><span id="theLastName"></span></generic-top>
-            <input id="meta_about" class="genericMetadata" type="hidden" my-key="about" value="unknown">
-            <input id="meta_author" class="genericMetadata" type="hidden" my-key="author" value="unknown">
-            <input id="meta_name" class="genericMetadata" type="hidden" my-key="name" value="A user Experience">
-            <generic-top-hierarchy>
+        <generic-experience class="">
+            <generic-top id="">We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>
+            <div class="card">
                 <!-- Spaces, Things, Senses, Words, Practices,   -->
-                <header class="card-title">Please check all that apply to this experience.</header>
-                <input type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /> 
-                <input type="checkbox" name="things" onchange="LR.ui.reactiveHierarchy(event)" />
-                <input type="checkbox" name="senses" onchange="LR.ui.reactiveHierarchy(event)" />
-                <input type="checkbox" name="words" onchange="LR.ui.reactiveHierarchy(event)" />
-                <input type="checkbox" name="practices" onchange="LR.ui.reactiveHierarchy(event)" />
-            </generic-top-hierarchy>
-
-            <generic-reactive-hierarchy>
+                <div class="card-body">
+                    <header class="card-title">Please check all that apply to this experience.</header>
+                    <input type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Spaces</span> 
+                    <input type="checkbox" name="things" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Things</span>
+                    <input type="checkbox" name="senses" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Senses</span>
+                    <input type="checkbox" name="words" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Words</span>
+                    <input type="checkbox" name="practices" onchange="LR.ui.reactiveHierarchy(event)"/><span class="chk_lbl">Practices</span>
+                </div>
+            </div>
+            <div class="card">
                 <div class="dataWrap kind" for="spaces">
                     <header>What kind of space is this?  Check all that apply.:</header>
                     <input type="checkbox" deer-key="TODO" value="Accommodation"><span class="chk_lbl">Accommodation</span>
@@ -265,13 +259,14 @@
                         <option value="Other Public">Other Public</option>
                     </select>
                 </div>
+            </div>
+        </generic-experience>
 
-                
-            </generic-reactive-hierarchy>
-                
-            <input type="button" class="btn-primary" value="Save Information" onclick="LR.ui.submitExperienceInfo(false)" />
-            <input type="button" class="btn-primary" value="Submit A Different Experience" onclick="LR.ui.submitExperience(true)" />
-        </form>
+
+        
+        <input type="button" onclick="LR.ui.submitExpierence(event)" value="Submit My Experience" />
+        <!-- Throw a confirmation.  Continue, submit, submit and do another -->
+    </form>
 
     <!-- Add ins -->
     <script src="./js/deerInitializer.js" type="module"></script>   
