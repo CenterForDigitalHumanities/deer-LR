@@ -121,5 +121,52 @@
 
     /* new generic view development */
     .dataWrap{
+        
+    }
+
+    .kind{
         display: none;
+        margin-bottom: 20px; 
+    }
+
+    .kind[for="spaces"]{
+        border: 2px solid blue;
+    }
+
+    .kind[for="things"]{
+        border: 2px solid orange;
+    }
+
+    .kind[for="senses"]{
+        border: 2px solid green;
+    }
+
+    .kind[for="words"]{
+        border: 2px solid purple;
+    }
+
+    .kind[for="practices"]{
+        border: 2px solid aqua;
+    }
+
+    #jewishSub{
+        display: none;
+    }
+
+    generic-experience{
+        display: block;
+        position: relative;
+        border: 2px dotted black;
+        margin-top: 100px;
+    }
+
+    generic-top{
+        position: relative;
+        display: block;
+        top: 0px;
+        background-color: black;
+        color: white;
+        padding: 1em;
+        width: 100%;
+        text-align: center;
     }

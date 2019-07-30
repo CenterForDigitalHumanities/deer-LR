@@ -15,7 +15,7 @@
 <body>
     <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
     <form id="theExperience" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience">
-        <generic-top id="surveyTitle">If you would like to alter a previous entry, see your "My Entries" page.</generic-top>
+        <generic-top id="surveyTitle">{{  If you would like to alter a previous entry, see your "My Entries" page.  }}</generic-top>
         <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
         <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
         <generic-top id="surveyTitle">Tell us who you are so we can attribute this experience.</generic-top>
@@ -23,17 +23,17 @@
             <div id="" class="card">
                 <div class="card-body">
                     <header class="card-title">If you already know your ID, please provide it here</header>
-                    <input id="survey_id" type="text" value="http://devstore.rerum.io/v1/id/5cf17149e4b07d216aab75ee"/><br>
-                    <input class="btn btn-primary" type="button" value="Resume Survey" onclick="LR.ui.assignAttributor(event)" />
+                    <input id="survey_id" type="text" value=""/><br>
+                    <input class="btn btn-primary" type="button" value="This is me!" onclick="LR.ui.assignAttributor(event)" />
                 </div>
             </div> 
             <div id="known_attributor" class="card">
                 <div class="card-body">
-                    <header class="card-title">If you don't know your ID, tell us a little about yourself</header>
+                    <header class="card-title">If you don't know your ID, tell us a little about yourself and we will look you up.  If we cannot find you, then you will be given the option to register.</header>
                     <label>First Name:</label> <input id="firstName" type="text"  />
                     <label>Last Name:</label> <input id="lastName" type="text"  />
                     <label>E-mail:</label>  <input id="email" type="text"  />
-                    <input class="btn btn-primary" onclick="LR.ui.lookupAttributor(event)" type="button" value="Look Up Person">
+                    <input class="btn btn-primary" onclick="LR.ui.lookupAttributor(event)" type="button" value="Find Me Please">
                 </div>
             </div> 
             <div id="find_attributor" class="card hidden">
@@ -43,7 +43,7 @@
                         <li>We did not find any matching people. <input onclick="LR.ui.assignAttributor(event)" type="button" class="me" value="This is me!"/></li>
                     </ul>
                 </div>
-                <input type="button" value="This is a new Person" onclick="LR.crud.createPerson(event)" />
+                
             </div>
         </generic-attribution>
 
@@ -59,7 +59,7 @@
             </div> 
             <div id="known_related" class="card">
                 <div class="card-body">
-                    <header class="card-title">If you don't know the ID, tell us the name associated with this Event or Location.</header>
+                    <header class="card-title">If you don't know the ID, tell us the name associated with this Event or Location  If we can't find anything, you will be asked to create a record for this Location/Event.</header>
                     <label>Location/Event title:</label> <input id="" type="text"  />
                     <input class="btn btn-primary" onclick="LR.ui.lookupRelated(event)" type="button" value="Look Up Related Place">
                 </div>
@@ -76,6 +76,7 @@
         </generic-place>
 
         <generic-experience class="">
+            <div> We should only see this once we have the previous information.  This is for demo purposes only.  </div>
             <generic-top id="">We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>
             <div class="card">
                 <!-- Spaces, Things, Senses, Words, Practices,   -->
@@ -130,7 +131,7 @@
                     <header>Describe Sense Further:</header>
                     <input type="text" deer-ley="TODO" />
 
-                    <input type="button" onclick="LR.ui.addProposedSenseAndReset(event)" />
+                    <input type="button" onclick="LR.ui.addProposedSenseAndReset(event)" value="Add Sense and Reset" />
                 </div>
                 <div class="dataWrap kind" for="words">
                     <header>What kind of words are these? Check all that apply(??)</header>
@@ -153,18 +154,14 @@
                     <input type="checkbox" deer-key="TODO" value="Planned"><span class="chk_lbl">Planned</span>
                 </div>
                 <!-- This should contain some way to gather the data in form of the hierarchy provided.  Hide/Show pieces as needed. -->
-                <div class="dataWrap" for="all">
-                    <label>Name (Can be anonymous):</label>
-                    <input type="text" deer-key="name" value="">
-                </div>
 
                 <div class="dataWrap religiousTradition" for="all">
                     <label>Religious Tradition:</label>
-                    <select deer-key="religious_tradition" value="" onchange="LR.ui.subCatagoryCheck()">
+                    <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
                         <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
                         <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
-                        <option value="Christian" sub="christianSub">Christian</option>
-                        <option value="Jewish" sub="jewishSub">Jewish</option>
+                        <option value="Christian">Christian</option>
+                        <option value="Jewish">Jewish</option>
                         <option value="Muslim">Muslim</option>
                         <option value="Buddhist">Buddhist</option>
                         <option value="Daoist">Daoist</option>
@@ -182,7 +179,7 @@
                         <option value="Humanist">Humanist</option>
                         <option value="Nothing in particular">Nothing in particular</option>
                     </select>
-                    <select sub="christianSub" deer-key="" value="">
+                    <select id="christianSub" deer-key="" value="">
                         <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
                         <option value="Christian: Mainline Protestant">Mainline Protestant</option>
                         <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
@@ -192,7 +189,7 @@
                         <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
                         <option value="Christian: Other Christian">Other Christian</option>
                     </select>
-                    <select sub="jewishSub" deer-key="" value="">
+                    <select id="jewishSub" deer-key="" value="">
                         <option value="Jewish: Conservative">Conservative</option>
                         <option value="Jewish: Reform">Reform</option>
                         <option value="Jewish: Orthodox">Orthodox</option>
@@ -245,8 +242,6 @@
                     <label>National Origin:</label>
                     <input type="text" deer-key="nationality" value="">
 
-                    <label>Description</label>
-                    <textarea deer-key="description" value=""></textarea>
                 </div>
 
                 <div class="dataWrap" for="all">
@@ -258,6 +253,11 @@
                         <option value="Civic">Civic</option>
                         <option value="Other Public">Other Public</option>
                     </select>
+                </div>
+
+                <div class="dataWrap" for="all">
+                    <label>General Information:</label>
+                    <input type="text" deer-key="TODO" value="">
                 </div>
             </div>
         </generic-experience>

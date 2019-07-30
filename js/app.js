@@ -599,6 +599,56 @@ LR.local.removeDirty = function(){
     }
 }
 
+/* New stuff for generic interface */
+
+LR.ui.reactiveHierarchy = function(event){
+    let checkbox = event.target
+    let sel = checkbox.checked
+    let react_key = checkbox.getAttribute("name")
+    let matches = document.querySelectorAll(".kind[for='"+react_key+"']")
+    if(sel){
+        for(let i=0; i<matches.length; i++){
+            let show = matches[i]
+            show.style.display = "block"
+        }
+    }
+    else{
+        for(let i=0; i<matches.length; i++){
+            let hide = matches[i]
+            hide.style.display = "none"
+        }
+    }
+    
+}
+
+LR.ui.subCategoryCheck = function(event){
+    let e = event.target
+    var value = e.options[e.selectedIndex].value
+    var text = e.options[e.selectedIndex].text
+    if(value === "Christian"){
+        document.getElementById("jewishSub").style.display = "none"
+        document.getElementById("christianSub").style.display = "block"
+        document.getElementById("religion").setAttribute("deer-key", "")
+        document.getElementById("jewishSub").setAttribute("deer-key", "")
+        document.getElementById("christianSub").setAttribute("deer-key", "religious_tradition")
+
+    }
+    else if(value === "Jewish"){
+        document.getElementById("jewishSub").style.display = "block"
+        document.getElementById("christianSub").style.display = "none"
+        document.getElementById("religion").setAttribute("deer-key", "")
+        document.getElementById("jewishSub").setAttribute("deer-key", "religious_tradition")
+        document.getElementById("christianSub").setAttribute("deer-key", "")
+    }
+    else{
+        document.getElementById("jewishSub").style.display = "none"
+        document.getElementById("christianSub").style.display = "none"
+        document.getElementById("religion").setAttribute("deer-key", "religious_tradition")
+        document.getElementById("jewishSub").setAttribute("deer-key", "")
+        document.getElementById("christianSub").setAttribute("deer-key", "")
+    }
+
+}
 
 
 
