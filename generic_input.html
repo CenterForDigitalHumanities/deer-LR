@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    -->
+<html>
+
+<head>
+    <title>Lived Religion Data Collector</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <link rel="stylesheet" href="./css/mycss.css">
+</head>
+
+<body>
+    <div class="container">
+        <generic-top id="surveyTitle">If you would like to alter a previous entry, see your "My Entries" page.</generic-top>
+        <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
+        <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
+        <generic-top id="surveyTitle">Tell us who you are so we can attribute this experience.</generic-top>
+        <generic-attribution>
+            <div id="" class="card">
+                <div class="card-body">
+                    <header class="card-title">If you already know your ID, please provide it here</header>
+                    <input id="survey_id" type="text" value="http://devstore.rerum.io/v1/id/5cf17149e4b07d216aab75ee"/><br>
+                    <input class="btn btn-primary" type="button" value="Resume Survey" onclick="LR.ui.assignAttributor(event)" />
+                </div>
+            </div> 
+            <div id="known_attributor" class="card">
+                <div class="card-body">
+                    <header class="card-title">If you don't know your ID, tell us a little about yourself</header>
+                    <label>First Name:</label> <input id="firstName" type="text"  />
+                    <label>Last Name:</label> <input id="lastName" type="text"  />
+                    <label>E-mail:</label>  <input id="email" type="text"  />
+                    <input class="btn btn-primary" onclick="LR.ui.lookupAttributor(event)" type="button" value="Look Up Person">
+                </div>
+            </div> 
+            <div id="find_attributor" class="card hidden">
+                <div class="card-body">
+                    <header class="card-title">We found someone with the provided information.  If you are one of these people, please tell us so we don't make a copy.</header>
+                    <ul id="attributor_list">
+                        <li>We did not find any matching people. <input onclick="LR.ui.assignAttributor(event)" type="button" class="me" value="This is me!"/></li>
+                    </ul>
+                </div>
+                <input type="button" value="This is a new Person" onclick="LR.crud.createPerson(event)" />
+            </div>
+        </generic-attribution>
+
+        <generic-place>
+             <generic-loader class="hidden">Please wait while we create and link yor experience...</generic-loader>
+             <generic-top id="">All things happen at a time and place.  Tell us about where this experience occurred.</generic-top>
+             <div id="" class="card">
+                <div class="card-body">
+                    <header class="card-title">Please give us the ID  of the Event or Location this relates to.</header>
+                    <label>Location/Event ID:</label><input id="" type="text" value=""/><br>
+                    <input class="btn btn-primary" type="button" value="Resume Survey" onclick="LR.ui.assignRelated(event)" />
+                </div>
+            </div> 
+            <div id="known_related" class="card">
+                <div class="card-body">
+                    <header class="card-title">If you don't know the ID, tell us the name associated with this Event or Location.</header>
+                    <label>Location/Event title:</label> <input id="" type="text"  />
+                    <input class="btn btn-primary" onclick="LR.ui.lookupRelated(event)" type="button" value="Look Up Related Place">
+                </div>
+            </div> 
+            <div id="find_related" class="card hidden">
+                <div class="card-body">
+                    <header class="card-title">We found some things matching this name. Please select from the list below or register a new Location/Event.</header>
+                    <ul id="related_list">
+                        <li>We did not find any matching people. <input onclick="LR.ui.assignRelated(event)" type="button" class="me" value="This is me!"/></li>
+                    </ul>
+                </div>
+                <input type="button" value="This is a new Person" onclick="LR.crud.createRelated(event)" /> <!-- Ask for Location infor -->
+            </div>
+        </generic-place>
+
+        <generic-experience>
+            <generic-top id="">All things happen at a time and place.  Tell us about where this experience occurred.</generic-top>
+        </generic-experience>
+
+    <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
+        <form id="theExperience" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience hidden">
+            <generic-top id="">We want to hear from you <span id="theFirstName"></span><span id="theLastName"></span></generic-top>
+            <input id="meta_about" class="genericMetadata" type="hidden" my-key="about" value="unknown">
+            <input id="meta_author" class="genericMetadata" type="hidden" my-key="author" value="unknown">
+            <input id="meta_name" class="genericMetadata" type="hidden" my-key="name" value="A user Experience">
+            <generic-top-hierarchy>
+                <!-- Spaces, Things, Senses, Words, Practices,   -->
+                <header class="card-title">Please check all that apply to this experience.</header>
+                <input type="checkbox" name="Spaces" onchange="LR.ui.reactiveHierarchy(event)" /> 
+                <input type="checkbox" name="Things" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="Senses" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="Words" onchange="LR.ui.reactiveHierarchy(event)" />
+                <input type="checkbox" name="Practices" onchange="LR.ui.reactiveHierarchy(event)" />
+            </generic-top-hierarchy>
+
+            <generic-reactive-hierarchy>
+                <!-- This should contain some way to gather the data in form of the hierarchy provided.  Hide/Show pieces as needed. -->
+                <div class="col">
+                    <label>Name (Can be anonymous):</label>
+                    <input type="text" deer-key="name" deer-source="">
+                </div>
+
+                <div class="traditionWrapper col">
+                    <label>Religious Tradition:</label>
+                    <select deer-key="religious_tradition" deer-source="">
+                        <option value="Christian" sub="christianSub">Christian</option>
+                        <option value="Jewish" sub="jewishSub">Jewish</option>
+                        <option value="Muslim">Muslim</option>
+                        <option value="Buddhist">Buddhist</option>
+                        <option value="Daoist">Daoist</option>
+                        <option value="Confucianism">Confucianism</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Sikh">Sikh</option>
+                        <option value="Pagan">Pagan</option>
+                        <option value="Indigenous">Indigenous</option>
+                        <option value="Native American Traditions">Native American Traditions</option>
+                        <option value="Other Religions">Other Religions</option>
+                        <option value="Other Faiths">Other Faiths</option>
+                        <option value="Unaffiliated">Unaffiliated</option>
+                        <option value="Atheist">Atheist</option>
+                        <option value="Agnostic">Agnostic</option>
+                        <option value="Humanist">Humanist</option>
+                        <option value="Nothing in particular">Nothing in particular</option>
+                    </select>
+                    <select sub="christianSub" deer-key="religious_tradition" deer-source="">
+                        <option value="Evangelical Protestant">Evangelical Protestant</option>
+                        <option value="Mainline Protestant">Mainline Protestant</option>
+                        <option value="Historically Black Protestant">Historically Black Protestant</option>
+                        <option value="Catholic">Catholic</option>
+                        <option value="Mormon">Mormon</option>
+                        <option value="Othodox Christian">Orthodox Christian</option>
+                        <option value="Jehova's Witness">Jehovah’s Witness</option>
+                        <option value="Other Christian">Other Christian</option>
+                    </select>
+                    <select sub="jewishSub" deer-key="religious_tradition" deer-source="">
+                        <option value="Conservative">Conservative</option>
+                        <option value="Reform">Reform</option>
+                        <option value="Orthodox">Orthodox</option>
+                        <option value="Reconstructionist">Reconstructionist</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="demographicsWrapper col">
+                    <label>Race/Ethnicity:</label>
+                    <select deer-key="ethnicity" deer-source="">
+                        <option value="African American/Black/African">African American/Black/African</option>
+                        <option value="Bosniak">Bosniak</option>
+                        <option value="Caribbean">Caribbean</option>
+                        <option value="East Asian">East Asian</option>
+                        <option value="Hispanic/Latin">Hispanic/Latin</option>
+                        <option value="Middle Eastern">Middle Eastern</option>
+                        <option value="Bosniak">Native American/indigenous American</option>
+                        <option value="Native American/indigenous American">North African/Mediterranean</option>
+                        <option value="Pacific Islander">Pacific Islander</option>
+                        <option value="South Asian">South Asian</option>
+                        <option value="Mixed-Race">Mixed-race</option>
+                        <option value="Other">Other</option>
+                    </select>
+               
+
+                    <label>Gender & Sexuality:</label>
+                    <select deer-key="gender" deer-source="">
+                        <option value="Female-presenting">Female-presenting</option>
+                        <option value="Male-presenting">Male-presenting</option>
+                        <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                        <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                        <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                        <option value="Genders are intermingled">Genders are intermingled</option>
+                        <option value="Genders are separated">Genders are separated</option>
+                        <option value="Other">Other</option>
+                        <option value="Not applicable">Not applicable</option>
+                    </select>
+
+                    <label>Education:</label>
+                    <select deer-key="education" deer-source="">
+                        <option value="Some high school">Some high school</option>
+                        <option value="High school graduate">High school graduate</option>
+                        <option value="Some college">Some college</option>
+                        <option value="College Degree">College degree</option>
+                        <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                    </select>
+                
+                
+                    <label>National Origin:</label>
+                    <input type="text" deer-key="nationality" deer-source="">
+
+                    <label>Description</label>
+                    <textarea deer-key="description" deer-source=""></textarea>
+                </div>
+            </generic-reactive-hierarchy>
+                
+            <input type="button" class="btn-primary" value="Save Information" onclick="LR.ui.submitExperienceInfo(false)" />
+            <input type="button" class="btn-primary" value="Submit A Different Experience" onclick="LR.ui.submitExperience(true)" />
+        </form>
+
+    <!-- Add ins -->
+    <script src="./js/deerInitializer.js" type="module"></script>   
+    <script src="./js/app.js" type="text/javascript"></script>  
+
+    </script>
+</body>
+
+</html>
