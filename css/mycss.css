@@ -53,6 +53,7 @@
     textarea{
         height: 6em;
         display: block;
+        resize: vertical;
     }
     .hidden{
         display: none !important;
@@ -60,6 +61,8 @@
     textarea, input[type="text"]{
         width: 27em;
         margin-bottom: 6px;
+        font-family: monospace;
+        font-size: 11pt;
     }
     .container{
         text-align:center;

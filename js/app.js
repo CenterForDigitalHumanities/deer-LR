@@ -599,6 +599,12 @@ LR.local.removeDirty = function(){
     }
 }
 
+
+
+
+
+
+
 /* New stuff for generic interface */
 
 LR.ui.reactiveHierarchy = function(event){
@@ -649,6 +655,79 @@ LR.ui.subCategoryCheck = function(event){
     }
 
 }
+
+LR.ui.addSenseAndReset = function(event){
+    //Clear further sense
+    //uncheck all name="sense" radios
+    //Add new sense to local tracker
+    let matches = document.querySelectorAll("input[name='sense']")
+    for(let i=0; i<matches.length; i++){
+        let radio = matches[i]
+        let descr = document.getElementById("furtherSense").value
+        if(radio.checked){
+            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
+            document.getElementById("added_senses").innerHTML += li
+        }
+        radio.checked = false
+
+    }
+    document.getElementById("furtherSense").value = ""
+
+}
+
+LR.ui.addNewSenseToLocal = function(){
+
+}
+
+LR.ui.lookupAttributor = function(){
+    if(document.getElementById("find_attributor").classList.contains("hidden")){
+        document.getElementById("find_attributor").classList.remove("hidden")
+        document.getElementById("findMePlease").value = "Find Me Later"
+
+    }
+    else{
+        document.getElementById("find_attributor").classList.add("hidden")
+        document.getElementById("findMePlease").value = "Find Me Please"
+    }
+    
+}
+
+LR.ui.assignAttributor = function(){
+    alert("Stil under development")
+
+}
+
+LR.crud.createAttributor = function(){
+    alert("Stil under development")
+}
+
+LR.ui.lookupRelated = function(event){
+    if(document.getElementById("find_related").classList.contains("hidden")){
+        document.getElementById("find_related").classList.remove("hidden")
+        document.getElementById("findRelated").value = "Find Location/Event Later"
+
+    }
+    else{
+        document.getElementById("find_related").classList.add("hidden")
+        document.getElementById("findRelated").value = "Look Up Related Location/Event"
+    }
+}
+
+LR.ui.assignRelated = function(event){
+    alert("Stil under development")
+}
+
+LR.crud.createRelated = function(event){
+    alert("Stil under development")
+
+}
+
+LR.crud.submitExperience = function (event){
+    alert("Still Under Development")
+}
+
+
+
 
 
 
