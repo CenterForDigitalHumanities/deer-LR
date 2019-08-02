@@ -675,9 +675,63 @@ LR.ui.addSenseAndReset = function(event){
 
 }
 
-LR.ui.addNewSenseToLocal = function(){
+LR.ui.addWordAndReset = function(event){
+    //Clear further sense
+    //uncheck all name="sense" radios
+    //Add new sense to local tracker
+    let matches = document.querySelectorAll("input[name='word']")
+    for(let i=0; i<matches.length; i++){
+        let radio = matches[i]
+        let descr = document.getElementById("furtherWords").value
+        if(radio.checked){
+            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
+            document.getElementById("added_words").innerHTML += li
+        }
+        radio.checked = false
+
+    }
+    document.getElementById("furtherWords").value = ""
 
 }
+
+LR.ui.addPracticeAndReset = function(event){
+    //Clear further sense
+    //uncheck all name="sense" radios
+    //Add new sense to local tracker
+    let matches = document.querySelectorAll("input[name='practice']")
+    for(let i=0; i<matches.length; i++){
+        let radio = matches[i]
+        let descr = document.getElementById("furtherPractice").value
+        if(radio.checked){
+            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
+            document.getElementById("added_practices").innerHTML += li
+        }
+        radio.checked = false
+
+    }
+    document.getElementById("furtherPractice").value = ""
+
+}
+
+LR.ui.addThingAndReset = function(event){
+    //Clear further sense
+    //uncheck all name="sense" radios
+    //Add new sense to local tracker
+    let matches = document.querySelectorAll("input[name='thing']")
+    for(let i=0; i<matches.length; i++){
+        let radio = matches[i]
+        let descr = document.getElementById("furtherThing").value
+        if(radio.checked){
+            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
+            document.getElementById("added_things").innerHTML += li
+        }
+        radio.checked = false
+
+    }
+    document.getElementById("furtherThing").value = ""
+
+}
+
 
 LR.ui.lookupAttributor = function(){
     if(document.getElementById("find_attributor").classList.contains("hidden")){
