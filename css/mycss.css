@@ -176,6 +176,6 @@
         text-align: center;
     }
 
-    #theExperience{
-        min-height: 1005px;
+    .fixDynamicHeight{
+        min-height: 845px;
     }
