@@ -14,7 +14,7 @@
 
 <body>
     <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
-    <form id="theExperience" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience">
+    <form id="thePrerequisites" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience">
         <generic-top id="surveyTitle">{{  If you would like to alter a previous entry, see your "My Entries" page.  }}</generic-top>
         <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
         <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
@@ -75,7 +75,8 @@
             </div> 
             
         </generic-place>
-
+    </form>
+    <form id="theExperience" class="container experience">
         <generic-experience class="">
             <div> We should only see this once we have the information from above.  This is for demo purposes only.  </div>
             <generic-top id="">We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>

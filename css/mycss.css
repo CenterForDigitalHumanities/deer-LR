@@ -173,3 +173,7 @@
         width: 100%;
         text-align: center;
     }
+
+    #theExperience{
+        min-height: 1005px;
+    }
