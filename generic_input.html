@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./css/mycss.css">
 </head>
 
-<body>
+<body class="container">
     <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
     <generic-top id="surveyTitle">{{  If you would like to alter a previous entry, see your "My Entries" page.  }}</generic-top>
     <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
@@ -41,7 +41,7 @@
                         <li>We did not find any matching people. <input onclick="LR.ui.assignAttributor(event)" type="button" class="me" value="This is me!"/></li>
                     </ul>
                 </div>
-                <form id="theAttributor" my-type="Person" my-context="http://schema.org" exp_id="" class="container experience">
+                <form id="theAttributor" my-type="Person" my-context="http://schema.org" exp_id="" class="">
                     This is a deer form.  It should be a person.
                     <input type="button" value="I Am New To Lived Religion" onclick="LR.crud.createAttributor(event)" />  
                 </form>
@@ -72,7 +72,7 @@
                         <li>We did not find any matching locations/events. <input onclick="LR.ui.assignRelated(event)" type="button" class="me" value="This is it!"/></li>
                     </ul>
                 </div>
-                <form id="thePlace">
+                <form id="thePlace" class="">
                     This is a DEER form for a Location/Event
                     <input type="button" value="This Is A New Location/Event" onclick="LR.crud.createRelated(event)" />
                 </form>
@@ -95,7 +95,7 @@
             </div>
         </div>
         <div class="card">
-            <div class="dataWrap kind" for="spaces">
+            <form class="dataWrap kind" for="spaces">
                 <header>What kind of space is this?  There can only be one.</header>
                 <!--
                 <input type="checkbox" deer-key="TODO" value="Accommodation" name="space"><span class="chk_lbl">Accommodation</span>
@@ -238,8 +238,9 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="dataWrap kind" for="things">
+            </form>
+
+            <form class="dataWrap kind " for="things">
                 <header>What kind of thing is this?  You can add as many Things as you want, one at a time.</header>
                 <!--
                 <input type="checkbox" deer-key="TODO" value="Accommodation" name="thing"><span class="chk_lbl">Sacred Object</span>
@@ -358,8 +359,9 @@
                 <ul id="added_things">
                     <li><header> Added Things </header></li>
                 </ul>
-            </div>
-            <div class="dataWrap kind" for="senses">
+            </form>
+
+            <form class="dataWrap kind" for="senses">
                 <header>What kind of senses are you having?  Submit as many as you would like one at a time.</header>
                 <input type="radio" deer-key="TODO" value="Sight" name="sense"><span class="chk_lbl">Sight</span>
                 <input type="radio" deer-key="TODO" value="Smell" name="sense"><span class="chk_lbl">Smell</span>
@@ -474,9 +476,9 @@
                 <ul id="added_senses">
                      <li><header> Added Senses </header></li>
                 </ul>
-            </div>
+            </form>
                
-            <div class="dataWrap kind" for="words">
+            <form class="dataWrap kind" for="words">
                 <header>What kind of words are these? You can add as many Words as you want, one at a time.</header>
                 <input type="radio" name="word" deer-key="TODO" value="Text"><span class="chk_lbl">Text</span>
                 <input type="radio" name="word" deer-key="TODO" value="Story"><span class="chk_lbl">Store</span>
@@ -590,8 +592,9 @@
                      <li><header> Added Words </header></li>
                 </ul>
                 
-            </div>
-            <div class="dataWrap kind" for="practices">
+            </form>
+
+            <form class="dataWrap kind" for="practices">
                 <header>What kind of practices are there?  You can add as many practice as you want, one at a time.</header>
                 <input type="radio" deer-key="TODO" value="Ritual" name="practice"><span class="chk_lbl">Ritual</span>
                 <input type="radio" deer-key="TODO" value="Emotion" name="practice"><span class="chk_lbl">Emotion</span>
@@ -707,34 +710,31 @@
                 <ul id="added_practices">
                      <li><header> Added Practices </header></li>
                 </ul>
-            </div>
-            <!-- This should contain some way to gather the data in form of the hierarchy provided.  Hide/Show pieces as needed. -->
+            </form>
 
-            <div class="dataWrap" for="all">
-               
-            </div>
+            <form id="theExperience" class="experience" my-type="Experience">  
+                <input type="hidden" name="user" />
+                <input type="hidden" name="location/event" />
+                <!-- there is no natural way for a value to be an array.  One must force the javascript to make it an array on form submission -->
+                <input type="hidden" name="Space" value="ID from space form" />
+                <input type="hidden" name="Word" value="[IDs from word form]" />
+                <input type="hidden" name="Sense" value="[IDs from sense form]" />
+                <input type="hidden" name="Practice" value="[IDs from practice form]" />
+                <input type="hidden" name="Thing" value="[IDs from thing form]" />
+                <label>General Information:</label>
+                <textarea type="text" deer-key="TODO"> </textarea>
+                <input type="button" onclick="LR.crud.submitExperience(event)" value="Submit This Data" />
+            </form>
+    
         </div>
     </generic-experience>
 
-    <form id="theExperience" class="container experience" my-type="Experience">  
-        <input type="hidden" name="user" />
-        <input type="hidden" name="location/event" />
-        <!-- there is no natural way for a value to be an array.  One must force the javascript to make it an array on form submission -->
-        <input type="hidden" name="Space" value="ID from space form" />
-        <input type="hidden" name="Word" value="[IDs from word form]" />
-        <input type="hidden" name="Sense" value="[IDs from sense form]" />
-        <input type="hidden" name="Practice" value="[IDs from practice form]" />
-        <input type="hidden" name="Thing" value="[IDs from thing form]" />
-        <label>General Information:</label>
-        <textarea type="text" deer-key="TODO"> </textarea>
-        <input type="button" onclick="LR.crud.submitExperience(event)" value="Submit This Data" />
-    </form>
+    
 
     <!-- Add ins -->
     <script src="./js/deerInitializer.js" type="module"></script>   
     <script src="./js/app.js" type="text/javascript"></script>  
 
-    </script>
 </body>
 
 </html>

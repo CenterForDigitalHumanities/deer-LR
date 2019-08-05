@@ -49,6 +49,7 @@
         /*border: 2px solid black;*/
         background-color: white;
         text-align: left;
+        text-align: center;
     }
     textarea{
         height: 6em;
@@ -161,6 +162,7 @@
         position: relative;
         border: 2px dotted black;
         margin-top: 100px;
+        background-color: white;
     }
 
     generic-top{
