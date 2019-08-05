@@ -14,7 +14,7 @@
 
 <body>
     <!-- this is only here so that startSurvey has a template to go off of.  Make it the same on on interview.html until we can do this properly -->
-    <form id="theExperience" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience">
+    <form id="thePrerequisites" my-type="Experience" my-context="http://schema.org" exp_id="" class="container experience">
         <generic-top id="surveyTitle">{{  If you would like to alter a previous entry, see your "My Entries" page.  }}</generic-top>
         <!--Who is the person we are asking these questions to.  Should there be a person_simple custom template for this? -->
         <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
@@ -75,7 +75,8 @@
             </div> 
             
         </generic-place>
-
+    </form>
+    <form id="theExperience" class="container experience">
         <generic-experience class="">
             <div> We should only see this once we have the information from above.  This is for demo purposes only.  </div>
             <generic-top id="">We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>
@@ -92,7 +93,7 @@
             </div>
             <div class="card">
                 <div class="dataWrap kind" for="spaces">
-                    <header>What kind of space is this? </header>
+                    <header>What kind of space is this?  There can only be one.</header>
                     <!--
                     <input type="checkbox" deer-key="TODO" value="Accommodation" name="space"><span class="chk_lbl">Accommodation</span>
                     <input type="checkbox" deer-key="TODO" value="Administrative Area" name="space"><span class="chk_lbl">Administrative Area</span>
@@ -135,6 +136,107 @@
                     <input type="radio" deer-key="TODO" value="Imagined" name="space"><span class="chk_lbl">Imagined</span>
                     <header>Describe Space Further:</header>
                     <textarea type="text" deer-key="TODO" ></textarea>
+                    <div name="sense" class="forAll">
+                        <div class="dataWrap religiousTradition" for="all">
+                            <label>Religious Tradition:</label>
+                            <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                                <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                                <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
+                                <option value="Christian">Christian</option>
+                                <option value="Jewish">Jewish</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Daoist">Daoist</option>
+                                <option value="Confucianism">Confucianism</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Pagan">Pagan</option>
+                                <option value="Indigenous">Indigenous</option>
+                                <option value="Native American Traditions">Native American Traditions</option>
+                                <option value="Other Religions">Other Religions</option>
+                                <option value="Other Faiths">Other Faiths</option>
+                                <option value="Unaffiliated">Unaffiliated</option>
+                                <option value="Atheist">Atheist</option>
+                                <option value="Agnostic">Agnostic</option>
+                                <option value="Humanist">Humanist</option>
+                                <option value="Nothing in particular">Nothing in particular</option>
+                            </select>
+                            <select id="christianSub" deer-key="" value="">
+                                <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                                <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                                <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                                <option value="Christian: Catholic">Catholic</option>
+                                <option value="Christian: Mormon">Mormon</option>
+                                <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                                <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                                <option value="Christian: Other Christian">Other Christian</option>
+                            </select>
+                            <select id="jewishSub" deer-key="" value="">
+                                <option value="Jewish: Conservative">Conservative</option>
+                                <option value="Jewish: Reform">Reform</option>
+                                <option value="Jewish: Orthodox">Orthodox</option>
+                                <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                                <option value="Jewish: Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="dataWrap demographics" for="all">
+                            <label>Race/Ethnicity:</label>
+                            <select deer-key="ethnicity" value="">
+                                <option value="African American/Black/African">African American/Black/African</option>
+                                <option value="Bosniak">Bosniak</option>
+                                <option value="Caribbean">Caribbean</option>
+                                <option value="East Asian">East Asian</option>
+                                <option value="Hispanic/Latin">Hispanic/Latin</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Bosniak">Native American/indigenous American</option>
+                                <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Pacific Islander">Pacific Islander</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Mixed-Race">Mixed-race</option>
+                                <option value="Other">Other</option>
+                            </select>
+                       
+
+                            <label>Gender & Sexuality:</label>
+                            <select deer-key="gender" value="">
+                                <option value="Female-presenting">Female-presenting</option>
+                                <option value="Male-presenting">Male-presenting</option>
+                                <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                                <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                                <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                                <option value="Genders are intermingled">Genders are intermingled</option>
+                                <option value="Genders are separated">Genders are separated</option>
+                                <option value="Other">Other</option>
+                                <option value="Not applicable">Not applicable</option>
+                            </select>
+
+                            <label>Education:</label>
+                            <select deer-key="education" value="">
+                                <option value="Some high school">Some high school</option>
+                                <option value="High school graduate">High school graduate</option>
+                                <option value="Some college">Some college</option>
+                                <option value="College Degree">College degree</option>
+                                <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                            </select>
+                        
+                        
+                            <label>National Origin:</label>
+                            <input type="text" deer-key="nationality" value="">
+
+                        </div>
+
+                        <div class="dataWrap" for="all">
+                            <label>Typical Use: </label>
+                             <select deer-key="typical_use" value="">
+                                <option value="Religious">Religious</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Educational">Educational</option>
+                                <option value="Civic">Civic</option>
+                                <option value="Other Public">Other Public</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="dataWrap kind" for="things">
                     <header>What kind of thing is this?  You can add as many Things as you want, one at a time.</header>
@@ -152,6 +254,107 @@
                     <input type="radio" deer-key="TODO" value="Other Material Culture" name="thing"><span class="chk_lbl">Other Material Culture</span>
                     <header>Describe Thing Further:</header>
                     <textarea id="furtherThing" type="text" deer-key="TODO" ></textarea>
+                    <div name="thing" class="forAll">
+                        <div class="dataWrap religiousTradition" for="all">
+                            <label>Religious Tradition:</label>
+                            <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                                <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                                <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
+                                <option value="Christian">Christian</option>
+                                <option value="Jewish">Jewish</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Daoist">Daoist</option>
+                                <option value="Confucianism">Confucianism</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Pagan">Pagan</option>
+                                <option value="Indigenous">Indigenous</option>
+                                <option value="Native American Traditions">Native American Traditions</option>
+                                <option value="Other Religions">Other Religions</option>
+                                <option value="Other Faiths">Other Faiths</option>
+                                <option value="Unaffiliated">Unaffiliated</option>
+                                <option value="Atheist">Atheist</option>
+                                <option value="Agnostic">Agnostic</option>
+                                <option value="Humanist">Humanist</option>
+                                <option value="Nothing in particular">Nothing in particular</option>
+                            </select>
+                            <select id="christianSub" deer-key="" value="">
+                                <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                                <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                                <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                                <option value="Christian: Catholic">Catholic</option>
+                                <option value="Christian: Mormon">Mormon</option>
+                                <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                                <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                                <option value="Christian: Other Christian">Other Christian</option>
+                            </select>
+                            <select id="jewishSub" deer-key="" value="">
+                                <option value="Jewish: Conservative">Conservative</option>
+                                <option value="Jewish: Reform">Reform</option>
+                                <option value="Jewish: Orthodox">Orthodox</option>
+                                <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                                <option value="Jewish: Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="dataWrap demographics" for="all">
+                            <label>Race/Ethnicity:</label>
+                            <select deer-key="ethnicity" value="">
+                                <option value="African American/Black/African">African American/Black/African</option>
+                                <option value="Bosniak">Bosniak</option>
+                                <option value="Caribbean">Caribbean</option>
+                                <option value="East Asian">East Asian</option>
+                                <option value="Hispanic/Latin">Hispanic/Latin</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Bosniak">Native American/indigenous American</option>
+                                <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Pacific Islander">Pacific Islander</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Mixed-Race">Mixed-race</option>
+                                <option value="Other">Other</option>
+                            </select>
+                       
+
+                            <label>Gender & Sexuality:</label>
+                            <select deer-key="gender" value="">
+                                <option value="Female-presenting">Female-presenting</option>
+                                <option value="Male-presenting">Male-presenting</option>
+                                <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                                <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                                <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                                <option value="Genders are intermingled">Genders are intermingled</option>
+                                <option value="Genders are separated">Genders are separated</option>
+                                <option value="Other">Other</option>
+                                <option value="Not applicable">Not applicable</option>
+                            </select>
+
+                            <label>Education:</label>
+                            <select deer-key="education" value="">
+                                <option value="Some high school">Some high school</option>
+                                <option value="High school graduate">High school graduate</option>
+                                <option value="Some college">Some college</option>
+                                <option value="College Degree">College degree</option>
+                                <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                            </select>
+                        
+                        
+                            <label>National Origin:</label>
+                            <input type="text" deer-key="nationality" value="">
+
+                        </div>
+
+                        <div class="dataWrap" for="all">
+                            <label>Typical Use: </label>
+                             <select deer-key="typical_use" value="">
+                                <option value="Religious">Religious</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Educational">Educational</option>
+                                <option value="Civic">Civic</option>
+                                <option value="Other Public">Other Public</option>
+                            </select>
+                        </div>
+                    </div>
                     <input type="button" onclick="LR.ui.addThingAndReset(event)" value="Add Thing and Reset" />
                     <ul id="added_things">
                         <li><header> Added Things </header></li>
@@ -173,11 +376,114 @@
                     <input type="radio" deer-key="TODO" value="Taste" name="sense"><span class="chk_lbl">Taste</span>
                     <header>Describe Sense Further:</header>
                     <textarea id="furtherSense" type="text" deer-key="TODO" ></textarea>
+                   
+                    <div name="sense" class="forAll">
+                        <div class="dataWrap religiousTradition" for="all">
+                            <label>Religious Tradition:</label>
+                            <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                                <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                                <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
+                                <option value="Christian">Christian</option>
+                                <option value="Jewish">Jewish</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Daoist">Daoist</option>
+                                <option value="Confucianism">Confucianism</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Pagan">Pagan</option>
+                                <option value="Indigenous">Indigenous</option>
+                                <option value="Native American Traditions">Native American Traditions</option>
+                                <option value="Other Religions">Other Religions</option>
+                                <option value="Other Faiths">Other Faiths</option>
+                                <option value="Unaffiliated">Unaffiliated</option>
+                                <option value="Atheist">Atheist</option>
+                                <option value="Agnostic">Agnostic</option>
+                                <option value="Humanist">Humanist</option>
+                                <option value="Nothing in particular">Nothing in particular</option>
+                            </select>
+                            <select id="christianSub" deer-key="" value="">
+                                <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                                <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                                <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                                <option value="Christian: Catholic">Catholic</option>
+                                <option value="Christian: Mormon">Mormon</option>
+                                <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                                <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                                <option value="Christian: Other Christian">Other Christian</option>
+                            </select>
+                            <select id="jewishSub" deer-key="" value="">
+                                <option value="Jewish: Conservative">Conservative</option>
+                                <option value="Jewish: Reform">Reform</option>
+                                <option value="Jewish: Orthodox">Orthodox</option>
+                                <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                                <option value="Jewish: Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="dataWrap demographics" for="all">
+                            <label>Race/Ethnicity:</label>
+                            <select deer-key="ethnicity" value="">
+                                <option value="African American/Black/African">African American/Black/African</option>
+                                <option value="Bosniak">Bosniak</option>
+                                <option value="Caribbean">Caribbean</option>
+                                <option value="East Asian">East Asian</option>
+                                <option value="Hispanic/Latin">Hispanic/Latin</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Bosniak">Native American/indigenous American</option>
+                                <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Pacific Islander">Pacific Islander</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Mixed-Race">Mixed-race</option>
+                                <option value="Other">Other</option>
+                            </select>
+                       
+
+                            <label>Gender & Sexuality:</label>
+                            <select deer-key="gender" value="">
+                                <option value="Female-presenting">Female-presenting</option>
+                                <option value="Male-presenting">Male-presenting</option>
+                                <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                                <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                                <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                                <option value="Genders are intermingled">Genders are intermingled</option>
+                                <option value="Genders are separated">Genders are separated</option>
+                                <option value="Other">Other</option>
+                                <option value="Not applicable">Not applicable</option>
+                            </select>
+
+                            <label>Education:</label>
+                            <select deer-key="education" value="">
+                                <option value="Some high school">Some high school</option>
+                                <option value="High school graduate">High school graduate</option>
+                                <option value="Some college">Some college</option>
+                                <option value="College Degree">College degree</option>
+                                <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                            </select>
+                        
+                        
+                            <label>National Origin:</label>
+                            <input type="text" deer-key="nationality" value="">
+
+                        </div>
+
+                        <div class="dataWrap" for="all">
+                            <label>Typical Use: </label>
+                             <select deer-key="typical_use" value="">
+                                <option value="Religious">Religious</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Educational">Educational</option>
+                                <option value="Civic">Civic</option>
+                                <option value="Other Public">Other Public</option>
+                            </select>
+                        </div>
+                    </div>
                     <input type="button" onclick="LR.ui.addSenseAndReset(event)" value="Add Sense and Reset" />
                     <ul id="added_senses">
                          <li><header> Added Senses </header></li>
                     </ul>
                 </div>
+                   
                 <div class="dataWrap kind" for="words">
                     <header>What kind of words are these? You can add as many Words as you want, one at a time.</header>
                     <input type="radio" name="word" deer-key="TODO" value="Text"><span class="chk_lbl">Text</span>
@@ -188,6 +494,107 @@
                     <input type="radio" name="word" deer-key="TODO" value="Sacred"><span class="chk_lbl">Sacred</span>
                     <header>Describe Words Further:</header>
                     <textarea id="furtherWords" type="text" deer-key="TODO" ></textarea>
+                    <div name="word" class="forAll">
+                        <div class="dataWrap religiousTradition" for="all">
+                            <label>Religious Tradition:</label>
+                            <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                                <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                                <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
+                                <option value="Christian">Christian</option>
+                                <option value="Jewish">Jewish</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Daoist">Daoist</option>
+                                <option value="Confucianism">Confucianism</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Pagan">Pagan</option>
+                                <option value="Indigenous">Indigenous</option>
+                                <option value="Native American Traditions">Native American Traditions</option>
+                                <option value="Other Religions">Other Religions</option>
+                                <option value="Other Faiths">Other Faiths</option>
+                                <option value="Unaffiliated">Unaffiliated</option>
+                                <option value="Atheist">Atheist</option>
+                                <option value="Agnostic">Agnostic</option>
+                                <option value="Humanist">Humanist</option>
+                                <option value="Nothing in particular">Nothing in particular</option>
+                            </select>
+                            <select id="christianSub" deer-key="" value="">
+                                <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                                <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                                <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                                <option value="Christian: Catholic">Catholic</option>
+                                <option value="Christian: Mormon">Mormon</option>
+                                <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                                <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                                <option value="Christian: Other Christian">Other Christian</option>
+                            </select>
+                            <select id="jewishSub" deer-key="" value="">
+                                <option value="Jewish: Conservative">Conservative</option>
+                                <option value="Jewish: Reform">Reform</option>
+                                <option value="Jewish: Orthodox">Orthodox</option>
+                                <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                                <option value="Jewish: Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="dataWrap demographics" for="all">
+                            <label>Race/Ethnicity:</label>
+                            <select deer-key="ethnicity" value="">
+                                <option value="African American/Black/African">African American/Black/African</option>
+                                <option value="Bosniak">Bosniak</option>
+                                <option value="Caribbean">Caribbean</option>
+                                <option value="East Asian">East Asian</option>
+                                <option value="Hispanic/Latin">Hispanic/Latin</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Bosniak">Native American/indigenous American</option>
+                                <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Pacific Islander">Pacific Islander</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Mixed-Race">Mixed-race</option>
+                                <option value="Other">Other</option>
+                            </select>
+                       
+
+                            <label>Gender & Sexuality:</label>
+                            <select deer-key="gender" value="">
+                                <option value="Female-presenting">Female-presenting</option>
+                                <option value="Male-presenting">Male-presenting</option>
+                                <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                                <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                                <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                                <option value="Genders are intermingled">Genders are intermingled</option>
+                                <option value="Genders are separated">Genders are separated</option>
+                                <option value="Other">Other</option>
+                                <option value="Not applicable">Not applicable</option>
+                            </select>
+
+                            <label>Education:</label>
+                            <select deer-key="education" value="">
+                                <option value="Some high school">Some high school</option>
+                                <option value="High school graduate">High school graduate</option>
+                                <option value="Some college">Some college</option>
+                                <option value="College Degree">College degree</option>
+                                <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                            </select>
+                        
+                        
+                            <label>National Origin:</label>
+                            <input type="text" deer-key="nationality" value="">
+
+                        </div>
+
+                        <div class="dataWrap" for="all">
+                            <label>Typical Use: </label>
+                             <select deer-key="typical_use" value="">
+                                <option value="Religious">Religious</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Educational">Educational</option>
+                                <option value="Civic">Civic</option>
+                                <option value="Other Public">Other Public</option>
+                            </select>
+                        </div>
+                    </div>
                     <input type="button" onclick="LR.ui.addWordAndReset(event)" value="Add Word and Reset" />
                     <ul id="added_words">
                          <li><header> Added Words </header></li>
@@ -216,6 +623,107 @@
                     <input type="radio" deer-key="TODO" value="Planned" name="practice"><span class="chk_lbl">Planned</span>
                     <header>Describe Practice(s) Further:</header>
                     <input id="furtherPractice" type="text" deer-key="TODO" />
+                    <div name="practice" class="forAll">
+                        <div class="dataWrap religiousTradition" for="all">
+                            <label>Religious Tradition:</label>
+                            <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                                <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                                <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
+                                <option value="Christian">Christian</option>
+                                <option value="Jewish">Jewish</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Daoist">Daoist</option>
+                                <option value="Confucianism">Confucianism</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Pagan">Pagan</option>
+                                <option value="Indigenous">Indigenous</option>
+                                <option value="Native American Traditions">Native American Traditions</option>
+                                <option value="Other Religions">Other Religions</option>
+                                <option value="Other Faiths">Other Faiths</option>
+                                <option value="Unaffiliated">Unaffiliated</option>
+                                <option value="Atheist">Atheist</option>
+                                <option value="Agnostic">Agnostic</option>
+                                <option value="Humanist">Humanist</option>
+                                <option value="Nothing in particular">Nothing in particular</option>
+                            </select>
+                            <select id="christianSub" deer-key="" value="">
+                                <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                                <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                                <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                                <option value="Christian: Catholic">Catholic</option>
+                                <option value="Christian: Mormon">Mormon</option>
+                                <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                                <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                                <option value="Christian: Other Christian">Other Christian</option>
+                            </select>
+                            <select id="jewishSub" deer-key="" value="">
+                                <option value="Jewish: Conservative">Conservative</option>
+                                <option value="Jewish: Reform">Reform</option>
+                                <option value="Jewish: Orthodox">Orthodox</option>
+                                <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                                <option value="Jewish: Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="dataWrap demographics" for="all">
+                            <label>Race/Ethnicity:</label>
+                            <select deer-key="ethnicity" value="">
+                                <option value="African American/Black/African">African American/Black/African</option>
+                                <option value="Bosniak">Bosniak</option>
+                                <option value="Caribbean">Caribbean</option>
+                                <option value="East Asian">East Asian</option>
+                                <option value="Hispanic/Latin">Hispanic/Latin</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Bosniak">Native American/indigenous American</option>
+                                <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Pacific Islander">Pacific Islander</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Mixed-Race">Mixed-race</option>
+                                <option value="Other">Other</option>
+                            </select>
+                       
+
+                            <label>Gender & Sexuality:</label>
+                            <select deer-key="gender" value="">
+                                <option value="Female-presenting">Female-presenting</option>
+                                <option value="Male-presenting">Male-presenting</option>
+                                <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                                <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                                <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                                <option value="Genders are intermingled">Genders are intermingled</option>
+                                <option value="Genders are separated">Genders are separated</option>
+                                <option value="Other">Other</option>
+                                <option value="Not applicable">Not applicable</option>
+                            </select>
+
+                            <label>Education:</label>
+                            <select deer-key="education" value="">
+                                <option value="Some high school">Some high school</option>
+                                <option value="High school graduate">High school graduate</option>
+                                <option value="Some college">Some college</option>
+                                <option value="College Degree">College degree</option>
+                                <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                            </select>
+                        
+                        
+                            <label>National Origin:</label>
+                            <input type="text" deer-key="nationality" value="">
+
+                        </div>
+
+                        <div class="dataWrap" for="all">
+                            <label>Typical Use: </label>
+                             <select deer-key="typical_use" value="">
+                                <option value="Religious">Religious</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Educational">Educational</option>
+                                <option value="Civic">Civic</option>
+                                <option value="Other Public">Other Public</option>
+                            </select>
+                        </div>
+                    </div>
                     <input type="button" onclick="LR.ui.addPracticeAndReset(event)" value="Add Practice and Reset" />
                     <ul id="added_practices">
                          <li><header> Added Practices </header></li>
@@ -223,105 +731,7 @@
                 </div>
                 <!-- This should contain some way to gather the data in form of the hierarchy provided.  Hide/Show pieces as needed. -->
 
-                <div class="dataWrap religiousTradition" for="all">
-                    <label>Religious Tradition:</label>
-                    <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
-                        <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
-                        <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
-                        <option value="Christian">Christian</option>
-                        <option value="Jewish">Jewish</option>
-                        <option value="Muslim">Muslim</option>
-                        <option value="Buddhist">Buddhist</option>
-                        <option value="Daoist">Daoist</option>
-                        <option value="Confucianism">Confucianism</option>
-                        <option value="Hindu">Hindu</option>
-                        <option value="Sikh">Sikh</option>
-                        <option value="Pagan">Pagan</option>
-                        <option value="Indigenous">Indigenous</option>
-                        <option value="Native American Traditions">Native American Traditions</option>
-                        <option value="Other Religions">Other Religions</option>
-                        <option value="Other Faiths">Other Faiths</option>
-                        <option value="Unaffiliated">Unaffiliated</option>
-                        <option value="Atheist">Atheist</option>
-                        <option value="Agnostic">Agnostic</option>
-                        <option value="Humanist">Humanist</option>
-                        <option value="Nothing in particular">Nothing in particular</option>
-                    </select>
-                    <select id="christianSub" deer-key="" value="">
-                        <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
-                        <option value="Christian: Mainline Protestant">Mainline Protestant</option>
-                        <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
-                        <option value="Christian: Catholic">Catholic</option>
-                        <option value="Christian: Mormon">Mormon</option>
-                        <option value="Christian: Othodox Christian">Orthodox Christian</option>
-                        <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
-                        <option value="Christian: Other Christian">Other Christian</option>
-                    </select>
-                    <select id="jewishSub" deer-key="" value="">
-                        <option value="Jewish: Conservative">Conservative</option>
-                        <option value="Jewish: Reform">Reform</option>
-                        <option value="Jewish: Orthodox">Orthodox</option>
-                        <option value="Jewish: Reconstructionist">Reconstructionist</option>
-                        <option value="Jewish: Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="dataWrap demographics" for="all">
-                    <label>Race/Ethnicity:</label>
-                    <select deer-key="ethnicity" value="">
-                        <option value="African American/Black/African">African American/Black/African</option>
-                        <option value="Bosniak">Bosniak</option>
-                        <option value="Caribbean">Caribbean</option>
-                        <option value="East Asian">East Asian</option>
-                        <option value="Hispanic/Latin">Hispanic/Latin</option>
-                        <option value="Middle Eastern">Middle Eastern</option>
-                        <option value="Bosniak">Native American/indigenous American</option>
-                        <option value="Native American/indigenous American">North African/Mediterranean</option>
-                        <option value="Pacific Islander">Pacific Islander</option>
-                        <option value="South Asian">South Asian</option>
-                        <option value="Mixed-Race">Mixed-race</option>
-                        <option value="Other">Other</option>
-                    </select>
-               
-
-                    <label>Gender & Sexuality:</label>
-                    <select deer-key="gender" value="">
-                        <option value="Female-presenting">Female-presenting</option>
-                        <option value="Male-presenting">Male-presenting</option>
-                        <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
-                        <option value="Mostly transgender or queer">Mostly transgender or queer</option>
-                        <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
-                        <option value="Genders are intermingled">Genders are intermingled</option>
-                        <option value="Genders are separated">Genders are separated</option>
-                        <option value="Other">Other</option>
-                        <option value="Not applicable">Not applicable</option>
-                    </select>
-
-                    <label>Education:</label>
-                    <select deer-key="education" value="">
-                        <option value="Some high school">Some high school</option>
-                        <option value="High school graduate">High school graduate</option>
-                        <option value="Some college">Some college</option>
-                        <option value="College Degree">College degree</option>
-                        <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
-                    </select>
                 
-                
-                    <label>National Origin:</label>
-                    <input type="text" deer-key="nationality" value="">
-
-                </div>
-
-                <div class="dataWrap" for="all">
-                    <label>Typical Use: </label>
-                     <select deer-key="typical_use" value="">
-                        <option value="Religious">Religious</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Educational">Educational</option>
-                        <option value="Civic">Civic</option>
-                        <option value="Other Public">Other Public</option>
-                    </select>
-                </div>
 
                 <div class="dataWrap" for="all">
                     <label>General Information:</label>
