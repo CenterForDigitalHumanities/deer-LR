@@ -34,19 +34,128 @@
                 <label>E-mail:</label>  <input id="email" type="text"  />
                 <input id="findMePlease" class="btn btn-primary" onclick="LR.ui.lookupAttributor(event)" type="button" value="Find Me Please">
             </div>
-            <div id="find_attributor" class="card hidden">
-                <div class="card-body">
-                    <header class="card-title">Matching People</header>
-                    <ul id="attributor_list">
-                        <li>We did not find any matching people. <input onclick="LR.ui.assignAttributor(event)" type="button" class="me" value="This is me!"/></li>
-                    </ul>
-                </div>
-                <form id="theAttributor" my-type="Person" my-context="http://schema.org" exp_id="" class="">
-                    <!-- This is a deer form.  It should be a person. -->
-                    <input type="button" value="I Am New To Lived Religion" onclick="LR.crud.createAttributor(event)" />  
-                </form>
+        </div>
+        <div id="find_attributor" class="card hidden">
+            <div class="card-body">
+                <header class="card-title">Matching People</header>
+                <ul id="attributor_list">
+                    <li>We did not find any matching people. <input onclick="LR.ui.assignAttributor(event)" type="button" class="me" value="This is me!"/></li>
+                </ul>
+                <input type="button" class="btn btn-primary" value="Register New Participant" onclick="LR.ui.togglePersonAddition()"/>
             </div>
-        </div> 
+            <form id="newPersonForm" class="hidden" deer-type="Person" deer-context="http://schema.org">
+                <label>Name (Can be anonymous):</label>
+                <input type="text" deer-key="name" deer-source="">
+                <input type="hidden" deer-key="creator" value="demoAgent">
+                <input type="hidden" deer-key="performerIn" value="LivedReligionEvent">
+                <label>Birth Date</label>
+                <input type="date" deer-key="birthDate" deer-source="">
+
+                <label>E-mail:</label>
+                <input type="text" deer-key="email" deer-source="">
+
+                <label>Phone Number:</label>
+                <input type="text" deer-key="telephone" deer-source="">
+
+                <div class="row">
+                    <div class="dataWrap religiousTradition" for="all">
+                    <label>Religious Tradition:</label>
+                    <select class="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                        <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
+                        <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
+                        <option value="Christian">Christian</option>
+                        <option value="Jewish">Jewish</option>
+                        <option value="Muslim">Muslim</option>
+                        <option value="Buddhist">Buddhist</option>
+                        <option value="Daoist">Daoist</option>
+                        <option value="Confucianism">Confucianism</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Sikh">Sikh</option>
+                        <option value="Pagan">Pagan</option>
+                        <option value="Indigenous">Indigenous</option>
+                        <option value="Native American Traditions">Native American Traditions</option>
+                        <option value="Other Religions">Other Religions</option>
+                        <option value="Other Faiths">Other Faiths</option>
+                        <option value="Unaffiliated">Unaffiliated</option>
+                        <option value="Atheist">Atheist</option>
+                        <option value="Agnostic">Agnostic</option>
+                        <option value="Humanist">Humanist</option>
+                        <option value="Nothing in particular">Nothing in particular</option>
+                    </select>
+                    <select class="christianSub" deer-key="" value="">
+                        <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
+                        <option value="Christian: Mainline Protestant">Mainline Protestant</option>
+                        <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
+                        <option value="Christian: Catholic">Catholic</option>
+                        <option value="Christian: Mormon">Mormon</option>
+                        <option value="Christian: Othodox Christian">Orthodox Christian</option>
+                        <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
+                        <option value="Christian: Other Christian">Other Christian</option>
+                    </select>
+                    <select class="jewishSub hidden" deer-key="" value="">
+                        <option value="Jewish: Conservative">Conservative</option>
+                        <option value="Jewish: Reform">Reform</option>
+                        <option value="Jewish: Orthodox">Orthodox</option>
+                        <option value="Jewish: Reconstructionist">Reconstructionist</option>
+                        <option value="Jewish: Other">Other</option>
+                    </select>
+                </div>
+                    <div class="col">
+                        <label>Race/Ethnicity:</label>
+                        <select deer-key="ethnicity" deer-source="">
+                            <option value="African American/Black/African">African American/Black/African</option>
+                            <option value="Bosniak">Bosniak</option>
+                            <option value="Caribbean">Caribbean</option>
+                            <option value="East Asian">East Asian</option>
+                            <option value="Hispanic/Latin">Hispanic/Latin</option>
+                            <option value="Middle Eastern">Middle Eastern</option>
+                            <option value="Bosniak">Native American/indigenous American</option>
+                            <option value="Native American/indigenous American">North African/Mediterranean</option>
+                            <option value="Pacific Islander">Pacific Islander</option>
+                            <option value="South Asian">South Asian</option>
+                            <option value="Mixed-Race">Mixed-race</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Gender & Sexuality:</label>
+                        <select deer-key="gender" deer-source="">
+                            <option value="Female-presenting">Female-presenting</option>
+                            <option value="Male-presenting">Male-presenting</option>
+                            <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                            <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                            <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                            <option value="Genders are intermingled">Genders are intermingled</option>
+                            <option value="Genders are separated">Genders are separated</option>
+                            <option value="Other">Other</option>
+                            <option value="Not applicable">Not applicable</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                    <label>Education:</label>
+                        <select deer-key="education" deer-source="">
+                            <option value="Some high school">Some high school</option>
+                            <option value="High school graduate">High school graduate</option>
+                            <option value="Some college">Some college</option>
+                            <option value="College Degree">College degree</option>
+                            <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                        </select>
+                    </div>
+                </div>
+                <label>National Origin:</label>
+                <input type="text" deer-key="nationality" deer-source="">
+
+                <label>Description</label>
+                <textarea type="text" deer-key="description" deer-source=""></textarea>
+                <footer>
+                    <input class="button primary" type="submit">
+                    <div id="participantResult"> 
+                        <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
+                    </div>
+                    
+                </footer>
+            </form>
+        </div>
     </generic-attribution>
 
     <generic-place>
@@ -65,19 +174,41 @@
                 <label>Location/Event title:</label> <input id="" type="text"  />
                 <input id="findRelated" class="btn btn-primary" onclick="LR.ui.lookupRelated(event)" type="button" value="Look Up Related Location/Event">
             </div>
-            <div id="find_related" class="card hidden">
-                <div class="card-body">
-                    <header class="card-title">Matching Location/Event</header>
-                    <ul id="related_list">
-                        <li>We did not find any matching locations/events. <input onclick="LR.ui.assignRelated(event)" type="button" class="me" value="This is it!"/></li>
-                    </ul>
-                </div>
-                <form id="thePlace" class="">
-                    <!-- This is a DEER form for a Location/Event -->
-                    <input type="button" value="This Is A New Location/Event" onclick="LR.crud.createRelated(event)" />
+        </div>
+        <div id="find_related" class="card hidden">
+            <div class="card-body">
+                <header class="card-title">Matching Location/Event</header>
+                <ul id="related_list">
+                    <li>We did not find any matching locations/events. <input onclick="LR.ui.assignRelated(event)" type="button" class="me" value="This is it!"/></li>
+                </ul>
+                 <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleEventAddition()"/>
+                 <form id="newEventForm" class="hidden" deer-type="Event" deer-context="http://schema.org">
+                    <label>Event Title:</label>
+                    <input type="text" deer-key="name" deer-source="">
+
+                    <input type="hidden" deer-key="creator" value="demoAgent">
+
+                    <label>Start Date</label>
+                    <input type="date" deer-key="startDate" deer-source="">
+
+                    <label>End Date</label>
+                    <input type="date" deer-key="endDate" deer-source="">
+
+                    <label>Location:</label>
+                    <input type="text" deer-key="location" deer-source="">
+
+                    <label>Description</label>
+                    <textarea type="text" deer-key="description" deer-source=""></textarea>
+                    <footer>
+                        <input class="button primary" type="submit">
+                        <div id="eventResult"> 
+                            <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
+                        </div>
+                        
+                    </footer>
                 </form>
             </div>
-        </div> 
+        </div>
     </generic-place>
 
     <generic-experience class="">
@@ -143,7 +274,7 @@
                 <div name="sense" class="forAll">
                     <div class="dataWrap religiousTradition" for="all">
                         <label>Religious Tradition:</label>
-                        <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                        <select class="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
                             <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
                             <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
                             <option value="Christian">Christian</option>
@@ -165,7 +296,7 @@
                             <option value="Humanist">Humanist</option>
                             <option value="Nothing in particular">Nothing in particular</option>
                         </select>
-                        <select id="christianSub" deer-key="" value="">
+                        <select class="christianSub" deer-key="" value="">
                             <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
                             <option value="Christian: Mainline Protestant">Mainline Protestant</option>
                             <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
@@ -175,7 +306,7 @@
                             <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
                             <option value="Christian: Other Christian">Other Christian</option>
                         </select>
-                        <select id="jewishSub" deer-key="" value="">
+                        <select class="jewishSub hidden" deer-key="" value="">
                             <option value="Jewish: Conservative">Conservative</option>
                             <option value="Jewish: Reform">Reform</option>
                             <option value="Jewish: Orthodox">Orthodox</option>
@@ -261,7 +392,7 @@
                 <div name="thing" class="forAll">
                     <div class="dataWrap religiousTradition" for="all">
                         <label>Religious Tradition:</label>
-                        <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                        <select class="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
                             <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
                             <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
                             <option value="Christian">Christian</option>
@@ -283,7 +414,7 @@
                             <option value="Humanist">Humanist</option>
                             <option value="Nothing in particular">Nothing in particular</option>
                         </select>
-                        <select id="christianSub" deer-key="" value="">
+                        <select class="christianSub" deer-key="" value="">
                             <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
                             <option value="Christian: Mainline Protestant">Mainline Protestant</option>
                             <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
@@ -293,7 +424,7 @@
                             <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
                             <option value="Christian: Other Christian">Other Christian</option>
                         </select>
-                        <select id="jewishSub" deer-key="" value="">
+                        <select class="jewishSub hidden" deer-key="" value="">
                             <option value="Jewish: Conservative">Conservative</option>
                             <option value="Jewish: Reform">Reform</option>
                             <option value="Jewish: Orthodox">Orthodox</option>
@@ -377,7 +508,7 @@
                 <div name="sense" class="forAll">
                     <div class="dataWrap religiousTradition" for="all">
                         <label>Religious Tradition:</label>
-                        <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                        <select class="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
                             <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
                             <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
                             <option value="Christian">Christian</option>
@@ -399,7 +530,7 @@
                             <option value="Humanist">Humanist</option>
                             <option value="Nothing in particular">Nothing in particular</option>
                         </select>
-                        <select id="christianSub" deer-key="" value="">
+                        <select class="christianSub" deer-key="" value="">
                             <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
                             <option value="Christian: Mainline Protestant">Mainline Protestant</option>
                             <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
@@ -409,7 +540,7 @@
                             <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
                             <option value="Christian: Other Christian">Other Christian</option>
                         </select>
-                        <select id="jewishSub" deer-key="" value="">
+                        <select class="jewishSub hidden" deer-key="" value="">
                             <option value="Jewish: Conservative">Conservative</option>
                             <option value="Jewish: Reform">Reform</option>
                             <option value="Jewish: Orthodox">Orthodox</option>
@@ -495,7 +626,7 @@
                 <div name="word" class="forAll">
                     <div class="dataWrap religiousTradition" for="all">
                         <label>Religious Tradition:</label>
-                        <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                        <select class="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
                             <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
                             <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
                             <option value="Christian">Christian</option>
@@ -517,7 +648,7 @@
                             <option value="Humanist">Humanist</option>
                             <option value="Nothing in particular">Nothing in particular</option>
                         </select>
-                        <select id="christianSub" deer-key="" value="">
+                        <select class="christianSub" deer-key="" value="">
                             <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
                             <option value="Christian: Mainline Protestant">Mainline Protestant</option>
                             <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
@@ -527,7 +658,7 @@
                             <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
                             <option value="Christian: Other Christian">Other Christian</option>
                         </select>
-                        <select id="jewishSub" deer-key="" value="">
+                        <select class="jewishSub hidden" deer-key="" value="">
                             <option value="Jewish: Conservative">Conservative</option>
                             <option value="Jewish: Reform">Reform</option>
                             <option value="Jewish: Orthodox">Orthodox</option>
@@ -614,7 +745,7 @@
                 <div name="practice" class="forAll">
                     <div class="dataWrap religiousTradition" for="all">
                         <label>Religious Tradition:</label>
-                        <select id="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
+                        <select class="religion" deer-key="religious_tradition" value="" onchange="LR.ui.subCategoryCheck(event)">
                             <!-- If xtian or jewish, show the proper subcatagory.  Otherwise, hide beth subs-->
                             <!-- If sub catagory is showing, then this parent select deer-key should be removed so the sub's value is taken.-->
                             <option value="Christian">Christian</option>
@@ -636,7 +767,7 @@
                             <option value="Humanist">Humanist</option>
                             <option value="Nothing in particular">Nothing in particular</option>
                         </select>
-                        <select id="christianSub" deer-key="" value="">
+                        <select class="christianSub" deer-key="" value="">
                             <option value="Christian: Evangelical Protestant">Evangelical Protestant</option>
                             <option value="Christian: Mainline Protestant">Mainline Protestant</option>
                             <option value="Christian: Historically Black Protestant">Historically Black Protestant</option>
@@ -646,7 +777,7 @@
                             <option value="Christian: Jehova's Witness">Jehovah’s Witness</option>
                             <option value="Christian: Other Christian">Other Christian</option>
                         </select>
-                        <select id="jewishSub" deer-key="" value="">
+                        <select class="jewishSub hidden" deer-key="" value="">
                             <option value="Jewish: Conservative">Conservative</option>
                             <option value="Jewish: Reform">Reform</option>
                             <option value="Jewish: Orthodox">Orthodox</option>

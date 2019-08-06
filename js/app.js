@@ -629,29 +629,30 @@ LR.ui.reactiveHierarchy = function(event){
 
 LR.ui.subCategoryCheck = function(event){
     let e = event.target
+    let form = e.closest("form");
     var value = e.options[e.selectedIndex].value
     var text = e.options[e.selectedIndex].text
     if(value === "Christian"){
-        document.getElementById("jewishSub").style.display = "none"
-        document.getElementById("christianSub").style.display = "block"
-        document.getElementById("religion").setAttribute("deer-key", "")
-        document.getElementById("jewishSub").setAttribute("deer-key", "")
-        document.getElementById("christianSub").setAttribute("deer-key", "religious_tradition")
+        form.getElementsByClassName("jewishSub")[0].classList.add("hidden")
+        form.getElementsByClassName("christianSub")[0].classList.remove("hidden")
+        form.getElementsByClassName("religion")[0].setAttribute("deer-key", "")
+        form.getElementsByClassName("jewishSub")[0].setAttribute("deer-key", "")
+        form.getElementsByClassName("christianSub")[0].setAttribute("deer-key", "religious_tradition")
 
     }
     else if(value === "Jewish"){
-        document.getElementById("jewishSub").style.display = "block"
-        document.getElementById("christianSub").style.display = "none"
-        document.getElementById("religion").setAttribute("deer-key", "")
-        document.getElementById("jewishSub").setAttribute("deer-key", "religious_tradition")
-        document.getElementById("christianSub").setAttribute("deer-key", "")
+        form.getElementsByClassName("jewishSub")[0].classList.remove("hidden")
+        form.getElementsByClassName("christianSub")[0].classList.add("hidden")
+        form.getElementsByClassName("religion")[0].setAttribute("deer-key", "")
+        form.getElementsByClassName("jewishSub")[0].setAttribute("deer-key", "religious_tradition")
+        form.getElementsByClassName("christianSub")[0].setAttribute("deer-key", "")
     }
     else{
-        document.getElementById("jewishSub").style.display = "none"
-        document.getElementById("christianSub").style.display = "none"
-        document.getElementById("religion").setAttribute("deer-key", "religious_tradition")
-        document.getElementById("jewishSub").setAttribute("deer-key", "")
-        document.getElementById("christianSub").setAttribute("deer-key", "")
+        form.getElementsByClassName("jewishSub")[0].classList.add("hidden")
+        form.getElementsByClassName("christianSub")[0].classList.add("hidden")
+        form.getElementsByClassName("religion")[0].setAttribute("deer-key", "religious_tradition")
+        form.getElementsByClassName("jewishSub")[0].setAttribute("deer-key", "")
+        form.getElementsByClassName("christianSub")[0].setAttribute("deer-key", "")
     }
 
 }
