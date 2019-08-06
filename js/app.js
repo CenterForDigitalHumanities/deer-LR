@@ -780,10 +780,3 @@ LR.crud.createRelated = function(event){
 LR.crud.submitExperience = function (event){
     alert("Still Under Development")
 }
-
-
-
-
-
-
-
