@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    -->
+<html>
+
+    <head>
+        <title>Lived Religion login</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+        <link rel="stylesheet" href="./css/mycss.css">
+    </head>
+
+    <body class="container">
+        <generic-top>To continue please login below so we know who you are.  </generic-top>
+        
+        <!-- here a user will use the mock login to store an attributor before continuing -->
+        <login>
+            Username
+            <input type="text" id="login-usr" />
+            Password
+            <input type="password" id="login-pwd" />
+            <input type="button" value="Login" onclick="LR.ui.mockLogin(event)" />
+            <input type="button" value="Forgot" onclick="LR.ui.forgotLogin(event)">Forgot</generic=top>
+            <login-forgot class="hidden">
+                <generic-top>Please contact your class administrator to retrieve the login information.</generic-top>
+            </login-forgot>
+        </login>
+
+        <!-- Need to force some authorization for this page -->
+
+
+        <!-- Add ins -->
+        <script src="./js/deerInitializer.js" type="module"></script>   
+        <script src="./js/app.js" type="text/javascript"></script>  
+
+    </body>
+    <script>
+
+    </script>
+
+</html>

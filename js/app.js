@@ -5,6 +5,12 @@
  */
 
 const LR = {}
+LR.sessionInfo = {}
+if (typeof(Storage) !== "undefined") {
+  LR.sessionInfo = window.sessionStorage
+} else {
+  alert("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
+}
 LR.local = {}
 LR.local.survey={}
 LR.crud = {}
@@ -779,4 +785,55 @@ LR.crud.createRelated = function(event){
 
 LR.crud.submitExperience = function (event){
     alert("Still Under Development")
+}
+
+
+
+
+
+LR.tricks.mockLogin = function(event){
+    let who = "" //Get the user input
+    let secret = "" //Get the user input
+    let admins = ["Rachel Lindsey", "David Justice", "Adam Park", "Donal Hegarty", "Bryan Haberberger", "Pauline Lee"] //know who the admins are
+    //If user is an admin, set the admin flag for the session. 
+    let classes = ["LR 2017", "LR 2018", "LR 2019"]
+    //login success should redirect to new_schema.html after storing the user information. These people/classes should have an Agent ID from RERUM to do this as properly as possible.  
+    if(admins.contains(who)){
+        if (secret == "thisSecret"){
+            LR.ui.loginRedirect(who, secret)   
+        }
+        else{
+            LR.ui.loginFail()
+        }
+    }
+    else{
+        //Ask for the class password
+        switch(who){
+            case "LR 2017":
+                if (secret == "thisSecret"){
+                    LR.ui.loginRedirect(who, secret)
+                }
+                else{
+                    LR.ui.loginFail()
+                }
+            break;
+            case "LR 2018":
+                if (secret == "thisSecret"){
+                    LR.ui.loginRedirect(who, secret)
+                }
+                else{
+                    LR.ui.loginFail()
+                }
+            break;
+            case "LR 2019":
+                if (secret == "thisSecret"){
+                    LR.ui.loginRedirect(who, secret)
+                }
+                else{
+                    LR.ui.loginFail()
+                }
+            break;
+            default:
+        }
+    }
 }
