@@ -585,6 +585,20 @@ LR.ui.toggleEventAddition = function(){
     return hidden
 }
 
+LR.ui.toggleLocationAddition = function(){
+    let locationForm = document.getElementById("newLocationForm")
+    let hidden = false
+    if (locationForm.classList.contains("hidden")){
+        locationForm.classList.remove("hidden")
+        hidden = false
+    }
+    else{
+        locationForm.classList.add("hidden")
+        hidden = true
+    }
+    return hidden
+}
+
 LR.local.makeDirty = function(html){
     let items = LR.local.survey.hasPart
     let id = html.getAttribute("survey_id")
@@ -774,11 +788,15 @@ LR.ui.lookupRelated = function(event){
     }
 }
 
-LR.ui.assignRelated = function(event){
+LR.ui.assignLocation = function(event){
     alert("Stil under development")
 }
 
-LR.crud.createRelated = function(event){
+LR.ui.lookupLocation = function(event){
+    alert("Stil under development")
+}
+
+LR.crud.createLocation = function(event){
     alert("Stil under development")
 
 }

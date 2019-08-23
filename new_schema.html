@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title>Lived Religion Data Collector</title>
+    <title>New Entry</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
@@ -17,35 +17,39 @@
     <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
     
     <!-- the person to attribute should be known by now.  They had to provide their attributor ID to get here -->
+    <!-- A Location + Date/Time is required to continue -->
+
     <generic-place>
          <generic-loader class="hidden">Please wait while we create and link yor experience...</generic-loader>
-         <generic-top id="">All things happen at a time and place.  Tell us about the place or event this data is concerned with.</generic-top>
-         <div id="" class="card">
+         <generic-top id="">Tell us about the place this data is concerened with.</generic-top>
+         <div id="assignLocation" class="card">
             <div class="card-body">
-                <header class="card-title">Please give us the ID  of the Event or Location this relates to.</header>
+                <header class="card-title">Please give us the ID  of the Event or Location this relates to.  If you do not know the ID, you can search for the location.</header>
                 <label>Location/Event ID:</label><input id="" type="text" value=""/>
-                <input class="btn btn-primary" type="button" value="This Is The Place!" onclick="LR.ui.assignRelated(event)" />
+                <input class="btn btn-primary" type="button" value="This Is The Place!" onclick="LR.ui.assignLocation(event)" />
             </div>
         </div> 
-        <div id="known_related" class="card">
+        <div id="lookupLocation" class="card hidden">
             <div class="card-body">
                 <header class="card-title">If you don't know the ID, tell us the name associated with this Event or Location  If we can't find anything, you will be asked to create a record for this Location/Event.</header>
                 <label>Location/Event title:</label> <input id="" type="text"  />
-                <input id="findRelated" class="btn btn-primary" onclick="LR.ui.lookupRelated(event)" type="button" value="Look Up Related Location/Event">
+                <input id="findRelated" class="btn btn-primary" onclick="LR.ui.lookupLocation(event)" type="button" value="Look Up Related Location/Event">
             </div>
         </div>
-        <div id="find_related" class="card hidden">
+        <div id="createLocation" class="card hidden">
             <div class="card-body">
                 <header class="card-title">Matching Location/Event</header>
                 <ul id="related_list">
-                    <li>We did not find any matching locations/events. <input onclick="LR.ui.assignRelated(event)" type="button" class="me" value="This is it!"/></li>
+                    <li>We did not find any matching locations/events. <input onclick="LR.ui.assignLocation(event)" type="button" class="me" value="This is it!"/></li>
                 </ul>
-                 <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleEventAddition()"/>
-                 <form id="newEventForm" class="hidden" deer-type="Event" deer-context="http://schema.org">
+                 <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleLocationAddition()"/>
+                 <form id="newLocationForm" class="hidden" deer-type="Event" deer-context="http://schema.org">
                     <label>Event Title:</label>
                     <input type="text" deer-key="name" deer-source="">
 
-                    <input type="hidden" deer-key="creator" value="demoAgent">
+                    <input type="hidden" deer-key="creator_app" value="LR_Agent">
+                    <input type="hidden" deer-key="creator_user" value="User_Agent">
+                    <input type="hidden" deer-key="testing" value="Lived_Religion">
 
                     <label>Start Date</label>
                     <input type="date" deer-key="startDate" deer-source="">
@@ -59,7 +63,7 @@
                     <label>Description</label>
                     <textarea type="text" deer-key="description" deer-source=""></textarea>
                     <footer>
-                        <input class="button primary" type="button" value="Submit">
+                        <input class="button primary" type="button" value="Submit New Location">
                         <div id="eventResult"> 
                             <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
                             <!-- I think this can be a DEER view that deer listens tothe form with a template that just shows the ID or name or something -->
@@ -69,6 +73,19 @@
             </div>
         </div>
     </generic-place>
+
+
+    <generic-time>
+        <div id="assignTime" class="card">
+            <div class="card-body">
+                <header class="card-title">Please give us a date or date range this data is concerened with.  Leave "End Date" empty if this is not a date range.</header>
+                <label>Start Date:</label><input id="dateTimeStart" type="datetime-local"/>
+                <label>End Date:</label><input id="dateTimeEnd" type="datetime-local"/>
+                <input class="btn btn-primary" type="button" value="Submit Date/Time" onclick="LR.ui.assignDate(event)" />
+            </div>
+        </div> 
+    </generic-time>
+
 
     <generic-experience class="">
         <div> We should only see this once we have the information from above.  This is for demo purposes only.  </div>
