@@ -635,12 +635,14 @@ LR.ui.reactiveHierarchy = function(event){
     if(sel){
         for(let i=0; i<matches.length; i++){
             let show = matches[i]
+            show.classList.remove("hidden")
             show.style.display = "block"
         }
     }
     else{
         for(let i=0; i<matches.length; i++){
             let hide = matches[i]
+            show.classList.add("hidden")
             hide.style.display = "none"
         }
     }
