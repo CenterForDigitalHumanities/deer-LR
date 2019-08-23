@@ -137,11 +137,11 @@
         border: 2px solid blue;
     }
 
-    .kind[for="things"]{
+    .kind[for="objects"]{
         border: 2px solid orange;
     }
 
-    .kind[for="senses"]{
+    .kind[for="bodies"]{
         border: 2px solid green;
     }
 

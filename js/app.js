@@ -642,7 +642,7 @@ LR.ui.reactiveHierarchy = function(event){
     else{
         for(let i=0; i<matches.length; i++){
             let hide = matches[i]
-            show.classList.add("hidden")
+            hide.classList.add("hidden")
             hide.style.display = "none"
         }
     }
@@ -807,13 +807,14 @@ LR.crud.submitExperience = function (event){
     alert("Still Under Development")
 }
 
-LR.tricks.loginRedirect(who){
+LR.tricks.loginRedirect = function(who){
     LR.sessionInfo.setItem("authorized", who)
     document.location.href = "new_schema.html"
 }
 
-LR.tricks.loginFail(){
+LR.ui.loginFail = function(){
     LR.sessionInfo.removeItem("authorized")
+    alert("The username and/or password you provided is not correct.")
 }
 
 LR.tricks.mockLogin = async function(event){
@@ -828,7 +829,7 @@ LR.tricks.mockLogin = async function(event){
     //If user is an admin, set the admin flag for the session. 
     //login success should redirect to new_schema.html after storing the user information. These people/classes should have an Agent ID from RERUM to do this as properly as possible.  
     if(admins.includes(who)){
-        if (secret == secrets.admin){
+        if (usrSecret == secrets.admin){
             LR.ui.loginRedirect(who)   
         }
         else{
@@ -839,7 +840,7 @@ LR.tricks.mockLogin = async function(event){
         //Ask for the class password
         switch(who){
             case "LR_2017":
-                if (secret == secrets.LR_2017){
+                if (usrSecret == secrets.LR_2017){
                     LR.ui.loginRedirect(who)
                 }
                 else{
@@ -847,7 +848,7 @@ LR.tricks.mockLogin = async function(event){
                 }
             break;
             case "LR_2018":
-                if (secret == secrets.LR_2018){
+                if (usrSecret == secrets.LR_2018){
                     LR.ui.loginRedirect(who)
                 }
                 else{
@@ -855,7 +856,7 @@ LR.tricks.mockLogin = async function(event){
                 }
             break;
             case "LR_2019":
-                if (secret == secrets.LR_2019){
+                if (usrSecret == secrets.LR_2019){
                     LR.ui.loginRedirect(who)
                 }
                 else{
@@ -863,7 +864,7 @@ LR.tricks.mockLogin = async function(event){
                 }
             break;
             default:
-                alert("There is no user registered for "+who.  "Please contact the administrator for more information.")
+                alert("There is no user registered for "+who+".  Please contact the administrator for more information.")
         }
     }
 }

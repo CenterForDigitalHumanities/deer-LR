@@ -12,11 +12,26 @@
     <link rel="stylesheet" href="./css/mycss.css">
 </head>
 
-<body class="container">
-    <dashboard>
-        
-        
+<body >
+    <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
+    <!-- Yes.  If admin, entries can be edited -->
 
+    <dashboard class="container">
+        <div id="dashboard_header">   <!-- New Entry button in here -->   </div>
+        <div class="dash_body">
+            <!-- A kind of SPACE, OBJECT or BODY created by this user, ordered by most recent, clipped to a certain number perhaps -->
+            <ul id="previousEntries">
+
+            </ul>
+        </div>
+
+        <div class="dash_body">
+            <!-- An entry point into the corpus of all SPACES, OBJECTS and BODIES.  Should be able to filter down to and view specific entries. -->
+            <ul id="entryIndex">
+                
+            </ul>
+        </div>
+        <div id="dashboard_footer"> <!-- Various site redirects here? --> </div>
     </dashboard>
 
 

@@ -241,15 +241,19 @@
                 <textarea type="text" deer-key="TODO"> </textarea>
             </form>
 
+            <!-- 
+                We may need to give context to why these SPACES, BODIES and OBJECTS are referenced.  The context is "This experience" so save the connection and aggregation all together here as an "Experience".  Then "My Entries" can be "My Submitted Experiences", but also each individual SPACE, BODY and OBJECT are individual either referenced by or created by this user or because of this Experience 
+            -->
+
             <form id="theExperience" class="experience" my-type="Experience">  
                 <!-- This should be a DEER form but may not be depending on how we do the data relation -->
                 <!-- Submission or Experience type, not sure what I am doing with this yet. -->
                 <input type="hidden" name="user" />
                 <input type="hidden" name="location/event" />
                 <!-- there is no natural way for a value to be an array.  One must force the javascript to make it an array on form submission -->
-                <input type="hidden" name="Space" value="ID from space form" />
-                <input type="hidden" name="Objects" value="[IDs from word form]" />
-                <input type="hidden" name="Bodies" value="[IDs from sense form]" />
+                <input type="hidden" name="Space" value="{IDs of Spaces]" />
+                <input type="hidden" name="Objects" value="[IDs of Objects]" />
+                <input type="hidden" name="Bodies" value="[IDs of Bodies]" />
                 <label>General Information:</label>
                 <textarea type="text" deer-key="TODO"> </textarea>
                 <input type="button" onclick="LR.crud.submitExperience(event)" value="Submit This Data" />
