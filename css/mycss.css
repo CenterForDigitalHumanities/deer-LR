@@ -179,3 +179,86 @@
     .fixDynamicHeight{
         min-height: 845px;
     }
+
+
+
+    /* DASHBOARD */
+
+    dashboard {
+        display: block;
+        position: relative;
+        color: white;
+        border: 2px solid green;
+        top: 3em;
+        border: 1px solid white;
+        padding: 0px !important;
+
+    }
+
+    .dash_body{
+        display: inline-block;
+        width: 49%;
+        
+    }
+
+    .dash_body li{
+        list-style-type: none;
+    }
+
+    .dash_body ul{
+        max-height: 30em;
+        overflow-y: scroll;
+    }
+
+    .dash_body label{
+        border-bottom: 1px solid white;
+        padding: 0em 10em;
+    }
+
+    .dash_text{
+        display: inline-block;
+    }
+
+    .myEntriesBtn{
+        display: inline-block !important;
+        width: auto !important;
+    }
+
+    .allEntriesBtn{
+        display: inline-block !important;
+        width: auto !important;
+    }
+
+    #dashboard_header{
+        border-bottom: 1px solid white;
+        padding: 11px 0px;
+        background-color: black;
+    }
+
+    #newEntryBtn{
+        position: absolute;
+        right: 1em;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888; 
+      height: 15px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555; 
+    }
+
+    /* END DASHBOARS */
