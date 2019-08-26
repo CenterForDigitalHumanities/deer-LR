@@ -1,5 +1,13 @@
 package auth;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
 /**
  *
  * @author bhaberbe
@@ -22,13 +30,13 @@ public class Authorize {
             */
             sec_fileLoc =Authorize.class.getResource(secrets).toString();
             admins_fileLoc =Authorize.class.getResource(admins).toString();
-            sec_fileLoc = fileLoc.replace("file:", "");
-            admins_fileLoc = fileLoc.replace("file:", "");
+            sec_fileLoc = sec_fileLoc.replace("file:", "");
+            admins_fileLoc = admins_fileLoc.replace("file:", "");
             InputStream input_sec = new FileInputStream(sec_fileLoc);
             InputStream input_admins = new FileInputStream(admins_fileLoc);
             sec_props.load(input_sec);
             admins_props.load(input_admins);
-            admins_list = admins_props.getProperty("admins_list").split(",")
+            admins_list = admins_props.getProperty("admins_list").split(",");
     }
 
     public void setSecFileLoc(String location){
@@ -64,11 +72,12 @@ public class Authorize {
     }
 
     public boolean isAdmin(String user){
-        return admins_list.includes(user)
+        List<String> list = Arrays.asList(admins_list);
+        return list.contains(user);
     }
 
     public boolean isAuthorized(String user, String pwd){
-        return pwd.equals(sec_props.getProperty(user))
+        return pwd.equals(sec_props.getProperty(user));
     }
 
 
