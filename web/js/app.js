@@ -13,6 +13,15 @@ if (typeof(Storage) !== "undefined") {
 }
 LR.local = {}
 LR.local.survey={}
+LR.submission={
+    "@type":"UserSubmission",
+    "spaces":[],
+    "objects":[],
+    "bodies":[],
+    "contributors":[],
+    "creator":"",
+    "createdOn" :""    
+}
 LR.crud = {}
 LR.crud.URL = {
     BASE_ID: "http://devstore.rerum.io/v1",

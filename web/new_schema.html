@@ -21,14 +21,14 @@
     <!-- A Location + Date/Time is required to continue -->
 
     <generic-place>
-         <generic-loader class="hidden">Please wait while we create and link yor experience...</generic-loader>
-         <generic-top id="">Tell us about the place this data is concerened with.</generic-top>
-         <div id="assignLocation" class="card">
-            <div class="card-body">
-                <header class="card-title">Please give us the ID  of the Location this relates to.</header>
-                <label>Location/Event ID:</label><input id="" type="text" value=""/>
-                <input class="btn btn-primary" type="button" value="This Is The Place!" onclick="LR.ui.assignLocation(event)" />
-            </div>
+        <generic-loader class="hidden">Please wait while we create and link yor experience...</generic-loader>
+        <generic-top id="">Tell us about the place this data is concerened with.</generic-top>
+        <div id="assignLocation" class="card">
+           <div class="card-body">
+               <header class="card-title">Please give us the ID  of the Location this relates to.</header>
+               <label>Location/Event ID:</label><input id="" type="text" value=""/>
+               <input class="btn btn-primary" type="button" value="This Is The Place!" onclick="LR.ui.assignLocation(event)" />
+           </div>
         </div> 
         <div id="lookupLocation" class="card hidden">
             <div class="card-body">
@@ -43,50 +43,52 @@
                 <ul id="related_list">
                     <li>We did not find any matching locations/events. <input onclick="LR.ui.assignLocation(event)" type="button" class="me" value="This is it!"/></li>
                 </ul>
-                 <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleLocationAddition()"/>
-                 <form id="newLocationForm" class="hidden" deer-type="Event" deer-context="http://schema.org">
-                    <label>Event Title:</label>
+                <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleLocationAddition()"/>
+                <form id="newLocationForm" class="hidden" deer-type="Location" deer-context="http://schema.org">
+                    <label>Location Title:</label>
                     <input type="text" deer-key="name" deer-source="">
+
+                    <label>Location GPS Coordinates (lat, long)</label>
+                    <input type="text" deer-key="location" deer-source="">
 
                     <input type="hidden" deer-key="creator_app" value="LR_Agent">
                     <input type="hidden" deer-key="creator_user" value="User_Agent">
                     <input type="hidden" deer-key="testing" value="Lived_Religion">
 
-                    <label>Start Date</label>
-                    <input type="date" deer-key="startDate" deer-source="">
 
-                    <label>End Date</label>
-                    <input type="date" deer-key="endDate" deer-source="">
-
-                    <label>Location:</label>
-                    <input type="text" deer-key="location" deer-source="">
-
-                    <label>Description</label>
+                    <label>Location Notes/Description:</label>
                     <textarea type="text" deer-key="description" deer-source=""></textarea>
-                    <footer>
-                        <input class="button primary" type="button" value="Submit New Location">
-                        <div id="eventResult"> 
-                            <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
-                            <!-- I think this can be a DEER view that deer listens tothe form with a template that just shows the ID or name or something -->
-                        </div>
-                    </footer>
+
+                    <generic-time>
+                        <div id="assignTime" class="card">
+                            <div class="card-body">
+                                <header class="card-title">Please give us a date or date range this data is concerned with.  Leave "End Date" empty if this is not a date range.</header>
+                                <label>Start Date:</label><input id="dateTimeStart" type="date" name="startDate"/>
+                                <label>End Date:</label><input id="dateTimeEnd" type="date" name="endDate"/>
+                            </div>
+                        </div> 
+                    </generic-time>
+                   
+                    <generic-time>
+                        <div id="known_contributors" class="card">
+                            <div class="card-body">
+                                <header class="card-title">Please list anyone who is a contributor to this data</header>
+                                <label>Contributor(s):</label><input id="contributors" type="text" name="contributors"/>
+                                <label>End Date:</label><input id="dateTimeEnd" type="date" name="endDate"/>
+                            </div>
+                        </div> 
+                    </generic-time>
+                    <input deer-listening="newLocationForm" class="button primary" type="submit" value="Continue to Data Upload" onclick="LR.tricks.submitRequiredInfo(event)">
                 </form>
+                
+                <deer-view id="interviewerDeer" deer-listening="newLocationForm" deer-template="Location" >
+                    <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
+                    <!-- I think this can be a DEER view that deer listens to the form with a template that just shows the ID or name or something -->
+                </deer-view>
+
             </div>
         </div>
     </generic-place>
-
-
-    <generic-time>
-        <div id="assignTime" class="card">
-            <div class="card-body">
-                <header class="card-title">Please give us a date or date range this data is concerened with.  Leave "End Date" empty if this is not a date range.</header>
-                <label>Start Date:</label><input id="dateTimeStart" type="datetime-local"/>
-                <label>End Date:</label><input id="dateTimeEnd" type="datetime-local"/>
-                <input class="btn btn-primary" type="button" value="Submit Date/Time" onclick="LR.ui.assignDate(event)" />
-            </div>
-        </div> 
-    </generic-time>
-
 
     <generic-experience>
         <div> We should only see this once we have the information from above.  This is for demo purposes only.  </div>
@@ -102,39 +104,39 @@
         </div>
         <div class="card fixDynamicHeight">
             <!-- This is a DEER form for a Space -->
-            <form class="dataWrap kind hidden" for="spaces">
+            <form id="newSpaceForm" class="dataWrap kind hidden" for="spaces" deer-type="Place">
                 <header>What kind of space is this?  Check all that apply.</header>
-                <input type="checkbox" deer-key="TODO" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
-                <input type="checkbox" deer-key="TODO" value="Administrative Area"/><span class="chk_lbl">Administrative Area</span>
-                <input type="checkbox" deer-key="TODO" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                <input type="checkbox" deer-key="TODO" value="Landform" /><span class="chk_lbl">Landform</span>
-                <input type="checkbox" deer-key="TODO" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                <input type="checkbox" deer-key="TODO" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                <input type="checkbox" deer-key="TODO" value="Residence" /><span class="chk_lbl">Residence</span>
-                <input type="checkbox" deer-key="TODO" value="School" /><span class="chk_lbl">School</span>
-                <input type="checkbox" deer-key="TODO" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                <input type="checkbox" deer-key="TODO" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                <input type="checkbox" deer-key="TODO" value="Home" /><span class="chk_lbl">Home</span>
-                <input type="checkbox" deer-key="TODO" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                <input type="checkbox" deer-key="TODO" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                <input type="checkbox" deer-key="TODO" value="Museum" /><span class="chk_lbl">Museum</span>
-                <input type="checkbox" deer-key="TODO" value="Park" /><span class="chk_lbl">Park</span>
-                <input type="checkbox" deer-key="TODO" value="Street" /><span class="chk_lbl">Street</span>
-                <input type="checkbox" deer-key="TODO" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                <input type="checkbox" deer-key="TODO" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                <input type="checkbox" deer-key="TODO" value="Imagined" /><span class="chk_lbl">Imagined</span>
+                <input type="checkbox" deer-key="additionalType" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
+                <input type="checkbox" deer-key="additionalType" value="Administrative Area"/><span class="chk_lbl">Administrative Area</span>
+                <input type="checkbox" deer-key="additionalType" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
+                <input type="checkbox" deer-key="additionalType" value="Landform" /><span class="chk_lbl">Landform</span>
+                <input type="checkbox" deer-key="additionalType" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
+                <input type="checkbox" deer-key="additionalType" value="Local Business" /><span class="chk_lbl">Local Business</span>
+                <input type="checkbox" deer-key="additionalType" value="Residence" /><span class="chk_lbl">Residence</span>
+                <input type="checkbox" deer-key="additionalType" value="School" /><span class="chk_lbl">School</span>
+                <input type="checkbox" deer-key="additionalType" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
+                <input type="checkbox" deer-key="additionalType" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
+                <input type="checkbox" deer-key="additionalType" value="Home" /><span class="chk_lbl">Home</span>
+                <input type="checkbox" deer-key="additionalType" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
+                <input type="checkbox" deer-key="additionalType" value="Hospital" /><span class="chk_lbl">Hospital</span>
+                <input type="checkbox" deer-key="additionalType" value="Museum" /><span class="chk_lbl">Museum</span>
+                <input type="checkbox" deer-key="additionalType" value="Park" /><span class="chk_lbl">Park</span>
+                <input type="checkbox" deer-key="additionalType" value="Street" /><span class="chk_lbl">Street</span>
+                <input type="checkbox" deer-key="additionalType" value="Zoo" /><span class="chk_lbl">Zoo</span>
+                <input type="checkbox" deer-key="additionalType" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                <input type="checkbox" deer-key="additionalType" value="Imagined" /><span class="chk_lbl">Imagined</span>
 
                 <header>History of this Space:</header>
                 <label>Former Location(s):</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
+                <textarea type="text" deer-key="former_locations"> </textarea>
                 <label>Former Use(s):</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
+                <textarea type="text" deer-key="former_uses"> </textarea>
                 <label>Creator:</label>
-                <input type="text" deer-key="TODO" />
+                <input type="text" deer-key="creator" />
                 <label>Material(s):</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
+                <textarea type="text" deer-key="material"> </textarea>
                 <label>Further Description:</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
+                <textarea type="text" deer-key="description"> </textarea>
                 <div class="dataWrap" for="all">
                     <label>Typical Use: </label>
                      <select deer-key="typical_use" value="">
@@ -152,7 +154,7 @@
                 <textarea type="text" deer-key="TODO"> </textarea>
             </form>
 
-            <form class="dataWrap kind hidden" for="objects">
+            <form id="newObjectForm" class="dataWrap kind hidden" for="objects" deer-type="Object">
                 <!-- This is a DEER form for a Thing -->
                 <header>What kind of object is this?  Check all that apply.</header>
                 <input type="checkbox" deer-key="TODO" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
@@ -184,7 +186,7 @@
                 <textarea type="text" deer-key="TODO"> </textarea>
             </form>
 
-            <form class="dataWrap kind hidden" for="bodies">
+            <form id="newBodyForm" class="dataWrap kind hidden" for="bodies" deer-type="Body">
                 <!-- This is a DEER form for a Sense -->
                 <header>What senses are prominent?</header>
                 <input type="radio" deer-key="TODO" value="Sight" name="sense"><span class="chk_lbl">Sight</span>
@@ -241,16 +243,13 @@
                 <label>Tags:</label>
                 <textarea type="text" deer-key="TODO"> </textarea>
             </form>
-
-            <!-- 
-                We may need to give context to why these SPACES, BODIES and OBJECTS are referenced.  The context is "This experience" so save the connection and aggregation all together here as an "Experience".  Then "My Entries" can be "My Submitted Experiences", but also each individual SPACE, BODY and OBJECT are individual either referenced by or created by this user or because of this Experience 
-            -->
-
-            <form id="theExperience" class="experience" my-type="Experience">  
-                <!-- This should be a DEER form but may not be depending on how we do the data relation -->
-                <!-- Submission or Experience type, not sure what I am doing with this yet. -->
-                <input type="hidden" name="user" />
-                <input type="hidden" name="location/event" />
+            
+            <!-- https://www.designedbyaturtle.co.uk/submit-an-array-with-a-html-form/ -->
+            <form id="theExperience" class="experience" my-type="Experience">
+                <!-- This is a "User Submission" which needs to contain a reference to all objects created from this submission attributed to this user -->
+                <!-- As things are saved we need to store them locally.  This may be a proprietary submit as I do not think I can do what I want to with DEER here -->
+                <input type="hidden" name="user" value="" />
+                <input type="hidden" name="location/event" value="" />
                 <!-- there is no natural way for a value to be an array.  One must force the javascript to make it an array on form submission -->
                 <input type="hidden" name="Space" value="{IDs of Spaces]" />
                 <input type="hidden" name="Objects" value="[IDs of Objects]" />
@@ -261,9 +260,6 @@
             </form>
         </div>
     </generic-experience>
-
-    <!-- Need to force some authorization for this page -->
-
 
     <!-- Add ins -->
     <script src="./js/deerInitializer.js" type="module"></script>   
