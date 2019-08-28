@@ -48,8 +48,10 @@
                     <label>Location Title:</label>
                     <input type="text" deer-key="name" deer-source="">
 
-                    <label>Location GPS Coordinates (lat, long)</label>
-                    <input type="text" deer-key="location" deer-source="">
+                    <label>What are the GPS coordinates of this space (lat, long)?:</label>
+                    <input type="hidden" deer-key="geo['@type']"
+                    <label>Latitude:</label><input type="number" deer-key="geo['latitude']" />,
+                    <label>Longitude:</label><input type="number" deer-key="geo['longitude']" /> 
 
                     <input type="hidden" deer-key="creator_app" value="LR_Agent">
                     <input type="hidden" deer-key="creator_user" value="User_Agent">
@@ -94,7 +96,6 @@
         <div> We should only see this once we have the information from above.  This is for demo purposes only.  </div>
         <generic-top>We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>
         <div class="card">
-            <!-- Spaces, Things, Senses, Words, Practices,   -->
             <div class="card-body">
                 <header class="card-title">Please check everything that applies to what you want to tell us.</header>
                 <input type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Space</span> 
@@ -103,71 +104,115 @@
             </div>
         </div>
         <div class="card fixDynamicHeight">
-            <!-- This is a DEER form for a Space -->
-            <form id="newSpaceForm" class="dataWrap kind hidden" for="spaces" deer-type="Place">
-                <header>What kind of space is this?  Check all that apply.</header>
-                <input type="checkbox" deer-key="additionalType" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
-                <input type="checkbox" deer-key="additionalType" value="Administrative Area"/><span class="chk_lbl">Administrative Area</span>
-                <input type="checkbox" deer-key="additionalType" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                <input type="checkbox" deer-key="additionalType" value="Landform" /><span class="chk_lbl">Landform</span>
-                <input type="checkbox" deer-key="additionalType" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                <input type="checkbox" deer-key="additionalType" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                <input type="checkbox" deer-key="additionalType" value="Residence" /><span class="chk_lbl">Residence</span>
-                <input type="checkbox" deer-key="additionalType" value="School" /><span class="chk_lbl">School</span>
-                <input type="checkbox" deer-key="additionalType" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                <input type="checkbox" deer-key="additionalType" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                <input type="checkbox" deer-key="additionalType" value="Home" /><span class="chk_lbl">Home</span>
-                <input type="checkbox" deer-key="additionalType" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                <input type="checkbox" deer-key="additionalType" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                <input type="checkbox" deer-key="additionalType" value="Museum" /><span class="chk_lbl">Museum</span>
-                <input type="checkbox" deer-key="additionalType" value="Park" /><span class="chk_lbl">Park</span>
-                <input type="checkbox" deer-key="additionalType" value="Street" /><span class="chk_lbl">Street</span>
-                <input type="checkbox" deer-key="additionalType" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                <input type="checkbox" deer-key="additionalType" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                <input type="checkbox" deer-key="additionalType" value="Imagined" /><span class="chk_lbl">Imagined</span>
-
-                <header>History of this Space:</header>
-                <label>Former Location(s):</label>
-                <textarea type="text" deer-key="former_locations"> </textarea>
-                <label>Former Use(s):</label>
-                <textarea type="text" deer-key="former_uses"> </textarea>
-                <label>Creator:</label>
-                <input type="text" deer-key="creator" />
-                <label>Material(s):</label>
-                <textarea type="text" deer-key="material"> </textarea>
-                <label>Further Description:</label>
-                <textarea type="text" deer-key="description"> </textarea>
-                <div class="dataWrap" for="all">
-                    <label>Typical Use: </label>
-                     <select deer-key="typical_use" value="">
-                        <option value="Religious">Religious</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Educational">Educational</option>
-                        <option value="Civic">Civic</option>
-                        <option value="Other Public">Other Public</option>
-                    </select>
+            <!-- Major Types are Acoomodation, CivicStructure, TouristDestination -->
+            
+            <div for="spaces" class="hidden">
+                <div class="primarySpecification">
+                    <header>What kind of space is this?  Please select a primary specification from the list below.</header>
+                    <label>General Specification</label>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="AdministrativeArea"/><span class="chk_lbl">Administrative Area</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                    <!-- same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists -->
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
+                    <label>More Specific</label>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Landmarks or Historical Buildings"  /><span class="chk_lbl">Landmarks or Historical Buildings</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Home" /><span class="chk_lbl">Home</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
+                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span> 
+                    <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'spaces')" value="Choose" />
+                    <div id="chosenPrimarySpecification">None Chosen</div>
                 </div>
-                <div> Upload Media </div>
-                <label>Field Notes:</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
-                <label>Tags:</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
-            </form>
+                
+                <div class="secondarySpecification hidden">
+                    <header>If this space has other characteristics that meet other specifications, please select them now.</header>
+                    <label>General Specification</label>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea"/><span class="chk_lbl">Administrative Area</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                    <!-- same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists -->
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
+                    <label>More Specific</label>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landmarks or Historical Buildings"  /><span class="chk_lbl">Landmarks or Historical Buildings</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Home" name="Accomodation" /><span class="chk_lbl">Home</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span> 
+                </div>
 
+                <form id="newSpaceForm" class="dataWrap kind" for="spaces" deer-type="">    <!-- this type must react to what primary type is chosen above -->
+                    <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
+                    <label>What is this space named?:</label>
+                    <input type="text" deer-key="name" /> 
+
+                    <header>History of this Space:</header>
+                    <label>Former Location(s):</label>
+                    <textarea type="text" deer-key="former_locations"> </textarea>
+                    <label>Former Use(s):</label>
+                    <textarea type="text" deer-key="former_uses"> </textarea>
+                    <label>Creator:</label>
+                    <input type="text" deer-key="creator" />
+                    <label>Material(s):</label>
+                    <textarea type="text" deer-key="material"> </textarea>
+                    <label>Further Description:</label>
+                    <textarea type="text" deer-key="description"> </textarea>
+                    <div class="dataWrap" for="all">`
+                        <label>Typical Use: </label>
+                         <select deer-key="typical_use" value="">
+                            <option value="Religious">Religious</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Educational">Educational</option>
+                            <option value="Civic">Civic</option>
+                            <option value="Other Public">Other Public</option>
+                        </select>
+                    </div>
+                    <div> Upload Media </div>
+                    <label>Field Notes:</label>
+                    <textarea type="text" deer-key="TODO"> </textarea>
+                    <label>Tags:</label>
+                    <textarea type="text" deer-key="TODO"> </textarea>
+                </form>
+            </div>
+
+            <!-- Major Type is Thing >> LR::PhysicalObject   -->
+            <header>What kind of object is this?  Check all that apply.</header>
+            <input type="checkbox" deer-key="TODO" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
+            <input type="checkbox" deer-key="TODO" value="Artwork"><span class="chk_lbl">Artwork</span>
+            <input type="checkbox" deer-key="TODO" value="Clothing"><span class="chk_lbl">Clothing</span>
+            <input type="checkbox" deer-key="TODO" value="Food"><span class="chk_lbl">Food</span>
+            <input type="checkbox" deer-key="TODO" value="Building"><span class="chk_lbl">Building</span>
+            <input type="checkbox" deer-key="TODO" value="Natural"><span class="chk_lbl">Natural</span>
+            <input type="checkbox" deer-key="TODO" value="Manufactured"><span class="chk_lbl">Manufactured</span>
+            <input type="checkbox" deer-key="TODO" value="Found"><span class="chk_lbl">Found</span>
+            <input type="checkbox" deer-key="TODO" value="Written"><span class="chk_lbl">Written</span>
+            <input type="checkbox" deer-key="TODO" value="Spoken" ><span class="chk_lbl">Spoken</span>
+            <input type="checkbox" deer-key="TODO" value="Other"><span class="chk_lbl">Other</span>
+            
+            <!-- this type must react to what is chosen above [CreativeWork, Place  ] -->
             <form id="newObjectForm" class="dataWrap kind hidden" for="objects" deer-type="Object">
-                <!-- This is a DEER form for a Thing -->
-                <header>What kind of object is this?  Check all that apply.</header>
-                <input type="checkbox" deer-key="TODO" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
-                <input type="checkbox" deer-key="TODO" value="Artwork"><span class="chk_lbl">Artwork</span>
-                <input type="checkbox" deer-key="TODO" value="Clothing"><span class="chk_lbl">Clothing</span>
-                <input type="checkbox" deer-key="TODO" value="Food"><span class="chk_lbl">Food</span>
-                <input type="checkbox" deer-key="TODO" value="Building"><span class="chk_lbl">Building</span>
-                <input type="checkbox" deer-key="TODO" value="Natural"><span class="chk_lbl">Natural</span>
-                <input type="checkbox" deer-key="TODO" value="Manufactured"><span class="chk_lbl">Manufactured</span>
-                <input type="checkbox" deer-key="TODO" value="Found"><span class="chk_lbl">Found</span>
-                <input type="checkbox" deer-key="TODO" value="Written"><span class="chk_lbl">Written</span>
-                <input type="checkbox" deer-key="TODO" value="Spoken" ><span class="chk_lbl">Spoken</span>
-                <input type="checkbox" deer-key="TODO" value="Other"><span class="chk_lbl">Other</span>
                 <div>
                     <label>Please tell us what you mean by other:</label>
                     <textarea> </textarea>
@@ -178,7 +223,7 @@
                 <label>Creator:</label>
                 <input type="text" deer-key="TODO" />
                 <label>Material(s):</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
+                <textarea type="text" deer-key="material"> </textarea>
                 <div> Upload Media </div>
                 <label>Field Notes:</label>
                 <textarea type="text" deer-key="TODO"> </textarea>
