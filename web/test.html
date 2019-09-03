@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+        <link rel="stylesheet" href="./css/mycss.css">
+    </head>
+    <body>
+        <!-- deer form that gets values from checkboxes into an array -->
+        <!-- A place http://devstore.rerum.io/v1/id/5d6e8224e4b07f0c56c0f4ed -->
+        
+        <!-- BAAAAAAAAAAAAAAAAAAAAAAAAAAAD -->
+<!--        <form id="newSpaceForm" class="dataWrap" for="spaces" deer-type="Home" deer-id="http://devstore.rerum.io/v1/id/5d6e8224e4b07f0c56c0f4ed">     this type must react to what primary type is chosen above 
+            <label>Type 1</label> <input name="additionalType[]" type="text" deer-key="additionalType[]" />  this  must react to what secondary [types] are chosen above 
+            <label>Type 2</label> <input name="additionalType[]" type="text" deer-key="additionalType[]" />  this  must react to what secondary [types] are chosen above 
+            <input type="submit" />
+        </form>-->
+        
+        <div>
+            OR MAYBE
+        </div>
+        
+        <form id="newSpaceForm" class="dataWrap" for="spaces" deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d6e874ce4b07f0c56c0f4f7">    <!-- this type must react to what primary type is chosen above -->
+            <input type="text" deer-key="additionalType" value='["Residence", "Local Business"]' /> <!-- this  must react to what secondary [types] are chosen above -->
+            <input type="hidden" deer-key="griffin" value='bird' /> <!-- this  must react to what secondary [types] are chosen above -->
+            <input type="submit" />
+        </form>
+        
+        <!-- Add ins -->
+        <script src="./js/deerInitializer.js" type="module"></script>   
+        <script src="./js/app.js" type="text/javascript"></script>  
+    </body>
+</html>
