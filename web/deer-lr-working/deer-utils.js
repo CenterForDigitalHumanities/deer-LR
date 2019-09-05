@@ -32,11 +32,6 @@ export default {
                 return list
             })
     },
-    listFromContainer: function () { },
-
-    //TODO
-    //Write a helper to getArrayFromContainerObj(obj, asType)
-
     getValue: function (property, alsoPeek = [], asType) {
         // TODO: There must be a best way to do this...
         let prop;
@@ -45,7 +40,9 @@ export default {
             return undefined
         }
         if (Array.isArray(property)) {
-            prop = property.map(this.getValue.bind(this))
+            //It is an array of things, we can only presume that we want the array.  If it needs to become a string, local functions take on that responsibility.
+            //prop = property.map(this.getValue.bind(this))
+            prop = property
         } else {
             if (typeof property === "object") {
                 // TODO: JSON-LD insists on "@value", but this is simplified in a lot
@@ -119,7 +116,7 @@ export default {
             console.warn("Unable to find URI in object:",entity)
             return entity
         }
-        let getValue = this.getValue
+        let getVal = this.getValue
         return fetch(findId).then(response => response.json())
             .then(obj => this.findByTargetId(findId)
                 .then(function (annos) {
@@ -142,7 +139,7 @@ export default {
                                     let k = Object.keys(val)[0];
                                     if (!val.source) {
                                         // include an origin for this property, placehold madsrdf:Source
-                                        let aVal = getValue(val[k]);
+                                        let aVal = getVal(val[k])
                                         val[k] = {
                                             value: aVal,
                                             source: {
@@ -150,7 +147,7 @@ export default {
                                                 citationNote: annos[i].label || "Composed object from DEER",
                                                 comment: "Learn about the assembler for this object at https://github.com/CenterForDigitalHumanities/TinyThings"
                                             }
-                                        };
+                                        }
                                     }
                                     if (obj[k] !== undefined && annos[i].__rerum && annos[i].__rerum.history.next.length) {
                                         // this is not the most recent available
@@ -266,27 +263,23 @@ export default {
         element.dispatchEvent(e)
     },
     /**
-     * The body.value of an annotation was an array value.  We will eventually turn that into a string to show as the value of
-     * some input area.  We have decided to ignore any array value that is an object or array.  We do not simply want to
-     * filter() the array.  We want to show a soft error or warning when we come across an entry we are intentionally ignoring.  
+     * The body.value of an annotation is an array.  We will eventually turn that into a string to show as the value of
+     * some input area.  We have decided to ignore any array value that is an object or array.  Throw a soft error when encountering
+     * one.
     */
     cleanArrayForString:function(arr){
-        let cleanArray = []
-        for (const v of arr) {
-            if((["string","number"].indexOf(typeof v)>-1)){
-                cleanArray.push(v)
-            }
-            else if(typeof v === "object") {
+        return arr.filter((arrItem)=>{
+            if(typeof arrItem === "object") {
                 //TODO how should we handle?
                 console.warn("An annotation body value array contained an object.  We ignored it.")
-                console.log(v)
+                console.log(arrItem)
             }
-            else if(Array.isArray(v)){
+            else if(Array.isArray(arrItem)){
                 console.warn("An annotation body value array contained an array.  We ignored it.")
-                console.log(v)
+                console.log(arrItem)
             }
-        }
-        return cleanArray
+            return ["string","number"].indexOf(typeof arrItem)>-1
+        })
     },
     /**
      * The body.value of an annotation is an object.  Normally we would ignore objects as values, but container objects
@@ -298,22 +291,24 @@ export default {
         let cleanArray = []
         let objType = containerObj.type || containerObj["@type"] || ""
         if(Array.isArray(objType)){
-            //Grab the first type DEER supports from the obj type array
+            //Since type can be an array we have to pick one of the values that matches one of our supported container types.
             objType = objType.reduce((acc, curVal, ind, arr) => {
                 if(DEER.CONTAINERS.indexOf(curVal) > -1){
                     return curVal
                 }
             } ,"")
-            //If none match, objType is undefined.
         }
-        //The array we want to return will be in obj.items or obj.
         if(DEER.CONTAINERS.indexOf(objType) > -1){
+            //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config.
             if(["List", "Set", "set","list", "@set", "@list"].indexOf(objType) > -1){
                 cleanArray = this.cleanArrayForString(containerObj.items)
             }
             else if(["ItemList"].indexOf(objType > -1)){
                 cleanArray = this.cleanArrayForString(containerObj.itemListElement)
             }
+        }
+        else{
+            console.warn("The type of object we found is not a supported container type of an annotation's body's value.  Therefore, the value is empty.")
         }
         return cleanArray
     }
