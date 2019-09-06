@@ -106,7 +106,7 @@
         <div class="card fixDynamicHeight">
             <!-- Major Types are Acoomodation, CivicStructure, TouristDestination -->
             
-            <div for="spaces" class="hidden">
+            <div for="spaces" class="kind hidden">
                 <div class="primarySpecification">
                     <header>What kind of space is this?  Please select a primary specification from the list below.</header>
                     <label>General Specification</label>
@@ -135,7 +135,7 @@
                     <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
                     <div>
                         <label>Please tell us what you mean by other:</label>
-                        <textarea> </textarea>
+                        <textarea type="text"> </textarea>
                     </div>
                     <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'spaces')" value="Choose" />
                     <div id="chosenPrimarySpecification">None Chosen</div>
@@ -169,11 +169,11 @@
                     <input deer-key="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
                     <div class="reactiveOther hidden" for="spaces">
                         <label>Please tell us what you mean by other:</label>
-                        <input name="additionalType[]" type="text"  />
+                        <textarea type="text"> </textarea>
                     </div>
                 </div>
 
-                <form id="newSpaceForm" class="dataWrap kind" for="spaces" deer-type="">    <!-- this type must react to what primary type is chosen above -->
+                <form id="newSpaceForm" class="dataWrap" for="spaces" deer-type="">    <!-- this type must react to what primary type is chosen above -->
                     <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
                     <label>What is this space named?:</label>
                     <input type="text" deer-key="name" /> 
@@ -188,7 +188,7 @@
                     <textarea type="text" deer-key="material"> </textarea>
                     <label>Further Description:</label>
                     <textarea type="text" deer-key="description"> </textarea>
-                    <div class="dataWrap" for="all">`
+                    <div class="dataWrap" for="all">
                         <label>Typical Use: </label>
                          <select deer-key="typical_use" value="">
                             <option value="Religious">Religious</option>
@@ -206,7 +206,7 @@
                 </form>
             </div>
             
-            <div for="objects">
+            <div for="objects" class="kind hidden">
                 <!-- Major Type is Thing >> LR::PhysicalObject   -->
                 <div class="primarySpecification">
                     <header>What is the primary specification for this object? </header>
@@ -238,11 +238,11 @@
                     <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Other"><span class="chk_lbl">Other</span>
                 </div>
                 <!-- this type must react to what is chosen above [CreativeWork, Place  ] -->
-                <form id="newObjectForm" class="dataWrap kind hidden" for="objects" deer-type="Object"> <!-- this type must react to what primary type is chosen above -->
+                <form id="newObjectForm" class="dataWrap" for="objects" deer-type="Object"> <!-- this type must react to what primary type is chosen above -->
                     <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
                     <div>
                         <label>Please tell us what you mean by other:</label>
-                        <textarea> </textarea>
+                        <textarea type="text"> </textarea>
                     </div>
                     <header>History of Object:</header>
                     <label>Former Use(s):</label>
@@ -259,7 +259,7 @@
                 </form>
             </div>
            
-            <div for="bodies">
+            <div for="bodies" class="kind hidden">
                 <header>What senses are prominent?</header>
                 <input type="radio" value="LR::Sight" name="sense"><span class="chk_lbl">Sight</span>
                 <input type="radio" value="LR::Smell" name="sense"><span class="chk_lbl">Smell</span>
@@ -289,7 +289,7 @@
                 <input type="checkbox"  value="Other"><span class="chk_lbl">Other</span>
                 <div>
                     <label>Please tell us what you mean by other:</label>
-                    <textarea> </textarea>
+                    <textarea type="text"> </textarea>
                 </div>
 
                 <header>What is the context of these practices?  Check all that apply.</header>
@@ -306,10 +306,10 @@
                 <input type="checkbox"  value="Other"><span class="chk_lbl">Other</span>
                 <div>
                     <label>Please tell us what you mean by other:</label>
-                    <textarea> </textarea>
+                    <textarea type="text"> </textarea>
                 </div>
                     
-                <form id="newBodyForm" class="dataWrap kind" for="bodies" deer-type="Body">
+                <form id="newBodyForm" class="dataWrap" for="bodies" deer-type="Body">
                     <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
                     <div> Upload Media </div>
                     <label>Field Notes:</label>

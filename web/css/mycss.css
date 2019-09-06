@@ -127,31 +127,6 @@
         
     }
 
-    .kind{
-        display: none;
-        margin-bottom: 20px; 
-    }
-
-    .kind[for="spaces"]{
-        border: 2px solid blue;
-    }
-
-    .kind[for="objects"]{
-        border: 2px solid orange;
-    }
-
-    .kind[for="bodies"]{
-        border: 2px solid green;
-    }
-
-    .kind[for="words"]{
-        border: 2px solid purple;
-    }
-
-    .kind[for="practices"]{
-        border: 2px solid aqua;
-    }
-
     #jewishSub{
         display: none;
     }

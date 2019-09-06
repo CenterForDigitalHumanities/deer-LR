@@ -21,15 +21,33 @@ and open the template in the editor.
               <label>Home</label><input type="text" name="additionalType" deer-array-type="set" value='Home' /> 
               <label>Local Buisness</label><input type="text" name="additionalType" deer-array-type="set" value='Local Buisness' />
               -->
-              <input type="hidden" deer-key="additionalType" value='' /> 
-              <input type="hidden" deer-key="members" value='Tom,Frank,Sally' /> 
-              <input type="text" deer-key="contributors" value='' /> 
-              <input type="text" deer-key="alternateName" value='' /> 
-              <input type="text" deer-key="materials" value='' /> 
-              <input type="text" deer-key="additionalType" value='A,B,C' /> 
-              <input type="text" deer-key="members" value='' /> 
-              <input type="text" deer-key="contributors" value='' /> 
-              <input type="submit" />
+                <input type="hidden" deer-key="additionalType" value='' /> 
+                <input type="hidden" deer-key="members" value='Tom,Frank,Sally' /> 
+                <input type="text" deer-key="contributors" value='' /> 
+                <input type="text" deer-key="alternateName" value='' /> 
+                <input type="text" deer-key="materials" value='' /> 
+                <input type="text" deer-key="additionalType" value='A,B,C' /> 
+                <input type="text" deer-key="members" value='' /> 
+                <input type="text" deer-key="contributors" value='' /> 
+                <input type="submit" />
+          </form>
+          <br>
+          <br>
+          <form id="newThingForm" class="dataWrap" for="spaces" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d72930de4b07f0c56c0f50b">    
+              <!--
+              <label>Home</label><input type="text" name="additionalType" deer-array-type="set" value='Home' /> 
+              <label>Local Buisness</label><input type="text" name="additionalType" deer-array-type="set" value='Local Buisness' />
+              -->
+                <input type="hidden" deer-key="name" value="Cup Thing" /> 
+                <input type="hidden" deer-array-type="list" deer-key="additionalType" value="Container, Cup" /> 
+                <input type="text" deer-array-type="list" deer-key="additionalType" value='' /> 
+                <input type="hidden" deer-key="members" value='Tom,Frank,Sally' /> 
+                <input type="text" deer-key="contributors" value='' /> 
+                <input type="text" deer-key="alternateName" value='' /> 
+                <input type="text" deer-array-type="list" deer-key="materials" value='Paper, Plastic, Air' /> 
+                <input type="text" deer-key="members" value='' /> 
+                <input type="text" deer-key="contributors" value='' /> 
+                <input type="submit" />
           </form>
 
           <!-- Add ins -->

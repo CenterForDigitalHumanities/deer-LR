@@ -69,76 +69,96 @@ export default class DeerReport {
         this.evidence = elem.getAttribute(DEER.EVIDENCE) // inherited to inputs
         this.context = elem.getAttribute(DEER.CONTEXT) // inherited to inputs
         this.type = elem.getAttribute(DEER.TYPE)
-        this.inputs = document.querySelectorAll(DEER.INPUTS.map(s=>s+"["+DEER.KEY+"]").join(","))
-
+        this.inputs = elem.querySelectorAll(DEER.INPUTS.map(s=>s+"["+DEER.KEY+"]").join(","))
         Array.from(this.inputs).forEach(inpt=>inpt.addEventListener('input', () => inpt.$isDirty = true))
-
         changeLoader.observe(elem, {
             attributes:true
         })
-        
         elem.oninput = event => this.$isDirty = true
         elem.onsubmit = this.processRecord.bind(this)
-
-
         
         if (this.id) {
             //Do we want to expand for all types?
             UTILS.expand({"@id":this.id})
             //What if there are no annotations on it and the things I need to know are already in the object?
-            //Expand only returned an object like {"@id": "http://an/id"} instead of resolving it, which is what I expected. 
             .then((function(obj){
-                Object.keys(obj).forEach((function(key){
-                    try {
-                        for(let el of Array.from(this.inputs)) {
-                            if(el.getAttribute(DEER.KEY)===key){
+                try {
+                    for(let el of Array.from(this.inputs)){
+                        let key=el.getAttribute(DEER.KEY)
+                        let test = ""
+                        if(key){
+                            //Then this is a DEER form input, let's check if there is an annotation for it.
+                            if(obj.hasOwnProperty(key)){
+                                //Then there is an annotation this input is a representative for.  
                                 let assertedValue = UTILS.getValue(obj[key])
-                
-                            
-                                /*
-                                    We are expecting that obj is the body:{} of an annotation containing a 'value' of some kind.
-                                    That value needs to be displayed in the <input> HTML elelment.  Since it is a JSON object, the value
-                                    can be a string, number, array[strings, numbers, arrays, objects], or an object.
-                                    We need to end up with a string we can put into the <input> area.
-
-                                    A json object is a soft error, we will not display it.
-                                    This means we also ignore objects inside of arrays.
-                                    We also ignore arrays inside of arrays.
-
-                                */
                                 let delim = el.getAttribute(DEER.ARRAYDELIMETER) || DEER.DELIMETERDEFAULT
+                                let arrayOfValues = []
                                 let assertedArrayOfValues = []
-                                if(typeof assertedValue === "object"){
-                                    //The body value of this annotation is an object.  Perhaps it is a container object instead of just an array.
-                                    assertedArrayOfValues = UTILS.getArrayFromContainerObj(assertedValue)
-                                    //This may have returned an empty array
-                                    if(assertedArrayOfValues.length){
-                                        //Should we write a helper for this to catch a join failure and tell the user to check their delimeter?
-                                        el.value = (assertedArrayOfValues.length) ? assertedArrayOfValues.join(delim) : ""
-                                    }
-                                }
-                                else if(Array.isArray(assertedValue)) {
-                                    assertedArrayOfValues = UTILS.cleanArrayForString(assertedValue)
+                                if(Array.isArray(assertedValue)){
+                                    //The body value of this annotation is an array
+                                    arrayOfValues = UTILS.cleanArrayForString(assertedValue)
                                     //Should we write a helper for this to catch a join failure and tell the user to check their delimeter?
-                                    el.value = (assertedArrayOfValues.length) ? assertedArrayOfValues.join(delim) : ""
+                                    assertedArrayOfValues = (arrayOfValues.length) ? arrayOfValues.join(delim) : ""
+                                    if(el.value && el.value !== assertedArrayOfValues){
+                                        if(el.type==="hidden"){
+                                            el.$isDirty = true
+                                        }
+                                        else{
+                                            //The HTML input element has a value that is already set.  This is a soft error and the element should not be dirty..
+                                            console.warn("Element value for "+el.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
+                                        }
+                                    }
+                                    el.value = assertedArrayOfValues
+                                }
+                                else if(typeof assertedValue === "object"){
+                                    //The body value of this annotation is an object.  Perhaps it is a container object we support that contains an array.
+                                    arrayOfValues = UTILS.getArrayFromContainerObj(assertedValue)
+                                    //Should we write a helper for this to catch a join failure and tell the user to check their delimeter?
+                                    assertedArrayOfValues = (arrayOfValues.length) ? arrayOfValues.join(delim) : ""
+                                    if(el.value && el.value !== assertedArrayOfValues){
+                                        if(el.type==="hidden"){
+                                            el.$isDirty = true
+                                        }
+                                        else{
+                                            //The HTML input element has a value that is already set.  This is a soft error and the element should not be dirty.
+                                            console.warn("Element value for "+el.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
+                                        }
+                                    }
+                                    el.value = assertedArrayOfValues
                                 }
                                 else{
                                     if((["string","number"].indexOf(typeof assertedValue)>-1)){
-                                        el.value = UTILS.getValue(obj[key])
+                                        //The body value of this annotation is a string or number that we can grab outright.  
+                                        if(el.value && el.value !== assertedValue){
+                                            if(el.type==="hidden"){
+                                                el.$isDirty = true
+                                            }
+                                            else{
+                                                //The HTML input element has a value that is already set.  This is a soft error and the element should not be dirty..
+                                                console.warn("Element value for "+el.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
+                                            }
+                                        }
+                                        el.value = assertedValue
                                     }
                                     else{
-                                        //Is this a hard error maybe??
+                                        //The body value of this annotation is something unsupported, we cannot get its value.  Throw a soft error.
+                                        console.warn("We do not support values of this type "+typeof assertedValue+".  Therefore, the value of annotation "+key+" is being ignored.")
+                                        el.value=""
                                     }
                                 }
-
                                 if(obj[key].source) {
                                     el.setAttribute(DEER.SOURCE,UTILS.getValue(obj[key].source,"citationSource"))
                                 }
-                                break
                             }
+                            else{
+                                //An annotation for this input has not been created yet.  If it is hidden and has a value, it is dirty. 
+                                if(el.type==="hidden" && el.value !== ""){
+                                    el.$isDirty = true
+                                } 
+                            }                              
                         }
-                    } catch(err){ console.log(err) }
-                }).bind(this))
+                    }
+                } catch(err){ console.log(err) }
                 UTILS.broadcast(undefined,DEER.EVENTS.LOADED,elem,obj)
             }).bind(this))
             .then(()=>elem.click())
@@ -183,15 +203,17 @@ export default class DeerReport {
         }
 
         formAction.then((function(entity) {
-            let visitedAnnos = []  
             let annotations = Array.from(this.elem.querySelectorAll(DEER.INPUTS.map(s=>s+"["+DEER.KEY+"]").join(",")))
             .filter(el=>Boolean(el.$isDirty))
-            .filter((el, i)=>{
+            let flatKeys = annotations.map(input => {
+                return input.getAttribute(DEER.KEY)
+            })
+            annotations.filter((el, i)=>{
                 //Throw a soft error if we detect duplicate deer-key entries, and only respect the first one.
-                if(annotations.indexOf(el)===i){
-                    console.warn("Duplicate deer-key "+el.getAttribute(DEER.KEY)+" detected, we will only respect the first value of."+annotations[annotations.indexOf(el)].getAttribute(DEER.KEY))
+                if(flatKeys.indexOf(el.getAttribute(DEER.KEY))!==i){
+                    console.warn("Duplicate deer-key '"+el.getAttribute(DEER.KEY)+"'' detected, we will only respect the first value we found.")
                 }
-                return annotations.indexOf(el)===i
+                return flatKeys.indexOf(el.getAttribute(DEER.KEY))===i
             })
             .map(input => {
                 let inputId = input.getAttribute(DEER.SOURCE)

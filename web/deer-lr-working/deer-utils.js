@@ -269,13 +269,13 @@ export default {
     */
     cleanArrayForString:function(arr){
         return arr.filter((arrItem)=>{
-            if(typeof arrItem === "object") {
-                //TODO how should we handle?
-                console.warn("An annotation body value array contained an object.  We ignored it.")
+            if(Array.isArray(arrItem)){
+                console.warn("An annotation body value array contained an array.  We ignored it.")
                 console.log(arrItem)
             }
-            else if(Array.isArray(arrItem)){
-                console.warn("An annotation body value array contained an array.  We ignored it.")
+            else if(typeof arrItem === "object") {
+                //TODO how should we handle?
+                console.warn("An annotation body value array contained an object.  We ignored it.")
                 console.log(arrItem)
             }
             return ["string","number"].indexOf(typeof arrItem)>-1
@@ -299,7 +299,7 @@ export default {
             } ,"")
         }
         if(DEER.CONTAINERS.indexOf(objType) > -1){
-            //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config.
+            //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config too.
             if(["List", "Set", "set","list", "@set", "@list"].indexOf(objType) > -1){
                 cleanArray = this.cleanArrayForString(containerObj.items)
             }
