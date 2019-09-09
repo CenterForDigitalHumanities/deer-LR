@@ -791,11 +791,11 @@ LR.ui.loginFail = function(){
 }
 
 LR.tricks.mockLogin = async function(event){
-    return document.location.href="new_schema.html"
+    let who = document.getElementById("login-usr").value
+    return document.location.href="dashboard.html?user="+who
     
     
     
-    let who = document.getElementById("login-usr").value//Get the user input
     let secrets = await fetch('src/tokens/sec.txt')
       .then(response => response.text())
     secrets = JSON.parse(secrets)

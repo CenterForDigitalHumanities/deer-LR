@@ -175,6 +175,10 @@
         border: 1px transparent solid; 
         display: inline-block;
     }
+    
+    login{
+        color: white;
+    }
 
 
 

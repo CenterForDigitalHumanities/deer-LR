@@ -19,7 +19,7 @@
     <dashboard class="container">
         <div id="dashboard_header">   
             <!-- New Entry button in here -->   
-            <haeder> Your Dashboard </haeder>
+            <label id="userDashboard"> Your Dashboard </label>
             <a id="newEntryBtn" target="_blank" href="new_schema.html"> New Data Entry </a>
         </div>
         <div class="dash_body">
@@ -106,6 +106,12 @@
     <!-- Add ins -->
     <script src="./js/deerInitializer.js" type="module"></script>   
     <script src="./js/app.js" type="text/javascript"></script>  
+    <script>
+        window.onload = function(){
+            let who = LR.tricks.getURLVariable("user")
+            if(who) document.getElementById("userDashboard").innerHTML = who+"'s Dashboard"
+        }
+    </script>
 
 </body>
 
