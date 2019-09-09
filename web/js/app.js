@@ -658,6 +658,28 @@ LR.ui.reactiveHierarchy = function(event){
     
 }
 
+LR.ui.assignPrimarySpecification = function(event, type){
+    let matches = document.querySelectorAll("input[type='radio'][name='"+type+"']")
+    for(let i=0; i<matches.length; i++){
+        let radio = matches[i]
+        if(radio.checked){
+            let htmlVal = radio.value
+            let area = document.querySelectorAll(".chosenPrimarySpecification[for='"+type+"']")
+            area[0].innerHTML = htmlVal
+        }
+        radio.checked = false
+        radio.classList.add("hidden")
+        radio.nextSibling.classList.add("hidden")
+    }
+    event.target.classList.add("hidden")
+    LR.ui.showSecondarySpecification(event, type)
+}
+
+LR.ui.showSecondarySpecification = function(event, type){
+    let area = document.querySelectorAll(".secondarySpecification[for='"+type+"']")
+    area[0].classList.remove("hidden")
+}
+
 LR.ui.subCategoryCheck = function(event){
     let e = event.target
     let form = e.closest("form");
@@ -688,80 +710,22 @@ LR.ui.subCategoryCheck = function(event){
 
 }
 
-LR.ui.addSenseAndReset = function(event){
+LR.ui.addPieceAndReset = function(event, piece){
     //Clear further sense
     //uncheck all name="sense" radios
     //Add new sense to local tracker
-    let matches = document.querySelectorAll("input[name='sense']")
+    let matches = document.querySelectorAll("input[name='"+piece+"']")
     for(let i=0; i<matches.length; i++){
         let radio = matches[i]
-        let descr = document.getElementById("furtherSense").value
+        let descr = document.getElementById("further_"+piece).value
         if(radio.checked){
             let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
-            document.getElementById("added_senses").innerHTML += li
+            document.getElementById("added_"+piece).innerHTML += li
         }
         radio.checked = false
 
     }
-    document.getElementById("furtherSense").value = ""
-
-}
-
-LR.ui.addWordAndReset = function(event){
-    //Clear further sense
-    //uncheck all name="sense" radios
-    //Add new sense to local tracker
-    let matches = document.querySelectorAll("input[name='word']")
-    for(let i=0; i<matches.length; i++){
-        let radio = matches[i]
-        let descr = document.getElementById("furtherWords").value
-        if(radio.checked){
-            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
-            document.getElementById("added_words").innerHTML += li
-        }
-        radio.checked = false
-
-    }
-    document.getElementById("furtherWords").value = ""
-
-}
-
-LR.ui.addPracticeAndReset = function(event){
-    //Clear further sense
-    //uncheck all name="sense" radios
-    //Add new sense to local tracker
-    let matches = document.querySelectorAll("input[name='practice']")
-    for(let i=0; i<matches.length; i++){
-        let radio = matches[i]
-        let descr = document.getElementById("furtherPractice").value
-        if(radio.checked){
-            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
-            document.getElementById("added_practices").innerHTML += li
-        }
-        radio.checked = false
-
-    }
-    document.getElementById("furtherPractice").value = ""
-
-}
-
-LR.ui.addThingAndReset = function(event){
-    //Clear further sense
-    //uncheck all name="sense" radios
-    //Add new sense to local tracker
-    let matches = document.querySelectorAll("input[name='thing']")
-    for(let i=0; i<matches.length; i++){
-        let radio = matches[i]
-        let descr = document.getElementById("furtherThing").value
-        if(radio.checked){
-            let li = `<li> <b>${radio.value}</b> : ${descr} </li>`
-            document.getElementById("added_things").innerHTML += li
-        }
-        radio.checked = false
-
-    }
-    document.getElementById("furtherThing").value = ""
-
+    document.getElementById("further_"+piece).value = ""
 }
 
 

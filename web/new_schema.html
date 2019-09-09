@@ -30,7 +30,7 @@
                <input class="btn btn-primary" type="button" value="This Is The Place!" onclick="LR.ui.assignLocation(event)" />
            </div>
         </div> 
-        <div id="lookupLocation" class="card hidden">
+        <div id="lookupLocation" class="card">
             <div class="card-body">
                 <header class="card-title">If you don't know the ID, tell us the name associated with this Location and we will look for it. If we can't find anything, you will be asked to create a record for this Location.</header>
                 <label>Location Title/Name:</label> <input id="" type="text"  />
@@ -46,20 +46,20 @@
                 <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleLocationAddition()"/>
                 <form id="newLocationForm" class="hidden" deer-type="Location" deer-context="http://schema.org">
                     <label>Location Title:</label>
-                    <input type="text" deer-key="name" deer-source="">
+                    <input type="text" deer-key-x="name" deer-source="">
 
                     <label>What are the GPS coordinates of this space (lat, long)?:</label>
-                    <input type="hidden" deer-key="geo['@type']"
-                    <label>Latitude:</label><input type="number" deer-key="geo['latitude']" />,
-                    <label>Longitude:</label><input type="number" deer-key="geo['longitude']" /> 
+                    <input type="hidden" deer-key-x="geo['@type']"
+                    <label>Latitude:</label><input type="number" deer-key-x="geo['latitude']" />,
+                    <label>Longitude:</label><input type="number" deer-key-x="geo['longitude']" /> 
 
-                    <input type="hidden" deer-key="creator_app" value="LR_Agent">
-                    <input type="hidden" deer-key="creator_user" value="User_Agent">
-                    <input type="hidden" deer-key="testing" value="Lived_Religion">
+                    <input type="hidden" deer-key-x="creator_app" value="LR_Agent">
+                    <input type="hidden" deer-key-x="creator_user" value="User_Agent">
+                    <input type="hidden" deer-key-x="testing" value="Lived_Religion">
 
 
                     <label>Location Notes/Description:</label>
-                    <textarea type="text" deer-key="description" deer-source=""></textarea>
+                    <textarea type="text" deer-key-x="description" deer-source=""></textarea>
 
                     <generic-time>
                         <div id="assignTime" class="card">
@@ -107,42 +107,42 @@
             <!-- Major Types are Acoomodation, CivicStructure, TouristDestination -->
             
             <div for="spaces" class="kind hidden">
-                <div class="primarySpecification">
-                    <header>What kind of space is this?  Please select a primary specification from the list below.</header>
-                    <label>General Specification</label>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="AdministrativeArea"/><span class="chk_lbl">Administrative Area</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
-                    
+                <div class="primarySpecification" for="spaces">
+                    <header>What is the primary type of space this is?</header>
+                    <!--<label>General Specification</label>-->
+                    <input type="radio" name="spaces"  value="Accommodation"/><span class="chk_lbl">Accommodation</span>
+                    <input type="radio" name="spaces"  value="AdministrativeArea"/><span class="chk_lbl">Administrative Area</span>
+                    <input type="radio" name="spaces"  value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
+                    <input type="radio" name="spaces"  value="Landform" /><span class="chk_lbl">Landform</span>
                     <!-- same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists -->
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
-                    <label>More Specific</label>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Landmarks or Historical Buildings"  /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Home" /><span class="chk_lbl">Home</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span> 
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                    <div>
+                    <input type="radio" name="spaces"  value="Imagined" /><span class="chk_lbl">Imagined</span>
+                    <br>
+                    <!--<label>More Specific</label>-->
+                    <input type="radio" name="spaces"  value="Landmarks or Historical Buildings"  /><span class="chk_lbl">Landmarks or Historical Buildings</span>
+                    <input type="radio" name="spaces"  value="Local Business" /><span class="chk_lbl">Local Business</span>
+                    <input type="radio" name="spaces"  value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
+                    <input type="radio" name="spaces"  value="School" /><span class="chk_lbl">School</span>
+                    <input type="radio" name="spaces"  value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
+                    <input type="radio" name="spaces"  value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
+                    <input type="radio" name="spaces"  value="Home" /><span class="chk_lbl">Home</span>
+                    <input type="radio" name="spaces"  value="Cemetery" /><span class="chk_lbl">Cemetery</span>
+                    <input type="radio" name="spaces"  value="Hospital" /><span class="chk_lbl">Hospital</span>
+                    <input type="radio" name="spaces"  value="Museum" /><span class="chk_lbl">Museum</span>
+                    <input type="radio" name="spaces"  value="Park" /><span class="chk_lbl">Park</span>
+                    <input type="radio" name="spaces"  value="Street" /><span class="chk_lbl">Street</span>
+                    <input type="radio" name="spaces"  value="Zoo" /><span class="chk_lbl">Zoo</span>
+                    <input type="radio" name="spaces"  value="Gym" /><span class="chk_lbl">Gym</span> 
+                    <input type="radio" name="spaces"  value="Other Building" /><span class="chk_lbl">Other Building</span>
+                    <div class="reactiveOther hidden" for="building">
                         <label>Please tell us what you mean by other:</label>
                         <textarea type="text"> </textarea>
                     </div>
                     <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'spaces')" value="Choose" />
-                    <div id="chosenPrimarySpecification">None Chosen</div>
+                    <div for="spaces" class="chosenPrimarySpecification">None Chosen</div>
                 </div>
                 
-                <div class="secondarySpecification hidden">
-                    <header>If this space has other characteristics that meet other specifications, please select them now.</header>
+                <div class="secondarySpecification hidden" for="spaces">
+                    <header>Check all other types for this space.</header>
                     <label>General Specification</label>
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Accommodation"/><span class="chk_lbl">Accommodation</span>
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea"/><span class="chk_lbl">Administrative Area</span>
@@ -151,6 +151,7 @@
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
                     <!-- same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists -->
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
+                    <br>
                     <label>More Specific</label>
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landmarks or Historical Buildings"  /><span class="chk_lbl">Landmarks or Historical Buildings</span>
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
@@ -166,7 +167,7 @@
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
                     <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span> 
-                    <input deer-key="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                    <input deer-key-x="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
                     <div class="reactiveOther hidden" for="spaces">
                         <label>Please tell us what you mean by other:</label>
                         <textarea type="text"> </textarea>
@@ -174,23 +175,23 @@
                 </div>
 
                 <form id="newSpaceForm" class="dataWrap" for="spaces" deer-type="">    <!-- this type must react to what primary type is chosen above -->
-                    <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
+                    <input type="hidden" deer-key-x="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
                     <label>What is this space named?:</label>
-                    <input type="text" deer-key="name" /> 
+                    <input type="text" deer-key-x="name" /> 
                     <header>History of this Space:</header>
                     <label>Former Location(s):</label>
-                    <textarea type="text" deer-key="LR::FormerLocations"> </textarea>
+                    <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
                     <label>Former Use(s):</label>
-                    <textarea type="text" deer-key="LR::FormerUses"> </textarea>
+                    <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
                     <label>Creator:</label>
-                    <input type="text" deer-key="creator" />
+                    <input type="text" deer-key-x="creator" />
                     <label>Material(s):</label>
-                    <textarea type="text" deer-key="material"> </textarea>
+                    <textarea type="text" deer-key-x="material"> </textarea>
                     <label>Further Description:</label>
-                    <textarea type="text" deer-key="description"> </textarea>
+                    <textarea type="text" deer-key-x="description"> </textarea>
                     <div class="dataWrap" for="all">
                         <label>Typical Use: </label>
-                         <select deer-key="typical_use" value="">
+                         <select deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
                             <option value="Commercial">Commercial</option>
                             <option value="Educational">Educational</option>
@@ -200,31 +201,37 @@
                     </div>
                     <div> Upload Media </div>
                     <label>Field Notes:</label>
-                    <textarea type="text" deer-key="LR::FieldNotes"> </textarea>
+                    <textarea type="text" deer-key-x="LR::FieldNotes"> </textarea>
                     <label>Tags separated by ',':</label>
-                    <textarea type="text" deer-key="LR::Tags"> </textarea>
+                    <textarea type="text" deer-key-x="LR::Tags"> </textarea>
                 </form>
             </div>
             
             <div for="objects" class="kind hidden">
                 <!-- Major Type is Thing >> LR::PhysicalObject   -->
-                <div class="primarySpecification">
-                    <header>What is the primary specification for this object? </header>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Artwork"><span class="chk_lbl">Artwork</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Clothing"><span class="chk_lbl">Clothing</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Food"><span class="chk_lbl">Food</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Building"><span class="chk_lbl">Building</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Natural"><span class="chk_lbl">Natural</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Manufactured"><span class="chk_lbl">Manufactured</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Found"><span class="chk_lbl">Found</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Written"><span class="chk_lbl">Written</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Spoken" ><span class="chk_lbl">Spoken</span>
-                    <input type="radio" name="primarySpec" onchange="LR.ui.reactivePrimaryType(event, 'objects')" value="Other"><span class="chk_lbl">Other</span>
+                <div class="primarySpecification" for="objects">
+                    <header>What is the primary type for this object? </header>
+                    <input type="radio" name="objects"  value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
+                    <input type="radio" name="objects"  value="Artwork"><span class="chk_lbl">Artwork</span>
+                    <input type="radio" name="objects"  value="Clothing"><span class="chk_lbl">Clothing</span>
+                    <input type="radio" name="objects"  value="Food"><span class="chk_lbl">Food</span>
+                    <input type="radio" name="objects"  value="Building"><span class="chk_lbl">Building</span>
+                    <input type="radio" name="objects"  value="Natural"><span class="chk_lbl">Natural</span>
+                    <input type="radio" name="objects"  value="Manufactured"><span class="chk_lbl">Manufactured</span>
+                    <input type="radio" name="objects"  value="Found"><span class="chk_lbl">Found</span>
+                    <input type="radio" name="objects"  value="Written"><span class="chk_lbl">Written</span>
+                    <input type="radio" name="objects"  value="Spoken" ><span class="chk_lbl">Spoken</span>
+                    <input type="radio" name="objects"  value="Other"><span class="chk_lbl">Other</span>
+                    <div class="reactiveOther hidden" for="objects">
+                        <label>Please tell us what you mean by other:</label>
+                        <textarea type="text"> </textarea>
+                    </div>
+                    <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'objects')" value="Choose" />
+                    <div for="objects" class="chosenPrimarySpecification">None Chosen</div>
                 </div>
                 
-                <div class="secondarySpecification hidden">
-                    <header>What is the primary specification for this object? </header>
+                <div class="secondarySpecification hidden" for="objects">
+                    <header>Check all other types that apply. </header>
                     <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
                     <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Artwork"><span class="chk_lbl">Artwork</span>
                     <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Clothing"><span class="chk_lbl">Clothing</span>
@@ -239,23 +246,20 @@
                 </div>
                 <!-- this type must react to what is chosen above [CreativeWork, Place  ] -->
                 <form id="newObjectForm" class="dataWrap" for="objects" deer-type="Object"> <!-- this type must react to what primary type is chosen above -->
-                    <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
-                    <div>
-                        <label>Please tell us what you mean by other:</label>
-                        <textarea type="text"> </textarea>
-                    </div>
+                    <input type="hidden" deer-key-x="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
+                    
                     <header>History of Object:</header>
                     <label>Former Use(s):</label>
-                    <textarea type="text" deer-key="TODO"> </textarea>
+                    <textarea type="text" deer-key-x="TODO"> </textarea>
                     <label>Creator:</label>
-                    <input type="text" deer-key="TODO" />
+                    <input type="text" deer-key-x="TODO" />
                     <label>Material(s):</label>
-                    <textarea type="text" deer-key="material"> </textarea>
+                    <textarea type="text" deer-key-x="material"> </textarea>
                     <div> Upload Media </div>
                     <label>Field Notes:</label>
-                    <textarea type="text" deer-key="notes"> </textarea>
+                    <textarea type="text" deer-key-x="notes"> </textarea>
                     <label>Tags:</label>
-                    <textarea type="text" deer-key="tags"> </textarea>
+                    <textarea type="text" deer-key-x="tags"> </textarea>
                 </form>
             </div>
            
@@ -267,55 +271,65 @@
                 <input type="radio" value="LR::Touch" name="sense"><span class="chk_lbl">Touch</span>
                 <input type="radio" value="LR::Taste" name="sense"><span class="chk_lbl">Taste</span>
                 <header>Describe Sense Further:</header>
-                <textarea id="furtherSense" type="text" deer-key="description" ></textarea>
-                <input type="button" onclick="LR.ui.addSenseAndReset(event)" value="Add Sense and Reset" />
-                <ul id="added_senses">
+                <textarea id="further_sense" type="text" deer-key-x="description" ></textarea>
+                <input type="button" onclick="LR.ui.addPieceAndReset(event, 'sense')" value="Add Sense" />
+                <ul id="added_sense">
                      <li><header> Added Senses </header></li>
                 </ul>
 
                 <header>What practices are occurring?  Check all that apply</header>
-                <input type="checkbox"  value="Eating"><span class="chk_lbl">Eating</span>
-                <input type="checkbox"  value="Playing"><span class="chk_lbl">Playing</span>
-                <input type="checkbox"  value="Clothing"><span class="chk_lbl">Clothing</span>
-                <input type="checkbox"  value="Singing"><span class="chk_lbl">Singing</span>
-                <input type="checkbox"  value="Moving"><span class="chk_lbl">Moving</span>
-                <input type="checkbox"  value="Sitting"><span class="chk_lbl">Sitting</span>
-                <input type="checkbox"  value="Standing"><span class="chk_lbl">Standing</span>
-                <input type="checkbox"  value="Kneeling"><span class="chk_lbl">Kneeling</span>
-                <input type="checkbox"  value="Traveling"><span class="chk_lbl">Traveling</span>
-                <input type="checkbox"  value="Dancing" ><span class="chk_lbl">Dancing</span>
-                <input type="checkbox"  value="Cooking" ><span class="chk_lbl">Cooking</span>
-                <input type="checkbox"  value="Working" ><span class="chk_lbl">Working</span>
-                <input type="checkbox"  value="Other"><span class="chk_lbl">Other</span>
-                <div>
+                <input name="practice" type="radio"  value="Eating"><span class="chk_lbl">Eating</span>
+                <input name="practice" type="radio"  value="Playing"><span class="chk_lbl">Playing</span>
+                <input name="practice" type="radio"  value="Clothing"><span class="chk_lbl">Clothing</span>
+                <input name="practice" type="radio"  value="Singing"><span class="chk_lbl">Singing</span>
+                <input name="practice" type="radio"  value="Moving"><span class="chk_lbl">Moving</span>
+                <input name="practice" type="radio"  value="Sitting"><span class="chk_lbl">Sitting</span>
+                <input name="practice" type="radio"  value="Standing"><span class="chk_lbl">Standing</span>
+                <input name="practice" type="radio"  value="Kneeling"><span class="chk_lbl">Kneeling</span>
+                <input name="practice" type="radio"  value="Traveling"><span class="chk_lbl">Traveling</span>
+                <input name="practice" type="radio"  value="Dancing" ><span class="chk_lbl">Dancing</span>
+                <input name="practice" type="radio"  value="Cooking" ><span class="chk_lbl">Cooking</span>
+                <input name="practice" type="radio"  value="Working" ><span class="chk_lbl">Working</span>
+                <input name="practice" type="radio"  value="Other"><span class="chk_lbl">Other</span>
+                <div class="reactiveOther hidden" for="practice">
                     <label>Please tell us what you mean by other:</label>
                     <textarea type="text"> </textarea>
                 </div>
-
+                <header>Describe Practice Further:</header>
+                <textarea id="further_practice" type="text" deer-key-x="description" ></textarea>
+                <input type="button" onclick="LR.ui.addPieceAndReset(event, 'practice')" value="Add Practice" />
+                <ul id="added_practice">
+                     <li><header> Added Practices </header></li>
+                </ul>
                 <header>What is the context of these practices?  Check all that apply.</header>
-                <input type="checkbox"  value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
-                <input type="checkbox"  value="Community Event"><span class="chk_lbl">Community Event</span>
-                <input type="checkbox"  value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
-                <input type="checkbox"  value="Commercial"><span class="chk_lbl">Commercial</span>
-                <input type="checkbox"  value="Public"><span class="chk_lbl">Public</span>
-                <input type="checkbox"  value="Private"><span class="chk_lbl">Private</span>
-                <input type="checkbox"  value="Planned"><span class="chk_lbl">Planned</span>
-                <input type="checkbox"  value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
-                <input type="checkbox"  value="Individual"><span class="chk_lbl">Individual</span>
-                <input type="checkbox"  value="Collective" ><span class="chk_lbl">Collective</span>
-                <input type="checkbox"  value="Other"><span class="chk_lbl">Other</span>
-                <div>
+                <input name="context" type="radio"  value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
+                <input name="context" type="radio"  value="Community Event"><span class="chk_lbl">Community Event</span>
+                <input name="context" type="radio"  value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
+                <input name="context" type="radio"  value="Commercial"><span class="chk_lbl">Commercial</span>
+                <input name="context" type="radio"  value="Public"><span class="chk_lbl">Public</span>
+                <input name="context" type="radio"  value="Private"><span class="chk_lbl">Private</span>
+                <input name="context" type="radio"  value="Planned"><span class="chk_lbl">Planned</span>
+                <input name="context" type="radio"  value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
+                <input name="context" type="radio"  value="Individual"><span class="chk_lbl">Individual</span>
+                <input name="context" type="radio"  value="Collective" ><span class="chk_lbl">Collective</span>
+                <input name="context" type="radio"  value="Other"><span class="chk_lbl">Other</span>
+                <div class="reactiveOther hidden" for="context">
                     <label>Please tell us what you mean by other:</label>
                     <textarea type="text"> </textarea>
                 </div>
-                    
+                <header>Describe Context Further:</header>
+                <textarea id="further_context" type="text" deer-key-x="description" ></textarea>
+                <input type="button" onclick="LR.ui.addPieceAndReset(event, 'context')" value="Add Context" />
+                <ul id="added_context">
+                     <li><header> Added Contexts </header></li>
+                </ul>    
                 <form id="newBodyForm" class="dataWrap" for="bodies" deer-type="Body">
-                    <input type="hidden" deer-key="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
+                    <input type="hidden" deer-key-x="additionalType" value="[]" /> <!-- this  must react to what secondary [types] are chosen above -->
                     <div> Upload Media </div>
                     <label>Field Notes:</label>
-                    <textarea type="text" deer-key="TODO"> </textarea>
+                    <textarea type="text" deer-key-x="TODO"> </textarea>
                     <label>Tags:</label>
-                    <textarea type="text" deer-key="TODO"> </textarea>
+                    <textarea type="text" deer-key-x="TODO"> </textarea>
                 </form>
             </div>
             
@@ -330,7 +344,7 @@
                 <input type="hidden" name="Objects" value="[IDs of Objects]" />
                 <input type="hidden" name="Bodies" value="[IDs of Bodies]" />
                 <label>General Information:</label>
-                <textarea type="text" deer-key="TODO"> </textarea>
+                <textarea type="text" deer-key-x="TODO"> </textarea>
                 <input type="button" onclick="LR.crud.submitExperience(event)" value="Submit This Data" />
             </form>
         </div>
