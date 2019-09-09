@@ -179,7 +179,16 @@
     login{
         color: white;
     }
-
+    
+    .kind[for="spaces"]{
+        border: 2px solid blue;
+    }
+    .kind[for="objects"]{
+        border: 2px solid green;
+    }
+    .kind[for="bodies"]{
+        border: 2px solid orange;
+    }
 
 
     /* DASHBOARD */
