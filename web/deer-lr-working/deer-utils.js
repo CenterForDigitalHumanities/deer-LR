@@ -263,11 +263,10 @@ export default {
         element.dispatchEvent(e)
     },
     /**
-     * The body.value of an annotation is an array.  We will eventually turn that into a string to show as the value of
-     * some input area.  We have decided to ignore any array value that is an object or array.  Throw a soft error when encountering
-     * one.
+     * Remove array values that are objects or arrays.  We have decided these are not meant to be populated
+     * to interface.
     */
-    cleanArrayForString:function(arr){
+    cleanArray:function(arr){
         return arr.filter((arrItem)=>{
             if(Array.isArray(arrItem)){
                 console.warn("An annotation body value array contained an array.  We ignored it.")
@@ -281,35 +280,70 @@ export default {
             return ["string","number"].indexOf(typeof arrItem)>-1
         })
     },
+
     /**
-     * The body.value of an annotation is an object.  Normally we would ignore objects as values, but container objects
-     * may contain a list or set of things meant to represent the value as per web standards.  We should check for known/supported
-     * container objects.  If this object is not a supported object, an empty array will be returned indicating a failure
-     * to find any value.  
+     * Get the array of data from the container object, so long at it is one of the containers we support (so we know where to look.) 
     */
-    getArrayFromContainerObj:function(containerObj){
+    getArrayFromObj:function(containerObj){
         let cleanArray = []
         let objType = containerObj.type || containerObj["@type"] || ""
         if(Array.isArray(objType)){
             //Since type can be an array we have to pick one of the values that matches one of our supported container types.
-            objType = objType.reduce((acc, curVal, ind, arr) => {
-                if(DEER.CONTAINERS.indexOf(curVal) > -1){
-                    return curVal
+            //This picks the first one it comes across, since it doesnt seem like we would have any preference.
+            for(let t of objType){
+                if(DEER.CONTAINERS.indexOf(t) > -1){
+                    objType = t
+                    break
                 }
-            } ,"")
+            }
         }
         if(DEER.CONTAINERS.indexOf(objType) > -1){
             //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config too.
             if(["List", "Set", "set","list", "@set", "@list"].indexOf(objType) > -1){
-                cleanArray = this.cleanArrayForString(containerObj.items)
+                cleanArray = this.cleanArray(containerObj.items)
             }
             else if(["ItemList"].indexOf(objType > -1)){
-                cleanArray = this.cleanArrayForString(containerObj.itemListElement)
+                cleanArray = this.cleanArray(containerObj.itemListElement)
             }
         }
         else{
-            console.warn("The type of object we found is not a supported container type of an annotation's body's value.  Therefore, the value is empty.")
+            console.warn("The type of object ("+objType+") is not a supported container type.  Therefore, the value will be empty.")
         }
         return cleanArray
+    },
+
+    /**
+     * Given an array, turn the array into a string where the values are separated by the given delimeter.
+    */
+    stringifyArray:function(arr, delim){
+        //TODO detect if delim is not the correct deliminator and warn?
+        //TODO warn if arr is empty?
+        if(delim === ","){
+            //We are making a hard choice here and saying that for interface input areas, it is best if values are separated by a , plus " "
+            delim += " "
+        }
+        return (arr.length) ? arr.join(delim) : ""
+    },
+
+    /**
+     * Assert a value from an annotation onto an HTML input element.
+     * If it is a hidden input, the set value matters to determine whether or not the element is dirty.
+     * Note this should only be used for DEER inputs. 
+    */
+    assertElementValue:function(elem, val){
+        let re = new RegExp(", ", "g")
+        if(elem.value){
+            if(elem.type==="hidden"){
+                //Notice this will not consider hidden inputs with empty values in favor of avoiding accidental empty overwrites.
+                //Also notice we are negating whitespace matching around the , plus " " delimeter situation that stringifyArray produces.  
+                if(elem.value.replace(re, ",") === val.replace(re, ",")){
+                    elem.$isDirty = true  
+                }
+            } else{
+                console.warn("Element value for "+elem.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
+            }
+        }
+        elem.value = val
     }
+
 }

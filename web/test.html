@@ -21,14 +21,14 @@ and open the template in the editor.
               <label>Home</label><input type="text" name="additionalType" deer-array-type="set" value='Home' /> 
               <label>Local Buisness</label><input type="text" name="additionalType" deer-array-type="set" value='Local Buisness' />
               -->
-                <input type="hidden" deer-key="additionalType" value='' /> 
+                <input type="hidden" deer-array-type="List"  deer-key="additionalType" value='' /> 
                 <input type="hidden" deer-key="members" value='Tom,Frank,Sally' /> 
                 <input type="text" deer-key="contributors" value='' /> 
                 <input type="text" deer-key="alternateName" value='' /> 
                 <input type="text" deer-key="materials" value='' /> 
-                <input type="text" deer-key="additionalType" value='A,B,C' /> 
+                <input type="text" deer-array-type="List" deer-key="additionalType" value='A,B,C' /> 
                 <input type="text" deer-key="members" value='' /> 
-                <input type="text" deer-key="contributors" value='' /> 
+                <input type="text" deer-array-type="List" deer-key="contributors" value='' /> 
                 <input type="submit" />
           </form>
           <br>
@@ -45,7 +45,7 @@ and open the template in the editor.
                 <input type="text" deer-key="contributors" value='' /> 
                 <input type="text" deer-key="alternateName" value='' /> 
                 <input type="text" deer-array-type="list" deer-key="materials" value='Paper, Plastic, Air' /> 
-                <input type="text" deer-key="members" value='' /> 
+                <input type="text" deer-array-type="List" deer-key="members" value='' /> 
                 <input type="text" deer-key="contributors" value='' /> 
                 <input type="submit" />
           </form>

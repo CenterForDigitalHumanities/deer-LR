@@ -70,7 +70,6 @@ export default class DeerReport {
         this.context = elem.getAttribute(DEER.CONTEXT) // inherited to inputs
         this.type = elem.getAttribute(DEER.TYPE)
         this.inputs = elem.querySelectorAll(DEER.INPUTS.map(s=>s+"["+DEER.KEY+"]").join(","))
-        Array.from(this.inputs).forEach(inpt=>inpt.addEventListener('input', () => inpt.$isDirty = true))
         changeLoader.observe(elem, {
             attributes:true
         })
@@ -85,7 +84,7 @@ export default class DeerReport {
                 try {
                     for(let el of Array.from(this.inputs)){
                         let key=el.getAttribute(DEER.KEY)
-                        let test = ""
+                        el.addEventListener('input', () => inpt.$isDirty = true)
                         if(key){
                             //Then this is a DEER form input, let's check if there is an annotation for it.
                             if(obj.hasOwnProperty(key)){
@@ -93,66 +92,43 @@ export default class DeerReport {
                                 let assertedValue = UTILS.getValue(obj[key])
                                 let delim = el.getAttribute(DEER.ARRAYDELIMETER) || DEER.DELIMETERDEFAULT
                                 let arrayOfValues = []
-                                let assertedArrayOfValues = []
+                                let assertedArrayOfValues = ""
                                 if(Array.isArray(assertedValue)){
-                                    //The body value of this annotation is an array
-                                    arrayOfValues = UTILS.cleanArrayForString(assertedValue)
-                                    //Should we write a helper for this to catch a join failure and tell the user to check their delimeter?
-                                    assertedArrayOfValues = (arrayOfValues.length) ? arrayOfValues.join(delim) : ""
-                                    if(el.value && el.value !== assertedArrayOfValues){
-                                        if(el.type==="hidden"){
-                                            el.$isDirty = true
-                                        }
-                                        else{
-                                            //The HTML input element has a value that is already set.  This is a soft error and the element should not be dirty..
-                                            console.warn("Element value for "+el.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
-                                        }
-                                    }
-                                    el.value = assertedArrayOfValues
-                                }
+                                    //The body value of this annotation is an array.  At the moment, this is unsupported.  DEER saves this kind of data in supported container objects.   
+                                    // arrayOfValues = UTILS.cleanArray(assertedValue)
+                                    // assertedValue = UTILS.stringifyArray(arrayOfValues, delim)
+                                    // UTILS.assertElementValue(el, assertedValue)
+                                    UTILS.assertElementValue(el, "")
+                                    console.warn("We do not support values that are arrays.  The array of values should be in a container object.  Therefore, the value of annotation "+key+" is being ignored.")
+                                } 
                                 else if(typeof assertedValue === "object"){
-                                    //The body value of this annotation is an object.  Perhaps it is a container object we support that contains an array.
-                                    arrayOfValues = UTILS.getArrayFromContainerObj(assertedValue)
-                                    //Should we write a helper for this to catch a join failure and tell the user to check their delimeter?
-                                    assertedArrayOfValues = (arrayOfValues.length) ? arrayOfValues.join(delim) : ""
-                                    if(el.value && el.value !== assertedArrayOfValues){
-                                        if(el.type==="hidden"){
-                                            el.$isDirty = true
+                                    //The body value of this annotation is an object.  Perhaps it is a container object we support that contains an array to be used as a string value.
+                                    let objType = obj[key].type || obj[key]["@type"] || ""
+                                    if(el.getAttribute(DEER.ARRAYTYPE)){
+                                        if(el.getAttribute(DEER.ARRAYTYPE) !== objType){
+                                            console.warn("Container type mismatch!.  See annotation "+key+" and attribute "+DEER.ARRAYTYPE+" on element "+el+".  We will force the type found in the annotation.")
+                                            el.setAttribute(DEER.ARRAYTYPE, objType)
                                         }
-                                        else{
-                                            //The HTML input element has a value that is already set.  This is a soft error and the element should not be dirty.
-                                            console.warn("Element value for "+el.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
-                                        }
-                                    }
-                                    el.value = assertedArrayOfValues
-                                }
-                                else{
-                                    if((["string","number"].indexOf(typeof assertedValue)>-1)){
-                                        //The body value of this annotation is a string or number that we can grab outright.  
-                                        if(el.value && el.value !== assertedValue){
-                                            if(el.type==="hidden"){
-                                                el.$isDirty = true
-                                            }
-                                            else{
-                                                //The HTML input element has a value that is already set.  This is a soft error and the element should not be dirty..
-                                                console.warn("Element value for "+el.getAttribute(DEER.KEY)+" is not equal to the annotation value.  The element value should not be set and is being overwritten.")
-                                            }
-                                        }
-                                        el.value = assertedValue
-                                    }
-                                    else{
-                                        //The body value of this annotation is something unsupported, we cannot get its value.  Throw a soft error.
-                                        console.warn("We do not support values of this type "+typeof assertedValue+".  Therefore, the value of annotation "+key+" is being ignored.")
-                                        el.value=""
-                                    }
+                                        arrayOfValues = UTILS.getArrayFromObj(assertedValue)
+                                        assertedValue =  UTILS.stringifyArray(arrayOfValues, delim)
+                                    } else{
+                                        console.warn("We do not support values that are objects, unless they are a supported container object.  Therefore, the value of annotation "+key+" is being ignored.")
+                                    } 
+                                    UTILS.assertElementValue(el, assertedValue)
+                                } else if((["string","number"].indexOf(typeof assertedValue)>-1)){
+                                    //The body value of this annotation is a string or number that we can grab outright.  
+                                    UTILS.assertElementValue(el, assertedValue)
+                                } else{
+                                    console.warn("We do not support values of this type "+typeof assertedValue+".  Therefore, the value of annotation "+key+" is being ignored.")
+                                    UTILS.assertElementValue(el, "")
                                 }
                                 if(obj[key].source) {
                                     el.setAttribute(DEER.SOURCE,UTILS.getValue(obj[key].source,"citationSource"))
                                 }
-                            }
-                            else{
-                                //An annotation for this input has not been created yet.  If it is hidden and has a value, it is dirty. 
+                            } else{
+                                //An annotation for this input has not been created yet.
                                 if(el.type==="hidden" && el.value !== ""){
+                                    //Notice this will not consider hidden inputs with empty values, but perhaps it should?
                                     el.$isDirty = true
                                 } 
                             }                              
@@ -219,14 +195,51 @@ export default class DeerReport {
                 let inputId = input.getAttribute(DEER.SOURCE)
                 let action = (inputId) ? "UPDATE" : "CREATE"
                 let annotation = {
+                    type: "Annotation",
                     creator: DEER.ATTRIBUTION,
                     target: entity["@id"],
                     body: {}
                 }
+                let delim = input.getAttribute(DEER.ARRAYDELIMETER) || DEER.DELIMETERDEFAULT
+                let val = input.value
+                let arrType = input.getAttribute(DEER.ARRAYTYPE)
+                let annoBodyValueType = entity[input.getAttribute(DEER.KEY)].type ||  entity[input.getAttribute(DEER.KEY)]["@type"] || ""
+                if(input.hasAttribute(DEER.ARRAYTYPE)){
+                    if(annoBodyValueType && input.getAttribute(DEER.ARRAYTYPE) !== annoBodyValueType){
+                        console.error("Container type mismatch!.  See annotation "+key+" and attribute "+DEER.ARRAYTYPE+" on element "+el+".  The annotation will not be saved or updated.")
+                        continue
+                        //Could just preserve the type from the annotation and still try to save
+                        //arrType = annoBodyValueType
+                    }
+                    if(DEER.CONTAINERS.indexOf(arrType) > -1){
+                        val = val.split(delim)
+                        if(["List", "Set", "set","list", "@set", "@list"].indexOf(arrType) > -1){
+                            annotation.body[input.getAttribute(DEER.KEY)] = {
+                                "@type":arrType,
+                                "items":val
+                            }
+                        } else if(["ItemList"].indexOf(arrType > -1)){
+                            annotation.body[input.getAttribute(DEER.KEY)] = {
+                                "@type":arrType,
+                                "itemListElement":val
+                            }
+                        }
+                    } 
+                    else{
+                        console.error("Cannot save array value of unsupported type "+arrType+".  This annotation will not be saved or updated.")
+                        continue
+                        // Could save it as a string and move on instead of failing
+                        // annotation.body[input.getAttribute(DEER.KEY)] = {
+                        //     "value":input.value
+                        // }
+                    }
+                } else{
+                    annotation.body[input.getAttribute(DEER.KEY)] = {
+                        "value":val
+                    }
+                }  
+            
                 if(inputId) { annotation["@id"] = inputId }
-                annotation.body[input.getAttribute(DEER.KEY)] = {
-                    value: input.value
-                }
                 // TODO: maybe we need a deer-value to assign things here... or some option...
                 if(input.getAttribute(DEER.KEY)==="targetCollection"){
                     annotation.body.targetCollection = input.value
