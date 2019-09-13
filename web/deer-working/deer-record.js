@@ -79,99 +79,84 @@ export default class DeerReport {
         if (this.id) {
             //Do we want to expand for all types?
             UTILS.expand({"@id":this.id})
+            //What if there are no annotations on it and the things I need to know are already in the object?
             .then((function(obj){
                 try {
-                    let flatKeys = Array.from(this.inputs).map(input => {
+                    let inputs_no_duplicates = Array.from(this.inputs)
+                    let flatKeys = inputs_no_duplicates.map(input => {
                         return input.getAttribute(DEER.KEY)
                     })
-
-                    for(let el of Array.from(this.inputs)){
+                    inputs_no_duplicates = inputs_no_duplicates.filter((inpt, i)=>{
+                        //Throw a soft error if we detect duplicate deer-key entries, and only respect the first one.
+                        if(flatKeys.indexOf(el.getAttribute(DEER.KEY))!==i){
+                            console.warn("Duplicate deer-key '"+inpt.getAttribute(DEER.KEY)+"'' detected.  This one will be ignored and the first instance will be respected upon form submission.")
+                            console.log(el)
+                            //When this is saved, the same logic will run and the annotation value will only respect the first instance of this key.
+                            inpt.setAttribute(DEER.KEY+"-ignored", "true")
+                            //Could also remove DEER.KEY, which would make the form submission logic ignore it.  
+                            //el.removeAttribute(DEER.KEY)
+                        }
+                        return flatKeys.indexOf(inpt.getAttribute(DEER.KEY))===i
+                    })
+                    for(let el of inputs_no_duplicates){
                         let key=el.getAttribute(DEER.KEY)
                         if(key){
                             //Then this is a DEER form input.  Check if an annotation maps to this deer key.
-                            if(flatKeys.indexOf(key)!==i){
-                                console.warn("Duplicate deer-key '"+inpt.getAttribute(DEER.KEY)+"'' detected.  This one will be ignored and the first instance will be respected upon form submission.")
-                                console.log(el)
-                                inpt.setAttribute(DEER.KEY+"-duplicate", "true")
-                            }
                             el.addEventListener('input', (inpt) => inpt.target.$isDirty = true)
                             if(obj.hasOwnProperty(key)){
-                                //Then there is a key on this object that maps to the input.  
-                                let isAnno = (typeof obj[key] === "object" && obj[key].hasOwnProperty("source") && obj[key].source.hasOwnProperty("citationSource")) //It was either an annotation or was part of the object directly.
+                                //Then there is an annotation that maps to this deer key.
                                 let assertedValue = UTILS.getValue(obj[key])
-                                let containerObjectType = (assertedValue.hasOwnProperty("value")) ? assertedValue.value.type || assertedValue.value["@type"] || "" : "" 
+                                let containerObjectType = (obj[key].hasOwnProperty("value")) ? obj[key].value.type || obj[key].value["@type"] || "" : "" 
                                 let delim = el.getAttribute(DEER.ARRAYDELIMETER) || DEER.DELIMETERDEFAULT || "," //super fail safe
                                 let arrayOfValues = []
                                 if(Array.isArray(assertedValue)){
                                     /**
-                                      * This could mean that a key on the orignal object also had an annotation existing for it so UTILS.expand() put them together.
-                                      * This could mean a key on the original object was an array already, and may not contain anything we can get a value from.
-                                      * We will either go with the first thing we find is an annotation and preference it or the last string/number we encounter. 
-                                      * DEER does not technically support this situation, but can make a best guess and alert the user.  
+                                    //The body value of this annotation is an array.  At the moment, this is unsupported.  DEER saves this kind of data in supported container objects.  
+                                    //This would support annotation.body.value : ["like", "this"] 
+                                    arrayOfValues = UTILS.cleanArray(assertedValue)
+                                    assertedValue = UTILS.stringifyArray(arrayOfValues, delim)
+                                    UTILS.assertElementValue(el, assertedValue)
                                     */
-                                    console.warn("There are multiple possible values for key '"+key+"'. See below. ")
-                                    console.log(assertedValue)
-                                    let arbitraryAssertedValue = ""
-                                    for(let entry of assertedValue){
-                                        if(["string","number"].indexOf(typeof entry)>-1){
-                                            //We found it and understand it, but it is not an annotation that DEER mapped to the object.  We will remember the last one we came across.
-                                            assertedValue = arbitraryAssertedValue = UTILS.getValue(entry)
-                                        }
-                                        else if(typeof entry === "object" && entry.hasOwnProperty("source") && entry.source.hasOwnProperty("citationSource")){
-                                            //Then this is definitely an annotation DEER knows about and probably mapped itself.  We will preference this one and move forward with it, even if there are others.
-                                            assertedValue = arbitraryAssertedValue = UTILS.getValue(entry)
-                                            break
-                                        }
-                                    }
-                                    if(arbitraryAssertedValue){  console.warn("DEER arbitrarily chose "+arbitraryAssertedValue) }
-                                    else{ 
-                                        console.error("DEER did not understand any of these values.  Therefore, the value will be an empty string.") 
-                                        assertedValue = ""
-                                    }
+                                    UTILS.assertElementValue(el, "")
+                                    console.error("We do not support annotation body values that are arrays.  The array of values should be in a container object.  Therefore, the value of annotation is being ignored.  See annotation below.")
                                     console.log(obj[key])
-                                    UTILS.assertElementValue(el, assertedValue, isAnno)
                                 } 
                                 else if(typeof assertedValue === "object"){
-                                    //getValue either returned an object because it could not find obj.value or because obj.value was an object.  
-                                    if(isAnno){
-                                        //Then getValue found an annotation DEER understood and found the body.value was an object.
-                                        if(el.getAttribute(DEER.ARRAYTYPE)){
-                                            //Only an element noted as a DEER.ARRAYTYPE would have this
-                                            if(el.getAttribute(DEER.ARRAYTYPE) !== containerObjectType){
-                                                console.warn("Container type mismatch!.  See attribute '"+DEER.ARRAYTYPE+"'' on element "+el.outerHTML+".  We will force the type found in the annotation seen below.")
-                                                console.log(obj[key])
-                                                el.setAttribute(DEER.ARRAYTYPE, containerObjectType)
-                                            }
-                                            arrayOfValues = UTILS.getArrayFromObj(assertedValue)
-                                            assertedValue = UTILS.stringifyArray(arrayOfValues, delim)
-                                            UTILS.assertElementValue(el, assertedValue, isAnno)
-                                        } else{
-                                            //This should have been a string or number.  We do not support whatever was meant to be here.  
-                                            console.error("We do not support annotation body values that are objects, unless they are a supported container object and the element "+el.outerHTML+" notes '"+DEER.ARRAYTYPE+"'.  Therefore, the value of annotation is being ignored.  See annotation below.")
+                                    //The body value of this annotation is an object.  Perhaps it is a container object that DEER supports
+                                    if(el.getAttribute(DEER.ARRAYTYPE)){
+                                        if(el.getAttribute(DEER.ARRAYTYPE) !== containerObjectType){
+                                            console.warn("Container type mismatch!.  See attribute '"+DEER.ARRAYTYPE+"'' on element "+el.outerHTML+".  We will force the type found in the annotation seen below.")
                                             console.log(obj[key])
-                                            UTILS.assertElementValue(el, "", isAnno)
-                                        } 
-                                    } 
-                                    else{
-                                        //Then getValue could not find a value it understood and returned the object back.  We cannot find a value. 
-                                        console.error("The entry on the object was malformed and we could not find 'value'")
+                                            el.setAttribute(DEER.ARRAYTYPE, containerObjectType)
+                                        }
+                                        arrayOfValues = UTILS.getArrayFromObj(assertedValue)
+                                        assertedValue =  UTILS.stringifyArray(arrayOfValues, delim)
+                                        UTILS.assertElementValue(el, assertedValue)
+                                    } else{
+                                        console.error("We do not support annotation body values that are objects, unless they are a supported container object and the element "+el.outerHTML+" notes '"+DEER.ARRAYTYPE+"'.  Therefore, the value of annotation is being ignored.  See annotation below.")
                                         console.log(obj[key])
-                                        UTILS.assertElementValue(el, "", isAnno)
+                                        UTILS.assertElementValue(el, "")
                                     } 
+                                    
                                 } else if((["string","number"].indexOf(typeof assertedValue)>-1)){
-                                    //Get value either found that obj[key] was a string or found that it was an object with a .value that was a string or number. 
-                                    UTILS.assertElementValue(el, assertedValue, isAnno)
+                                    //The body value of this annotation is a string or number that we can grab outright.  
+                                    UTILS.assertElementValue(el, assertedValue)
                                 } else{
                                     console.error("We do not support values of this type '"+typeof assertedValue+"'.  Therefore, the value of annotation is being ignored.  See annotation below.")
                                     console.log(obj[key])
-                                    UTILS.assertElementValue(el, "", isAnno)
+                                    UTILS.assertElementValue(el, "")
                                 }
                                 if(obj[key].source) {
                                     el.setAttribute(DEER.SOURCE,UTILS.getValue(obj[key].source,"citationSource"))
                                 }
                             } else{
                                 //An annotation for this input has not been created yet.
-                                UTILS.assertElementValue(el, "", annoExists)
+                                if(el.type==="hidden" && el.value !== ""){
+                                    //Notice this will not consider hidden inputs with empty values, but perhaps it should?
+                                    console.log("Found a hidden element that did not have an annotation for it.  Making it dirty.")
+                                    console.log(el.outerHTML)
+                                    el.$isDirty = true
+                                } 
                             }                              
                         }
                     }

@@ -16,20 +16,21 @@ and open the template in the editor.
           <!-- deer form that gets values from checkboxes into an array -->
           <!-- A place http://devstore.rerum.io/v1/id/5d6e8224e4b07f0c56c0f4ed -->
 
-          <form id="newSpaceForm" class="dataWrap"deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d7ba431e4b07f0c56c0f53b">    
-                <input type="hidden" deer-key="name" value="Gulf Of Mexico" /> 
-                <input type="text" deer-array-type="List" deer-key="additionalType" value='' /> 
+          <form id="newSpaceForm" class="dataWrap" for="spaces" deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d6e874ce4b07f0c56c0f4f7">    
+                <input type="hidden" deer-key="name" value="Cup Thing" /> 
+                <input type="text" deer-array-type="List" deer-key="additionalType" value='A,B,C' /> 
                 <input type="text" deer-array-type="List" deer-key="contributors" value='' /> 
-                <input type="text" deer-array-type="List" deer-key="members" value='' /> 
+                <input type="text" deer-array-type="List" deer-key="members" value='Bryan, S.J.,Patrick, Sr.,Dr. Welliver' /> 
                 <input type="text" deer-array-type="List" deer-key="contributors" value='' /> 
                 <input type="text" deer-key="slogan" value='Any fishing trip is better than a work outing.' /> 
-                <input type="hidden" deer-key="slogan" value='Working is better than fishing.' /> 
+                
+                <input type="hidden" deer-key="slogan" value='' /> 
                 <input type="text" deer-key="name" value="" /> 
                 <input type="submit" />
           </form>
           <br>
           <br>
-            <form id="newThingForm" class="dataWrap" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d7ba417e4b07f0c56c0f539">    
+            <form id="newThingForm" class="dataWrap" for="spaces" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d72930de4b07f0c56c0f50b">    
                 <input type="hidden" deer-key="name" value="" /> 
                 <input type="text" deer-array-type="Set" deer-key="additionalType" value='X, Y, Z' /> 
                 <input type="text" deer-key="contributors" value='' /> 

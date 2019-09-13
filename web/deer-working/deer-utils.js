@@ -335,34 +335,31 @@ export default {
     },
 
     /**
-     * Assert a value found on an expanded object onto the HTML input that represents it.
-     * This element becomes dirty if it is hidden and the values do not match or if the value found on the expanded object was not an annotation.
-     * @param fromAnno Boolean for if the value is from a DEER annotation as opposed to part of the object (noted in deer-id on the form) directly.
-     * 
+     * Assert a value from an annotation onto an HTML input element.
+     * If it is a hidden input, the set value matters to determine whether or not the element is dirty.
+     * Note this should only be used for DEER inputs. 
     */
-    assertElementValue:function(elem, val, fromAnno){
+    assertElementValue:function(elem, val, delim){
         let re = new RegExp(", ", "g") //Replace all ', '...
-        if(elem.type==="hidden"){
-            if(elem.value !== undefined){
-                if(elem.hasAttribute(DEER.ARRAYTYPE)){
-                    console.warn("Hidden element with a hard coded value contains attributes '"+DEER.KEY+"'' and '"+DEER.ARRAYTYPE+"'.  "
-                    + "DEER takes this to mean the '"+elem.getAttribute(DEER.KEY)+"' annotation body value array will .join() into this string and pass a comparison operation, even if the hidden element's value is an empty string. " 
-                    + "If the array value as string does not match the hidden element's value string (including empty string), it will be considered dirty and a candidate "
-                    + "to be updated upon submission even though no interaction has taken place to change it.  Make sure this is what you want. /n"
-                    + "If this hidden input value is reactive to other interactions then processing should be done by your own custom interaction handler. "
-                    + "Remove the hard coded '"+DEER.KEY+"' or 'value' attribute.  This will make the DEER form input handler avoid processing of this input on page load. "
-                    + "If you want form submission to handle the annotation behind the input, make sure to handle the $isDirty state appropriately and restore the '"+DEER.KEY+"' attribute before submission.")
-                }
-                if(!fromAnno || elem.value !== val){
-                    //If an annotation does not exist that represents this value, then make it dirty so that DEER will make one on form submission.  
+        if(elem.value){
+            if(elem.type==="hidden"){
+                //Notice this will not consider hidden inputs with empty values in favor of avoiding accidental empty overwrites.
+                //Also notice we are negating whitespace matching around the , plus " " delimeter situation
+                if(elem.value.replace(re, ",") !== val.replace(re, ",")){
+                    console.log("Found a hidden element that did not have a macthing value.  Making it dirty.")
+                    console.log(elem.outerHTML)
                     elem.$isDirty = true  
-                }    
+                }
+            } else{
+                console.warn("Element value is already set '"+elem.value+"'.  The element value should not be set and will be overwritten by the annotation value '"+val+"'")
             }
-        } else{
-            console.warn("Element value is already set '"+elem.outerHTML+"'.  The element value should not be set and will be overwritten by the annotation value '"+val+"'")
-        }   
+        }
         elem.value = val
         elem.setAttribute("value", val)
+    },
+
+    handleDuplicateInputs:function(inputArr){
+        
     }
 
 }
