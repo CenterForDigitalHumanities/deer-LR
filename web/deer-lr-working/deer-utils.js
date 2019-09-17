@@ -149,14 +149,14 @@ export default {
                                             }
                                         }
                                     }
-                                    if (obj[k] !== undefined && annos[i].__rerum && annos[i].__rerum.history.next.length) {
+                                    if (obj.hasOwnProperty(k) && annos[i].hasOwnProperty("__rerum") && annos[i].__rerum.history.next.length) {
                                         // this is not the most recent available
                                         // TODO: maybe check generator, etc.
                                         continue Leaf;
                                     }
                                     else {
                                         // Assign this to the main object.
-                                        if(obj[k]) {
+                                        if(obj.hasOwnProperty(k)) {
                                             // It may be already there as an Array with some various labels
                                             if (Array.isArray(obj[k])){
                                                 let deepMatch = false
@@ -167,7 +167,9 @@ export default {
                                                     }
                                                 }
                                                 if(!deepMatch) { obj[k].push(val) }
-                                            } else if (obj[k].name !== val.name) { // often undefined
+                                            } else{
+                                                //It is already there and is an object, string, or number, perhaps from another annotation with a similar body.  
+                                                //Add in the body of this annotation we found,  DEER will aribitrarily pick a value from the array down the road and preference Annotations. .
                                                 obj[k] = [obj[k],val]
                                             }
                                         } else {
@@ -301,17 +303,23 @@ export default {
             //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config too.
             if(["Set", "List", "set","list", "@set", "@list"].indexOf(objType) > -1){
                 if(containerObj.hasOwnProperty("items")){ cleanArray = this.cleanArray(containerObj.items) }
-                else{ console.error("Object of type '"+objType+"' is malformed.  The values could not be found in obj.items.  Therefore, the value is empty.") }
+                else{ 
+                    console.error("Object of type ("+objType+") is malformed.  The values could not be found in obj.items.  Therefore, the value is empty.  See object below.") 
+                    console.log(containerObj)
+                }
                 
             }
             else if(["ItemList"].indexOf(objType > -1)){
                 if(containerObj.hasOwnProperty("itemListElement")){ cleanArray = this.cleanArray(containerObj.itemListElement)}
-                else{console.error("Object of type '"+objType+"' is malformed.  The values could not be found in obj.itemListElement.  Therefore, the value is empty.")}
+                else{
+                    console.error("Object of type ("+objType+") is malformed.  The values could not be found in obj.itemListElement.  Therefore, the value is empty.  See object below.")
+                    console.log(containerObj)
+                }
             }
         }
         else{
-            console.warn("The type of object ("+objType+") is not a supported container type.  Therefore, the value will be empty.  Check the annotation body value.")
-            console.warn(containerObj)
+            console.warn("Object of type ("+objType+") is not a supported container type.  Therefore, the value will be empty.  See object below..")
+            console.log(containerObj)
         }
         return cleanArray
     },
@@ -333,7 +341,7 @@ export default {
     /**
      * Assert a value found on an expanded object onto the HTML input that represents it.
      * The input is a representative for the annotation so the values should match.  Hidden elements will never have user interaction, they
-     * must be marked dirty if the values do not matc or if there is no annotation mapped to its DEER.KEY attribute so it will save/update on form submission.
+     * must be marked dirty if the values do not match or if there is no annotation mapped to its DEER.KEY attribute.
      * Values should not be coded into non-hidden input fields, they will be overwritten by the annotation value without being marked dirty.
 
      * @param elem The input HTML element the value is being asserted on
@@ -343,22 +351,33 @@ export default {
     */
     assertElementValue:function(elem, val, mapsToAnno){
         if(elem.type==="hidden"){
-            if(elem.value !== undefined){
-                if(elem.hasAttribute(DEER.ARRAYTYPE)){
-                    console.warn("Hidden element with a hard coded 'value' also contains attributes '"+DEER.KEY+"'' and '"+DEER.ARRAYTYPE+"'.  "
-                    + "DEER takes this to mean the '"+elem.getAttribute(DEER.KEY)+"' annotation body value array will .join() into this string and pass a comparison operation. " 
-                    + "If the array value as string does not match the hidden element's value string (including empty string), it will be considered dirty and a candidate "
-                    + "to be updated upon submission even though no interaction has taken place to change it.  Make sure this is what you want. /n"
-                    + "If this hidden input value is reactive to other interactions then processing should be done by your own custom interaction handler. "
-                    + "Remove the hard coded '"+DEER.KEY+"' or 'value' attribute.  This will make the DEER form input handler avoid processing of this input on page load. "
-                    + "If you want form submission to handle the annotation behind the input, make sure to handle the $isDirty state appropriately and restore the '"+DEER.KEY+"' attribute before submission.")
-                }
+            if(elem.hasAttribute("value") && elem.value !== undefined){
                 if(!mapsToAnno || elem.value !== val){
                     elem.$isDirty = true  
+                    if(elem.value !== val && elem.hasAttribute(DEER.ARRAYTYPE)){
+                        console.warn("Hidden element with a hard coded 'value' also contains attributes '"+DEER.KEY+"' and '"+DEER.ARRAYTYPE+"'.  "
+                        + "DEER takes this to mean the '"+elem.getAttribute(DEER.KEY)+"' annotation body value array will .join() into this string and pass a comparison operation. " 
+                        + "If the array value as string does not match the hidden element's value string (including empty string), it will be considered dirty and a candidate "
+                        + "to be updated upon submission even though no interaction has taken place to change it.  Make sure this is what you want. \n"
+                        + "If this hidden input value is reactive to other interactions then processing should be done by your own custom interaction handler. "
+                        + "Remove the hard coded '"+DEER.KEY+"' or 'value' attribute.  This will make the DEER form input handler avoid processing of this input on page load. "
+                        + "If you want form submission to handle the annotation behind the input, make sure to handle the $isDirty state appropriately and restore the '"+DEER.KEY+"' attribute before submission. " 
+                        + "See below.")
+                        console.log(elem)
+                    }
+                    
                 }
             }
         } else{
-            console.warn("Element value is already set '"+elem.outerHTML+"'.  The element value should not be set and will be overwritten by the annotation value '"+val+"'.")
+            if(elem.hasAttribute("value") && elem.value !== undefined){
+                //Empty strings count as a value.
+                console.warn("Element value is already set.  The element value should not be hard coded and will be overwritten by the annotation value '"+val+"'.  See below.")
+                console.log(elem)    
+            }
+            if(elem.hasAttribute(DEER.ARRAYTYPE)){
+                console.warn("This input element also has attribute '"+DEER.ARRAYTYPE+"'.  This attribute is only for hidden inputs only.  The attribute is being removed to avoid errors.")
+                elem.removeAttribute(DEER.ARRAYTYPE)
+            }
         }
         elem.value = val
         elem.setAttribute("value", val)
