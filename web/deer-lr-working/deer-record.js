@@ -94,10 +94,9 @@ export default class DeerReport {
                             let assertedValue = ""
                             el.addEventListener('input', (inpt) => inpt.target.$isDirty = true)
                             if(flatKeys.indexOf(deerKeyValue)!==i){
-                                console.warn("Duplicate input "+DEER.KEY+" attribute value '"+deerKeyValue+"' detected in form.  This input will be ignored upon form submission and only the first instance will be respected.  See duplicate below.")
-                                el.setAttribute(DEER.KEY+"-duplicate", "true")
-                                console.log(el)
-                                //Don't skip the input though, let it recieve all warnings and errors per usual in case this happens to be the one the user means to keep.
+                                UTILS.warning("Duplicate input "+DEER.KEY+" attribute value '"+deerKeyValue+"' detected in form.  This input will be ignored upon form submission and only the first instance will be respected.  See duplicate below.", el)
+                                el.setAttribute(DEER.KEYDUPLICATE, "true")
+                                //Don't skip the input though, let it recieve all warnings and errors per usual in case this happens to be the one the dev means to keep.
                             }
                             if(obj.hasOwnProperty(deerKeyValue)){
                                 //Then there is a key on this object that maps to the input.  
@@ -118,8 +117,7 @@ export default class DeerReport {
                                       * We will preference the first entry of the array that is an annotation.  If no annotations are found, we will aribitrarily pick the last string or number encountered.   
                                       * DEER does not technically support this situation, but can make a best guess and help it along...
                                     */
-                                    console.warn("There are multiple possible values for key '"+deerKeyValue+"'. See below. ")
-                                    console.log(assertedValue)
+                                    UTILS.warning("There are multiple possible values for key '"+deerKeyValue+"'. See below. ", assertedValue)
                                     let arbitraryAssertedValue = ""
                                     for(let entry of assertedValue){
                                         if(["string","number"].indexOf(typeof entry)>-1){
@@ -143,7 +141,7 @@ export default class DeerReport {
                                             }
                                         }
                                     }
-                                    if(arbitraryAssertedValue){  console.warn("DEER arbitrarily chose the value '"+arbitraryAssertedValue+"'.") }
+                                    if(arbitraryAssertedValue){  UTILS.warning("DEER arbitrarily chose the value '"+arbitraryAssertedValue+"'.") }
                                     else{ 
                                         console.error("DEER did not understand any of these values.  Therefore, the value will be an empty string.") 
                                         assertedValue = ""
@@ -156,10 +154,9 @@ export default class DeerReport {
                                             //Only an element noted as a DEER.ARRAYTYPE would have this kind of body.value (a container obj containing an array of values)
                                             if(annoBodyObjectType === "" || el.getAttribute(DEER.ARRAYTYPE) !== annoBodyObjectType){
                                                 //The HTML input should note the same type of container as the annotation so helper functiions can determine if it is a supported in DEER.CONTAINERS
-                                                console.warn("Container type mismatch!.  See attribute '"+DEER.ARRAYTYPE+"' on element "+el.outerHTML+"."
+                                                UTILS.warning("Container type mismatch!.  See attribute '"+DEER.ARRAYTYPE+"' on element "+el.outerHTML+"."
                                                     +" The element is now dirty and will overwrite the type noted in the annotation seen below upon form submission."
-                                                    +" If the type of the annotation body is not a supported type then DEER will not be able to get the array of values.")
-                                                console.log(obj[deerKeyValue])
+                                                    +" If the type of the annotation body is not a supported type then DEER will not be able to get the array of values.", obj[deerKeyValue])
                                             }
                                             arrayOfValues = UTILS.getArrayFromObj(assertedValue)
                                             assertedValue = UTILS.stringifyArray(arrayOfValues, delim)
@@ -200,7 +197,7 @@ export default class DeerReport {
     processRecord(event) {
         event.preventDefault()  
         if (!this.$isDirty) {
-            console.warn(event.target.id+" form submitted unchanged.")
+            UTILS.warning(event.target.id+" form submitted unchanged.")
         }
         if(this.elem.getAttribute(DEER.ITEMTYPE)==="simple") {
             return this.simpleUpsert(event).bind(this).then(entity => {
@@ -235,15 +232,12 @@ export default class DeerReport {
         formAction.then((function(entity) {
             let annotations = Array.from(this.elem.querySelectorAll(DEER.INPUTS.map(s=>s+"["+DEER.KEY+"]").join(",")))
             .filter(el=>Boolean(el.$isDirty))
-            let flatKeys = annotations.map(input => {
-                return input.getAttribute(DEER.KEY)
-            })
-            annotations.filter((el, i)=>{
+            annotations.filter(el=>{
                 //Throw a soft error if we detect duplicate deer-key entries, and only respect the first one.
-                if(flatKeys.indexOf(el.getAttribute(DEER.KEY))!==i){
-                    console.warn("Duplicate input "+DEER.KEY+" attribute value '"+el.getAttribute(DEER.KEY)+"' detected in form, DEER will only respect the first instance.")
+                if(el.hasAttribute(DEER.KEYDUPLICATE)){
+                    UTILS.warning("Duplicate input "+DEER.KEY+" attribute value '"+el.hasAttribute(DEER.KEY)+"' detected during submission.  This input will be ignored.  See duplicate below. ", el)
                 }
-                return flatKeys.indexOf(el.getAttribute(DEER.KEY))===i
+                return !el.hasAttribute(DEER.KEYDUPLICATE)
             })
             .map(input => {
                 let inputId = input.getAttribute(DEER.SOURCE)
