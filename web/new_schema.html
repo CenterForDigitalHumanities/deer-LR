@@ -19,12 +19,10 @@
     <!-- the person to attribute should be known by now.  They had to provide their attributor ID to get here -->
     <!-- A Location + Date/Time is required to continue -->
     
-    <!-- This is a "User Submission" which needs to contain a reference to all objects created from this submission attributed to this user -->   
-    <!-- TODO: Define a Type for this and design what the object looks like -->
+    <!-- TODO: Define a Type for the experience and design what the object looks like -->
     <generic-experience>
         <form id="theExperience" class="experience" my-type="Experience">
             <generic-place>
-                <generic-loader class="hidden">Please wait while we create and link your experience...</generic-loader>
                 <!-- This is a collection of Place's that exists for deer-lr.  Need to get that collection and resolve it as a list as a deer-view -->
                 <!-- That deer-view needs to be a template that is a <select> dropdown of Place's to choose from.  Does the collection ID persist? -->
                 <!-- TODO Make a LR Collection for places -->
@@ -34,13 +32,14 @@
             </generic-place>
             <generic-time>
                 <!--TODO allow time range??-->
-                <label> At what date and time did you gather this data?</label>
+                <label> At what date and time did you gather this data?  The default is the current date and time.</label>
                 <input type="datetime" deer-key-x="" />
             </generic-time>
-            <input type="hidden" name="user" />
-            <input type="hidden" name="location" />
-            <input type="hidden" name="time" />
-
+            <label> Please list all researchers involved </label>
+            <input type="text" deer-key-x="researchers" />
+            <input type="hidden" deer-key-x="user" />
+            <input type="hidden" deer-key-x="location" />
+            <input type="hidden" deer-key-x="time" />
             <label>General Information:</label>
             <textarea type="text" deer-key-x="description"> </textarea>
             <!-- TODO: Regular deer submit, capture the created event and continue. -->
@@ -147,7 +146,7 @@
                     <textarea type="text" deer-key-x="material"> </textarea>
                     <label>Further Description:</label>
                     <textarea type="text" deer-key-x="description"> </textarea>
-                    <div class="dataWrap" for="all">
+                    <div class="dataWrap">
                         <label>Typical Use: </label>
                          <select deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
@@ -165,6 +164,7 @@
                 </form>
             </div>
             
+            <header> Describe what you encountered at {Place.name}</header>
             <div for="objects" class="kind hidden">
                 <form id="newObjectForm" class="dataWrap" for="objects" deer-type="Object"> 
                     <div class="primarySpecification" for="objects">
@@ -214,6 +214,8 @@
                     <textarea type="text" deer-key-x="notes"> </textarea>
                     <label>Tags:</label>
                     <textarea type="text" deer-key-x="tags"> </textarea>
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" /> <!-- TODO -->
+                    <input type="button" value="Submit" /> <!-- TODO -->
                 </form>
             </div>
             <div for="bodies" class="kind hidden">
@@ -225,8 +227,10 @@
                     <input type="radio" value="LR::Sound" name="sense"><span class="chk_lbl">Sound</span>
                     <input type="radio" value="LR::Touch" name="sense"><span class="chk_lbl">Touch</span>
                     <input type="radio" value="LR::Taste" name="sense"><span class="chk_lbl">Taste</span>
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
                     <header>Describe Sense Further:</header>
                     <textarea id="further_sense" type="text" deer-key-x="description" ></textarea>
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" /> <!-- TODO -->
                     <input type="button" onclick="LR.ui.addPieceAndReset(event, 'sense')" value="Add Sense" />
                 </form>
                 <!-- TODO: Catch the created event for a sense and add into this area -->
@@ -257,6 +261,7 @@
                     </div>
                     <header>Describe Practice Further:</header>
                     <textarea id="further_practice" type="text" deer-key-x="description" ></textarea>
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" /> <!-- TODO -->
                     <input type="button" onclick="LR.ui.addPieceAndReset(event, 'practice')" value="Add Practice" />
                 </form>
                 <!-- TODO -->
@@ -284,6 +289,7 @@
                     </div>
                     <header>Describe Context Further:</header>
                     <textarea id="further_context" type="text" deer-key-x="description" ></textarea>
+                    <input type="hidden" deer-key-x="annoConnectingToPractices" /> <!-- TODO -->
                     <input type="button" onclick="LR.ui.addPieceAndReset(event, 'context')" value="Add Context" />
                 </form>
                 <!-- TODO -->
