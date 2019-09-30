@@ -4,9 +4,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -14,13 +18,10 @@ import java.util.Properties;
  */
 public class Authorize {
 
-    private String secrets = "sec.properties";
-    private String admins = "admins.properties";
-    private Properties sec_props = new Properties();
-    private Properties admins_props = new Properties();
-    private String sec_fileLoc = "";
-    private String admins_fileLoc = "";
-    private String[] admins_list;
+    private String info = "sec.txt";
+    private String info_loc = "";
+    private JSONArray admins_list;
+    private JSONObject userData;
 
     public final void init() throws FileNotFoundException, IOException{
         /*
@@ -28,57 +29,42 @@ public class Authorize {
             if you have it in Source Packages/java/tokens when you build.  That is how this will read it in without defining a root location
             https://stackoverflow.com/questions/2395737/java-relative-path-of-a-file-in-a-java-web-application
         */
-        sec_fileLoc =Authorize.class.getResource(secrets).toString();
-        admins_fileLoc =Authorize.class.getResource(admins).toString();
-        sec_fileLoc = sec_fileLoc.replace("file:", "");
-        admins_fileLoc = admins_fileLoc.replace("file:", "");
-        InputStream input_sec = new FileInputStream(sec_fileLoc);
-        InputStream input_admins = new FileInputStream(admins_fileLoc);
-        sec_props.load(input_sec);
-        admins_props.load(input_admins);
-        admins_list = admins_props.getProperty("admins_list").split(",");
+        info = Authorize.class.getResource(info).toString();
+        String users = new String(Files.readAllBytes(Paths.get(info))); 
+        userData = JSONObject.fromObject(users);
+        admins_list = userData.getJSONArray("admins");
     }
 
-    public void setSecFileLoc(String location){
-        sec_fileLoc = location;
+    public void setInfoFileLoc(String location){
+        info_loc = location;
     }
 
-    public String getSecFileLoc(){
-        return sec_fileLoc;
+    public String getInfoFileLoc(){
+        return info_loc;
     }
-
-    public void setAdminsFileLoc(String location){
-        admins_fileLoc = location;
-    }
-
-    public String getAdminsFileLoc(){
-        return admins_fileLoc;
-    }
-
-    public void setSecProps(Properties props){
-        sec_props = props;
-    }
-
-    public Properties getSecProps(){
-        return sec_props;
-    }
-
-    public void setAdminsProps(Properties props){
-        admins_props = props;
-    }
-
-    public Properties getAdminsProps(){
-        return admins_props;
+    
+    public JSONArray getAdmins(){
+        return admins_list;
     }
 
     public boolean isAdmin(String user){
-        List<String> list = Arrays.asList(admins_list);
-        return list.contains(user);
+        return userData.getJSONObject(user).getJSONObject("roles").getBoolean("administrator");
     }
 
     public boolean isAuthorized(String user, String pwd){
-        return pwd.equals(sec_props.getProperty(user));
+        return userData.getJSONObject(user).getString("password").equals(pwd);
     }
-
-
+    
+    public JSONObject getUserObject(String user){
+        return userData.getJSONObject(user);
+    }
+    
+    public String getUserID(String user){
+        return userData.getJSONObject(user).getString("@id");
+    }
+    
+    public JSONArray getUserRoles(String user){
+        return userData.getJSONObject(user).getJSONArray("roles");
+    }
+    
 }

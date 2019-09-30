@@ -5,12 +5,22 @@
  */
 package servlets;
 
+import auth.Authorize;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -28,57 +38,41 @@ public class Login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        /*
-        let secrets = await fetch('src/tokens/sec.txt')
-        .then(response => response.text())
-        secrets = JSON.parse(secrets)
-        let admins = await fetch('src/tokens/admins.txt')
-          .then(response => response.text()) 
-        admins = admins.split(",")
-        let usrSecret = document.getElementById("login-pwd").value //Get the user input
-        //If user is an admin, set the admin flag for the session. 
-        //login success should redirect to new_schema.html after storing the user information. These people/classes should have an Agent ID from RERUM to do this as properly as possible.  
-        if(admins.includes(who)){
-            if (usrSecret == secrets.admin){
-                LR.ui.loginRedirect(who)   
-            }
-            else{
-                LR.ui.loginFail()
-            }
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        response.addHeader("Content-Type", "application/json; charset=utf-8");
+        String requestBody;
+        ServletInputStream input = request.getInputStream();
+        InputStreamReader reader = new InputStreamReader(input, "utf-8");
+        BufferedReader bodyReader = new BufferedReader(reader);
+        StringBuilder bodyString = new StringBuilder();
+        String line;
+        JSONObject jo_return = new JSONObject();
+        while ((line = bodyReader.readLine()) != null)
+        {
+          bodyString.append(line);
+        }
+        requestBody = bodyString.toString();
+        JSONObject jo_request = JSONObject.fromObject(requestBody);
+        String user = jo_request.getString("username");
+        String pwd = jo_request.getString("password");
+        Authorize authorizer = new Authorize();
+        JSONObject roles = new JSONObject();
+        if(authorizer.isAuthorized(user, pwd)){
+           //Check if the password for that user matches 
+           response.setStatus(HttpServletResponse.SC_OK);
+           jo_return.element("user", user);
+           jo_return.element("id", authorizer.getUserID(user));
+           jo_return.element("roles", authorizer.getUserRoles(user));
         }
         else{
-            //Ask for the class password
-            switch(who){
-                case "LR_2017":
-                    if (usrSecret == secrets.LR_2017){
-                        LR.ui.loginRedirect(who)
-                    }
-                    else{
-                        LR.ui.loginFail()
-                    }
-                break;
-                case "LR_2018":
-                    if (usrSecret == secrets.LR_2018){
-                        LR.ui.loginRedirect(who)
-                    }
-                    else{
-                        LR.ui.loginFail()
-                    }
-                break;
-                case "LR_2019":
-                    if (usrSecret == secrets.LR_2019){
-                        LR.ui.loginRedirect(who)
-                    }
-                    else{
-                        LR.ui.loginFail()
-                    }
-                break;
-                default:
-                    alert("There is no user registered for "+who+".  Please contact the administrator for more information.")
-            }
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        */
+        response.addHeader("Content-Type", "application/json; charset=utf-8");
+        response.setContentType("UTF-8");
+        PrintWriter out = response.getWriter();
+        Gson bldr = new GsonBuilder().setPrettyPrinting().create();
+        out.write(bldr.toJson(jo_return));
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

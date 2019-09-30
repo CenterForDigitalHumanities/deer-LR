@@ -1,6 +1,52 @@
 {
-"admin":"LR_Admin_2019",
-"LR_2017":"LR_2017!","
-"LR_2018=":"R_2018!",
-"LR_2019":"LR_2019!",
+    "Rachel Lindsey":{
+        "id":"",
+        "roles":{
+            "administrator":true,
+            "contributor":true
+        }
+    },
+    "David Justice":{
+        "id":"",
+        "roles":{
+            "administrator":true,
+            "contributor":true
+        }
+    },
+    "Adam Park":{
+        "id":"",
+        "roles":{
+            "administrator":true,
+            "contributor":true
+        }
+    },
+    "bhaberbe":{
+        "id":"",
+        "roles":{
+            "administrator":true,
+            "contributor":true
+        }
+    },
+    "cubap":{
+        "id":"",
+        "roles":{
+            "administrator":true,
+            "contributor":true
+        }
+    },
+    "Pauline Lee":{
+        "id":"",
+        "roles":{
+            "administrator":true,
+            "contributor":true
+        }
+    },
+    "LR_2019":{
+        "id":"",
+        "roles":{
+            "administrator":false,
+            "contributor":true
+        }
+    },
+    admin_list:["Rachel Lindsey", "David Justice", "Adam Park", "bhaberbe", "cubap", "Pauline Lee"]
 }

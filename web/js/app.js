@@ -5,7 +5,16 @@
  */
 
 const LR = {}
-LR.sessionInfo = {}
+LR.URLS = {
+    LOGIN : "login",
+    LOGOUT : "logout",
+    BASE_ID: "http://devstore.rerum.io/v1",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since"
+}
 if (typeof(Storage) !== "undefined") {
   LR.localInfo = window.localStorage
 } else {
@@ -780,13 +789,15 @@ LR.crud.submitExperience = function (event){
     alert("Still Under Development")
 }
 
+
+/**
+ * Login/Logout 
+ */ 
 LR.tricks.loginRedirect = function(who){
-    LR.sessionInfo.setItem("authorized", who)
     document.location.href = "new_schema.html"
 }
 
 LR.ui.loginFail = function(){
-    LR.sessionInfo.removeItem("authorized")
     alert("The username and/or password you provided is not correct.")
 }
 
@@ -798,7 +809,34 @@ LR.ui.loginFail = function(){
  * @return {undefined}
  */
 LR.tricks.mockLogin = async function(event){
-    let who = document.getElementById("login-usr").value   
+    let who = document.getElementById("login-usr").value 
+    let pass = document.getElementById("login-pwd").value 
+    let loginObj = {username:who, password:pass}
+    if(who){
+        await fetch(LR.URLS.LOGIN, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginObj)
+        })
+        .then(response => response.json())
+        .then(responseObj => {
+            if(responseObj.success){
+                localStorage.setItem("authorized", responseObj.user)
+                LR.ui.loginRedirect(responseObj.user)
+            }
+            else{
+                localStorage.removeItem("authorized")
+                LR.ui.loginFail()
+            }
+        })
+    }       
+    else{
+        //Error
+        //LR.ui.loginFail()
+    }
 }
 
 /**
@@ -808,5 +846,5 @@ LR.tricks.mockLogin = async function(event){
  * @return {undefined}
  */
 LR.tricks.mockLogout = async function(event){
-    let who = document.getElementById("login-usr").value   
+    LR.localInfo.removeItem("userInfo")
 }

@@ -14,7 +14,6 @@
 
     <body class="container">
         <generic-top>User Login</generic-top>
-        
         <login>
             <label> Please log in below </label>
             Username
@@ -24,7 +23,7 @@
             <input type="button" value="Login" onclick="LR.tricks.mockLogin(event)" />
             <input type="button" value="Forgot" onclick="LR.ui.forgotLogin(event)">
             <login-forgot class="hidden">
-                <generic-top>Please contact your class administrator to retrieve the login information.</generic-top>
+                <label>Please contact your class administrator to retrieve the login information.</label>
             </login-forgot>
         </login>
         
@@ -32,6 +31,10 @@
             <label>You are logged in as <span id="currentUser">{{current user}}</span></label>
             <input type="button" value="logout" onclick="LR.tricks.mockLogout(event)" />
         </logout>
+        
+        <login-feedback class="hidden">
+            <generic-top>Please contact your class administrator to retrieve the login information.</generic-top>
+        </login-feedback>
         <!-- Add ins -->
         <script src="./js/deerInitializer.js" type="module"></script>   
         <script src="./js/app.js" type="text/javascript"></script>  
