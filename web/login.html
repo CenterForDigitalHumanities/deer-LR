@@ -13,10 +13,10 @@
     </head>
 
     <body class="container">
-        <generic-top>To continue please login below so we know who you are.  </generic-top>
+        <generic-top>User Login</generic-top>
         
-        <!-- here a user will use the mock login to store an attributor before continuing -->
         <login>
+            <label> Please log in below </label>
             Username
             <input type="text" id="login-usr" />
             Password
@@ -27,10 +27,11 @@
                 <generic-top>Please contact your class administrator to retrieve the login information.</generic-top>
             </login-forgot>
         </login>
-
-        <!-- Need to force some authorization for this page -->
-
-
+        
+        <logout class="hidden">
+            <label>You are logged in as <span id="currentUser">{{current user}}</span></label>
+            <input type="button" value="logout" onclick="LR.tricks.mockLogout(event)" />
+        </logout>
         <!-- Add ins -->
         <script src="./js/deerInitializer.js" type="module"></script>   
         <script src="./js/app.js" type="text/javascript"></script>  
