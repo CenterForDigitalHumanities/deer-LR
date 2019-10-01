@@ -20,7 +20,6 @@ public class Authorize {
 
     public final void init() throws FileNotFoundException, IOException{
         users_file = Authorize.class.getResource(users_file).toString();
-        users_file = users_file.replace("file:/", "");
         users_file = users_file.replace("file:", "");
         String users = new String(Files.readAllBytes(Paths.get(users_file))); 
         userData = JSONObject.fromObject(users);
