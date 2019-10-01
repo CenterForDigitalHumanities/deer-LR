@@ -1,5 +1,6 @@
 package auth;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,9 +21,8 @@ public class Authorize {
     private JSONObject userData;
     
     public Authorize() throws IOException, FileNotFoundException {
-        users_file = Authorize.class.getResource(users_file).toString();
-        //users_file = users_file.replace("file:/", ""); //For Windows deployments
-        users_file = users_file.replace("file:", "");  //For all other OS deployments
+        File file = new File(Authorize.class.getResource(users_file).getFile());
+        users_file = file.getAbsolutePath();
         String users = new String(Files.readAllBytes(Paths.get(users_file))); 
         userData = JSONObject.fromObject(users);
         admins_list = userData.getJSONArray("admin_list");
