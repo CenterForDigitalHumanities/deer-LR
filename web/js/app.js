@@ -865,7 +865,6 @@ LR.login.forgotLogin = function(){
  * Determine what interface a user should see when coming to login.html.
  */
 LR.login.loginInterface = function(){
-    console.log("login interface")
     if(localStorage.getItem("authorized_user")){
         let userObj = JSON.parse(localStorage.getItem("authorized_user"))
         if(userObj.user || userObj["@id"]){
