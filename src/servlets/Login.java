@@ -109,7 +109,7 @@ public class Login extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Lived Religion application login servlet.";
     }// </editor-fold>
 
 }
