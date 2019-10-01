@@ -8,33 +8,25 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- *
+ * For interaction with the Users file.
+ * The user file is a JSON object containing users with roles and passwords.
  * @author bhaberbe
  */
 public class Authorize {
 
-    private String info = "sec.txt";
-    private String info_loc = "";
+    private String users_file = "users.txt";
     private JSONArray admins_list;
     private JSONObject userData;
 
     public final void init() throws FileNotFoundException, IOException{
-        info = Authorize.class.getResource(info).toString();
-        info = info.replace("file:/", "");
-        info = info.replace("file:", "");
-        String users = new String(Files.readAllBytes(Paths.get(info))); 
+        users_file = Authorize.class.getResource(users_file).toString();
+        users_file = users_file.replace("file:/", "");
+        users_file = users_file.replace("file:", "");
+        String users = new String(Files.readAllBytes(Paths.get(users_file))); 
         userData = JSONObject.fromObject(users);
         admins_list = userData.getJSONArray("admin_list");
     }
 
-    public void setInfoFileLoc(String location){
-        info_loc = location;
-    }
-
-    public String getInfoFileLoc(){
-        return info_loc;
-    }
-    
     public JSONArray getAdmins(){
         return admins_list;
     }

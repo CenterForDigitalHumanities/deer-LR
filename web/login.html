@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <!--
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
-    -->
+-->
 <html>
-
     <head>
         <title>Lived Religion login</title>
         <meta charset="UTF-8">
@@ -11,7 +10,6 @@
         <link rel="stylesheet" href="https://unpkg.com/chota@latest">
         <link rel="stylesheet" href="./css/mycss.css">
     </head>
-
     <body class="container">
         <generic-top>Login Below</generic-top>
         <login id="login">
@@ -19,13 +17,13 @@
             <input type="text" id="login-usr" />
             Password
             <input type="password" id="login-pwd" />
-            <input type="button" value="Login" onclick="LR.tricks.mockLogin(event)" />
-            <input type="button" value="Forgot" onclick="LR.ui.forgotLogin(event)">
+            <input type="button" value="Login" onclick="LR.login.mockLogin(event)" />
+            <input type="button" value="Forgot" onclick="LR.login.forgotLogin(event)">
         </login>
         
         <logout id="logout" class="hidden">
             <label>You are logged in as <span id="currentUser">{{current user}}</span></label>
-            <input type="button" value="Logout" onclick="LR.tricks.mockLogout(event)" />
+            <input type="button" value="Logout" onclick="LR.login.mockLogout(event)" />
         </logout>
         
         <login-feedback id="loginFeedback" class="hidden">
@@ -34,10 +32,8 @@
         <!-- Add ins -->
         <script src="./js/deerInitializer.js" type="module"></script>   
         <script src="./js/app.js" type="text/javascript"></script>  
-
     </body>
     <script>
-        LR.ui.loginInterface()
+        LR.login.loginInterface()
     </script>
-
 </html>

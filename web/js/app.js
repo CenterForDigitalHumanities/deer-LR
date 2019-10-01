@@ -21,6 +21,7 @@ if (typeof(Storage) !== "undefined") {
   LR.err.generic_error("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
 }
 LR.local = {}
+LR.login = {}
 LR.local.survey={}
 LR.submission={
     "@type":"UserSubmission",
@@ -789,11 +790,7 @@ LR.crud.submitExperience = function (event){
     alert("Still Under Development")
 }
 
-
-/**
- * 
- */ 
-LR.ui.loginRedirect = function(who){
+LR.login.loginRedirect = function(who){
     document.location.href = "new_schema.html"
 }
 
@@ -803,9 +800,8 @@ LR.ui.loginRedirect = function(who){
  * The login servlet will return the user information if login is successful.
  * It is up to this function to place that user information into localStorage.
  * @param {type} event
- * @return {undefined}
  */
-LR.tricks.mockLogin = async function(event){
+LR.login.mockLogin = async function(event){
     document.getElementById("loginFeedback").classList.add("hidden")
     let who = document.getElementById("login-usr").value 
     let pass = document.getElementById("login-pwd").value 
@@ -824,7 +820,7 @@ LR.tricks.mockLogin = async function(event){
             document.getElementById("loginFeedback").classList.remove("hidden")
             if(responseObj.user){
                 localStorage.setItem("authorized_user", JSON.stringify(responseObj))
-                LR.ui.loginRedirect(responseObj["@id"])
+                LR.login.loginRedirect(responseObj["@id"])
                 document.getElementById("feedbackMsg").innerHTML = "Success.  Redirecting...."
             }
             else{
@@ -839,7 +835,6 @@ LR.tricks.mockLogin = async function(event){
         })
     }       
     else{
-        //Error
         document.getElementById("loginFeedback").classList.remove("hidden")
         document.getElementById("feedbackMsg").innerHTML = "Please provide a username and password"
     }
@@ -851,19 +846,25 @@ LR.tricks.mockLogin = async function(event){
  * @param {Event} event
  * 
  */
-LR.tricks.mockLogout = async function(event){
+LR.login.mockLogout = async function(event){
     localStorage.removeItem("authorized_user")
     document.getElementById("loginFeedback").classList.remove("hidden")
     document.getElementById("feedbackMsg").innerHTML = "You have logged out"
     document.location.reload()
 }
 
-LR.ui.forgotLogin = function(){
+/**
+ * The forgot widget that login interfaces usually have.
+ */
+LR.login.forgotLogin = function(){
     document.getElementById("loginFeedback").classList.remove("hidden")
     document.getElementById("feedbackMsg").innerHTML = "Please contact your class administrator to retrieve the login information."
 }
 
-LR.ui.loginInterface = function(){
+/**
+ * Determine what interface a user should see when coming to login.html.
+ */
+LR.login.loginInterface = function(){
     console.log("login interface")
     if(localStorage.getItem("authorized_user")){
         let userObj = JSON.parse(localStorage.getItem("authorized_user"))
