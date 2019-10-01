@@ -8,7 +8,6 @@ package servlets;
 import auth.Authorize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,8 +17,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -56,16 +53,17 @@ public class Login extends HttpServlet {
         String user = jo_request.getString("username");
         String pwd = jo_request.getString("password");
         Authorize authorizer = new Authorize();
-        JSONObject roles = new JSONObject();
+        authorizer.init();
         if(authorizer.isAuthorized(user, pwd)){
            //Check if the password for that user matches 
            response.setStatus(HttpServletResponse.SC_OK);
            jo_return.element("user", user);
-           jo_return.element("id", authorizer.getUserID(user));
+           jo_return.element("@id", authorizer.getUserID(user));
            jo_return.element("roles", authorizer.getUserRoles(user));
         }
         else{
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            jo_return.element("error", "Unauthorized");
         }
         response.addHeader("Content-Type", "application/json; charset=utf-8");
         response.setContentType("UTF-8");

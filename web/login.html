@@ -13,27 +13,23 @@
     </head>
 
     <body class="container">
-        <generic-top>User Login</generic-top>
-        <login>
-            <label> Please log in below </label>
+        <generic-top>Login Below</generic-top>
+        <login id="login">
             Username
             <input type="text" id="login-usr" />
             Password
             <input type="password" id="login-pwd" />
             <input type="button" value="Login" onclick="LR.tricks.mockLogin(event)" />
             <input type="button" value="Forgot" onclick="LR.ui.forgotLogin(event)">
-            <login-forgot class="hidden">
-                <label>Please contact your class administrator to retrieve the login information.</label>
-            </login-forgot>
         </login>
         
-        <logout class="hidden">
+        <logout id="logout" class="hidden">
             <label>You are logged in as <span id="currentUser">{{current user}}</span></label>
-            <input type="button" value="logout" onclick="LR.tricks.mockLogout(event)" />
+            <input type="button" value="Logout" onclick="LR.tricks.mockLogout(event)" />
         </logout>
         
-        <login-feedback class="hidden">
-            <generic-top>Please contact your class administrator to retrieve the login information.</generic-top>
+        <login-feedback id="loginFeedback" class="hidden">
+            <label id="feedbackMsg"></label>
         </login-feedback>
         <!-- Add ins -->
         <script src="./js/deerInitializer.js" type="module"></script>   
@@ -41,7 +37,7 @@
 
     </body>
     <script>
-
+        LR.ui.loginInterface()
     </script>
 
 </html>

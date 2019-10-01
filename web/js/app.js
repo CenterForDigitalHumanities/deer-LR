@@ -791,15 +791,12 @@ LR.crud.submitExperience = function (event){
 
 
 /**
- * Login/Logout 
+ * 
  */ 
-LR.tricks.loginRedirect = function(who){
+LR.ui.loginRedirect = function(who){
     document.location.href = "new_schema.html"
 }
 
-LR.ui.loginFail = function(){
-    alert("The username and/or password you provided is not correct.")
-}
 
 /**
  * Call to the login servlet to check users against passwords.
@@ -809,9 +806,10 @@ LR.ui.loginFail = function(){
  * @return {undefined}
  */
 LR.tricks.mockLogin = async function(event){
+    document.getElementById("loginFeedback").classList.add("hidden")
     let who = document.getElementById("login-usr").value 
     let pass = document.getElementById("login-pwd").value 
-    let loginObj = {username:who, password:pass}
+    let loginObj = {"username":who, "password":pass}
     if(who){
         await fetch(LR.URLS.LOGIN, {
             method: "POST",
@@ -823,28 +821,57 @@ LR.tricks.mockLogin = async function(event){
         })
         .then(response => response.json())
         .then(responseObj => {
-            if(responseObj.success){
-                localStorage.setItem("authorized", responseObj.user)
-                LR.ui.loginRedirect(responseObj.user)
+            document.getElementById("loginFeedback").classList.remove("hidden")
+            if(responseObj.user){
+                localStorage.setItem("authorized_user", JSON.stringify(responseObj))
+                LR.ui.loginRedirect(responseObj["@id"])
+                document.getElementById("feedbackMsg").innerHTML = "Success.  Redirecting...."
             }
             else{
-                localStorage.removeItem("authorized")
-                LR.ui.loginFail()
+                localStorage.removeItem("authorized_user")
+                document.getElementById("feedbackMsg").innerHTML = "Login Failed"
             }
+        })
+        .catch(error => {
+            console.error(error) 
+            document.getElementById("loginFeedback").classList.remove("hidden")
+            document.getElementById("feedbackMsg").innerHTML = "Login Failed"
         })
     }       
     else{
         //Error
-        //LR.ui.loginFail()
+        document.getElementById("loginFeedback").classList.remove("hidden")
+        document.getElementById("feedbackMsg").innerHTML = "Please provide a username and password"
     }
 }
 
 /**
  * Call to the logout servlet to remove user sessions stored with a servet.
  * It is up to this function to remove user information from localStorage. 
- * @param {type} event
- * @return {undefined}
+ * @param {Event} event
+ * 
  */
 LR.tricks.mockLogout = async function(event){
-    LR.localInfo.removeItem("userInfo")
+    localStorage.removeItem("authorized_user")
+    document.getElementById("loginFeedback").classList.remove("hidden")
+    document.getElementById("feedbackMsg").innerHTML = "You have logged out"
+    document.location.reload()
+}
+
+LR.ui.forgotLogin = function(){
+    document.getElementById("loginFeedback").classList.remove("hidden")
+    document.getElementById("feedbackMsg").innerHTML = "Please contact your class administrator to retrieve the login information."
+}
+
+LR.ui.loginInterface = function(){
+    console.log("login interface")
+    if(localStorage.getItem("authorized_user")){
+        let userObj = JSON.parse(localStorage.getItem("authorized_user"))
+        if(userObj.user || userObj["@id"]){
+            //document.getElementById("currentUser").innerHTML = (userObj.hasOwnProperty("@id")) ? userObj["@id"] : userObj.user
+            document.getElementById("currentUser").innerHTML = userObj.user
+            document.getElementById("login").classList.add("hidden")
+            document.getElementById("logout").classList.remove("hidden")
+        }
+    }
 }

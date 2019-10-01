@@ -1,52 +1,51 @@
 {
     "Rachel Lindsey":{
-        "id":"",
+        "@id":"http://devstore.rerum.io/v1/id/5d9369b3e4b07f0c56c0f5c4",
         "roles":{
             "administrator":true,
             "contributor":true
-        }
-    },
-    "David Justice":{
-        "id":"",
-        "roles":{
-            "administrator":true,
-            "contributor":true
-        }
+        },
+        "sec" : "1"
     },
     "Adam Park":{
-        "id":"",
+        "@id":"",
         "roles":{
             "administrator":true,
             "contributor":true
-        }
+        },
+        "sec" : "2"
     },
     "bhaberbe":{
-        "id":"",
+        "@id":"http://devstore.rerum.io/v1/id/5d936955e4b07f0c56c0f5c2",
         "roles":{
             "administrator":true,
             "contributor":true
-        }
+        },
+        "sec" : "3"
     },
     "cubap":{
-        "id":"",
+        "@id":"http://devstore.rerum.io/v1/id/5d9369e0e4b07f0c56c0f5c6",
         "roles":{
             "administrator":true,
             "contributor":true
-        }
+        },
+        "sec" : "3"
     },
     "Pauline Lee":{
-        "id":"",
+        "@id":"",
         "roles":{
             "administrator":true,
             "contributor":true
-        }
+        },
+        "sec" : "4"
     },
     "LR_2019":{
-        "id":"",
+        "@id":"",
         "roles":{
             "administrator":false,
             "contributor":true
-        }
+        },
+        "sec" : "LR_2019!"
     },
-    admin_list:["Rachel Lindsey", "David Justice", "Adam Park", "bhaberbe", "cubap", "Pauline Lee"]
+    "admin_list":["Rachel Lindsey", "David Justice", "Adam Park", "bhaberbe", "cubap", "Pauline Lee"]
 }
