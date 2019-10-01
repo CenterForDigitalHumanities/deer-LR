@@ -791,7 +791,7 @@ LR.crud.submitExperience = function (event){
 }
 
 LR.login.loginRedirect = function(who){
-    document.location.href = "new_schema.html"
+    document.location.href = "dashboard.html?user="+who
 }
 
 
@@ -820,7 +820,8 @@ LR.login.mockLogin = async function(event){
             document.getElementById("loginFeedback").classList.remove("hidden")
             if(responseObj.user){
                 localStorage.setItem("authorized_user", JSON.stringify(responseObj))
-                LR.login.loginRedirect(responseObj["@id"])
+                //LR.login.loginRedirect(responseObj["@id"])
+                LR.login.loginRedirect(responseObj.user)
                 document.getElementById("feedbackMsg").innerHTML = "Success.  Redirecting...."
             }
             else{
