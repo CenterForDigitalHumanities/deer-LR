@@ -53,7 +53,6 @@ public class Login extends HttpServlet {
         String user = jo_request.getString("username");
         String pwd = jo_request.getString("password");
         Authorize authorizer = new Authorize();
-        authorizer.init();
         if(authorizer.isAuthorized(user, pwd)){
            //Check if the password for that user matches 
            response.setStatus(HttpServletResponse.SC_OK);

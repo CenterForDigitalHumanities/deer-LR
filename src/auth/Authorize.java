@@ -12,13 +12,14 @@ import net.sf.json.JSONObject;
  * The user file is a JSON object containing users with roles and passwords.
  * @author bhaberbe
  */
+
 public class Authorize {
 
     private String users_file = "users.txt";
     private JSONArray admins_list;
     private JSONObject userData;
-
-    public final void init() throws FileNotFoundException, IOException{
+    
+    public Authorize() throws IOException, FileNotFoundException {
         users_file = Authorize.class.getResource(users_file).toString();
         //users_file = users_file.replace("file:/", ""); //For Windows deployments
         users_file = users_file.replace("file:", "");  //For all other OS deployments
