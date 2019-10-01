@@ -21,7 +21,7 @@ public class Authorize {
     public final void init() throws FileNotFoundException, IOException{
         users_file = Authorize.class.getResource(users_file).toString();
         //users_file = users_file.replace("file:/", ""); //For Windows deployments
-        users_file = users_file.replace("file:", "");  //For ll other OS deployments
+        users_file = users_file.replace("file:", "");  //For all other OS deployments
         String users = new String(Files.readAllBytes(Paths.get(users_file))); 
         userData = JSONObject.fromObject(users);
         admins_list = userData.getJSONArray("admin_list");
