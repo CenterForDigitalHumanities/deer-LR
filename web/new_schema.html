@@ -14,7 +14,7 @@
 
 <body class="container">
     <!-- If an ID is provided with the page, then pre populate the page.  In general, a user submission is immutable -->
-    <generic-top id="surveyTitle">{{  If you would like to alter a previous entry, see your "My Entries" page.  }}</generic-top>
+    <generic-top id="surveyTitle">Data Upload</generic-top>
     <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
     <!-- the person to attribute should be known by now.  They had to provide their attributor ID to get here -->
     <!-- A Location + Date/Time is required to continue -->
@@ -48,8 +48,7 @@
     </generic-experience>
     
     <experience-artifacts>
-        <div> We should only see this once we have the information from above.  This is for demo purposes only.  </div>
-        <generic-top>We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>
+        <generic-top>Describe your encounter at <span id="theLocationName">{Place.name}</span> </generic-top>
         <div class="card">
             <div class="card-body">
                 <header class="card-title">Please check everything that applies to what you want to tell us.</header>
@@ -60,45 +59,14 @@
         </div>
         <div class="card fixDynamicHeight">
             <!-- The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information -->
-            <div for="spaces">
+            <div for="spaces" class="kind hidden">
                 <!-- Here the user can offer additional information about the Location.  They cannot change or delete existing information. -->
                 <form id="chosenLocation" class="dataWrap" for="spaces" deer-type="Place"> 
                     <!-- TODO make a deer-view for all the things about the Location we want to show.-->
                     <!-- TODO offer the user various catagories to add annotation to.  Cannot alter/remove other existing ones -->
                     <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <div class="primarySpecification" for="spaces">
-                        <header>What is the primary type of space this is?</header>
-                        <label>General Specification</label>
-                        <input type="radio" name="spaces"  value="Accommodation"/><span class="chk_lbl">Accommodation</span>
-                        <input type="radio" name="spaces"  value="AdministrativeArea"/><span class="chk_lbl">Administrative Area</span>
-                        <input type="radio" name="spaces"  value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                        <input type="radio" name="spaces"  value="Landform" /><span class="chk_lbl">Landform</span>
-                        <!--TODO: same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists-->
-                        <input type="radio" name="spaces"  value="Imagined" /><span class="chk_lbl">Imagined</span>
-                        <br>
-                        <label>More Specific</label>
-                        <input type="radio" name="spaces"  value="Landmarks or Historical Buildings"  /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                        <input type="radio" name="spaces"  value="Local Business" /><span class="chk_lbl">Local Business</span>
-                        <input type="radio" name="spaces"  value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
-                        <input type="radio" name="spaces"  value="School" /><span class="chk_lbl">School</span>
-                        <input type="radio" name="spaces"  value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                        <input type="radio" name="spaces"  value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                        <input type="radio" name="spaces"  value="Home" /><span class="chk_lbl">Home</span>
-                        <input type="radio" name="spaces"  value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                        <input type="radio" name="spaces"  value="Hospital" /><span class="chk_lbl">Hospital</span>
-                        <input type="radio" name="spaces"  value="Museum" /><span class="chk_lbl">Museum</span>
-                        <input type="radio" name="spaces"  value="Park" /><span class="chk_lbl">Park</span>
-                        <input type="radio" name="spaces"  value="Street" /><span class="chk_lbl">Street</span>
-                        <input type="radio" name="spaces"  value="Zoo" /><span class="chk_lbl">Zoo</span>
-                        <input type="radio" name="spaces"  value="Gym" /><span class="chk_lbl">Gym</span> 
-                        <input type="radio" name="spaces"  value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        <div class="reactiveOther hidden" for="building">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
-                        <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'spaces')" value="Choose" />
-                        <div for="spaces" class="chosenPrimarySpecification">None Chosen</div>
-                    </div>
+                    <label> Primary Type </label>
+                    <input disabled type="text" deer-key-x="type" /> 
                     <div class="secondarySpecification hidden" for="spaces">
                         <header>Check all other types for this space.</header>
                         <label>General Specification</label>
@@ -107,7 +75,7 @@
                         <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
                         <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
                         <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                         same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists 
+                         <!--same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists--> 
                         <input  type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
                         <br>
                         <label>More Specific</label>
@@ -131,24 +99,24 @@
                             <textarea type="text"> </textarea>
                         </div>
                     </div>
-                    <input type="hidden" deer-key-x="type" /> 
                     <input type="hidden" deer-array-type-x="Set" deer-key-x="additionalType" /> 
                     <label>What is this space named?:</label>
-                    <input type="text" deer-key-x="name" /> 
+                    <input disabled type="text" deer-key-x="name" /> 
                     <header>History of this Space:</header>
+                    <textarea type="text" deer-key-x="LR::SpaceHistory"> </textarea>
                     <label>Former Location(s):</label>
                     <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
                     <label>Former Use(s):</label>
                     <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
                     <label>Creator:</label>
-                    <input type="text" deer-key-x="creator" />
+                    <input disabled type="text" deer-key-x="creator" />
                     <label>Material(s):</label>
                     <textarea type="text" deer-key-x="material"> </textarea>
                     <label>Further Description:</label>
                     <textarea type="text" deer-key-x="description"> </textarea>
                     <div class="dataWrap">
                         <label>Typical Use: </label>
-                         <select deer-key-x="typical_use" value="">
+                         <select disabled deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
                             <option value="Commercial">Commercial</option>
                             <option value="Educational">Educational</option>
@@ -163,8 +131,7 @@
                     <textarea type="text" deer-key-x="LR::Tags"> </textarea>
                 </form>
             </div>
-            
-            <header> Describe what you encountered at {Place.name}</header>
+                    
             <div for="objects" class="kind hidden">
                 <form id="newObjectForm" class="dataWrap" for="objects" deer-type="Object"> 
                     <div class="primarySpecification" for="objects">

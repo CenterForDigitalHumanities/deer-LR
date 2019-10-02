@@ -130,6 +130,14 @@
     #jewishSub{
         display: none;
     }
+    
+    generic-place{
+        display: block;
+    }
+    
+    generic-time{
+        display: block;
+    }
 
     generic-experience{
         display: block;
@@ -148,6 +156,10 @@
         padding: 1em;
         width: 100%;
         text-align: center;
+    }
+    
+    experience-artifacts{
+        display:block;
     }
 
     .fixDynamicHeight{
