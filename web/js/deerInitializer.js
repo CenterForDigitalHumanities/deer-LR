@@ -79,6 +79,21 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     }
 }
 
+DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
+    console.log("Collection as select dropdown handed the object from expand.")
+    //Is this obj an array or an object with an array in it?
+    //Obj.itemList unless the collection defines itself as something else
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>
+                    <select>` 
+        let collectionItems = UTILS.listFromCollection()
+        tmpl += (depiction+dob+email+phone+religion+gender+edu+nationality+description)
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
 DEER.TEMPLATES.survey= function(obj, options={}) {
     console.log("Survey template")
     try {
