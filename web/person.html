@@ -7,23 +7,24 @@
 <head>
     <title>Lived Religions Participants</title>
     <meta charset="UTF-8">
-<!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./css/mycss.css">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <style>
-        select[sub]{
+        select[sub] {
             display: none;
         }
     </style>
 </head>
 
 <body>
+    <lr-nav></lr-nav>
+
     <div class="container">
         <survey-top id="surveyTitle">Add or Find Participants</survey-top>
         <div class="card">
             <div class="card_body">
-                <input type="button" class="btn btn-primary" value="Register New Participant" onclick="LR.ui.togglePersonAddition()"/>
+                <input type="button" class="btn btn-primary" value="Register New Participant" onclick="LR.ui.togglePersonAddition()" />
                 <form id="newPersonForm" class="hidden" deer-type="Person" deer-context="http://schema.org">
                     <label>Name (Can be anonymous):</label>
                     <input type="text" deer-key="name" deer-source="">
@@ -111,7 +112,7 @@
                             </select>
                         </div>
                         <div class="col">
-                        <label>Education:</label>
+                            <label>Education:</label>
                             <select deer-key="education" deer-source="">
                                 <option value="Some high school">Some high school</option>
                                 <option value="High school graduate">High school graduate</option>
@@ -128,10 +129,10 @@
                     <textarea deer-key="description" deer-source=""></textarea>
                     <footer>
                         <input class="button primary" type="submit">
-                        <div id="participantResult"> 
+                        <div id="participantResult">
                             <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
                         </div>
-                        
+
                     </footer>
                 </form>
             </div>
@@ -139,21 +140,22 @@
 
         <div class="card">
             <div class="card_body">
-                <input type="button" value="View Existing Participants" class="btn btn-primary" onclick="LR.tricks.populateExistingParticipants()"/>
+                <input type="button" value="View Existing Participants" class="btn btn-primary" onclick="LR.tricks.populateExistingParticipants()" />
                 <header>Existing Participants</header>
                 <!-- <deer-view  deer-type="List" deer-id=""> -->
-                    <ul id="participants">
-                        <li>Gathering Participant Data..TODO</li>
-                    </ul>
+                <ul id="participants">
+                    <li>Gathering Participant Data..TODO</li>
+                </ul>
                 <!-- </deer-view> -->
             </div>
         </div>
     </div>
-<script src="./js/deerInitializer.js" type="module"></script>   
-<script src="./js/app.js" type="text/javascript"></script>  
-<script>
-    
-</script>
+    <lr-footer></lr-footer>
+
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+    <script src="./js/components.js" type="text/javascript"></script>
+
 </body>
 
 </html>

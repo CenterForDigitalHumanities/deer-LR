@@ -37,7 +37,6 @@
             </ul>
         </div>
     </div>
-    <div style="height:5rem;" class="clearfix"></div>
     <lr-footer></lr-footer>
 
 
@@ -53,11 +52,9 @@
             getUserEntries()
         }
 
-        function loadUser() {}
-
-        async function getUserEntries() {
-            // dummy for now
-            let user = {
+        function loadUser() {
+            LR.user = // dummy for now
+                {
                     "name": "cubap",
                     "@id": "http://devstore.rerum.io/v1/id/5d9369e0e4b07f0c56c0f5c6",
                     "roles": {
@@ -71,6 +68,10 @@
                 // } catch (err) {
                 //     return user
                 // }
+        }
+
+        async function getUserEntries() {
+            let user = LR.user
             let experiences = await fetch("http://tinydev.rerum.io/app/query", {
                 method: "POST",
                 headers: {

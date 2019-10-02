@@ -3,94 +3,44 @@
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
     -->
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="./css/mycss.css">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
-    <style>
-    body, html {
-      height: 100%;
-    }
-
-    .parallax {
-      /* The image used */
-      background-image: url('icons/bg.jpg');
-      height: 40%; 
-      /* Create the parallax scrolling effect */
-      background-attachment: fixed;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
-    .content{
-        color: white;
-        min-height: 11em;
-        text-align: center;
-        border: double dodgerblue;
-        padding-top: 5em;
-    }
-
-    .nolineheight{
-        padding-top: 3em;
-    }
-
-    header{
-        position: absolute;
-        top: 0px;
-        background-color: white;
-        width: 100%;
-        height: 19em;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-image: url(icons/logo.jpg);
-    }
-
-    .hdrText{
-        position: relative;
-        display: block;
-        padding-top: 1em;
-        text-align: center;
-        font-size: 130%;
-    }
-    </style>
 </head>
-    <body>
-        <header> <div class="hdrText">Lived Religion in the Digital Age</div> </header>
 
-        <div class="parallax"></div>
+<body>
+    <lr-nav></lr-nav>
 
-        <div class="content">
-            Explore religious life in St. Louis through interviews, profiles, maps and media content.
+    <div class="container">
+        <h1 class="hide-lg hide-md hide-sm">Lived Religion in the Digital Age</h1>
+        <img src="http://religioninplace.org/blog/wp-content/uploads/2019/04/LRDA-Logo.jpg" class="is-full-screen hide-xs">
+        <div class="row">
+            <h3 class="col">
+                Explore religious life in St. Louis through interviews, profiles, maps and media content.
+            </h3>
+
+            <h3 class="col">
+                Be willing to relinquish specific definitions of religion to delve into details of lived experience.
+            </h3>
         </div>
+        <div class="row">
+            <h3 class="col-4">
+                Mapping religion in St. Louis can provide a framework to how the city developed and how groups of people migrated to the area and where they settled.
+            </h3>
 
-        <div class="parallax"></div>
-
-        <div class="content">
-            Be willing to relinquish specific definitions of religion to delve into details of lived experience.   
+            <h3 class="col">
+                “Think of civic events and places - Festival of Nations in Tower Grove Park, the Gateway Arch, baseball at Busch Stadium, even protesting and voting - and we don't usually think ‘religion, but what we are finding is that people are making connections
+                between their religious lives and the city all the time. And that even people who don't identify as religious are often shaped by the religious histories and cultures of the city.” - Rachel Lindsey, Ph.D.
+            </h3>
         </div>
-
-        <div class="parallax"></div>
-
-        <div class="content">
-            Mapping religion in St. Louis can provide a framework to how the city developed and how groups of people migrated to the area and where they settled.
-        </div>
-
-        <div class="parallax"></div>
-
-        <div class="content nolineheight"> 
-            “Think of civic events and places - Festival of Nations in Tower Grove Park, the Gateway Arch, baseball at Busch Stadium, even protesting and voting - and we don't usually think ‘religion, but what we are finding is that people are making connections between their religious lives and the city all the time. And that even people who don't identify as religious are often shaped by the religious histories and cultures of the city.” - Rachel Lindsey, Ph.D.
-        </div>
-
-        <div class="parallax"></div>
-
-        <div class="content">
+        <cite>
             “We are hoping to push the edge of what is currently available by mapping the diversity of religious faiths within St. Louis and its history and create a database of scholarship.” - Pauline Lee, Ph.D.
-        </div>
+        </cite>
+    </div>
+    <lr-footer></lr-footer>
+    <script src="./js/components.js" type="text/javascript"></script>
+</body>
 
-
-        <div class="parallax"></div>
-
-    </body>
 </html>

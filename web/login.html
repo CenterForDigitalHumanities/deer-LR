@@ -3,37 +3,44 @@
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
 -->
 <html>
-    <head>
-        <title>Lived Religion login</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://unpkg.com/chota@latest">
-        <link rel="stylesheet" href="./css/mycss.css">
-    </head>
-    <body class="container">
-        <generic-top>Login Below</generic-top>
-        <login id="login">
-            Username
-            <input type="text" id="login-usr" />
-            Password
-            <input type="password" id="login-pwd" />
-            <input type="button" value="Login" onclick="LR.login.mockLogin(event)" />
-            <input type="button" value="Forgot" onclick="LR.login.forgotLogin(event)">
-        </login>
-        
-        <logout id="logout" class="hidden">
-            <label>You are logged in as <span id="currentUser">{{current user}}</span></label>
-            <input type="button" value="Logout" onclick="LR.login.mockLogout(event)" />
-        </logout>
-        
-        <login-feedback id="loginFeedback" class="hidden">
-            <label id="feedbackMsg"></label>
-        </login-feedback>
-        <!-- Add ins -->
-        <script src="./js/deerInitializer.js" type="module"></script>   
-        <script src="./js/app.js" type="text/javascript"></script>  
-    </body>
-    <script>
-        LR.login.loginInterface()
-    </script>
+
+<head>
+    <title>Lived Religion login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+</head>
+
+<body class="container">
+    <lr-nav></lr-nav>
+
+    <generic-top>Login Below</generic-top>
+    <login id="login">
+        Username
+        <input type="text" id="login-usr" /> Password
+        <input type="password" id="login-pwd" />
+        <input type="button" value="Login" onclick="LR.login.mockLogin(event)" />
+        <input type="button" value="Forgot" onclick="LR.login.forgotLogin(event)">
+    </login>
+
+    <logout id="logout" class="hidden">
+        <label>You are logged in as <span id="currentUser">{{current user}}</span></label>
+        <input type="button" value="Logout" onclick="LR.login.mockLogout(event)" />
+    </logout>
+
+    <login-feedback id="loginFeedback" class="hidden">
+        <label id="feedbackMsg"></label>
+    </login-feedback>
+    <lr-footer></lr-footer>
+
+    <!-- Add ins -->
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+    <script src="./js/components.js" type="text/javascript"></script>
+
+</body>
+<script>
+    LR.login.loginInterface()
+</script>
+
 </html>
