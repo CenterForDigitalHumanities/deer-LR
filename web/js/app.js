@@ -5,13 +5,23 @@
  */
 
 const LR = {}
-LR.sessionInfo = {}
+LR.URLS = {
+    LOGIN : "login",
+    LOGOUT : "logout",
+    BASE_ID: "http://devstore.rerum.io/v1",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since"
+}
 if (typeof(Storage) !== "undefined") {
-  LR.sessionInfo = window.sessionStorage
+  LR.localInfo = window.localStorage
 } else {
-  alert("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
+  LR.err.generic_error("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
 }
 LR.local = {}
+LR.login = {}
 LR.local.survey={}
 LR.submission={
     "@type":"UserSubmission",
@@ -780,68 +790,89 @@ LR.crud.submitExperience = function (event){
     alert("Still Under Development")
 }
 
-LR.tricks.loginRedirect = function(who){
-    LR.sessionInfo.setItem("authorized", who)
-    document.location.href = "new_schema.html"
+LR.login.loginRedirect = function(who){
+    document.location.href = "dashboard.html?user="+who
 }
 
-LR.ui.loginFail = function(){
-    LR.sessionInfo.removeItem("authorized")
-    alert("The username and/or password you provided is not correct.")
-}
 
-LR.tricks.mockLogin = async function(event){
-    let who = document.getElementById("login-usr").value
-    return document.location.href="dashboard.html?user="+who
-    
-    
-    
-    let secrets = await fetch('src/tokens/sec.txt')
-      .then(response => response.text())
-    secrets = JSON.parse(secrets)
-    let admins = await fetch('src/tokens/admins.txt')
-      .then(response => response.text()) 
-    admins = admins.split(",")
-    let usrSecret = document.getElementById("login-pwd").value //Get the user input
-    //If user is an admin, set the admin flag for the session. 
-    //login success should redirect to new_schema.html after storing the user information. These people/classes should have an Agent ID from RERUM to do this as properly as possible.  
-    if(admins.includes(who)){
-        if (usrSecret == secrets.admin){
-            LR.ui.loginRedirect(who)   
-        }
-        else{
-            LR.ui.loginFail()
-        }
-    }
+/**
+ * Call to the login servlet to check users against passwords.
+ * The login servlet will return the user information if login is successful.
+ * It is up to this function to place that user information into localStorage.
+ * @param {type} event
+ */
+LR.login.mockLogin = async function(event){
+    document.getElementById("loginFeedback").classList.add("hidden")
+    let who = document.getElementById("login-usr").value 
+    let pass = document.getElementById("login-pwd").value 
+    let loginObj = {"username":who, "password":pass}
+    if(who){
+        await fetch(LR.URLS.LOGIN, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginObj)
+        })
+        .then(response => response.json())
+        .then(responseObj => {
+            document.getElementById("loginFeedback").classList.remove("hidden")
+            if(responseObj.user){
+                localStorage.setItem("authorized_user", JSON.stringify(responseObj))
+                //LR.login.loginRedirect(responseObj["@id"])
+                LR.login.loginRedirect(responseObj.user)
+                document.getElementById("feedbackMsg").innerHTML = "Success.  Redirecting...."
+            }
+            else{
+                localStorage.removeItem("authorized_user")
+                document.getElementById("feedbackMsg").innerHTML = "Login Failed"
+            }
+        })
+        .catch(error => {
+            console.error(error) 
+            document.getElementById("loginFeedback").classList.remove("hidden")
+            document.getElementById("feedbackMsg").innerHTML = "Login Failed"
+        })
+    }       
     else{
-        //Ask for the class password
-        switch(who){
-            case "LR_2017":
-                if (usrSecret == secrets.LR_2017){
-                    LR.ui.loginRedirect(who)
-                }
-                else{
-                    LR.ui.loginFail()
-                }
-            break;
-            case "LR_2018":
-                if (usrSecret == secrets.LR_2018){
-                    LR.ui.loginRedirect(who)
-                }
-                else{
-                    LR.ui.loginFail()
-                }
-            break;
-            case "LR_2019":
-                if (usrSecret == secrets.LR_2019){
-                    LR.ui.loginRedirect(who)
-                }
-                else{
-                    LR.ui.loginFail()
-                }
-            break;
-            default:
-                alert("There is no user registered for "+who+".  Please contact the administrator for more information.")
+        document.getElementById("loginFeedback").classList.remove("hidden")
+        document.getElementById("feedbackMsg").innerHTML = "Please provide a username and password"
+    }
+}
+
+/**
+ * Call to the logout servlet to remove user sessions stored with a servet.
+ * It is up to this function to remove user information from localStorage. 
+ * @param {Event} event
+ * 
+ */
+LR.login.mockLogout = async function(event){
+    localStorage.removeItem("authorized_user")
+    document.getElementById("loginFeedback").classList.remove("hidden")
+    document.getElementById("feedbackMsg").innerHTML = "You have logged out"
+    document.location.reload()
+}
+
+/**
+ * The forgot widget that login interfaces usually have.
+ */
+LR.login.forgotLogin = function(){
+    document.getElementById("loginFeedback").classList.remove("hidden")
+    document.getElementById("feedbackMsg").innerHTML = "Please contact your class administrator to retrieve the login information."
+}
+
+/**
+ * Determine what interface a user should see when coming to login.html.
+ */
+LR.login.loginInterface = function(){
+    if(localStorage.getItem("authorized_user")){
+        let userObj = JSON.parse(localStorage.getItem("authorized_user"))
+        if(userObj.user || userObj["@id"]){
+            //document.getElementById("currentUser").innerHTML = (userObj.hasOwnProperty("@id")) ? userObj["@id"] : userObj.user
+            document.getElementById("currentUser").innerHTML = userObj.user
+            document.getElementById("login").classList.add("hidden")
+            document.getElementById("logout").classList.remove("hidden")
         }
     }
 }
