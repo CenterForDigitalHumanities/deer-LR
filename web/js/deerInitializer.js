@@ -79,25 +79,51 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     }
 }
 
-DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
-    console.log("Collection as select dropdown handed the object from expand.")
-    //Is this obj an array or an object with an array in it?
-    //Obj.itemList unless the collection defines itself as something else
+//Just for a person's name
+DEER.TEMPLATES.placeName = function(obj, options={}){
     try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>
-                    <select>` 
-        let collectionItems = UTILS.listFromCollection()
-        tmpl += (depiction+dob+email+phone+religion+gender+edu+nationality+description)
+        let tmpl = obj.hasOwnProperty("name") ? obj.name : obj.hasOwnProperty("label") ? obj.label : "No Name" //UTILS.getLabel(obj)
         return tmpl
     } catch (err) {
         return null
     }
 }
 
-DEER.TEMPLATES.survey= function(obj, options={}) {
-    console.log("Survey template")
+DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)} Collection</h2> <select>`
+        let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
+        for(let place of allPlacesInCollection){
+            tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getValue(place.name, [], "string")}</option>`
+        }
+        tmpl += `</select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+DEER.TEMPLATES.peopleAsDropdown= function(obj, options={}) {
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)} Collection</h2> <select>`
+        let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
+        for(let person of allPeopleInCollection){
+            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getValue(person.name, [], "string")}</option>`
+        }
+        tmpl += `</select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+DEER.TEMPLATES.Eventx = function(obj, options={}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
+        let researchers = UTILS.getValue(obj.contributor, [], "array")
+        let date = UTILS.getValue(obj.date, [], "string")
+        let place = UTILS.getValue(obj.location, [], "string")
+        tmpl += place+date+researchers
         return tmpl
     } catch (err) {
         return null

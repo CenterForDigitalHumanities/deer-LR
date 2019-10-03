@@ -13,15 +13,7 @@ if (typeof(Storage) !== "undefined") {
 }
 LR.local = {}
 LR.local.survey = {}
-LR.submission = {
-    "@type": "UserSubmission",
-    "spaces": [],
-    "objects": [],
-    "bodies": [],
-    "contributors": [],
-    "creator": "",
-    "createdOn": ""
-}
+LR.formProcessor = {}
 LR.crud = {}
 LR.crud.URL = {
     BASE_ID: "http://devstore.rerum.io/v1",
@@ -774,6 +766,9 @@ LR.crud.submitExperience = function(event) {
         "creator":"",
         "startDate": "" // 2019-10-02
     }
+    let date = ""
+    let contributors = ""
+    let creator = ""
     
     alert("Still Under Development")
 }
@@ -835,6 +830,24 @@ LR.tricks.mockLogin = async function(event) {
                 break;
             default:
                 alert("There is no user registered for " + who + ".  Please contact the administrator for more information.")
+        }
+    }
+}
+
+LR.tricks.loggedInUserAttribution = function(){
+    let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : {"user":"LR_UNKNOWN"}
+    let inputs = document.querySelectorAll("input[deer-key='creator']")
+    for(el in inputs){
+        if(el.value){
+            if(el.value !== userObj.user){
+                //Already a creator and it is not the current user...
+                el.value = userObj.user
+                //el.$isDirty = true
+            }
+        }
+        else{
+            el.value = userObj.user
+            //el.$isDirty = true
         }
     }
 }
