@@ -12,6 +12,8 @@
 </head>
 
 <body class="container">
+    <lr-nav></lr-nav>
+
     <!-- If an ID is provided with the page, then pre populate the page.  In general, a user submission is immutable -->
     <generic-top id="surveyTitle">Data Upload</generic-top>
     <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link your experience...</generic-loader>
@@ -284,6 +286,9 @@
     <script>
         LR.tricks.loggedInUserAttribution()
     </script>
+    <script src="./js/components.js" type="text/javascript"></script>
+
+    <lr-footer></lr-footer>
 </body>
 
 </html>

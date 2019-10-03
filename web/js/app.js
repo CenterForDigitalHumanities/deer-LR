@@ -15,8 +15,7 @@ LR.URLS = {
     QUERY: "http://tinydev.rerum.io/app/query",
     SINCE: "http://devstore.rerum.io/v1/since"
 }
-if (typeof(Storage) !== "undefined") { <<
-    << << < HEAD
+if (typeof(Storage) !== "undefined") {
     LR.localInfo = window.localStorage
 } else {
     LR.err.generic_error("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
@@ -25,24 +24,22 @@ LR.local = {}
 LR.login = {}
 LR.local.survey = {}
 LR.submission = {
-        "@type": "UserSubmission",
-        "spaces": [],
-        "objects": [],
-        "bodies": [],
-        "contributors": [],
-        "creator": "",
-        "createdOn": ""
-    } ===
-    === =
-    LR.sessionInfo = window.sessionStorage
+    "@type": "UserSubmission",
+    "spaces": [],
+    "objects": [],
+    "bodies": [],
+    "contributors": [],
+    "creator": "",
+    "createdOn": ""
+}
+LR.sessionInfo = window.sessionStorage
 }
 else {
     alert("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
 }
 LR.local = {}
 LR.local.survey = {}
-LR.formProcessor = {} >>>
-    >>> > origin / encounter
+LR.formProcessor = {}
 LR.crud = {}
 LR.crud.URL = {
     BASE_ID: "http://devstore.rerum.io/v1",
