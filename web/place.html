@@ -174,12 +174,9 @@
         <div class="card">
             <div class="card_body">
                 <input type="button" value="View Existing events" class="btn btn-primary" onclick="LR.tricks.populateExistingvents()" />
-                <header>Existing events</header>
-                <!-- <deer-view  deer-type="List" deer-id=""> -->
-                <ul id="events">
-                    <li>Gathering event Data..TODO</li>
-                </ul>
-                <!-- </deer-view> -->
+                <header>Existing Locations</header>
+                <deer-view deer-collection="LivedReligionLocationsTest" deer-list="Place">
+                </deer-view>
             </div>
         </div>
     </div>
