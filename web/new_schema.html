@@ -13,42 +13,43 @@
 
 <body class="container">
     <!-- If an ID is provided with the page, then pre populate the page.  In general, a user submission is immutable -->
-    <generic-top id="surveyTitle">{{ If you would like to alter a previous entry, see your "My Entries" page. }}</generic-top>
-    <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link yor experience...</generic-loader>
+    <generic-top id="surveyTitle">Data Upload</generic-top>
+    <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link your experience...</generic-loader>
     <!-- the person to attribute should be known by now.  They had to provide their attributor ID to get here -->
     <!-- A Location + Date/Time is required to continue -->
-
     <!-- TODO: Define a Type for the experience and design what the object looks like -->
     <generic-experience>
-        <form id="theExperience" class="experience" my-type="Experience">
+        <form id="theExperience" class="experience" deer-type="Event">
+            <input type="hidden" deer-key="LRtesting" value="true" />
             <generic-place>
                 <!-- This is a collection of Place's that exists for deer-lr.  Need to get that collection and resolve it as a list as a deer-view -->
                 <!-- That deer-view needs to be a template that is a <select> dropdown of Place's to choose from.  Does the collection ID persist? -->
                 <!-- TODO Make a LR Collection for places -->
                 <label>Select which location this data entry is concerned with.</label>
-                <deer-view id="locations" deer-id="http://LR.org/Location/Collection">
+                <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
                 </deer-view>
+                <deer-view deer-listening="locations" deer-template="entity">{{Listen To Location Selection}}</deer-view>
             </generic-place>
             <generic-time>
                 <!--TODO allow time range??-->
-                <label> At what date and time did you gather this data?  The default is the current date and time.</label>
-                <input type="datetime" deer-key-x="" />
+                <label> On what date was this data gathered?</label>
+                <input type="date" deer-key="startDate" />
             </generic-time>
-            <label> Please list all researchers involved </label>
-            <input type="text" deer-key-x="researchers" />
-            <input type="hidden" deer-key-x="user" />
-            <input type="hidden" deer-key-x="location" />
-            <input type="hidden" deer-key-x="time" />
-            <label>General Information:</label>
-            <textarea type="text" deer-key-x="description"> </textarea>
+            <label> Please select all researchers involved </label>
+            <!-- How do we want to show them all the people to choose from?  What happens after someone is chosen? -->
+            <deer-view id="locations" deer-collection="LivedReligionResearchersTest" deer-template="peopleAsDropdown"></deer-view>
+            <ul id="added_researchers">
+                <li> Added Researchers here </li>
+            </ul>
+            <input deer-arry-type="set" type="text" deer-key="contributor" />
             <!-- TODO: Regular deer submit, capture the created event and continue. -->
-            <input type="button" onclick="LR.crud.submitExperience(event)" value="Continue" />
+            <!--<input type="button" onclick="LR.crud.submitExperience(event)" value="Continue" />-->
+            <input type="submit" value="Continue" />
         </form>
     </generic-experience>
-
-    <experience-artifacts>
-        <div> We should only see this once we have the information from above. This is for demo purposes only. </div>
-        <generic-top>We want to hear from you <span id="theFirstName">{First Name}</span><span id="theLastName">{Last Name}</span></generic-top>
+    <deer-view deer-listening="theExperience" deer-template="entity">{{Listen to Experience Submission}}</deer-view>
+    <!--    <experience-artifacts>
+        <generic-top>Describe your encounter at <deer-view id="theLocationName" deer-template="placeName">{Place.name}</deer-view> </generic-top>
         <div class="card">
             <div class="card-body">
                 <header class="card-title">Please check everything that applies to what you want to tell us.</header>
@@ -58,46 +59,14 @@
             </div>
         </div>
         <div class="card fixDynamicHeight">
-            <!-- The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information -->
-            <div for="spaces">
-                <!-- Here the user can offer additional information about the Location.  They cannot change or delete existing information. -->
+             The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information 
+            <div for="spaces" class="kind hidden">
+                 Here the user can offer additional information about the Location.  They cannot change or delete existing information. 
                 <form id="chosenLocation" class="dataWrap" for="spaces" deer-type="Place">
-                    <!-- TODO make a deer-view for all the things about the Location we want to show.-->
-                    <!-- TODO offer the user various catagories to add annotation to.  Cannot alter/remove other existing ones -->
+                     TODO make tyhe deer-id of this the id from the chosen location.  Preload information into the form. 
                     <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <div class="primarySpecification" for="spaces">
-                        <header>What is the primary type of space this is?</header>
-                        <label>General Specification</label>
-                        <input type="radio" name="spaces" value="Accommodation" /><span class="chk_lbl">Accommodation</span>
-                        <input type="radio" name="spaces" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
-                        <input type="radio" name="spaces" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                        <input type="radio" name="spaces" value="Landform" /><span class="chk_lbl">Landform</span>
-                        <!--TODO: same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists-->
-                        <input type="radio" name="spaces" value="Imagined" /><span class="chk_lbl">Imagined</span>
-                        <br>
-                        <label>More Specific</label>
-                        <input type="radio" name="spaces" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                        <input type="radio" name="spaces" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                        <input type="radio" name="spaces" value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
-                        <input type="radio" name="spaces" value="School" /><span class="chk_lbl">School</span>
-                        <input type="radio" name="spaces" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                        <input type="radio" name="spaces" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                        <input type="radio" name="spaces" value="Home" /><span class="chk_lbl">Home</span>
-                        <input type="radio" name="spaces" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                        <input type="radio" name="spaces" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                        <input type="radio" name="spaces" value="Museum" /><span class="chk_lbl">Museum</span>
-                        <input type="radio" name="spaces" value="Park" /><span class="chk_lbl">Park</span>
-                        <input type="radio" name="spaces" value="Street" /><span class="chk_lbl">Street</span>
-                        <input type="radio" name="spaces" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                        <input type="radio" name="spaces" value="Gym" /><span class="chk_lbl">Gym</span>
-                        <input type="radio" name="spaces" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        <div class="reactiveOther hidden" for="building">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
-                        <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'spaces')" value="Choose" />
-                        <div for="spaces" class="chosenPrimarySpecification">None Chosen</div>
-                    </div>
+                    <label> Primary Type </label>
+                    <input disabled type="text" deer-key-x="type" />
                     <div class="secondarySpecification hidden" for="spaces">
                         <header>Check all other types for this space.</header>
                         <label>General Specification</label>
@@ -105,8 +74,8 @@
                         <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
                         <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
                         <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span> same properties as Place and Intangible in schema, but this is like LR::Imagined
-                        because no schema exists
+                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                        same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists
                         <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
                         <br>
                         <label>More Specific</label>
@@ -130,24 +99,24 @@
                             <textarea type="text"> </textarea>
                         </div>
                     </div>
-                    <input type="hidden" deer-key-x="type" />
                     <input type="hidden" deer-array-type-x="Set" deer-key-x="additionalType" />
                     <label>What is this space named?:</label>
-                    <input type="text" deer-key-x="name" />
+                    <input disabled type="text" deer-key-x="name" />
                     <header>History of this Space:</header>
+                    <textarea type="text" deer-key-x="LR::SpaceHistory"> </textarea>
                     <label>Former Location(s):</label>
                     <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
                     <label>Former Use(s):</label>
                     <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
                     <label>Creator:</label>
-                    <input type="text" deer-key-x="creator" />
+                    <input disabled type="text" deer-key-x="creator" />
                     <label>Material(s):</label>
                     <textarea type="text" deer-key-x="material"> </textarea>
                     <label>Further Description:</label>
                     <textarea type="text" deer-key-x="description"> </textarea>
                     <div class="dataWrap">
                         <label>Typical Use: </label>
-                        <select deer-key-x="typical_use" value="">
+                        <select disabled deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
                             <option value="Commercial">Commercial</option>
                             <option value="Educational">Educational</option>
@@ -157,13 +126,11 @@
                     </div>
                     <div> Upload Media </div>
                     <label>Field Notes:</label>
-                    <textarea type="text" deer-key-x="LR::FieldNotes"> </textarea>
+                    <textarea type="text" deer-key-x="notes"> </textarea>
                     <label>Tags separated by ',':</label>
-                    <textarea type="text" deer-key-x="LR::Tags"> </textarea>
+                    <textarea type="text" deer-key-x="tag"> </textarea>
                 </form>
             </div>
-
-            <header> Describe what you encountered at {Place.name}</header>
             <div for="objects" class="kind hidden">
                 <form id="newObjectForm" class="dataWrap" for="objects" deer-type="Object">
                     <div class="primarySpecification" for="objects">
@@ -213,14 +180,12 @@
                     <textarea type="text" deer-key-x="notes"> </textarea>
                     <label>Tags:</label>
                     <textarea type="text" deer-key-x="tags"> </textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <!-- TODO -->
-                    <input type="button" value="Submit" />
-                    <!-- TODO -->
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
+                    <input type="button" value="Submit" />  TODO 
                 </form>
             </div>
             <div for="bodies" class="kind hidden">
-                <!-- TODO design how the experience object aggregates Sense annotations -->
+                 TODO design how the experience object aggregates Sense annotations 
                 <header>What senses are prominent?</header>
                 <form id="senses" deer-id-x="" deer-type-x="Sense">
                     <input type="radio" value="LR::Sight" name="sense"><span class="chk_lbl">Sight</span>
@@ -231,19 +196,17 @@
                     <input type="hidden" deer-key-x="annoConnectingToExperience" />
                     <header>Describe Sense Further:</header>
                     <textarea id="further_sense" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <!-- TODO -->
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
                     <input type="button" onclick="LR.ui.addPieceAndReset(event, 'sense')" value="Add Sense" />
                 </form>
-                <!-- TODO: Catch the created event for a sense and add into this area -->
+                 TODO: Catch the created event for a sense and add into this area 
                 <ul id="added_sense">
                     <li>
                         <header> Added Senses </header>
                     </li>
                 </ul>
-
-                <!-- TODO Design how experience object aggregates practices.  Is this a collection? -->
-                <!-- TODO Design what a distinct practice object looks like -->
+                 TODO Design how experience object aggregates practices.  Is this a collection? 
+                 TODO Design what a distinct practice object looks like 
                 <header>What practices are occurring? Add one at a time.</header>
                 <form id="practices" deer-id-x="" deer-type-x="Practice">
                     <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
@@ -265,18 +228,17 @@
                     </div>
                     <header>Describe Practice Further:</header>
                     <textarea id="further_practice" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <!-- TODO -->
+                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
                     <input type="button" onclick="LR.ui.addPieceAndReset(event, 'practice')" value="Add Practice" />
                 </form>
-                <!-- TODO -->
+                 TODO 
                 <ul id="added_practice">
                     <li>
                         <header> Added Practices </header>
                     </li>
                 </ul>
-                <!-- TODO Design how experience object aggregates contexts and relates them to the aggregated practices.-->
-                <!-- TODO Design what a distinct practice object looks like -->
+                 TODO Design how experience object aggregates contexts and relates them to the aggregated practices.
+                 TODO Design what a distinct practice object looks like 
                 <header>What is the context of these practices? Add one at a time.</header>
                 <form id="contexts">
                     <input name="context" type="radio" value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
@@ -296,35 +258,32 @@
                     </div>
                     <header>Describe Context Further:</header>
                     <textarea id="further_context" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToPractices" />
-                    <!-- TODO -->
+                    <input type="hidden" deer-key-x="annoConnectingToPractices" />  TODO 
                     <input type="button" onclick="LR.ui.addPieceAndReset(event, 'context')" value="Add Context" />
                 </form>
-                <!-- TODO -->
+                 TODO 
                 <ul id="added_context">
                     <li>
                         <header> Added Contexts </header>
                     </li>
                 </ul>
-                <!-- TODO note that these don't make much sense here... -->
-                <!--
+                 TODO note that these don't make much sense here... 
+                
                 <div> Upload Media </div>
                 <label>Field Notes:</label>
                 <textarea type="text" deer-key-x="notes"> </textarea>
                 <label>Tags:</label>
                 <textarea type="text" deer-key-x="tags"> </textarea>
-                -->
+                
             </div>
         </div>
-    </experience-artifacts>
-
-    <lr-footer></lr-footer>
-
+    </experience-artifacts>-->
     <!-- Add ins -->
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
-    <script src="./js/components.js" type="text/javascript"></script>
-
+    <script>
+        LR.tricks.loggedInUserAttribution()
+    </script>
 </body>
 
 </html>
