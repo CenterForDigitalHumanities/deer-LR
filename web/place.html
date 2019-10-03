@@ -38,6 +38,8 @@
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocationsTest">
 
                     <h4>Map Information</h4>
+
+                    <div id="leafletPreview" class="col"></div>
                     <input type="hidden" deer-key="geometry" value="{}">
                     <div class="grouped">
                         <label>Latitude</label>
@@ -46,8 +48,6 @@
                         <label>Longitude</label>
                         <input id="leafLong" step=".000000001" type="number" oninput="updateGeoJSON()">
                     </div>
-
-                    <div id="leafletPreview"></div>
 
                     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
                     <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
@@ -73,108 +73,123 @@
 
                     <label>Description</label>
                     <textarea deer-key="description"></textarea>
-                    <div class="row">
-                        <input class="button primary" type="submit">
-                    </div class="row">
 
-                    <div class="primarySpecification" for="spaces">
-                        <header>What is the primary type of space this is?</header>
-                        <label>General Specification</label>
-                        <input type="radio" name="spaces" value="Accommodation" /><span class="chk_lbl">Accommodation</span>
-                        <input type="radio" name="spaces" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
-                        <input type="radio" name="spaces" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                        <input type="radio" name="spaces" value="Landform" /><span class="chk_lbl">Landform</span>
-                        <!--TODO: same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists-->
-                        <input type="radio" name="spaces" value="Imagined" /><span class="chk_lbl">Imagined</span>
-                        <br>
-                        <label>More Specific</label>
-                        <input type="radio" name="spaces" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                        <input type="radio" name="spaces" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                        <input type="radio" name="spaces" value="Residence" name="Accomodation" /><span class="chk_lbl">Residence</span>
-                        <input type="radio" name="spaces" value="School" /><span class="chk_lbl">School</span>
-                        <input type="radio" name="spaces" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                        <input type="radio" name="spaces" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                        <input type="radio" name="spaces" value="Home" /><span class="chk_lbl">Home</span>
-                        <input type="radio" name="spaces" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                        <input type="radio" name="spaces" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                        <input type="radio" name="spaces" value="Museum" /><span class="chk_lbl">Museum</span>
-                        <input type="radio" name="spaces" value="Park" /><span class="chk_lbl">Park</span>
-                        <input type="radio" name="spaces" value="Street" /><span class="chk_lbl">Street</span>
-                        <input type="radio" name="spaces" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                        <input type="radio" name="spaces" value="Gym" /><span class="chk_lbl">Gym</span>
-                        <input type="radio" name="spaces" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        <div class="reactiveOther hidden" for="building">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
-                        <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'spaces')" value="Choose" />
-                        <div for="spaces" class="chosenPrimarySpecification">None Chosen</div>
-                    </div>
-                    <div class="secondarySpecification hidden" for="spaces">
-                        <header>Check all other types for this space.</header>
-                        <label>General Specification</label>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Accommodation" /><span class="chk_lbl">Accommodation</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span> same properties as Place and Intangible in schema, but this is like LR::Imagined
-                        because no schema exists
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
-                        <br>
-                        <label>More Specific</label>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Residence" /><span class="chk_lbl">Residence</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Home" /><span class="chk_lbl">Home</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span>
-                        <input deer-key-x="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        <div class="reactiveOther hidden" for="spaces">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
-                    </div>
-                    <header>History of this Space:</header>
+                    <h3>What type of space this is?</h3>
+                    <label>Primary Specification</label>
+                    <select deer-key="additionalType">
+                            <optgroup label="General Categories"> 
+                                <option value="Place.Accommodation" >Accommodation</option>
+                                <option value="Place.AdministrativeArea" >Administrative Area</option>
+                                <option value="Place.CivicStructure" >Civic Structure</option>
+                                <option value="Place.Landform" >Landform</option>
+                                <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                                <option value="Place.LocalBusiness" >Local Business</option>
+                                <option value="Place.Residence" >Residence</option>
+                                <option value="Placed.TouristDestination" >Tourist Destination</option>
+                            </optgroup>
+                            <Optgroup label="Precise Types">
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                                <option value="Place.Accommodation.House" >Home</option>
+                                <option value="Cemetery" >Cemetery</option>
+                                <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                                <option value="Museum" >Museum</option>
+                                <option value="Park" >Park</option>
+                                <option value="Street" >Street</option>
+                                <option value="Zoo" >Zoo</option>
+                                <option value="Gym" >Gym</option>
+                            </Optgroup>
+                            <option value="OtherBuilding" >Other Building</option>
+                        </select>
+
+                    <h3>Additional Types (if any)</h3>
+                    Hold <kbd>CTRL</kbd> to make multiple selections.
+                    <input type="hidden" deer-array="additionalType" value="">
+                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                                <optgroup label="General Categories"> 
+                                    <option value="Place.Accommodation" >Accommodation</option>
+                                    <option value="Place.AdministrativeArea" >Administrative Area</option>
+                                    <option value="Place.CivicStructure" >Civic Structure</option>
+                                    <option value="Place.Landform" >Landform</option>
+                                    <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                                    <option value="Place.LocalBusiness" >Local Business</option>
+                                    <option value="Place.Residence" >Residence</option>
+                                    <option value="Placed.TouristDestination" >Tourist Destination</option>
+                                </optgroup>
+                                <Optgroup label="Precise Types">
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                                    <option value="Place.Accommodation.House" >Home</option>
+                                    <option value="Cemetery" >Cemetery</option>
+                                    <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                                    <option value="Museum" >Museum</option>
+                                    <option value="Park" >Park</option>
+                                    <option value="Street" >Street</option>
+                                    <option value="Zoo" >Zoo</option>
+                                    <option value="Gym" >Gym</option>
+                                </Optgroup>
+                                <option value="OtherBuilding" >Other Building</option>
+                            </select>
+                    <h3>History of this Space:</h3>
                     <label>Former Location(s):</label>
-                    <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-list="Place">
+                    </deer-view>
                     <label>Former Use(s):</label>
-                    <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
+                    <input type="hidden" deer-array="lr:formerUses" value="">
+                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                                <optgroup label="General Categories"> 
+                                    <option value="Place.Accommodation" >Accommodation</option>
+                                    <option value="Place.AdministrativeArea" >Administrative Area</option>
+                                    <option value="Place.CivicStructure" >Civic Structure</option>
+                                    <option value="Place.Landform" >Landform</option>
+                                    <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                                    <option value="Place.LocalBusiness" >Local Business</option>
+                                    <option value="Place.Residence" >Residence</option>
+                                    <option value="Placed.TouristDestination" >Tourist Destination</option>
+                                </optgroup>
+                                <Optgroup label="Precise Types">
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                                    <option value="Place.Accommodation.House" >Home</option>
+                                    <option value="Cemetery" >Cemetery</option>
+                                    <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                                    <option value="Museum" >Museum</option>
+                                    <option value="Park" >Park</option>
+                                    <option value="Street" >Street</option>
+                                    <option value="Zoo" >Zoo</option>
+                                    <option value="Gym" >Gym</option>
+                                </Optgroup>
+                                <option value="OtherBuilding" >Other Building</option>
+                            </select>
                     <label>Material(s):</label>
-                    <textarea type="text" deer-key-x="material"> </textarea>
-                    <label>Further Description:</label>
-                    <textarea type="text" deer-key-x="description"> </textarea>
-                    <div class="dataWrap">
-                        <label>Typical Use: </label>
-                        <select deer-key-x="typical_use" value="">
+                    <input disabled type="text" deer-key-x="material">
+                    <label>Typical Use: </label>
+                    <select disabled deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
                             <option value="Commercial">Commercial</option>
                             <option value="Educational">Educational</option>
                             <option value="Civic">Civic</option>
                             <option value="Other Public">Other Public</option>
                         </select>
-                    </div>
-                    <div> Upload Media </div>
+                    <h3> Upload Media </h3>
                     <label>Field Notes:</label>
-                    <textarea type="text" deer-key-x="LR::FieldNotes"> </textarea>
+                    <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
                     <label>Tags separated by ',':</label>
-                    <textarea type="text" deer-key-x="LR::Tags"> </textarea>
+                    <input disabled type="text" deer-key-x="LR:Tags">
 
+                    <div class="row">
+                        <input class="button primary col" type="submit">
+                    </div>
                 </form>
             </div>
         </div>
 
         <div class="card">
             <div class="card_body">
-                <input type="button" value="View Existing events" class="btn btn-primary" onclick="LR.tricks.populateExistingvents()" />
-                <header>Existing Locations</header>
+                <h3>Existing Locations</h3>
                 <deer-view deer-collection="LivedReligionLocationsTest" deer-list="Place">
                 </deer-view>
             </div>
