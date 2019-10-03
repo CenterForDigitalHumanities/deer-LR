@@ -68,7 +68,7 @@
                                 previewMap.setView([lat, long], 18)
                             }
                         }
-                        previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="leafLat.value=${parseInt(e.latlng.lat * 1000000) / 1000000};leafLong.value=${parseInt(e.latlng.lng * 1000000) / 1000000};">Use These</button></div>`).openOn(previewMap))
+                        previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="leafLat.value=${parseInt(e.latlng.lat * 1000000) / 1000000};leafLong.value=${parseInt(e.latlng.lng * 1000000) / 1000000};return false;">Use These</button></div>`).openOn(previewMap))
                     </script>
 
                     <label>Description</label>
@@ -190,7 +190,7 @@
         <div class="card">
             <div class="card_body">
                 <h3>Existing Locations</h3>
-                <deer-view deer-collection="LivedReligionLocationsTest" deer-list="Place">
+                <deer-view deer-collection="LivedReligionLocationsTest">
                 </deer-view>
             </div>
         </div>
