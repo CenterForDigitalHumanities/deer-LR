@@ -286,3 +286,21 @@
     }
 
     /* END DASHBOARS */
+    
+    login, logout, login-feedback{
+        display: block
+    }
+    
+    login label{
+        display:block;
+    }
+    
+    login input[type="button"]{
+        display : inline-block;
+        margin: 18px;
+    }
+    
+    login-feedback, logout{
+        color : white;
+        font-weight: bold;
+    }
