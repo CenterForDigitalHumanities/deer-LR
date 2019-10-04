@@ -12,10 +12,6 @@
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
     <style>
-        select[sub] {
-            display: none;
-        }
-        
         #leafletPreview {
             height: 20rem;
         }
@@ -30,8 +26,13 @@
         <div class="card bd-primary">
             <div class="card_body">
                 <form id="newLocationForm" deer-type="Place" deer-context="http://schema.org">
-                    <label>Location Label</label>
-                    <input type="text" deer-key="name" deer-source="">
+                    <div class="grouped">
+                        <label>Location Label</label>
+                        <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
+                        <p class="hide-xs">
+                            Enter a name for the Location to be known by in simple lists.
+                        </p>
+                    </div>
 
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="additionalType" value="Feature">
@@ -71,37 +72,87 @@
                         previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="leafLat.value=${parseInt(e.latlng.lat * 1000000) / 1000000};leafLong.value=${parseInt(e.latlng.lng * 1000000) / 1000000};return false;">Use These</button></div>`).openOn(previewMap))
                     </script>
 
-                    <label>Description</label>
-                    <textarea deer-key="description"></textarea>
+                    <h3>Description of Space</h3>
 
-                    <h3>What type of space this is?</h3>
+                    <div class="grouped">
+                        <label>Description</label>
+                        <textarea deer-key="description"></textarea>
+                        <p>
+                            Provide a short decription of this Location with otherwise unprovided or disambiguating details.
+                        </p>
+                    </div>
                     <label>Primary Specification</label>
-                    <select deer-key="additionalType">
-                            <optgroup label="General Categories"> 
-                                <option value="Place.Accommodation" >Accommodation</option>
-                                <option value="Place.AdministrativeArea" >Administrative Area</option>
-                                <option value="Place.CivicStructure" >Civic Structure</option>
-                                <option value="Place.Landform" >Landform</option>
-                                <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
-                                <option value="Place.LocalBusiness" >Local Business</option>
-                                <option value="Place.Residence" >Residence</option>
-                                <option value="Placed.TouristDestination" >Tourist Destination</option>
-                            </optgroup>
-                            <Optgroup label="Precise Types">
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
-                                <option value="Place.Accommodation.House" >Home</option>
-                                <option value="Cemetery" >Cemetery</option>
-                                <option value="Place.CivicStructure.Hospital" >Hospital</option>
-                                <option value="Museum" >Museum</option>
-                                <option value="Park" >Park</option>
-                                <option value="Street" >Street</option>
-                                <option value="Zoo" >Zoo</option>
-                                <option value="Gym" >Gym</option>
-                            </Optgroup>
+                    <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                    <div class="row">
+                        <div data-rdf="Place.Accommodation" class="bd-primary text-center card col" title="Accommodation">
+                            <header>Accommodation</header>
+                            <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" alt="Accommodation">
+                        </div>
+                        <div data-rdf="Place.AdministrativeArea" class="bd-primary text-center card col" title="Administrative Area">
+                            <header>Administrative Area</header>
+                            <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Administrative Area" alt="Administrative Area">
+                        </div>
+                        <div data-rdf="Place.CivicStructure" class="bd-primary text-center card col" title="Civic Structure">
+                            <header>Civic Structure</header>
+                            <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Civic Structure" alt="Civic Structure">
+                        </div>
+                        <div data-rdf="Place.Landform" class="bd-primary text-center card col" title="Landform">
+                            <header>Landform</header>
+                            <img class="hide-xs" src="https://icongr.am/material/earth.svg?size=64&color=##14854f" title="Landform" alt="Landform">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div data-rdf="Place.LandmarksOrHistoricalBuildings" class="bd-primary text-center card col" title="Landmarks or Historical Buildings">
+                            <header>Landmarks or Historical Buildings</header>
+                            <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Landmarks or Historical Buildings" alt="Landmarks or Historical Buildings">
+                        </div>
+                        <div data-rdf="Place.LocalBusiness" class="bd-primary text-center card col" title="Local Business">
+                            <header>Local Business</header>
+                            <img class="hide-xs" src="https://icongr.am/material/shopping.svg?size=64&color=##14854f" title="Local Business" alt="Local Business">
+                        </div>
+                        <div data-rdf="Place.Residence" class="bd-primary text-center card col" title="Residence">
+                            <header>Residence</header>
+                            <img class="hide-xs" src="https://icongr.am/material/home.svg?size=64&color=##14854f" title="Residence" alt="Residence">
+                        </div>
+                        <div data-rdf="Placed.TouristDestination" class="bd-primary text-center card col" title="Tourist Destination">
+                            <header>Tourist Destination</header>
+                            <img class="hide-xs" src="https://icongr.am/material/beach.svg?size=64&color=##14854f" title="Tourist Destination" alt="Tourist Destination">
+                        </div>
+                    </div>
+                    <div class="grouped">
+                        <label>More Precise Options</label>
+                        <select oninput="setPrimaryType(this)">
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                            <option value="Cemetery" >Cemetery</option>
+                            <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                            <option value="Museum" >Museum</option>
+                            <option value="Park" >Park</option>
+                            <option value="Street" >Street</option>
+                            <option value="Zoo" >Zoo</option>
+                            <option value="Gym" >Gym</option>
                             <option value="OtherBuilding" >Other Building</option>
                         </select>
+                    </div>
+
+                    <script>
+                        var data_key_elements = document.querySelectorAll("[data-rdf]")
+                        Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
+
+                        function setPrimaryType(event) {
+                            let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                            additionalTypeInput.value = val
+                            Array.from(data_key_elements).forEach(el => {
+                                el = el.closest("[data-rdf]")
+                                if (el.getAttribute("data-rdf") === val) {
+                                    el.classList.add("bg-light")
+                                } else {
+                                    el.classList.remove("bg-light")
+                                }
+                            })
+                        }
+                    </script>
 
                     <h3>Additional Types (if any)</h3>
                     Hold <kbd>CTRL</kbd> to make multiple selections.
@@ -133,9 +184,47 @@
                                 <option value="OtherBuilding" >Other Building</option>
                             </select>
                     <h3>History of this Space:</h3>
-                    <label>Former Location(s):</label>
-                    <deer-view deer-collection="LivedReligionLocationsTest" deer-list="Place">
-                    </deer-view>
+                    <span class="text-light">TODO:Click to select here</span>
+                    <label id="formerLocation">Former Location(s):</label>
+                    <script>
+                        let locationsList = document.createElement("ul")
+                        let queryObj = {
+                            $or: [{
+                                "targetCollection": "LivedReligionLocationsTest"
+                            }, {
+                                "body.targetCollection": "LivedReligionLocationsTest"
+                            }]
+                        }
+                        fetch("http://tinydev.rerum.io/app/query", {
+                                method: "POST",
+                                mode: "cors",
+                                body: JSON.stringify(queryObj)
+                            }).then(response => response.json())
+                            .then(pointers => {
+                                let list = []
+                                pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
+                                    __deleted: console.log(err)
+                                }))))
+                                return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
+                            }).then(refs => {
+                                let filtered = []
+                                refs.map(item => {
+                                    let found = false
+                                    for (let i of filtered) {
+                                        if (i['@id'] === item['@id']) {
+                                            found = true
+                                            break
+                                        }
+                                    }
+                                    if (!found) {
+                                        filtered.push(item)
+                                    }
+                                })
+                                return filtered
+                            })
+                            .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
+                            .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
+                    </script>
                     <label>Former Use(s):</label>
                     <input type="hidden" deer-array="lr:formerUses" value="">
                     <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">

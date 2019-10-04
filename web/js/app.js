@@ -33,10 +33,6 @@ LR.submission = {
     "createdOn": ""
 }
 LR.sessionInfo = window.sessionStorage
-}
-else {
-    alert("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
-}
 LR.local = {}
 LR.local.survey = {}
 LR.formProcessor = {}
