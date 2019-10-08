@@ -3,53 +3,36 @@
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
     -->
 <html>
-
 <head>
     <title>New Entry</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
 </head>
-
 <body class="container">
     <lr-nav></lr-nav>
-
-    <!-- If an ID is provided with the page, then pre populate the page.  In general, a user submission is immutable -->
     <generic-top id="surveyTitle">Data Upload</generic-top>
     <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link your experience...</generic-loader>
-    <!-- the person to attribute should be known by now.  They had to provide their attributor ID to get here -->
-    <!-- A Location + Date/Time is required to continue -->
-    <!-- TODO: Define a Type for the experience and design what the object looks like -->
     <generic-experience>
         <form id="theExperience" class="experience" deer-type="Event">
             <input type="hidden" deer-key="LRtesting" value="true" />
-            <generic-place>
-                <!-- This is a collection of Place's that exists for deer-lr.  Need to get that collection and resolve it as a list as a deer-view -->
-                <!-- That deer-view needs to be a template that is a <select> dropdown of Place's to choose from.  Does the collection ID persist? -->
-                <!-- TODO Make a LR Collection for places -->
-                <label>Select which location this data entry is concerned with.</label>
-                <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
-                </deer-view>
-                <deer-view deer-listening="locations" deer-template="entity">{{Listen To Location Selection}}</deer-view>
-            </generic-place>
-            <generic-time>
-                <!--TODO allow time range??-->
-                <label> On what date was this data gathered?</label>
-                <input type="date" deer-key="startDate" />
-            </generic-time>
-            <label> Please select all researchers involved </label>
-            <!-- How do we want to show them all the people to choose from?  What happens after someone is chosen? -->
-            <deer-view id="locations" deer-collection="LivedReligionResearchersTest" deer-template="peopleAsDropdown"></deer-view>
-            <ul id="added_researchers">
-                <li> Added Researchers here </li>
-            </ul>
+            <label>Select which location this data entry is concerned with.</label>
+            <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
+            </deer-view>
+            <deer-view deer-listening="locations" deer-template="entity">{{Listen To Location Selection}}</deer-view>
+            <!--TODO allow time range??-->
+            <label> On what date was this data gathered?</label>
+            <input type="date" deer-key="startDate" />
+            <label> Select the researchers involved.  Hold <kbd>CTRL</kbd> to make multiple selections. </label>
             <input deer-arry-type="set" type="text" deer-key="contributor" />
-            <!-- TODO: Regular deer submit, capture the created event and continue. -->
-            <!--<input type="button" onclick="LR.crud.submitExperience(event)" value="Continue" />-->
+            <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
+            <!-- TODO Capture added reseachers and display them with ability to remove as a selection -->
             <input type="submit" value="Continue" />
         </form>
     </generic-experience>
     <deer-view deer-listening="theExperience" deer-template="entity">{{Listen to Experience Submission}}</deer-view>
+    
+    <!-- TODO describe the experience -->
     <!--    <experience-artifacts>
         <generic-top>Describe your encounter at <deer-view id="theLocationName" deer-template="placeName">{Place.name}</deer-view> </generic-top>
         <div class="card">

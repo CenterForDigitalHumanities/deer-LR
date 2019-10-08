@@ -117,6 +117,21 @@ DEER.TEMPLATES.peopleAsDropdown= function(obj, options={}) {
     }
 }
 
+DEER.TEMPLATES.personMulti= function(obj, options={}) {
+    try {
+        let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
+        let tmpl = `<select multiple="" disabled="" oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+            <optgroup label="Researchers"> `
+        for(let person of allPeopleInCollection){
+            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getValue(person.name, [], "string")}</option>`
+        }
+        tmpl += `</optgroup></select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
 DEER.TEMPLATES.Eventx = function(obj, options={}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
