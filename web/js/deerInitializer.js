@@ -79,22 +79,12 @@ DEER.TEMPLATES.person= function(obj, options={}) {
     }
 }
 
-//Just for a person's name
-DEER.TEMPLATES.placeName = function(obj, options={}){
-    try {
-        let tmpl = obj.hasOwnProperty("name") ? obj.name : obj.hasOwnProperty("label") ? obj.label : "No Name" //UTILS.getLabel(obj)
-        return tmpl
-    } catch (err) {
-        return null
-    }
-}
-
 DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)} Collection</h2> <select>`
+        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select>`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for(let place of allPlacesInCollection){
-            tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getValue(place.name, [], "string")}</option>`
+            tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -105,10 +95,10 @@ DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
 
 DEER.TEMPLATES.peopleAsDropdown= function(obj, options={}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)} Collection</h2> <select>`
+        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select>`
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         for(let person of allPeopleInCollection){
-            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getValue(person.name, [], "string")}</option>`
+            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -120,10 +110,11 @@ DEER.TEMPLATES.peopleAsDropdown= function(obj, options={}) {
 DEER.TEMPLATES.personMulti= function(obj, options={}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
-        let tmpl = `<select multiple="" disabled="" oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
+        tmpl += `<select multiple="" disabled="" oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Researchers"> `
         for(let person of allPeopleInCollection){
-            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getValue(person.name, [], "string")}</option>`
+            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
         }
         tmpl += `</optgroup></select>`
         return tmpl
@@ -132,12 +123,14 @@ DEER.TEMPLATES.personMulti= function(obj, options={}) {
     }
 }
 
+//TODO Really this is the "data submission" template.  As far as it goes, this is the only "Event" recorded so far.  
 DEER.TEMPLATES.Eventx = function(obj, options={}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
-        let researchers = UTILS.getValue(obj.contributor, [], "array")
-        let date = UTILS.getValue(obj.date, [], "string")
+        let tmpl = `<h5>${UTILS.getLabel(obj)}</h5>`
+        let researchers = UTILS.getValue(obj.contributor)
+        let date = UTILS.getValue(obj.startDate, [], "string")
         let place = UTILS.getValue(obj.location, [], "string")
+        //TODO and all the arttifacts with their annotations...
         tmpl += place+date+researchers
         return tmpl
     } catch (err) {

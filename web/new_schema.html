@@ -11,25 +11,25 @@
 </head>
 <body class="container">
     <lr-nav></lr-nav>
-    <generic-top id="surveyTitle">Data Upload</generic-top>
-    <generic-loader id="surveyLoader" class="hidden">Please wait while we create and link your experience...</generic-loader>
-    <generic-experience>
-        <form id="theExperience" class="experience" deer-type="Event">
-            <input type="hidden" deer-key="LRtesting" value="true" />
-            <label>Select which location this data entry is concerned with.</label>
-            <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
-            </deer-view>
-            <deer-view deer-listening="locations" deer-template="entity">{{Listen To Location Selection}}</deer-view>
-            <!--TODO allow time range??-->
-            <label> On what date was this data gathered?</label>
-            <input type="date" deer-key="startDate" />
-            <label> Select the researchers involved.  Hold <kbd>CTRL</kbd> to make multiple selections. </label>
-            <input deer-arry-type="set" type="text" deer-key="contributor" />
-            <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
-            <!-- TODO Capture added reseachers and display them with ability to remove as a selection -->
-            <input type="submit" value="Continue" />
-        </form>
-    </generic-experience>
+    <h3 id="surveyTitle">Data Upload</h3>
+    <form id="theExperience" class="experience" deer-type="Event">
+        <input type="hidden" deer-key="creator" />
+        <input type="hidden" deer-key="@context" value="https://schema.org/" />
+        <label>Select which location this data entry is concerned with.</label>
+        <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
+        </deer-view>
+        <!-- TODO it may be nice to listen to what location is selected and show its details.  However, deer-listening is not supported on <select>s -->
+        <!--<deer-view deer-listening="locations" deer-template="entity">{{Listen To Location Selection}}</deer-view>-->
+        <!--TODO allow time range??-->
+        <label> On what date was this data gathered?</label>
+        <input type="date" deer-key="startDate" />
+        <label> Select the researchers involved.  Hold <kbd>CTRL</kbd> to make multiple selections. </label>
+        <input deer-array-type-x="set" type="hidden" deer-key-x="contributor" />
+        <input deer-array-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Phyllis W." />
+        <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
+        <input type="submit" value="Continue" />
+    </form>
+    <!-- FIXME just having this listener here broke data entry -->
     <deer-view deer-listening="theExperience" deer-template="entity">{{Listen to Experience Submission}}</deer-view>
     
     <!-- TODO describe the experience -->
