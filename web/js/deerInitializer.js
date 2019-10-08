@@ -81,24 +81,10 @@ DEER.TEMPLATES.person= function(obj, options={}) {
 
 DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
     try {
-        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select>`
+        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select deer-key="location">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for(let place of allPlacesInCollection){
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
-        }
-        tmpl += `</select>`
-        return tmpl
-    } catch (err) {
-        return null
-    }
-}
-
-DEER.TEMPLATES.peopleAsDropdown= function(obj, options={}) {
-    try {
-        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select>`
-        let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
-        for(let person of allPeopleInCollection){
-            tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -154,7 +140,9 @@ import { default as renderer, initializeDeerViews } from '../deer-lr-working/dee
 import { default as record, initializeDeerForms } from '../deer-lr-working/deer-record.js'
 
 // fire up the element detection as needed
-initializeDeerViews(DEER) 
+initializeDeerViews(DEER)
+//Need to make the form initializer wait on view initializer, these cannot run syncronously.  
 initializeDeerForms(DEER)
+
 
 

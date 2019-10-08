@@ -190,6 +190,7 @@ export default class DeerReport {
             }).bind(this))
             .then(()=>elem.click())
         } else {
+            //RACE CONDITION: If there are deer-views inside of <form>s that load input elements, they load up after this and are not dirty.
             Array.from(this.inputs).filter(el=>el.type==="hidden").forEach(inpt=>inpt.$isDirty = true)
         }
     }
@@ -427,7 +428,6 @@ async function create(obj, attribution, evidence) {
 
 export function initializeDeerForms(config) {
     const forms = document.querySelectorAll(config.FORM)
-    const formArray = Array.from(forms)
     Array.from(forms).forEach(elem => new DeerReport(elem,config))
     document.addEventListener(DEER.EVENTS.NEW_FORM,e => Array.from(e.detail.set).forEach(elem=>new DeerReport(elem,config)))
 }

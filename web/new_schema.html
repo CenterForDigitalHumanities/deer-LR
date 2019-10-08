@@ -24,12 +24,13 @@
         <label> On what date was this data gathered?</label>
         <input type="date" deer-key="startDate" />
         <label> Select the researchers involved.  Hold <kbd>CTRL</kbd> to make multiple selections. </label>
-        <input deer-array-type-x="set" type="hidden" deer-key-x="contributor" />
         <input deer-array-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Phyllis W." />
+        <!-- TODO be able to select multiple and have them stored to the hidden input for saving -->
+        <input deer-array-type-x="set" type="hidden" deer-key-x="contributor" />
         <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
         <input type="submit" value="Continue" />
     </form>
-    <!-- FIXME just having this listener here broke data entry -->
+    <!-- FIXME causing a null error in web console -->
     <deer-view deer-listening="theExperience" deer-template="entity">{{Listen to Experience Submission}}</deer-view>
     
     <!-- TODO describe the experience -->
