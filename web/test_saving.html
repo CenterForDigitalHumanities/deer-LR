@@ -5,45 +5,47 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-      <head>
-          <title>DEER testing</title>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="https://unpkg.com/chota@latest">
-          <link rel="stylesheet" href="./css/mycss.css">
-      </head>
-      <body>
-            <!-- Only warnings here, make this one error free -->
-            <form id="newSpaceForm" class="dataWrap"deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d811c56e4b07f0c56c0f568">
-                  <header> A Place:  http://devstore.rerum.io/v1/id/5d811c56e4b07f0c56c0f568</header>
-                  <label>Name: </label><input type="text" deer-key="name" value="Maramec Spring Park" />
-                  <input type="hidden" deer-key="additionalType" deer-array-type="List" value="TouristAttraction,Local Buisiness,Landform"/>
-                  <input type="hidden" deer-key="contributors" deer-array-delimeter="|" deer-array-type="Set" value="St. James Foundation|MODOC|Bryan H., Sr."/>
-                  <input type="hidden" deer-key="members" deer-array-type="List" value="Trout,Blue Gill,White Tail Deer,Gray Pelican" />
-                  <label>Slogan: </label><input type="text" deer-key="slogan" value="Catch trout or have a great time tryin'" />
-                  <input type="submit" />
-            </form>
-            
-            <br>
-            <br>
-            
-            <!-- Should get lots of warnings and errors here -->      
-            <form id="newThingForm" class="dataWrap" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d811c71e4b07f0c56c0f56a">    
-                <header> A Thing : http://devstore.rerum.io/v1/id/5d811c71e4b07f0c56c0f56a </header>
-                <label>Name: </label><input type="text" deer-key="name" value="Ball"/> 
-                <label>Additional Types: </label><input type="text" deer-key="additionalType" deer-array-type="Set" deer-array-delimeter-="|"  value='Sphere|Equipment|3D Shape' /> 
-                <input type="hidden" deer-key="contributors" deer-array-type="ListToLoadIntoInterface" value='Rawlings,Spalding,Nike' /> 
-                <input type="hidden" deer-key="members" deer-array-type="List" deer-array-delimeter-="|"  value='Baseball,Basketball,Football' /> 
-                <label>Description: </label><input type="text" deer-key="description" /> 
-                <input type="hidden" deer-key="slogan" value='' /> 
-                <input type="hidden" deer-key="" deer-array-type="@list" value="Bread,Apple,Gravy,Very Small Rocks,Churches,Duck" />
-                <input type="hidden" deer-key="description" value="" />
-                <input type="submit" />
-            </form>
 
-            
-          <!-- Add ins -->
-          <script src="./js/deerInitializer.js" type="module"></script>   
-          <script src="./js/app.js" type="text/javascript"></script>  
-      </body>
+<head>
+    <title>DEER testing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+</head>
+
+<body>
+    <!-- Only warnings here, make this one error free -->
+    <form id="newSpaceForm" class="dataWrap" deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d811c56e4b07f0c56c0f568">
+        <header> A Place: http://devstore.rerum.io/v1/id/5d811c56e4b07f0c56c0f568</header>
+        <label>Name: </label><input type="text" deer-key="name" value="Maramec Spring Park" />
+        <input type="hidden" deer-key="additionalType" deer-array-type="List" value="TouristAttraction,Local Buisiness,Landform" />
+        <input type="hidden" deer-key="contributors" deer-array-delimeter="|" deer-array-type="Set" value="St. James Foundation|MODOC|Bryan H., Sr." />
+        <input type="hidden" deer-key="members" deer-array-type="List" value="Trout,Blue Gill,White Tail Deer,Gray Pelican" />
+        <label>Slogan: </label><input type="text" deer-key="slogan" value="Catch trout or have a great time tryin'" />
+        <input type="submit" />
+    </form>
+
+    <br>
+    <br>
+
+    <!-- Should get lots of warnings and errors here -->
+    <form id="newThingForm" class="dataWrap" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d811c71e4b07f0c56c0f56a">
+        <header> A Thing : http://devstore.rerum.io/v1/id/5d811c71e4b07f0c56c0f56a </header>
+        <label>Name: </label><input type="text" deer-key="name" value="Ball" />
+        <label>Additional Types: </label><input type="text" deer-key="additionalType" deer-array-type="Set" deer-array-delimeter-="|" value='Sphere|Equipment|3D Shape' />
+        <input type="hidden" deer-key="contributors" deer-array-type="ListToLoadIntoInterface" value='Rawlings,Spalding,Nike' />
+        <input type="hidden" deer-key="members" deer-array-type="List" deer-array-delimeter-="|" value='Baseball,Basketball,Football' />
+        <label>Description: </label><input type="text" deer-key="description" />
+        <input type="hidden" deer-key="slogan" value='' />
+        <input type="hidden" deer-key="" deer-array-type="@list" value="Bread,Apple,Gravy,Very Small Rocks,Churches,Duck" />
+        <input type="hidden" deer-key="description" value="" />
+        <input type="submit" />
+    </form>
+
+
+    <!-- Add ins -->
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+</body>
+
 </html>

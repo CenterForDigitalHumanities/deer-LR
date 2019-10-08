@@ -7,68 +7,289 @@
 <head>
     <title>Lived Religions events</title>
     <meta charset="UTF-8">
-<!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./css/mycss.css">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
     <style>
-        select[sub]{
-            display: none;
+        #leafletPreview {
+            height: 20rem;
         }
     </style>
 </head>
 
 <body>
+    <lr-nav></lr-nav>
+
     <div class="container">
-        <survey-top id="surveyTitle">Add or Find events</survey-top>
-        <div class="card">
+        <h2 class="text-primary">Create a New Location</h2>
+        <div class="card bd-primary">
             <div class="card_body">
-                <input type="button" class="btn btn-primary" value="Register New event" onclick="LR.ui.toggleEventAddition()"/>
-                <form id="newEventForm" class="hidden" deer-type="Event" deer-context="http://schema.org">
-                    <label>Event Title:</label>
-                    <input type="text" deer-key="name" deer-source="">
+                <form id="newLocationForm" deer-type="Place" deer-context="http://schema.org">
+                    <div class="grouped">
+                        <label>Location Label</label>
+                        <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
+                        <p class="hide-xs">
+                            Enter a name for the Location to be known by in simple lists.
+                        </p>
+                    </div>
 
-                    <input type="hidden" deer-key="creator" value="demoAgent">
+                    <input type="hidden" deer-key="creator" value="loading">
+                    <input type="hidden" deer-key="additionalType" value="Feature">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocationsTest">
 
-                    <label>Start Date</label>
-                    <input type="date" deer-key="startDate" deer-source="">
+                    <h4>Map Information</h4>
 
-                    <label>End Date</label>
-                    <input type="date" deer-key="endDate" deer-source="">
+                    <div id="leafletPreview" class="col"></div>
+                    <input type="hidden" deer-key="geometry" value="{}">
+                    <div class="grouped">
+                        <label>Latitude</label>
+                        <input id="leafLat" step=".000000001" type="number" oninput="updateGeoJSON()">
 
-                    <label>Location:</label>
-                    <input type="text" deer-key="location" deer-source="">
+                        <label>Longitude</label>
+                        <input id="leafLong" step=".000000001" type="number" oninput="updateGeoJSON()">
+                    </div>
 
-                    <label>Description</label>
-                    <textarea deer-key="description" deer-source=""></textarea>
-                    <footer>
-                        <input class="button primary" type="submit">
-                        <div id="eventResult"> 
-                            <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
+                    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+                    <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
+
+                    <script>
+                        var previewMap = L.map('leafletPreview').setView([38.628009, -90.201101], 16)
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(previewMap);
+                        var osmb = new OSMBuildings(previewMap).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json')
+
+                        function updateGeoJSON() {
+                            let geometryInput = document.querySelector("input[deer-key='geometry']")
+                            let lat = parseInt(leafLat.value * 1000000) / 1000000
+                            let long = parseInt(leafLong.value * 1000000) / 1000000
+                            if (lat && long) {
+                                previewMap.setView([lat, long], 18)
+                            }
+                        }
+                        previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="leafLat.value=${parseInt(e.latlng.lat * 1000000) / 1000000};leafLong.value=${parseInt(e.latlng.lng * 1000000) / 1000000};return false;">Use These</button></div>`).openOn(previewMap))
+                    </script>
+
+                    <h3>Description of Space</h3>
+
+                    <div class="grouped">
+                        <label>Description</label>
+                        <textarea deer-key="description"></textarea>
+                        <p>
+                            Provide a short decription of this Location with otherwise unprovided or disambiguating details.
+                        </p>
+                    </div>
+                    <label>Primary Specification</label>
+                    <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                    <div class="row">
+                        <div data-rdf="Place.Accommodation" class="bd-primary text-center card col" title="Accommodation">
+                            <header>Accommodation</header>
+                            <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" alt="Accommodation">
                         </div>
-                        
-                    </footer>
+                        <div data-rdf="Place.AdministrativeArea" class="bd-primary text-center card col" title="Administrative Area">
+                            <header>Administrative Area</header>
+                            <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Administrative Area" alt="Administrative Area">
+                        </div>
+                        <div data-rdf="Place.CivicStructure" class="bd-primary text-center card col" title="Civic Structure">
+                            <header>Civic Structure</header>
+                            <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Civic Structure" alt="Civic Structure">
+                        </div>
+                        <div data-rdf="Place.Landform" class="bd-primary text-center card col" title="Landform">
+                            <header>Landform</header>
+                            <img class="hide-xs" src="https://icongr.am/material/earth.svg?size=64&color=##14854f" title="Landform" alt="Landform">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div data-rdf="Place.LandmarksOrHistoricalBuildings" class="bd-primary text-center card col" title="Landmarks or Historical Buildings">
+                            <header>Landmarks or Historical Buildings</header>
+                            <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Landmarks or Historical Buildings" alt="Landmarks or Historical Buildings">
+                        </div>
+                        <div data-rdf="Place.LocalBusiness" class="bd-primary text-center card col" title="Local Business">
+                            <header>Local Business</header>
+                            <img class="hide-xs" src="https://icongr.am/material/shopping.svg?size=64&color=##14854f" title="Local Business" alt="Local Business">
+                        </div>
+                        <div data-rdf="Place.Residence" class="bd-primary text-center card col" title="Residence">
+                            <header>Residence</header>
+                            <img class="hide-xs" src="https://icongr.am/material/home.svg?size=64&color=##14854f" title="Residence" alt="Residence">
+                        </div>
+                        <div data-rdf="Placed.TouristDestination" class="bd-primary text-center card col" title="Tourist Destination">
+                            <header>Tourist Destination</header>
+                            <img class="hide-xs" src="https://icongr.am/material/beach.svg?size=64&color=##14854f" title="Tourist Destination" alt="Tourist Destination">
+                        </div>
+                    </div>
+                    <div class="grouped">
+                        <label>More Precise Options</label>
+                        <select oninput="setPrimaryType(this)">
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                            <option value="Cemetery" >Cemetery</option>
+                            <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                            <option value="Museum" >Museum</option>
+                            <option value="Park" >Park</option>
+                            <option value="Street" >Street</option>
+                            <option value="Zoo" >Zoo</option>
+                            <option value="Gym" >Gym</option>
+                            <option value="OtherBuilding" >Other Building</option>
+                        </select>
+                    </div>
+
+                    <script>
+                        var data_key_elements = document.querySelectorAll("[data-rdf]")
+                        Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
+
+                        function setPrimaryType(event) {
+                            let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                            additionalTypeInput.value = val
+                            Array.from(data_key_elements).forEach(el => {
+                                el = el.closest("[data-rdf]")
+                                if (el.getAttribute("data-rdf") === val) {
+                                    el.classList.add("bg-light")
+                                } else {
+                                    el.classList.remove("bg-light")
+                                }
+                            })
+                        }
+                    </script>
+
+                    <h3>Additional Types (if any)</h3>
+                    Hold <kbd>CTRL</kbd> to make multiple selections.
+                    <input type="hidden" deer-array="additionalType" value="">
+                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                                <optgroup label="General Categories"> 
+                                    <option value="Place.Accommodation" >Accommodation</option>
+                                    <option value="Place.AdministrativeArea" >Administrative Area</option>
+                                    <option value="Place.CivicStructure" >Civic Structure</option>
+                                    <option value="Place.Landform" >Landform</option>
+                                    <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                                    <option value="Place.LocalBusiness" >Local Business</option>
+                                    <option value="Place.Residence" >Residence</option>
+                                    <option value="Placed.TouristDestination" >Tourist Destination</option>
+                                </optgroup>
+                                <Optgroup label="Precise Types">
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                                    <option value="Place.Accommodation.House" >Home</option>
+                                    <option value="Cemetery" >Cemetery</option>
+                                    <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                                    <option value="Museum" >Museum</option>
+                                    <option value="Park" >Park</option>
+                                    <option value="Street" >Street</option>
+                                    <option value="Zoo" >Zoo</option>
+                                    <option value="Gym" >Gym</option>
+                                </Optgroup>
+                                <option value="OtherBuilding" >Other Building</option>
+                            </select>
+                    <h3>History of this Space:</h3>
+                    <span class="text-light">TODO:Click to select here</span>
+                    <label id="formerLocation">Former Location(s):</label>
+                    <script>
+                        let locationsList = document.createElement("ul")
+                        let queryObj = {
+                            $or: [{
+                                "targetCollection": "LivedReligionLocationsTest"
+                            }, {
+                                "body.targetCollection": "LivedReligionLocationsTest"
+                            }]
+                        }
+                        fetch("http://tinydev.rerum.io/app/query", {
+                                method: "POST",
+                                mode: "cors",
+                                body: JSON.stringify(queryObj)
+                            }).then(response => response.json())
+                            .then(pointers => {
+                                let list = []
+                                pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
+                                    __deleted: console.log(err)
+                                }))))
+                                return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
+                            }).then(refs => {
+                                let filtered = []
+                                refs.map(item => {
+                                    let found = false
+                                    for (let i of filtered) {
+                                        if (i['@id'] === item['@id']) {
+                                            found = true
+                                            break
+                                        }
+                                    }
+                                    if (!found) {
+                                        filtered.push(item)
+                                    }
+                                })
+                                return filtered
+                            })
+                            .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
+                            .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
+                    </script>
+                    <label>Former Use(s):</label>
+                    <input type="hidden" deer-array="lr:formerUses" value="">
+                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                                <optgroup label="General Categories"> 
+                                    <option value="Place.Accommodation" >Accommodation</option>
+                                    <option value="Place.AdministrativeArea" >Administrative Area</option>
+                                    <option value="Place.CivicStructure" >Civic Structure</option>
+                                    <option value="Place.Landform" >Landform</option>
+                                    <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                                    <option value="Place.LocalBusiness" >Local Business</option>
+                                    <option value="Place.Residence" >Residence</option>
+                                    <option value="Placed.TouristDestination" >Tourist Destination</option>
+                                </optgroup>
+                                <Optgroup label="Precise Types">
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                                    <option value="Place.Accommodation.House" >Home</option>
+                                    <option value="Cemetery" >Cemetery</option>
+                                    <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                                    <option value="Museum" >Museum</option>
+                                    <option value="Park" >Park</option>
+                                    <option value="Street" >Street</option>
+                                    <option value="Zoo" >Zoo</option>
+                                    <option value="Gym" >Gym</option>
+                                </Optgroup>
+                                <option value="OtherBuilding" >Other Building</option>
+                            </select>
+                    <label>Material(s):</label>
+                    <input disabled type="text" deer-key-x="material">
+                    <label>Typical Use: </label>
+                    <select disabled deer-key-x="typical_use" value="">
+                            <option value="Religious">Religious</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Educational">Educational</option>
+                            <option value="Civic">Civic</option>
+                            <option value="Other Public">Other Public</option>
+                        </select>
+                    <h3> Upload Media </h3>
+                    <label>Field Notes:</label>
+                    <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
+                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">
+
+                    <div class="row">
+                        <input class="button primary col" type="submit">
+                    </div>
                 </form>
             </div>
         </div>
 
         <div class="card">
             <div class="card_body">
-                <input type="button" value="View Existing events" class="btn btn-primary" onclick="LR.tricks.populateExistingvents()"/>
-                <header>Existing events</header>
-                <!-- <deer-view  deer-type="List" deer-id=""> -->
-                    <ul id="events">
-                        <li>Gathering event Data..TODO</li>
-                    </ul>
-                <!-- </deer-view> -->
+                <h3>Existing Locations</h3>
+                <deer-view deer-collection="LivedReligionLocationsTest">
+                </deer-view>
             </div>
         </div>
     </div>
-<script src="./js/deerInitializer.js" type="module"></script>   
-<script src="./js/app.js" type="text/javascript"></script>  
-<script>
-    
-</script>
+    <lr-footer></lr-footer>
+
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+    <script src="./js/components.js" type="text/javascript"></script>
+
 </body>
 
 </html>

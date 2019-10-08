@@ -5,46 +5,48 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-      <head>
-          <title>DEER testing</title>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="https://unpkg.com/chota@latest">
-          <link rel="stylesheet" href="./css/mycss.css">
-      </head>
-      <body>
-            <!-- Only warnings here, make this one error free -->
-            <form id="newSpaceForm" class="dataWrap"deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d7ba431e4b07f0c56c0f53b">
-                  <header> A Place:  http://devstore.rerum.io/v1/id/5d7ba431e4b07f0c56c0f53b</header>
-                  <label>Name: </label><input type="text" deer-key="name" value="Gulf Of Mexico" />
-                  <input type="hidden" deer-key="additionalType" deer-array-type="List"/>
-                  <input type="hidden" deer-key="contributors" deer-array-delimeter="|" deer-array-type="List" value="Dr. Oz|Bryan, S.J.|Jim Ginther, esq."/>
-                  <input type="hidden" deer-key="members" deer-array-type="List" value="Kolten Wong,Adam Wainright,Paul Goldshmidt" />
-                  <label>Slogan </label><input type="text" deer-key="slogan" />
-                  <input type="hidden" deer-key="name" value="Gulf Of Mexico" />
-                  <input type="hidden" deer-key="" deer-array-type="List" />
-                  <input type="button" class="primary" value="Does Not Submit" />
-            </form>
-            <br>
-            <br>
-            <!-- Should get lots of warnings and errors here -->      
-            <form id="newThingForm" class="dataWrap" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d7ba417e4b07f0c56c0f539">    
-                <header> A Thing  http://devstore.rerum.io/v1/id/5d7ba417e4b07f0c56c0f539</header>
-                <label>Name: </label> <input type="text" deer-key="name" /> 
-                <label>Additional Types: </label><input type="text" deer-array-type="Set" deer-key="additionalType" value='X, Y, Z' /> 
-                <input type="hidden" deer-key="contributors" deer-array-type="List" value='' /> 
-                <input type="hidden" deer-array-type="List" deer-key="members" value='Tom,Frank,Sally' /> 
-                <label>Slogan: </label><input type="text" deer-key="slogan" value='You can ride buffalos in a buffalo herd.' /> 
-                <input type="hidden" deer-key="slogan" value='You can ride buffalos in a buffalo herd.' /> 
-                <label>No deer-key: </label><input type="text" deer-key="" value="Deer key is empty string." />
-                <label>No Anno</label><input type="text" deer-key="hey" value="Object does not have this key."/>
-                <label>Two Annos: </label><input type="text" deer-key="doubling" value='' />
-                <input type="button" class="primary" value="Does Not Submit" />
-            </form>
+
+<head>
+    <title>DEER testing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+</head>
+
+<body>
+    <!-- Only warnings here, make this one error free -->
+    <form id="newSpaceForm" class="dataWrap" deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d7ba431e4b07f0c56c0f53b">
+        <header> A Place: http://devstore.rerum.io/v1/id/5d7ba431e4b07f0c56c0f53b</header>
+        <label>Name: </label><input type="text" deer-key="name" value="Gulf Of Mexico" />
+        <input type="hidden" deer-key="additionalType" deer-array-type="List" />
+        <input type="hidden" deer-key="contributors" deer-array-delimeter="|" deer-array-type="List" value="Dr. Oz|Bryan, S.J.|Jim Ginther, esq." />
+        <input type="hidden" deer-key="members" deer-array-type="List" value="Kolten Wong,Adam Wainright,Paul Goldshmidt" />
+        <label>Slogan </label><input type="text" deer-key="slogan" />
+        <input type="hidden" deer-key="name" value="Gulf Of Mexico" />
+        <input type="hidden" deer-key="" deer-array-type="List" />
+        <input type="button" class="primary" value="Does Not Submit" />
+    </form>
+    <br>
+    <br>
+    <!-- Should get lots of warnings and errors here -->
+    <form id="newThingForm" class="dataWrap" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d7ba417e4b07f0c56c0f539">
+        <header> A Thing http://devstore.rerum.io/v1/id/5d7ba417e4b07f0c56c0f539</header>
+        <label>Name: </label> <input type="text" deer-key="name" />
+        <label>Additional Types: </label><input type="text" deer-array-type="Set" deer-key="additionalType" value='X, Y, Z' />
+        <input type="hidden" deer-key="contributors" deer-array-type="List" value='' />
+        <input type="hidden" deer-array-type="List" deer-key="members" value='Tom,Frank,Sally' />
+        <label>Slogan: </label><input type="text" deer-key="slogan" value='You can ride buffalos in a buffalo herd.' />
+        <input type="hidden" deer-key="slogan" value='You can ride buffalos in a buffalo herd.' />
+        <label>No deer-key: </label><input type="text" deer-key="" value="Deer key is empty string." />
+        <label>No Anno</label><input type="text" deer-key="hey" value="Object does not have this key." />
+        <label>Two Annos: </label><input type="text" deer-key="doubling" value='' />
+        <input type="button" class="primary" value="Does Not Submit" />
+    </form>
 
 
-          <!-- Add ins -->
-          <script src="./js/deerInitializer.js" type="module"></script>   
-          <script src="./js/app.js" type="text/javascript"></script>  
-      </body>
+    <!-- Add ins -->
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+</body>
+
 </html>
