@@ -16,8 +16,11 @@
         <input type="hidden" deer-key="creator" />
         <input type="hidden" deer-key="@context" value="https://schema.org/" />
         <label>Select which location this data entry is concerned with.</label>
-        <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
-        </deer-view>
+        <input id="loc" type="hidden" deer-key="location" />
+        <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
+        
+<!--   <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown">
+        </deer-view>-->
         <!-- TODO it may be nice to listen to what location is selected and show its details.  However, deer-listening is not supported on <select>s -->
         <!--<deer-view deer-listening="locations" deer-template="entity">{{Listen To Location Selection}}</deer-view>-->
         <!--TODO allow time range??-->

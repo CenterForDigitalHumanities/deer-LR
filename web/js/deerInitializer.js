@@ -81,7 +81,7 @@ DEER.TEMPLATES.person= function(obj, options={}) {
 
 DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
     try {
-        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select deer-key="location">`
+        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key="location">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for(let place of allPlacesInCollection){
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
@@ -97,7 +97,7 @@ DEER.TEMPLATES.personMulti= function(obj, options={}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
-        tmpl += `<select multiple="" disabled="" oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Researchers"> `
         for(let person of allPeopleInCollection){
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
