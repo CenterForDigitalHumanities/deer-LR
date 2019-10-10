@@ -81,7 +81,8 @@ DEER.TEMPLATES.person= function(obj, options={}) {
 
 DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
     try {
-        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5> <select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key="location">`
+        //<h5>${UTILS.getLabel(obj)} Collection</h5> 
+        let tmpl = `<select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key-x="location">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for(let place of allPlacesInCollection){
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
@@ -96,8 +97,9 @@ DEER.TEMPLATES.locationsAsDropdown= function(obj, options={}) {
 DEER.TEMPLATES.personMulti= function(obj, options={}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
-        let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
-        tmpl += `<select multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        //let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
+        let tmpl = ``
+        tmpl += `<select deer-key-x="contributor" multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Researchers"> `
         for(let person of allPeopleInCollection){
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
@@ -110,18 +112,37 @@ DEER.TEMPLATES.personMulti= function(obj, options={}) {
 }
 
 //TODO Really this is the "data submission" template.  As far as it goes, this is the only "Event" recorded so far.  
-DEER.TEMPLATES.Eventx = function(obj, options={}) {
-    try {
-        let tmpl = `<h5>${UTILS.getLabel(obj)}</h5>`
-        let researchers = UTILS.getValue(obj.contributor)
-        let date = UTILS.getValue(obj.startDate, [], "string")
-        let place = UTILS.getValue(obj.location, [], "string")
-        //TODO and all the arttifacts with their annotations...
-        tmpl += place+date+researchers
-        return tmpl
-    } catch (err) {
-        return null
+DEER.TEMPLATES.Event= function(obj, options = {}) {
+    let tmpl = `<h2>${UTILS.getValue(obj.label)}</h2>`
+    let list = ``
+    
+    for (let key in obj) {
+        if(DEER.SUPPRESS.indexOf(key)>-1) {continue}
+        let label = key
+        let value = UTILS.getValue(obj[key],key)
+        try {
+            if ((value.image || value.trim()).length > 0) {
+                list +=  `<dt deer-source="${obj[key].source}">${label}</dt><dd>${value}</dd>`
+            }
+        } catch (err) {
+            // Some object maybe or untrimmable somesuch
+            // is it object/array?
+            list+=`<dt>${label}</dt>`
+            if(Array.isArray(value)){
+                value.forEach((val,index)=>{
+                    let name = UTILS.getLabel(val,(val.type || val['@type'] || label+index))
+                    list+= (val["@id"]) ? `<dd><a href="#${val["@id"]}">${name}</a></dd>` : `<dd>${name}</dd>`
+                })
+            } else {
+                // a single, probably
+                let v = UTILS.getValue(value)
+                if(typeof v==="object") { v = UTILS.getValue(v.items) }
+                list+=(value['@id'])?`<dd><a href="${options.link||""}#${value['@id']}">${v}</a></dd>`:`<dd>${v}</dd>`
+            }
+        }
     }
+    tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
+    return tmpl
 }
 // sandbox repository URLS
 DEER.URLS = {

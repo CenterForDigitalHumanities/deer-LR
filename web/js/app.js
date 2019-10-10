@@ -859,7 +859,7 @@ LR.tricks.mockLogin = async function(event) {
 LR.tricks.loggedInUserAttribution = function() {
     let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : { "user": "LR_UNKNOWN" }
     let inputs = document.querySelectorAll("input[deer-key='creator']")
-    for (el in inputs) {
+    for (el of inputs) {
         if (el.value) {
             if (el.value !== userObj.user) {
                 //Already a creator and it is not the current user...
@@ -870,5 +870,16 @@ LR.tricks.loggedInUserAttribution = function() {
             el.value = userObj.user
                 //el.$isDirty = true
         }
+    }
+    
+    LR.tricks.generateSubmissionLabel = function() {
+        let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : { "user": "LR_UNKNOWN" }
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = yyyy + "-" + mm + "-"+dd;
+        document.getElementById("uploadLabel").value = userObj.user+" "+today+" Upload -- Thank You!"
+        document.getElementById("uploadLabel").$isDirty = true
     }
 }
