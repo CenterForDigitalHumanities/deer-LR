@@ -190,7 +190,6 @@ export default class DeerReport {
             }).bind(this))
             .then(()=>elem.click())
         } else {
-            //RACE CONDITION: If there are deer-views inside of <form>s that load input elements, they load up after this and are not dirty.
             Array.from(this.inputs).filter(el=>el.type==="hidden").forEach(inpt=>inpt.$isDirty = true)
         }
     }
