@@ -79,6 +79,12 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
     }
 }
 
+/**
+ * Create a select dropdown containing Places.  
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
         //<h5>${UTILS.getLabel(obj)} Collection</h5> 
@@ -94,6 +100,12 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     }
 }
 
+/**
+ * Create a select area that is populated by some set or list of people.
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
 DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
@@ -111,7 +123,15 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     }
 }
 
-//TODO Really this is the "data submission" template.  As far as it goes, this is the only "Event" recorded so far.  
+/**
+ * TODO Really this is the "data submission" template.  As far as it goes, this is the only "Event" recorded so far.  
+ * This is very basic and does not contain the information describing the Event.  It needs to be built out as we begin to #14
+ * describe an experience.  
+ * 
+ * @param {type} obj
+ * @param {type} options
+ * @return {default.TEMPLATES.Event.tmpl, String}
+ */
 DEER.TEMPLATES.Event = function(obj, options = {}) {
     let tmpl = `<h2>${UTILS.getValue(obj.label)}</h2>`
     let list = ``

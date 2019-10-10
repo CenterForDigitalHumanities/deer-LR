@@ -808,9 +808,6 @@ LR.ui.loginFail = function() {
 LR.tricks.mockLogin = async function(event) {
     let who = document.getElementById("login-usr").value
     return document.location.href = "dashboard.html?user=" + who
-
-
-
     let secrets = await fetch('src/tokens/sec.txt')
         .then(response => response.text())
     secrets = JSON.parse(secrets)
@@ -856,23 +853,30 @@ LR.tricks.mockLogin = async function(event) {
     }
 }
 
+/**
+ * Detect the user in localStorage and attribute them to deer-key="creator" that are not yet set.  
+ * This is a bit of a hack, since it forcefully sets a value to hidden inputs with DEER.KEY="creator".
+ * @return {undefined}
+ */
 LR.tricks.loggedInUserAttribution = function() {
     let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : { "user": "LR_UNKNOWN" }
-    let inputs = document.querySelectorAll("input[deer-key='creator']")
+    let inputs = document.querySelectorAll("input[type='hidden'][deer-key='creator']")
     for (let el of inputs) {
         if (el.value) {
             if (el.value !== userObj.user) {
                 //Already a creator and it is not the current user...
                 el.value = userObj.user
-                //el.$isDirty = true
             }
         } else {
             el.value = userObj.user
-            //el.$isDirty = true
         }
     }
 }
 
+/**
+ * Generate a default label for an Experience, noting the user and the date.  
+ * @return {undefined}
+ */
 LR.tricks.generateSubmissionLabel = function() {
     let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : { "user": "LR_UNKNOWN" }
     var today = new Date();
