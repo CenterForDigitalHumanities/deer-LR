@@ -83,35 +83,35 @@ LR.err.unhandled = function(error) {
 }
 
 LR.err.handleHTTPError = function(response) {
-        if (!response.ok) {
-            let status = response.status;
-            switch (status) {
-                case 400:
-                    console.log("Bad Request")
-                    break;
-                case 401:
-                    console.log("Request was unauthorized")
-                    break;
-                case 403:
-                    console.log("Forbidden to make request")
-                    break;
-                case 404:
-                    console.log("Not found")
-                    break;
-                case 500:
-                    console.log("Internal server error")
-                    break;
-                case 503:
-                    console.log("Server down time")
-                    break;
-                default:
-                    console.log("unahndled HTTP ERROR")
-            }
-            throw Error("HTTP Error: " + response.statusText)
+    if (!response.ok) {
+        let status = response.status;
+        switch (status) {
+            case 400:
+                console.log("Bad Request")
+                break;
+            case 401:
+                console.log("Request was unauthorized")
+                break;
+            case 403:
+                console.log("Forbidden to make request")
+                break;
+            case 404:
+                console.log("Not found")
+                break;
+            case 500:
+                console.log("Internal server error")
+                break;
+            case 503:
+                console.log("Server down time")
+                break;
+            default:
+                console.log("unahndled HTTP ERROR")
         }
-        return response
+        throw Error("HTTP Error: " + response.statusText)
     }
-    /** END Error handlers */
+    return response
+}
+/** END Error handlers */
 
 /**
  * 
@@ -382,7 +382,7 @@ LR.crud.createOrUpdate = async function(conversation) {
     let convo = JSON.parse(JSON.stringify(conversation))
     let isnewconvo = !conversation.hasOwnProperty("@id") || conversation["@id"] == ""
     let update = document.getElementById("theSurvey").getAttribute("survey_id") == ""
-        //we are just waiting for them all to complete, each one isn't waiting on the last. 
+    //we are just waiting for them all to complete, each one isn't waiting on the last. 
     for (let x = 0; x < convo.hasPart.length; x++) {
         let elem = document.querySelectorAll(".QA")[x].children[1]
         let QAorRA = convo.hasPart[x]
@@ -508,8 +508,8 @@ LR.ui.resumeSurvey = async function(redirect) {
     document.getElementById("meta_about").value = eventID
     document.getElementById("meta_author").value = interviewerID
     document.getElementById("meta_contributor").value = intervieweeID
-        //Should probably store interviewer and interviewee id somewhere easy to gather.  
-        //Should probably display the event title
+    //Should probably store interviewer and interviewee id somewhere easy to gather.  
+    //Should probably display the event title
     LR.ui.displayEventInfo(eventID)
     LR.ui.displayNames(interviewerID, intervieweeID)
     LR.ui.populateQA(surveyObj)
@@ -808,9 +808,6 @@ LR.ui.loginFail = function() {
 LR.tricks.mockLogin = async function(event) {
     let who = document.getElementById("login-usr").value
     return document.location.href = "dashboard.html?user=" + who
-
-
-
     let secrets = await fetch('src/tokens/sec.txt')
         .then(response => response.text())
     secrets = JSON.parse(secrets)
@@ -818,8 +815,8 @@ LR.tricks.mockLogin = async function(event) {
         .then(response => response.text())
     admins = admins.split(",")
     let usrSecret = document.getElementById("login-pwd").value //Get the user input
-        //If user is an admin, set the admin flag for the session. 
-        //login success should redirect to new_schema.html after storing the user information. These people/classes should have an Agent ID from RERUM to do this as properly as possible.  
+    //If user is an admin, set the admin flag for the session. 
+    //login success should redirect to new_schema.html after storing the user information. These people/classes should have an Agent ID from RERUM to do this as properly as possible.  
     if (admins.includes(who)) {
         if (usrSecret == secrets.admin) {
             LR.ui.loginRedirect(who)
@@ -856,19 +853,37 @@ LR.tricks.mockLogin = async function(event) {
     }
 }
 
+/**
+ * Detect the user in localStorage and attribute them to deer-key="creator" that are not yet set.  
+ * This is a bit of a hack, since it forcefully sets a value to hidden inputs with DEER.KEY="creator".
+ * @return {undefined}
+ */
 LR.tricks.loggedInUserAttribution = function() {
     let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : { "user": "LR_UNKNOWN" }
-    let inputs = document.querySelectorAll("input[deer-key='creator']")
-    for (el in inputs) {
+    let inputs = document.querySelectorAll("input[type='hidden'][deer-key='creator']")
+    for (let el of inputs) {
         if (el.value) {
             if (el.value !== userObj.user) {
                 //Already a creator and it is not the current user...
                 el.value = userObj.user
-                    //el.$isDirty = true
             }
         } else {
             el.value = userObj.user
-                //el.$isDirty = true
         }
     }
+}
+
+/**
+ * Generate a default label for an Experience, noting the user and the date.  
+ * @return {undefined}
+ */
+LR.tricks.generateSubmissionLabel = function() {
+    let userObj = localStorage.hasOwnProperty("authorized_user") ? JSON.parse(localStorage.getItem("authorized_user")) : { "user": "LR_UNKNOWN" }
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;
+    document.getElementById("uploadLabel").value = userObj.user + " " + today + " Upload -- Thank You!"
+    document.getElementById("uploadLabel").$isDirty = true
 }
