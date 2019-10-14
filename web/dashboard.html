@@ -47,6 +47,7 @@
     <script src="./js/app.js" type="text/javascript"></script>
     <script src="./js/components.js" type="text/javascript"></script>
     <script>
+        const APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
         window.onload = function() {
             loadUser()
             getUserEntries()
@@ -79,7 +80,8 @@
                 },
                 body: JSON.stringify({
                     "@type": "Event",
-                    "creator": user['@id']
+                    "creator": user['@id'],
+                    "__rerum.generatedBy": APPAGENT
                 })
             })
             experiences = await experiences.json()
