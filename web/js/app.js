@@ -38,10 +38,12 @@ LR.local.survey = {}
 LR.formProcessor = {}
 LR.crud = {}
 LR.crud.URL = {
-    BASE_ID: "http://devstore.rerum.io/v1",
-    CREATE: "http://tinydev.rerum.io/app/create",
-    UPDATE: "http://tinydev.rerum.io/app/update",
-    DELETE: "http://tinydev.rerum.io/app/delete"
+    CREATE: "/create",
+    UPDATE: "/update",
+    QUERY:  "/query",
+    OVERWRITE: "/overwrite",
+    DELETE: "/delete",
+    SINCE: "http://devstore.rerum.io/v1/since"
 }
 LR.err = {}
 LR.tricks = {}

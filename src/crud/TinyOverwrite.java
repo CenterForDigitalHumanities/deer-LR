@@ -71,7 +71,7 @@ public class TinyOverwrite extends HttpServlet {
             String pubTok = manager.getAccessToken();
             boolean expired = manager.checkTokenExpiry();
             if(expired){
-                System.out.println("Tiny thing detected an expired token, auto getting and setting a new one...");
+                System.out.println("Lived Religion detected an expired token, auto getting and setting a new one...");
                 pubTok = manager.generateNewAccessToken();
             }
             //Point to rerum server v1
