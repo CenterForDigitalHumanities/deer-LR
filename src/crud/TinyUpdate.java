@@ -19,13 +19,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 import tokens.TinyTokenManager;
+import java.util.List;
+import java.util.Map;
 
 
 /**
  *
  * @author bhaberbe
  */
-public class tinyOverwrite extends HttpServlet {
+public class TinyUpdate extends HttpServlet {
     //private final TinyTokenManager manager = new TinyTokenManager("E:\\tinyThings\\Source Packages\\tiny.properties");
 
     /**
@@ -39,6 +41,7 @@ public class tinyOverwrite extends HttpServlet {
      */
         protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
+        request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
         TinyTokenManager manager = new TinyTokenManager();
@@ -75,7 +78,7 @@ public class tinyOverwrite extends HttpServlet {
                 pubTok = manager.generateNewAccessToken();
             }
             //Point to rerum server v1
-            URL postUrl = new URL(Constant.RERUM_API_ADDR + "/overwrite.action");
+            URL postUrl = new URL(Constant.RERUM_API_ADDR + "/update.action");
             HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -87,8 +90,10 @@ public class tinyOverwrite extends HttpServlet {
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+                byte[] toWrite = requestJSON.toString().getBytes("UTF-8");
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
-                out.writeBytes(requestJSON.toString());
+                //out.writeBytes(requestJSON.toString());
+                out.write(toWrite);
                 out.flush();
                 out.close(); 
                 codeOverwrite = connection.getResponseCode();
@@ -98,8 +103,14 @@ public class tinyOverwrite extends HttpServlet {
                     sb.append(line);
                 }
                 reader.close();
-            }
-            catch(IOException ex){
+                for (Map.Entry<String, List<String>> entries : connection.getHeaderFields().entrySet()) {
+                    String values = "";
+                    for (String value : entries.getValue()) {
+                        values += value + ",";
+                    }
+                    response.setHeader(entries.getKey(), values);
+                }
+            } catch (IOException ex) {
                 //Need to get the response RERUM sent back.
                 BufferedReader error = new BufferedReader(new InputStreamReader(connection.getErrorStream(),"utf-8"));
                 String errorLine = "";
@@ -109,10 +120,32 @@ public class tinyOverwrite extends HttpServlet {
                 error.close();
             }
             connection.disconnect();
+            if(manager.getAPISetting().equals("true")){
+                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+            }
             response.setStatus(codeOverwrite);
             response.getWriter().print(sb.toString());
         }
         
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(TinyUpdate.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -129,7 +162,36 @@ public class tinyOverwrite extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(tinyOverwrite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyUpdate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+   /**
+     * Handles the HTTP <code>OPTIONS</code> preflight method.
+     * This should be a configurable option.  Turning this on means you
+     * intend for this version of Tiny Things to work like an open API.  
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            TinyTokenManager manager = new TinyTokenManager();
+            String openAPI = manager.getAPISetting();
+            if(openAPI.equals("true")){
+                //These headers must be present to pass browser preflight for CORS
+                response.addHeader("Access-Control-Allow-Origin", "*");
+                response.addHeader("Access-Control-Allow-Headers", "*");
+                response.addHeader("Access-Control-Allow-Methods", "*");
+            }
+            response.setStatus(200);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(TinyQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -140,7 +202,7 @@ public class tinyOverwrite extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Overwrites an object in the RERUM store without versioning.";
+        return "Short description";
     }// </editor-fold>
 
 }

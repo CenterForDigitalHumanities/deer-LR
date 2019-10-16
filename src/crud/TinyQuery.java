@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author bhaberbe
  */
-public class tinyQuery extends HttpServlet {
+public class TinyQuery extends HttpServlet {
     //private final TinyTokenManager manager = new TinyTokenManager("E:\\tinyThings\\Source Packages\\tiny.properties");
 
     /**
@@ -145,7 +145,7 @@ public class tinyQuery extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(tinyQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -174,7 +174,7 @@ public class tinyQuery extends HttpServlet {
             response.setStatus(200);
             
         } catch (Exception ex) {
-            Logger.getLogger(tinyQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
