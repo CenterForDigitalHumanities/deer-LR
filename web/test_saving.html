@@ -15,12 +15,12 @@ and open the template in the editor.
 
 <body>
     <!-- Only warnings here, make this one error free -->
-    <form id="newSpaceForm" class="dataWrap" deer-type="Place" deer-id="http://devstore.rerum.io/v1/id/5d811c56e4b07f0c56c0f568">
-        <header> A Place: http://devstore.rerum.io/v1/id/5d811c56e4b07f0c56c0f568</header>
+    <form id="newSpaceForm" class="dataWrap" deer-type="Place">
+        <header> A Place</header>
         <label>Name: </label><input type="text" deer-key="name" value="Maramec Spring Park" />
         <input type="hidden" deer-key="additionalType" deer-array-type="List" value="TouristAttraction,Local Buisiness,Landform" />
         <input type="hidden" deer-key="contributors" deer-array-delimeter="|" deer-array-type="Set" value="St. James Foundation|MODOC|Bryan H., Sr." />
-        <input type="hidden" deer-key="members" deer-array-type="List" value="Trout,Blue Gill,White Tail Deer,Gray Pelican" />
+        <input type="hidden" deer-key="members" deer-array-type="List" deer-list="fishez" value="Trout,Blue Gill,White Tail Deer,Gray Pelican" />
         <label>Slogan: </label><input type="text" deer-key="slogan" value="Catch trout or have a great time tryin'" />
         <input type="submit" />
     </form>
@@ -29,12 +29,12 @@ and open the template in the editor.
     <br>
 
     <!-- Should get lots of warnings and errors here -->
-    <form id="newThingForm" class="dataWrap" deer-type="Thing" deer-id="http://devstore.rerum.io/v1/id/5d811c71e4b07f0c56c0f56a">
-        <header> A Thing : http://devstore.rerum.io/v1/id/5d811c71e4b07f0c56c0f56a </header>
+    <form id="newThingForm" class="dataWrap" deer-type="Thing">
+        <header> A Thing </header>
         <label>Name: </label><input type="text" deer-key="name" value="Ball" />
-        <label>Additional Types: </label><input type="text" deer-key="additionalType" deer-array-type="Set" deer-array-delimeter-="|" value='Sphere|Equipment|3D Shape' />
+        <input type="hidden" deer-key="additionalType" deer-array-type="Set" deer-array-delimeter="|" value='Sphere|Equipment|3D Shape' />
         <input type="hidden" deer-key="contributors" deer-array-type="ListToLoadIntoInterface" value='Rawlings,Spalding,Nike' />
-        <input type="hidden" deer-key="members" deer-array-type="List" deer-array-delimeter-="|" value='Baseball,Basketball,Football' />
+        <input type="hidden" deer-key="members" deer-array-type="List" deer-array-delimeter="|" value='Baseball,Basketball,Football' />
         <label>Description: </label><input type="text" deer-key="description" />
         <input type="hidden" deer-key="slogan" value='' />
         <input type="hidden" deer-key="" deer-array-type="@list" value="Bread,Apple,Gravy,Very Small Rocks,Churches,Duck" />
