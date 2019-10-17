@@ -55,7 +55,7 @@ public class Login extends HttpServlet {
         if(authorizer.isAuthorized(user, pwd)){
            //Check if the password for that user matches 
            response.setStatus(HttpServletResponse.SC_OK);
-           jo_return.element("user", user);
+           jo_return.element("name", user);
            jo_return.element("@id", authorizer.getUserID(user));
            jo_return.element("roles", authorizer.getUserRoles(user));
         }
