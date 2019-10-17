@@ -90,37 +90,42 @@ class LrLogin extends HTMLElement {
     }
     connectedCallback() {
         let shadow = this.shadowRoot
-        shadow.querySelector('FORM').onsubmit = async function(event) {
-            event.preventDefault()
-            let data = new FormData(this)
-            console.log(data, data.user, data.pwd)
-            let authenticatedUser = await fetch('login', {
-                method: "POST",
-                mode: "cors",
-                cache: "no-cache",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: data.get("user"),
-                    password: data.get("pwd")
-                })
-            }).then(res => res.json()).catch(err => console.error(err))
-            if (authenticatedUser && authenticatedUser["@id"]) {
-                document.dispatchEvent(new CustomEvent('lr-user-known', { detail: { user: authenticatedUser } }))
-                localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
-                shadow.innerHTML = `<span>
+        try {
+            shadow.querySelector('FORM').onsubmit = async function(event) {
+                event.preventDefault()
+                let data = new FormData(this)
+                console.log(data, data.user, data.pwd)
+                let authenticatedUser = await fetch('login', {
+                    method: "POST",
+                    mode: "cors",
+                    cache: "no-cache",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: data.get("user"),
+                        password: data.get("pwd")
+                    })
+                }).then(res => res.json()).catch(err => console.error(err))
+                if (authenticatedUser && authenticatedUser["@id"]) {
+                    document.dispatchEvent(new CustomEvent('lr-user-known', { detail: { user: authenticatedUser } }))
+                    localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
+                    shadow.innerHTML = `<span>
                 Logged in as <strong>${authenticatedUser.name}</strong>
                 <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
                 </span>`
-                this.closest('BACKDROP').remove()
-                document.body.style.overflowY = ''
-            } else {
-                let error = document.createElement('P')
-                error.classList.add('bg-error')
-                error.textContent = `Login failed.`
-                this.querySelector('fieldset').insertBefore(error, this.querySelector('legend'))
+                    this.closest('BACKDROP').remove()
+                    document.body.style.overflowY = ''
+                } else {
+                    let error = document.createElement('P')
+                    error.classList.add('bg-error')
+                    error.textContent = `Login failed.`
+                    this.querySelector('fieldset').insertBefore(error, this.querySelector('legend'))
+                }
             }
+        } catch (err) {
+            // already logged in or other error
+            // TODO: focus this catch
         }
     }
 }
