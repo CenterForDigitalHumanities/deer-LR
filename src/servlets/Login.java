@@ -35,7 +35,6 @@ public class Login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setStatus(HttpServletResponse.SC_CREATED);
         response.addHeader("Content-Type", "application/json; charset=utf-8");
         String requestBody;
         ServletInputStream input = request.getInputStream();
