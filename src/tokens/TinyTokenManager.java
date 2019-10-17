@@ -28,7 +28,7 @@ public class TinyTokenManager{
     //Notice that when it is initialized, nothing is set.
     private String currentAccessToken = "";
     private String currentRefreshToken = "";
-    private String propFileLocation = "tiny.properties";
+    private String propFileLocation = Constant.PROPERTIES_FILE_NAME; //This package.
     private String apiSetting = "";
     private Properties props = new Properties();
     
@@ -145,7 +145,7 @@ public class TinyTokenManager{
      * @throws Exception 
      */
     public String generateNewAccessToken() throws SocketTimeoutException, IOException, Exception{
-        System.out.println("Tiny Things has to get a new access token...");
+        System.out.println("Lived Religion has to get a new access token...");
         String newAccessToken = "";
         JSONObject jsonReturn = new JSONObject();
         JSONObject tokenRequestParams = new JSONObject();
@@ -195,7 +195,7 @@ public class TinyTokenManager{
         }
         setAccessToken(newAccessToken);
         writeProperty("access_token", newAccessToken);
-        System.out.println("Tiny Things has a new access token, and it is written to the properties file...");
+        System.out.println("Lived Religion has a new access token, and it is written to the properties file...");
         return newAccessToken;
     }
     

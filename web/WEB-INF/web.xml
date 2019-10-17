@@ -10,24 +10,26 @@
     </servlet>
     <servlet>
         <servlet-name>TinyDelete</servlet-name>
-        <servlet-class>crud.Logout</servlet-class>
+        <servlet-class>crud.TinyDelete</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TinyOverwrite</servlet-name>
-        <servlet-class>crud.Login</servlet-class>
+        <servlet-class>crud.TinyOverwrite</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TinyQuery</servlet-name>
-        <servlet-class>crud.Logout</servlet-class>
+        <servlet-class>crud.TinyQuery</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TinySave</servlet-name>
-        <servlet-class>crud.Login</servlet-class>
+        <servlet-class>crud.TinySave</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TinyUpdate</servlet-name>
-        <servlet-class>crud.Logout</servlet-class>
+        <servlet-class>crud.TinyUpdate</servlet-class>
     </servlet>
+    
+    
     
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -55,9 +57,8 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>TinyUpdate</servlet-name>
-        <url-pattern>/save</url-pattern>
+        <url-pattern>/update</url-pattern>
     </servlet-mapping>
-    
     <session-config>
         <session-timeout>
             90
