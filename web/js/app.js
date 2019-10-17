@@ -9,10 +9,11 @@ LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
     BASE_ID: "http://devstore.rerum.io/v1",
-    CREATE: "http://tinydev.rerum.io/app/create",
-    UPDATE: "http://tinydev.rerum.io/app/update",
-    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-    QUERY: "http://tinydev.rerum.io/app/query",
+    CREATE: "create",
+    UPDATE: "update",
+    QUERY:  "query",
+    OVERWRITE: "overwrite",
+    DELETE: "delete",
     SINCE: "http://devstore.rerum.io/v1/since"
 }
 if (typeof(Storage) !== "undefined") {

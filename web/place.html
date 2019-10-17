@@ -36,7 +36,7 @@
 
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="additionalType" value="Feature">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocationsTest">
 
                     <h4>Map Information</h4>
 
@@ -190,9 +190,9 @@
                         let locationsList = document.createElement("ul")
                         let queryObj = {
                             $or: [{
-                                "targetCollection": "LivedReligionLocations"
+                                "targetCollection": "LivedReligionLocationsTest"
                             }, {
-                                "body.targetCollection": "LivedReligionLocations"
+                                "body.targetCollection": "LivedReligionLocationsTest"
                             }]
                         }
                         fetch("http://tinydev.rerum.io/app/query", {
@@ -279,7 +279,7 @@
         <div class="card">
             <div class="card_body">
                 <h3>Existing Locations</h3>
-                <deer-view deer-collection="LivedReligionLocations">
+                <deer-view deer-collection="LivedReligionLocationsTest">
                 </deer-view>
             </div>
         </div>
