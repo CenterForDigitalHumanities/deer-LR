@@ -107,12 +107,13 @@ class LrLogin extends HTMLElement {
                 })
             }).then(res => res.json()).catch(err => console.error(err))
             if (authenticatedUser && authenticatedUser["@id"]) {
-                document.body.style.overflowY = ''
+                localStorage.setItem("lr-user", JSON.stringify(user))
                 shadow.innerHTML = `<span>
                 Logged in as <strong>${authenticatedUser.name}</strong>
                 <a href="/logout">Logout</a>
                 </span>`
                 this.closest('BACKDROP').remove()
+                document.body.style.overflowY = ''
             } else {
                 let error = document.createElement('P')
                 error.classList.add('bg-error')
