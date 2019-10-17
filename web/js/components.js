@@ -107,7 +107,7 @@ class LrLogin extends HTMLElement {
                 })
             }).then(res => res.json()).catch(err => console.error(err))
             if (authenticatedUser && authenticatedUser["@id"]) {
-                localStorage.setItem("lr-user", JSON.stringify(user))
+                localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
                 shadow.innerHTML = `<span>
                 Logged in as <strong>${authenticatedUser.name}</strong>
                 <a href="/logout">Logout</a>
