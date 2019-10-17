@@ -52,7 +52,7 @@ class LrLogin extends HTMLElement {
         if (this.hasAttribute("lr-user")) {
             shadow.innerHTML = `<span>
                 Logged in as ${user.name}
-                <a href="logout">Logout</a>
+                <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
             </span>`
         } else {
             shadow.innerHTML = `
@@ -111,7 +111,7 @@ class LrLogin extends HTMLElement {
                 localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
                 shadow.innerHTML = `<span>
                 Logged in as <strong>${authenticatedUser.name}</strong>
-                <a href="/logout">Logout</a>
+                <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
                 </span>`
                 this.closest('BACKDROP').remove()
                 document.body.style.overflowY = ''
