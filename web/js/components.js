@@ -42,6 +42,7 @@ class LrLogin extends HTMLElement {
             try {
                 user = JSON.parse(user)
                 this.setAttribute("lr-user", user["@id"])
+                document.dispatchEvent(new CustomEvent('lr-user-known', { detail: user }))
             } catch (err) {
                 console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                 localStorage.removeItem("lr-user")
