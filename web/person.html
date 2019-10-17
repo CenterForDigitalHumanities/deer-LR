@@ -152,15 +152,15 @@
     </div>
     <lr-footer></lr-footer>
 
-    <script src="./js/deerInitializer.js" type="module"></script>
-    <script src="./js/app.js" type="text/javascript"></script>
-    <script src="./js/components.js" type="text/javascript"></script>
     <script>
         document.addEventListener('lr-user-known', event => {
-            let user = event.details.user
+            let user = event.detail.user
             document.querySelector("[deer-key='creator']").value = user['@id']
         })
     </script>
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+    <script src="./js/components.js" type="text/javascript"></script>
 
 </body>
 
