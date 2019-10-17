@@ -52,7 +52,7 @@ class LrLogin extends HTMLElement {
         if (this.hasAttribute("lr-user")) {
             shadow.innerHTML = `<span>
                 Logged in as ${user.name}
-                <a href="/logout">Logout</a>
+                <a href="logout">Logout</a>
             </span>`
         } else {
             shadow.innerHTML = `
@@ -94,7 +94,7 @@ class LrLogin extends HTMLElement {
             event.preventDefault()
             let data = new FormData(this)
             console.log(data, data.user, data.pwd)
-            let authenticatedUser = await fetch('/login', {
+            let authenticatedUser = await fetch('login', {
                 method: "POST",
                 mode: "cors",
                 cache: "no-cache",
