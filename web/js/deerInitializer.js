@@ -159,8 +159,9 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
             }
         }
         tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
-        return tmpl
     }
+        return tmpl
+}
     //
 DEER.URLS = {
         CREATE: "create",
