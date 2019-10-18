@@ -18,6 +18,7 @@ customElements.define("lr-footer", LrFooter)
 
 class LrNav extends HTMLElement {
     constructor() {
+        super()
         this.addEventListener('lr-user-known', event => {
             let user = event.detail.user
             this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
