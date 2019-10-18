@@ -37,7 +37,7 @@ DEER.TEMPLATES.sense = function(obj, options = {}) {
         let gender = `<dd>Gender:${UTILS.getValue(obj.demographic.gender)}</dd>`
         let age = `<dd>Age:${UTILS.getValue(obj.demographic.age)}</dd>`
         let use = `<dd>Use:${UTILS.getValue(obj.typical_use)}</dd>`
-        //If I use a obj.xyz that doesn't exist a breaking error occurs...
+            //If I use a obj.xyz that doesn't exist a breaking error occurs...
 
         let senseTemplate = `<div>`
 
@@ -66,8 +66,8 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
         let phone = `<entry-line><lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval></entry-line/>`
         let religion = `<entry-line><lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval></entry-line/>`
         let depiction = `<entry-line><lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval></entry-line/>`
-        // let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
-        // let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
+            // let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
+            // let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
         let gender = `<entry-line><lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval></entry-line/>`
         let edu = `<entry-line><lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval></entry-line/>`
         let nationality = `<entry-line><lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval></entry-line/>`
@@ -109,7 +109,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
-        //let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
+            //let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
         let tmpl = ``
         tmpl += `<select deer-key-x="contributor" multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Researchers"> `
@@ -158,28 +158,27 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
                 list += (value['@id']) ? `<dd><a href="${options.link||""}#${value['@id']}">${v}</a></dd>` : `<dd>${v}</dd>`
             }
         }
+        tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
+        return tmpl
     }
-    tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
-    return tmpl
-}
-//
+    //
 DEER.URLS = {
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY:  "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://devstore.rerum.io/v1/since"
-}
-// Render is probably needed by all items, but can be removed.
-// CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from '../deer-lr-working/deer-render.js'
+        CREATE: "create",
+        UPDATE: "update",
+        QUERY: "query",
+        OVERWRITE: "overwrite",
+        DELETE: "delete",
+        SINCE: "http://devstore.rerum.io/v1/since"
+    }
+    // Render is probably needed by all items, but can be removed.
+    // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
+import { default as renderer, initializeDeerViews } from 'http://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from '../deer-lr-working/deer-record.js'
+import { default as record, initializeDeerForms } from 'http://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
 
 // fire up the element detection as needed
 initializeDeerViews(DEER)
-//Need to make the form initializer wait on view initializer, these cannot run syncronously.  
+    //Need to make the form initializer wait on view initializer, these cannot run syncronously.  
 initializeDeerForms(DEER)
