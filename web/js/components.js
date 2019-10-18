@@ -17,14 +17,15 @@ class LrFooter extends HTMLElement {
 customElements.define("lr-footer", LrFooter)
 
 class LrNav extends HTMLElement {
-    connectedCallback() {
+    constructor() {
         this.addEventListener('lr-user-known', event => {
             let user = event.detail.user
             this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
             <a href="places.html">Locations</a>
             <a href="stories.html">Stories</a>`
         })
-
+    }
+    connectedCallback() {
         this.innerHTML = `<div class="nav-left">
         <a class="brand" href="index.html"><img src="http://religioninplace.org/blog/wp-content/uploads/2019/04/LRDA-Logo.jpg"></a>
         <div class="tabs">
@@ -48,7 +49,7 @@ class LrLogin extends HTMLElement {
             try {
                 user = JSON.parse(user)
                 this.setAttribute("lr-user", user["@id"])
-                document.dispatchEvent(new CustomEvent('lr-user-known', { detail: { user: user } }))
+                document.dispatchEvent(new CustomEvent('lr-user-known', { detail: { user: user }, composed: true, bubbles: true }))
             } catch (err) {
                 console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                 localStorage.removeItem("lr-user")
@@ -97,7 +98,6 @@ class LrLogin extends HTMLElement {
             this.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
                 let data = new FormData(this)
-                console.log(data, data.user, data.pwd)
                 let authenticatedUser = await fetch('login', {
                     method: "POST",
                     mode: "cors",
