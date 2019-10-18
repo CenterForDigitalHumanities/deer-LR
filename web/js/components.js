@@ -18,10 +18,16 @@ customElements.define("lr-footer", LrFooter)
 
 class LrNav extends HTMLElement {
     connectedCallback() {
+        this.on('lr-user-known', event => {
+            let user = event.detail.user
+            this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
+            <a href="places.html">Locations</a>
+            <a href="stories.html">Stories</a>`
+        })
+
         this.innerHTML = `<div class="nav-left">
         <a class="brand" href="index.html"><img src="http://religioninplace.org/blog/wp-content/uploads/2019/04/LRDA-Logo.jpg"></a>
         <div class="tabs">
-            <a class="active" href="dashboard.html">Dashboard</a>
             <a href="places.html">Locations</a>
             <a href="stories.html">Stories</a>
         </div>
