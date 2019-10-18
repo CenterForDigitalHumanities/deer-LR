@@ -47,7 +47,7 @@
             if (event.detail.user.roles.administrator) {
                 buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
             }
-            this.querySelector('.entries').innerHTML = buttons
+            document.querySelector('.entries').innerHTML = buttons
         })
 
         async function getUserEntries(user) {
