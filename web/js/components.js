@@ -19,7 +19,7 @@ customElements.define("lr-footer", LrFooter)
 class LrNav extends HTMLElement {
     constructor() {
         super()
-        this.addEventListener('lrUserKnown', event => {
+        addEventListener('lrUserKnown', event => {
             let user = event.detail.user
             this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
             <a href="places.html">Locations</a>
@@ -50,7 +50,7 @@ class LrLogin extends HTMLElement {
             try {
                 user = JSON.parse(user)
                 this.setAttribute("lr-user", user["@id"])
-                this.dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: user }, composed: true, bubbles: true }))
+                dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: user }, composed: true, bubbles: true }))
             } catch (err) {
                 console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                 localStorage.removeItem("lr-user")
@@ -112,7 +112,7 @@ class LrLogin extends HTMLElement {
                     })
                 }).then(res => res.json()).catch(err => console.error(err))
                 if (authenticatedUser && authenticatedUser["@id"]) {
-                    this.dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
+                    dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
                     localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
                     this.innerHTML = `<span>
                 Logged in as <strong>${authenticatedUser.name}</strong>

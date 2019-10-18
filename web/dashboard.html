@@ -40,7 +40,7 @@
     <!-- Add ins -->
     <script>
         const APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
-        document.querySelector('.entries').addEventListener('lrUserKnown', event => {
+        addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
             let buttons = `<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
             <a class="button primary" href="place.html"> &#xFF0B; Location </a>`
