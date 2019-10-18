@@ -40,7 +40,7 @@
     <!-- Add ins -->
     <script>
         const APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
-        document.addEventListener('lrUserKnown', event => {
+        document.querySelector('.entries').addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
             let buttons = `<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
             <a class="button primary" href="place.html"> &#xFF0B; Location </a>`
@@ -48,7 +48,7 @@
                 buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
             }
             document.querySelector('.entries').innerHTML = buttons
-        })
+        }, false)
 
         async function getUserEntries(user) {
             let experiences = await fetch("http://tinydev.rerum.io/app/query", {
