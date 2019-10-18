@@ -54,15 +54,13 @@ class LrLogin extends HTMLElement {
                 localStorage.removeItem("lr-user")
             }
         }
-        var shadow = this.attachShadow({ mode: "open" })
         if (this.hasAttribute("lr-user")) {
-            shadow.innerHTML = `<span>
+            this.innerHTML = `<span>
                 Logged in as ${user.name}
                 <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
             </span>`
         } else {
-            shadow.innerHTML = `
-            <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+            this.innerHTML = `
             <style>
             backdrop {
                 position: fixed;
@@ -95,9 +93,8 @@ class LrLogin extends HTMLElement {
         }
     }
     connectedCallback() {
-        let shadow = this.shadowRoot
         try {
-            shadow.querySelector('FORM').onsubmit = async function(event) {
+            this.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
                 let data = new FormData(this)
                 console.log(data, data.user, data.pwd)
@@ -116,7 +113,7 @@ class LrLogin extends HTMLElement {
                 if (authenticatedUser && authenticatedUser["@id"]) {
                     document.dispatchEvent(new CustomEvent('lr-user-known', { detail: { user: authenticatedUser } }))
                     localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
-                    shadow.innerHTML = `<span>
+                    this.innerHTML = `<span>
                 Logged in as <strong>${authenticatedUser.name}</strong>
                 <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
                 </span>`
