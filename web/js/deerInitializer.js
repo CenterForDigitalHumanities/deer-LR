@@ -133,35 +133,35 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
  * @return {default.TEMPLATES.Event.tmpl, String}
  */
 DEER.TEMPLATES.Event = function(obj, options = {}) {
-    let tmpl = `<h2>${UTILS.getValue(obj.label)}</h2>`
-    let list = ``
-    for (let key in obj) {
-        if (DEER.SUPPRESS.indexOf(key) > -1) { continue }
-        let label = key
-        let value = UTILS.getValue(obj[key], key)
-        try {
-            if ((value.image || value.trim()).length > 0) {
-                list += `<dt deer-source="${obj[key].source}">${label}</dt><dd>${value}</dd>`
+        let tmpl = `<h2>${UTILS.getValue(obj.label)}</h2>`
+        let list = ``
+        for (let key in obj) {
+            if (DEER.SUPPRESS.indexOf(key) > -1) { continue }
+            let label = key
+            let value = UTILS.getValue(obj[key], key)
+            try {
+                if ((value.image || value.trim()).length > 0) {
+                    list += `<dt deer-source="${obj[key].source}">${label}</dt><dd>${value}</dd>`
+                }
+            } catch (err) {
+                // Some object maybe or untrimmable somesuch
+                list += `<dt>${label}</dt>`
+                if (Array.isArray(value)) {
+                    value.forEach((val, index) => {
+                        let name = UTILS.getLabel(val, (val.type || val['@type'] || label + index))
+                        list += (val["@id"]) ? `<dd><a href="#${val["@id"]}">${name}</a></dd>` : `<dd>${name}</dd>`
+                    })
+                } else {
+                    //This is an object containing an array.  In this case, it is most likely contributor
+                    let v = UTILS.getValue(value)
+                    if (typeof v === "object") { v = UTILS.getArrayFromObj(v, null) }
+                    list += (value['@id']) ? `<dd><a href="${options.link||""}#${value['@id']}">${v}</a></dd>` : `<dd>${v}</dd>`
+                }
             }
-        } catch (err) {
-            // Some object maybe or untrimmable somesuch
-            list += `<dt>${label}</dt>`
-            if (Array.isArray(value)) {
-                value.forEach((val, index) => {
-                    let name = UTILS.getLabel(val, (val.type || val['@type'] || label + index))
-                    list += (val["@id"]) ? `<dd><a href="#${val["@id"]}">${name}</a></dd>` : `<dd>${name}</dd>`
-                })
-            } else {
-                //This is an object containing an array.  In this case, it is most likely contributor
-                let v = UTILS.getValue(value)
-                if (typeof v === "object") { v = UTILS.getArrayFromObj(v, null) }
-                list += (value['@id']) ? `<dd><a href="${options.link||""}#${value['@id']}">${v}</a></dd>` : `<dd>${v}</dd>`
-            }
+            tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
         }
-        tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
+        return tmpl
     }
-    return tmpl
-}
     //
 DEER.URLS = {
         CREATE: "create",
@@ -173,11 +173,11 @@ DEER.URLS = {
     }
     // Render is probably needed by all items, but can be removed.
     // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'http://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
+import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'http://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
+import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
 
 // fire up the element detection as needed
 initializeDeerViews(DEER)
