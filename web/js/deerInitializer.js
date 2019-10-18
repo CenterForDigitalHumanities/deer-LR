@@ -154,7 +154,7 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
             } else {
                 //This is an object containing an array.  In this case, it is most likely contributor
                 let v = UTILS.getValue(value)
-                if (typeof v === "object") { v = UTILS.getArrayFromObj(v) }
+                if (typeof v === "object") { v = UTILS.getArrayFromObj(v, null) }
                 list += (value['@id']) ? `<dd><a href="${options.link||""}#${value['@id']}">${v}</a></dd>` : `<dd>${v}</dd>`
             }
         }
