@@ -132,36 +132,19 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
  * @param {type} options
  * @return {default.TEMPLATES.Event.tmpl, String}
  */
-DEER.TEMPLATES.Event = function(obj, options = {}) {
-        let tmpl = `<h2>${UTILS.getValue(obj.label)}</h2>`
-        let list = ``
-        for (let key in obj) {
-            if (DEER.SUPPRESS.indexOf(key) > -1) { continue }
-            let label = key
-            let value = UTILS.getValue(obj[key], key)
-            try {
-                if ((value.image || value.trim()).length > 0) {
-                    list += `<dt deer-source="${obj[key].source}">${label}</dt><dd>${value}</dd>`
-                }
-            } catch (err) {
-                // Some object maybe or untrimmable somesuch
-                list += `<dt>${label}</dt>`
-                if (Array.isArray(value)) {
-                    value.forEach((val, index) => {
-                        let name = UTILS.getLabel(val, (val.type || val['@type'] || label + index))
-                        list += (val["@id"]) ? `<dd><a href="#${val["@id"]}">${name}</a></dd>` : `<dd>${name}</dd>`
-                    })
-                } else {
-                    //This is an object containing an array.  In this case, it is most likely contributor
-                    let v = UTILS.getValue(value)
-                    if (typeof v === "object") { v = UTILS.getArrayFromObj(v, null) }
-                    list += (value['@id']) ? `<dd><a href="${options.link||""}#${value['@id']}">${v}</a></dd>` : `<dd>${v}</dd>`
-                }
-            }
-            tmpl += (list.includes("<dd>")) ? `<dl>${list}</dl>` : ``
-        }
+DEER.TEMPLATES.Event = function(obj, options={}) {
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
+        let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
+        let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+        let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
+        let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
+        tmpl += place+date+researchers
         return tmpl
+    } catch (err) {
+        return null
     }
+}
     //
 DEER.URLS = {
         CREATE: "create",
@@ -173,11 +156,11 @@ DEER.URLS = {
     }
     // Render is probably needed by all items, but can be removed.
     // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
+import { default as renderer, initializeDeerViews } from '../deer-lr-working/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
+import { default as record, initializeDeerForms } from '../deer-lr-working/deer-record.js'
 
 // fire up the element detection as needed
 initializeDeerViews(DEER)
