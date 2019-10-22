@@ -43,8 +43,24 @@
                         <div class="traditionWrapper col">
                             <label>Religious Tradition:</label>
                             <select deer-key="religious_tradition">
-                                <option value="Christian" sub="christianSub">Christian</option>
+                                <optgroup label="Christian">
+                                    <option value="Evangelical Protestant">Evangelical Protestant</option>
+                                    <option value="Mainline Protestant">Mainline Protestant</option>
+                                    <option value="Historically Black Protestant">Historically Black Protestant</option>
+                                    <option value="Catholic">Catholic</option>
+                                    <option value="Mormon">Mormon</option>
+                                    <option value="Othodox Christian">Orthodox Christian</option>
+                                    <option value="Jehova's Witness">Jehovah’s Witness</option>
+                                    <option value="Other Christian">Other Christian</option>
+                                </optgroup>
                                 <option value="Jewish" sub="jewishSub">Jewish</option>
+                                <optgroup label="Jewish">
+                                    <option value="Conservative">Conservative</option>
+                                    <option value="Reform">Reform</option>
+                                    <option value="Orthodox">Orthodox</option>
+                                    <option value="Reconstructionist">Reconstructionist</option>
+                                    <option value="Other">Other</option>
+                                </optgroup>
                                 <option value="Muslim">Muslim</option>
                                 <option value="Buddhist">Buddhist</option>
                                 <option value="Daoist">Daoist</option>
@@ -61,23 +77,6 @@
                                 <option value="Agnostic">Agnostic</option>
                                 <option value="Humanist">Humanist</option>
                                 <option value="Nothing in particular">Nothing in particular</option>
-                            </select>
-                            <select sub="christianSub" deer-key="religious_tradition">
-                                <option value="Evangelical Protestant">Evangelical Protestant</option>
-                                <option value="Mainline Protestant">Mainline Protestant</option>
-                                <option value="Historically Black Protestant">Historically Black Protestant</option>
-                                <option value="Catholic">Catholic</option>
-                                <option value="Mormon">Mormon</option>
-                                <option value="Othodox Christian">Orthodox Christian</option>
-                                <option value="Jehova's Witness">Jehovah’s Witness</option>
-                                <option value="Other Christian">Other Christian</option>
-                            </select>
-                            <select sub="jewishSub" deer-key="religious_tradition">
-                                <option value="Conservative">Conservative</option>
-                                <option value="Reform">Reform</option>
-                                <option value="Orthodox">Orthodox</option>
-                                <option value="Reconstructionist">Reconstructionist</option>
-                                <option value="Other">Other</option>
                             </select>
                         </div>
                         <div class="col">
