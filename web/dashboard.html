@@ -51,6 +51,7 @@
         }, false)
 
         async function getUserEntries(user) {
+            let historyWildcard = {"$exists":true, "$size":0}
             let experiences = await fetch("query", {
                 method: "POST",
                 headers: {
@@ -59,7 +60,8 @@
                 body: JSON.stringify({
                     "@type": "Event",
                     "creator": user['@id'],
-                    "__rerum.generatedBy": "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af"
+                    "__rerum.generatedBy": "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af",
+                    "__rerum.history.next" : historyWildcard
                 })
             })
             experiences = await experiences.json()
