@@ -39,7 +39,7 @@
     <!-- Need to force some authorization for this page -->
     <!-- Add ins -->
     <script>
-        const APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+        //TODO this needs to be an app helper function so we can use the DEER config with it.
         addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
             let buttons = `<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
@@ -51,7 +51,8 @@
         }, false)
 
         async function getUserEntries(user) {
-            let experiences = await fetch("http://tinydev.rerum.io/app/query", {
+            let historyWildcard = {"$exists":true, "$size":0}
+            let experiences = await fetch("query", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -59,7 +60,8 @@
                 body: JSON.stringify({
                     "@type": "Event",
                     "creator": user['@id'],
-                    "__rerum.generatedBy": APPAGENT
+                    "__rerum.generatedBy": "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af",
+                    "__rerum.history.next" : historyWildcard
                 })
             })
             experiences = await experiences.json()
