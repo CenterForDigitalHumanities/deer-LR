@@ -205,6 +205,7 @@ export default class DeerReport {
         let record = {
             "@type": this.type
         }
+        if (this.context) { record["@context"] = this.context }
         for (let p of DEER.PRIMITIVES) {
             try {
                 record[p] = this.elem.querySelector("[" + DEER.KEY + "='" + p + "']").value
