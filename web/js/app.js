@@ -39,14 +39,6 @@ LR.local = {}
 LR.local.survey = {}
 LR.formProcessor = {}
 LR.crud = {}
-LR.crud.URL = {
-    CREATE: "/create",
-    UPDATE: "/update",
-    QUERY:  "/query",
-    OVERWRITE: "/overwrite",
-    DELETE: "/delete",
-    SINCE: "http://devstore.rerum.io/v1/since"
-}
 LR.err = {}
 LR.tricks = {}
 LR.ui = {}
@@ -276,7 +268,7 @@ LR.crud.makeConversation = async function(interviewerID, intervieweeID, eventID,
  */
 LR.crud.create = async function(obj) {
     delete obj.__isdirty
-    let url = LR.crud.URL.CREATE
+    let url = LR.URLS.CREATE
     let jsonReturn = {}
     return await fetch(url, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -299,7 +291,7 @@ LR.crud.create = async function(obj) {
  */
 LR.crud.update = async function(obj) {
     delete obj.__isdirty
-    let url = LR.crud.URL.UPDATE
+    let url = LR.URLS.UPDATE
     return await fetch(url, {
             method: "PUT",
             headers: {
@@ -341,7 +333,7 @@ LR.crud.update = async function(obj) {
  * @return {JSON representing the new state of the object updated}
  */
 LR.crud.delete = async function(obj) {
-    let url = LR.crud.URL.DELETE
+    let url = LR.URLS.DELETE
     let jsonReturn = {};
     return await fetch(url, {
             method: "DELETE",
