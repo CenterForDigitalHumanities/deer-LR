@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author bhaberbe
  */
-public class tinyUpdate extends HttpServlet {
+public class TinyQuery extends HttpServlet {
     //private final TinyTokenManager manager = new TinyTokenManager("E:\\tinyThings\\Source Packages\\tiny.properties");
 
     /**
@@ -59,7 +59,7 @@ public class tinyUpdate extends HttpServlet {
           bodyString.append(line);
         }
         requestString = bodyString.toString();
-        try{ 
+        try { 
             //JSONObject test
             requestJSON = JSONObject.fromObject(requestString);
             moveOn = true;
@@ -74,15 +74,15 @@ public class tinyUpdate extends HttpServlet {
             String pubTok = manager.getAccessToken();
             boolean expired = manager.checkTokenExpiry();
             if(expired){
-                System.out.println("Tiny thing detected an expired token, auto getting and setting a new one...");
+                System.out.println("Lived Religion detected an expired token, auto getting and setting a new one...");
                 pubTok = manager.generateNewAccessToken();
             }
             //Point to rerum server v1
-            URL postUrl = new URL(Constant.RERUM_API_ADDR + "/update.action");
+            URL postUrl = new URL(Constant.RERUM_API_ADDR + "/getByProperties.action");
             HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
             connection.setDoOutput(true);
             connection.setDoInput(true);
-            connection.setRequestMethod("PUT");
+            connection.setRequestMethod("POST");
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
@@ -90,6 +90,7 @@ public class tinyUpdate extends HttpServlet {
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+                //Pass in the user provided JSON for the body of the rerumserver v1 request
                 byte[] toWrite = requestJSON.toString().getBytes("UTF-8");
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
                 //out.writeBytes(requestJSON.toString());
@@ -97,8 +98,8 @@ public class tinyUpdate extends HttpServlet {
                 out.flush();
                 out.close(); 
                 codeOverwrite = connection.getResponseCode();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));
-                while ((line = reader.readLine()) != null){
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+                while ((line = reader.readLine()) != null) {
                     //Gather rerum server v1 response
                     sb.append(line);
                 }
@@ -110,7 +111,8 @@ public class tinyUpdate extends HttpServlet {
                     }
                     response.setHeader(entries.getKey(), values);
                 }
-            } catch (IOException ex) {
+            }
+            catch(IOException ex){
                 //Need to get the response RERUM sent back.
                 BufferedReader error = new BufferedReader(new InputStreamReader(connection.getErrorStream(),"utf-8"));
                 String errorLine = "";
@@ -126,28 +128,9 @@ public class tinyUpdate extends HttpServlet {
             response.setStatus(codeOverwrite);
             response.getWriter().print(sb.toString());
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(tinyUpdate.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     /**
      * Handles the HTTP <code>PUT</code> method.
      *
@@ -157,16 +140,16 @@ public class tinyUpdate extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(tinyUpdate.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-   /**
+    /**
      * Handles the HTTP <code>OPTIONS</code> preflight method.
      * This should be a configurable option.  Turning this on means you
      * intend for this version of Tiny Things to work like an open API.  
@@ -191,7 +174,7 @@ public class tinyUpdate extends HttpServlet {
             response.setStatus(200);
             
         } catch (Exception ex) {
-            Logger.getLogger(tinyQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

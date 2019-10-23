@@ -35,7 +35,6 @@ public class Login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setStatus(HttpServletResponse.SC_CREATED);
         response.addHeader("Content-Type", "application/json; charset=utf-8");
         String requestBody;
         ServletInputStream input = request.getInputStream();
@@ -56,7 +55,7 @@ public class Login extends HttpServlet {
         if(authorizer.isAuthorized(user, pwd)){
            //Check if the password for that user matches 
            response.setStatus(HttpServletResponse.SC_OK);
-           jo_return.element("user", user);
+           jo_return.element("name", user);
            jo_return.element("@id", authorizer.getUserID(user));
            jo_return.element("roles", authorizer.getUserRoles(user));
         }

@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author bhaberbe
  */
-public class tinyDelete extends HttpServlet {    
+public class TinyDelete extends HttpServlet {    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -69,7 +69,7 @@ public class tinyDelete extends HttpServlet {
         String pubTok = manager.getAccessToken();
         boolean expired = manager.checkTokenExpiry();
         if(expired){
-            System.out.println("Tiny thing detected an expired token, auto getting and setting a new one...");
+            System.out.println("Lived Religion detected an expired token, auto getting and setting a new one...");
             pubTok = manager.generateNewAccessToken();
         }
         //Point to rerum server v1
@@ -136,7 +136,7 @@ public class tinyDelete extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(tinyDelete.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyDelete.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -154,7 +154,7 @@ public class tinyDelete extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(tinyDelete.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyDelete.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -183,7 +183,7 @@ public class tinyDelete extends HttpServlet {
             response.setStatus(200);
             
         } catch (Exception ex) {
-            Logger.getLogger(tinyQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TinyQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

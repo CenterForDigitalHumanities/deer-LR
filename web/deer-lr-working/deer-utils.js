@@ -41,7 +41,7 @@ export default {
         }
         if (Array.isArray(property)) {
             //It is an array of things, we can only presume that we want the array.  If it needs to become a string, local functions take on that responsibility.
-            prop = property
+            return property
         } else {
             if (typeof property === "object") {
                 // TODO: JSON-LD insists on "@value", but this is simplified in a lot
@@ -94,12 +94,15 @@ export default {
      * Attempt to discover a readable label from the object
      */
     get getLabel() {
+        let UTILS = this
         return (obj, noLabel = "[ unlabeled ]", options = {}) => {
             if (typeof obj === "string") { return obj }
             let label = obj[options.label] || obj.name || obj.label || obj.title
             if(Array.isArray(label)) {
-                label = [...new Set(label.map(l => this.getValue(this.getLabel(l))))]
-
+                label = [...new Set(label.map(l => this.getValue(UTILS.getLabel(l))))]
+            }
+            if(typeof label === "object"){
+                label = UTILS.getValue(label)
             }
             return label || noLabel
         }
@@ -200,7 +203,8 @@ export default {
             targetStyle = [targetStyle]
         }
         targetStyle = targetStyle.concat(["target", "target.@id", "target.id"]) //target.source?
-        let obj = {"$or":[]}
+        let historyWildcard = {"$exists":true, "$size":0}
+        let obj = {"$or":[], "__rerum.history.next":historyWildcard}
         for (let target of targetStyle) {
             //Entries that are not strings are not supported.  Ignore those entries.  
             //TODO: should we we let the user know we had to ignore something here?
@@ -210,7 +214,7 @@ export default {
                 obj["$or"].push(o)
             }
         }
-        //TODO let this request also include $and:__rerum.history.next.length === 0
+        
         let matches = await fetch(DEER.URLS.QUERY, {
             method: "POST",
             body: JSON.stringify(obj),
@@ -288,10 +292,19 @@ export default {
     /**
      * Get the array of data from the container object, so long at it is one of the containers we support (so we know where to look.) 
     */
-    getArrayFromObj:function(containerObj){
+    getArrayFromObj:function(containerObj, inputElem){
         let cleanArray = []
+        //Handle if what we are actualy looking for is inside containObj.value (DEER templates do that)
+        let alsoPeek = ["@value", "value", "$value", "val"]
+        for (let k of alsoPeek) {
+            if (containerObj.hasOwnProperty(k)) {
+                containerObj = containerObj[k]
+                break
+            }
+        }
         let objType = containerObj.type || containerObj["@type"] || ""
         let UTILS = this
+        let arrKey = (inputElem !== null && inputElem.hasAttribute(DEER.LIST)) ? inputElem.getAttribute(DEER.LIST) : ""
         if(Array.isArray(objType)){
             //Since type can be an array we have to pick one of the values that matches one of our supported container types.
             //This picks the first one it comes across, since it doesnt seem like we would have any preference.
@@ -305,16 +318,23 @@ export default {
         if(DEER.CONTAINERS.indexOf(objType) > -1){
             //Where it is we will find the array we seek differs between our supported types.  Perhaps we should store that with them in the config too.
             if(["Set", "List", "set","list", "@set", "@list"].indexOf(objType) > -1){
-                if(containerObj.hasOwnProperty("items")){ cleanArray = this.cleanArray(containerObj.items) }
+                if(arrKey === "") {
+                    arrKey = "items"
+                    UTILS.warning("Found attribute '"+DEER.ARRAYTYPE+"' on an input, but there is no '"+DEER.LIST+"' attribute value.  DEER will use the default schema '"+arrKey+"' to find the array values for this "+objType+".", inputElem)
+                } 
+                if(containerObj.hasOwnProperty(arrKey)){ cleanArray = this.cleanArray(containerObj[arrKey]) }
                 else{ 
-                    console.error("Object of type ("+objType+") is malformed.  The values could not be found in obj.items.  Therefore, the value is empty.  See object below.") 
+                    console.error("Object of type ("+objType+") is malformed.  The values could not be found in obj["+arrKey+"].  Therefore, the value is empty.  See object below.") 
                     console.log(containerObj)
                 }
-                
             } else if(["ItemList"].indexOf(objType > -1)){
-                if(containerObj.hasOwnProperty("itemListElement")){ cleanArray = this.cleanArray(containerObj.itemListElement)}
+                if(arrKey === "") {
+                    arrKey = "itemListElement"
+                    UTILS.warning("Found attribute '"+DEER.ARRAYTYPE+"' on an input, but there is no '"+DEER.LIST+"' attribute value.  DEER will use the default schema '"+arrKey+"' to find the the array values for this "+objType+".", inputElem)
+                } 
+                if(containerObj.hasOwnProperty(arrKey)){ cleanArray = this.cleanArray(containerObj[arrKey])}
                 else{
-                    console.error("Object of type ("+objType+") is malformed.  The values could not be found in obj.itemListElement.  Therefore, the value is empty.  See object below.")
+                    console.error("Object of type ("+objType+") is malformed.  The values could not be found in obj["+arrKey+"].  Therefore, the value is empty.  See object below.")
                     console.log(containerObj)
                 }
             }
