@@ -22,12 +22,12 @@ export default {
     PRIMITIVES: ["name", "creator", "label"],
 
     URLS: {
-        BASE_ID: "http://devstore.rerum.io/v1",
+        BASE_ID: "http://store.rerum.io/v1",
         CREATE: "http://tinydev.rerum.io/app/create",
         UPDATE: "http://tinydev.rerum.io/app/update",
         OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
         QUERY: "http://tinydev.rerum.io/app/query",
-        SINCE: "http://devstore.rerum.io/v1/since"
+        SINCE: "http://store.rerum.io/v1/since"
     },
 
     EVENTS: {
@@ -55,7 +55,7 @@ export default {
         cat: (obj) => `<h5>${obj.name}</h5><img src="http://placekitten.com/300/150" style="width:100%;">`
     },
     
-    APPAGENT:"http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af",
+    APPAGENT:"http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474",
 
     version: "alpha 0.8"
 }

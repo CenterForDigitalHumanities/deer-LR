@@ -5,17 +5,17 @@
  */
 
 const LR = {}
-LR.APPAGENT = "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af"
+LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "http://devstore.rerum.io/v1",
+    BASE_ID: "http://store.rerum.io/v1",
     CREATE: "create",
     UPDATE: "update",
     QUERY:  "query",
     OVERWRITE: "overwrite",
     DELETE: "delete",
-    SINCE: "http://devstore.rerum.io/v1/since"
+    SINCE: "http://store.rerum.io/v1/since"
 }
 if (typeof(Storage) !== "undefined") {
     LR.localInfo = window.localStorage
@@ -45,15 +45,15 @@ LR.ui = {}
 LR.test = {}
 
 LR.test.event = {
-    "@id": "http://devstore.rerum.io/v1/id/5cee987de4b07d216aab6bfc"
+    "@id": "http://store.rerum.io/v1/id/5cee987de4b07d216aab6bfc"
 }
 
 LR.test.interviewer = {
-    "@id": "http://devstore.rerum.io/v1/id/5cee975be4b07d216aab6bfa"
+    "@id": "http://store.rerum.io/v1/id/5cee975be4b07d216aab6bfa"
 }
 
 LR.test.interviewee = {
-    "@id": "http://devstore.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908"
+    "@id": "http://store.rerum.io/v1/id/5cdeb6a7e4b07d216aab6908"
 }
 
 LR.test.fillTextAreas = function() {
