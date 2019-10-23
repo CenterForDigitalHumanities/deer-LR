@@ -34,12 +34,9 @@
     </div>
     <lr-footer></lr-footer>
 
-
-
     <!-- Need to force some authorization for this page -->
     <!-- Add ins -->
     <script>
-        //TODO this needs to be an app helper function so we can use the DEER config with it.
         addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
             let buttons = `<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
@@ -48,8 +45,8 @@
                 buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
             }
             document.querySelector('.entries').innerHTML = buttons
-        }, false)
-
+        }, false) 
+        
         async function getUserEntries(user) {
             let historyWildcard = {"$exists":true, "$size":0}
             let experiences = await fetch("query", {
@@ -60,18 +57,38 @@
                 body: JSON.stringify({
                     "@type": "Event",
                     "creator": user['@id'],
-                    "__rerum.generatedBy": "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af",
+                    "__rerum.generatedBy": LR.APPAGENT,
                     "__rerum.history.next" : historyWildcard
                 })
             })
             experiences = await experiences.json()
-            previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) => a += `<li>(05/05/5555) at LOCATION <a class="tag is-small text-primary bd-primary" href="experience.html?id=${b['@id']}">view</a></li>`, ``) : `<p class="text-error">There are no recent experiences for this user.</p>`
+            previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>
+                {
+                    let obj = (b.value) ? b.value : b
+                    let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
+                    return a += `<li> ${label} <a class="tag is-small text-primary bd-primary" href="experience.html?id=${b['@id']}">view</a></li>`               
+                },``):`<p class="text-error">There are no recent experiences for this user.</p>`
+            
+            /**
+             * TODO this is the logic we need, but how are we going to do it?
+             */
+            /*
+            previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>
+                UTILS.expand({ "@id": b["@id"] })
+                    .then((function(obj) {
+                        let date = (UTILS.getValue(obj.startDate)) ? UTILS.getValue(obj.startDate) : "Unknown Date"
+                        let location = (UTILS.getValue(obj.location)) ? UTILS.getValue(obj.location) : "Unknown Location"
+                        let label = (UTILS.getLabel(obj)) ? UTILS.getLabel(obj) :  date + " at " + location
+                        a += `<li> ${label} <a class="tag is-small text-primary bd-primary" href="experience.html?id=${b['@id']}">view</a></li>`
+                    }))
+                , ``) 
+                :`<p class="text-error">There are no recent experiences for this user.</p>`
+            */
         }
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
     <script src="./js/components.js" type="text/javascript"></script>
-
 </body>
 
 </html>
