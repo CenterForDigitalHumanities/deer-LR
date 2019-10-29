@@ -130,15 +130,15 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
         }
     }
     //
-DEER.URLS = {
-    BASE_ID: "http://devstore.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://devstore.rerum.io/v1/since"
-}
+    // DEER.URLS = {
+    //     BASE_ID: "http://devstore.rerum.io/v1",
+    //     CREATE: "create",
+    //     UPDATE: "update",
+    //     QUERY: "query",
+    //     OVERWRITE: "overwrite",
+    //     DELETE: "delete",
+    //     SINCE: "http://devstore.rerum.io/v1/since"
+    // }
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
