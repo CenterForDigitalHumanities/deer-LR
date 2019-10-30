@@ -14,22 +14,11 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 // Identify a UTILS package
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-utils.js'
 
-
 // Overwrite or add certain values to the configuration to customize.
-
-// new template
-DEER.TEMPLATES.cat = (obj) => `<h5>${obj.name}</h5><img src="http://placekitten.com/300/150" style="width:100%;">`
 
 //Add one of my own templates
 DEER.TEMPLATES.sense = function(obj, options = {}) {
-    console.log("sense template")
     try {
-        // let kind = DEER.TEMPLATES.prop(obj, {key:"kind", label:"Type"}) || ``
-        //    let location = DEER.TEMPLATES.prop(obj, {key:"location", label:"Where"}) || ``
-        //    let religiousTradition = DEER.TEMPLATES.prop(obj, {key:"religious_tradition", label:"Religion"}) || ``
-        //    let gender = DEER.TEMPLATES.prop(obj.demographic, {key:"gender", label:"Gender"}) || ``
-        //    let age = DEER.TEMPLATES.prop(obj.demographic, {key:"age", label:"Age"}) || ``
-        //       let use = DEER.TEMPLATES.prop(obj, {key:"use", label:"Use"}) || ``
         //if I use key that doesn't exist, I get a blank, which is better than a breaking error 
         let kind = `<h3>${UTILS.getValue(obj.kind)}</h3>`
         let location = `<dd>Location:${UTILS.getValue(obj.location)}</dd>`
@@ -58,7 +47,6 @@ DEER.TEMPLATES.sense = function(obj, options = {}) {
 
 //Overwrite the internal person template with a more robust one
 DEER.TEMPLATES.person = function(obj, options = {}) {
-    console.log("person template")
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
         let dob = `<entry-line><lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval></entry-line/>`
@@ -66,8 +54,6 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
         let phone = `<entry-line><lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval></entry-line/>`
         let religion = `<entry-line><lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval></entry-line/>`
         let depiction = `<entry-line><lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval></entry-line/>`
-            // let familyName = `<lbl>Family Name</lbl> <theval>${UTILS.getValue(obj.familyName, [], "string")}</theval>`
-            // let givenName = `<lbl>Given Name</lbl> <theval>${UTILS.getValue(obj.givenName, [], "string")}</theval>`
         let gender = `<entry-line><lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval></entry-line/>`
         let edu = `<entry-line><lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval></entry-line/>`
         let nationality = `<entry-line><lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval></entry-line/>`
@@ -87,7 +73,6 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
  */
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
-        //<h5>${UTILS.getLabel(obj)} Collection</h5> 
         let tmpl = `<select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key-x="location">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
@@ -109,7 +94,6 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
-            //let tmpl = `<h5>${UTILS.getLabel(obj)} Collection</h5>`
         let tmpl = ``
         tmpl += `<select deer-key-x="contributor" multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Researchers"> `
@@ -132,31 +116,32 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
  * @param {type} options
  * @return {default.TEMPLATES.Event.tmpl, String}
  */
-DEER.TEMPLATES.Event = function(obj, options={}) {
-    try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
-        let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
-        let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
-        let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
-        let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
-        tmpl += place+date+researchers
-        return tmpl
-    } catch (err) {
-        return null
+DEER.TEMPLATES.Event = function(obj, options = {}) {
+        try {
+            let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
+            let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
+            let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+            let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
+            let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
+            tmpl += place + date + researchers
+            return tmpl
+        } catch (err) {
+            return null
+        }
     }
-}
     //
-DEER.URLS = {
-        BASE_ID: "http://store.rerum.io/v1",
-        CREATE: "create",
-        UPDATE: "update",
-        QUERY: "query",
-        OVERWRITE: "overwrite",
-        DELETE: "delete",
-        SINCE: "http://store.rerum.io/v1/since"
-    }
-    // Render is probably needed by all items, but can be removed.
-    // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
+    // DEER.URLS = {
+    //     BASE_ID: "http://devstore.rerum.io/v1",
+    //     CREATE: "create",
+    //     UPDATE: "update",
+    //     QUERY: "query",
+    //     OVERWRITE: "overwrite",
+    //     DELETE: "delete",
+    //     SINCE: "http://devstore.rerum.io/v1/since"
+    // }
+
+// Render is probably needed by all items, but can be removed.
+// CDN at https://centerfordigitalhumanities.github.io/deer/releases/
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
 
 // Record is only needed for saving or updating items.
