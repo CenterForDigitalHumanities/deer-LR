@@ -147,11 +147,7 @@ DEER.TEMPLATES.Event = function(obj, options={}) {
 }
     //
 DEER.URLS = {
-<<<<<<< HEAD
         BASE_ID: "http://store.rerum.io/v1",
-=======
-        BASE_ID: "http://devstore.rerum.io/v1",
->>>>>>> master
         CREATE: "create",
         UPDATE: "update",
         QUERY: "query",
