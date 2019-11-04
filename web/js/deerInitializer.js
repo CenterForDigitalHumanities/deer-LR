@@ -47,18 +47,22 @@ DEER.TEMPLATES.sense = function(obj, options = {}) {
 
 //Overwrite the internal person template with a more robust one
 DEER.TEMPLATES.person = function(obj, options = {}) {
-    try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
-        let dob = `<entry-line><lbl>Birth Date</lbl> <theval>${UTILS.getValue(obj.birthDate, [], "string")}</theval></entry-line/>`
-        let email = `<entry-line><lbl>Email</lbl> <theval>${UTILS.getValue(obj.email, [], "string")}</theval></entry-line/>`
-        let phone = `<entry-line><lbl>Phone Number</lbl> <theval>${UTILS.getValue(obj.telephone, [], "string")}</theval></entry-line/>`
-        let religion = `<entry-line><lbl>Religious Tradition</lbl> <theval>${UTILS.getValue(obj["religious_tradition"], [], "string")}</theval></entry-line/>`
-        let depiction = `<entry-line><lbl>Photo</lbl> <theval><img src="${UTILS.getValue(obj.depiction, [], "string")}"/></theval></entry-line/>`
-        let gender = `<entry-line><lbl>Gender/Sexuality</lbl> <theval>${UTILS.getValue(obj.gender, [], "string")}</theval></entry-line/>`
-        let edu = `<entry-line><lbl>Education</lbl> <theval>${UTILS.getValue(obj.education, [], "string")}</theval></entry-line/>`
-        let nationality = `<entry-line><lbl>National Origin</lbl> <theval>${UTILS.getValue(obj.nationality, [], "string")}</theval></entry-line/>`
-        let description = `<entry-line><lbl>Further Person Description</lbl> <theval>${UTILS.getValue(obj.description, [], "string")}</theval></entry-line/>`
-        tmpl += (depiction + dob + email + phone + religion + gender + edu + nationality + description)
+        try {
+            let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
+            let depiction = UTILS.getValue(obj.depiction) || "https://via.placeholder.com/200?text=No+photo+available"
+            let dob = ["Date of birth", UTILS.getValue(obj.birthDate) || "unrecorded"]
+            let email = ["Email", UTILS.getValue(obj.email) || "unrecorded"]
+            let phone = ["Telephone Number", UTILS.getValue(obj.telephone) || "unrecorded"]
+            let religion = ["Religion", UTILS.getValue(obj["religious_tradition"]) || "unrecorded"]
+            let gender = ["Gender", UTILS.getValue(obj.gender) || "unrecorded"]
+            let edu = ["Education", UTILS.getValue(obj.education) || "unrecorded"]
+            let nationality = ["Nationality", UTILS.getValue(obj.nationality) || "unrecorded"]
+            let description = ["Description", UTILS.getValue(obj.description) || "unrecorded"]
+            tmpl += `<img src=${depiction} alt='portrait' class="pull-right">
+            <dl>
+            ${[dob,email,phone,religion,gender,edu,nationality,description].reduce((a,b)=>a+=`<dt>${b[0]}<dt>
+            <dd>${b[1]}</dd>
+            </dl>`,``)}`
         return tmpl
     } catch (err) {
         return null

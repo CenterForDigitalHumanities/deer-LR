@@ -67,6 +67,11 @@
                             let long = parseInt(leafLong.value * 1000000) / 1000000
                             if (lat && long) {
                                 previewMap.setView([lat, long], 18)
+                                let geometry = {
+                                    type: "Point",
+                                    coordinates: [long, lat]
+                                }
+                                geometryInput.value = JSON.stringify(geometry)
                             }
                         }
                         previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="leafLat.value=${parseInt(e.latlng.lat * 1000000) / 1000000};leafLong.value=${parseInt(e.latlng.lng * 1000000) / 1000000};return false;">Use These</button></div>`).openOn(previewMap))

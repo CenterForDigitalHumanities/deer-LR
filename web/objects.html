@@ -9,6 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        #objects h2 {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,8 +23,10 @@
     <lr-nav></lr-nav>
     <div class="container">
         <h1 class="text-primary"> Objects </h1>
-        <deer-view id="locations" deer-collection="LivedReligionObjects" class="col">No objects.</deer-view>
-        <deer-view deer-listening="locations" class="col"></deer-view>
+        <div class="row">
+            <div id="objects" deer-collection="LivedReligionObjectsTest" class="deer-view col">No objects.</div>
+            <div deer-listening="objects" class="deer-view col" deer-template="entity"></div>
+        </div>
     </div>
     <lr-footer></lr-footer>
     <!-- Add ins -->
