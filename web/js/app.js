@@ -5,6 +5,7 @@
  */
 
 const LR = {}
+LR.VERSION = "0.2.0"
 LR.APPAGENT = "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af"
 LR.URLS = {
     LOGIN: "login",
