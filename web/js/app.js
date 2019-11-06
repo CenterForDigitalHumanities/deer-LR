@@ -25,6 +25,7 @@ if (typeof(Storage) !== "undefined") {
 }
 LR.err = {}
 LR.ui = {}
+LR.utils = {}
 
 /** Various LR error handlers */
 LR.err.generic_error = function(msg) {
@@ -73,4 +74,52 @@ LR.err.handleHTTPError = function(response) {
 LR.ui.loginFail = function() {
     LR.sessionInfo.removeItem("authorized")
     alert("The username and/or password you provided is not correct.")
+}
+
+LR.utils.removeCollectionEntry = async function(itemID, itemElem){
+    let historyWildcard = {"$exists":true, "$size":0}
+    let queryObj = {
+        $or: [{
+            "targetCollection": this.collection
+        }, {
+            "body.targetCollection": this.collection
+        }],
+        "__rerum.history.next": historyWildcard,
+        "target" : itemID
+    }
+    fetch(LR.URLS.QUERY, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(queryObj)
+    }).then(response => response.json())
+    .then(pointers => {
+        let deleteList = []
+        pointers.map(tc => {
+            deleteList.push(
+                fetch(LR.URLS.DELETE, {
+                    method: "DELETE",
+                    mode: "cors",
+                    body: tc.target || tc["@id"] || tc.id
+                })
+            )
+        })
+        return Promise.all(deleteList)
+    })
+    .then(deletedList => {
+        LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
+        itemElem.remove()
+
+    })
+    .catch(err => {
+        console.error("There was an error removing an item from the collection")
+        console.log(itemElem)
+    })
+},
+        
+ /**
+* Broadcast a message about some event
+*/
+LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
+   let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
+   element.dispatchEvent(e)
 }

@@ -133,6 +133,28 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
             return null
         }
     }
+
+/**
+ * This is to override the normal behavior for drawing collection types.  
+ * We need the targetCollection annotation ID exposed for removal
+ * We need all eleemtns that cause removal to be classed so we can hide/show them.  
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */    
+DEER.TEMPLATES.list= function(obj, options={}) {
+    let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
+    if(options.list){
+        tmpl += `<ul>`
+        obj[options.list].forEach((val,index)=>{
+            let name = UTILS.getLabel(val,(val.type || val['@type'] || index))
+            let removeBtn = `<input type="button" class="button error removeCollectionItem" onclick="LR.ui.removeCollectionEntry('${val["@id"]}', this)" />`
+            tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name}${removeBtn}</li>`
+        })
+        tmpl += `</ul>`
+    }
+    return tmpl
+}
     //
     // DEER.URLS = {
     //     BASE_ID: "http://devstore.rerum.io/v1",
