@@ -81,7 +81,6 @@ LR.ui.loginFail = function() {
  * Remove an item from one of the Lived Religion application collections.
  * @param {String} itemID : The ID of the annotation connecting the item to the collection.
  * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
- * @return {boolean} Representing whether or not the function was successful.
  */
 LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName){
     let historyWildcard = {"$exists":true, "$size":0}
@@ -135,7 +134,7 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName
     })
 },  
         
- /**
+/**
 * Broadcast a message about some event
 * DO NOT collide with DEER events.  
 */
