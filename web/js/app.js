@@ -6,18 +6,20 @@
 
 const LR = {}
 LR.VERSION = "0.2.0"
-LR.APPAGENT = "http://devstore.rerum.io/v1/id/5da8c04ae4b0a6b3a23849af"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90" //This is the sandbox id, we aren't using lived-religion-dev
+//Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
     BASE_ID: "http://devstore.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
     SINCE: "http://devstore.rerum.io/v1/since"
 }
+
 if (typeof(Storage) !== "undefined") {
     LR.localInfo = window.localStorage
 } else {
@@ -31,7 +33,6 @@ LR.utils = {}
 LR.err.generic_error = function(msg) {
     alert(msg)
 }
-
 
 LR.err.unhandled = function(error) {
     console.log("There was an unhandled error when using fetch")
@@ -82,13 +83,13 @@ LR.ui.loginFail = function() {
  * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
  * @return {boolean} Representing whether or not the function was successful.
  */
-LR.utils.removeCollectionEntry = async function(itemID, itemElem){
+LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName){
     let historyWildcard = {"$exists":true, "$size":0}
     let queryObj = {
         $or: [{
-            "targetCollection": this.collection
+            "targetCollection": collectionName
         }, {
-            "body.targetCollection": this.collection
+            "body.targetCollection": collectionName
         }],
         "__rerum.history.next": historyWildcard,
         "__rerum.generatedBy":LR.APPAGENT,
@@ -100,21 +101,28 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem){
         body: JSON.stringify(queryObj)
     }).then(response => response.json())
     .then(pointers => {
+        //Remember, there may be multiple annotations that place this item in the collection.  Get rid of all of them.
         let deleteList = []
-        pointers.map(tc => {
+        pointers.map(ta => {
             deleteList.push(
                 fetch(LR.URLS.DELETE, {
                     method: "DELETE",
                     mode: "cors",
-                    body: tc.target || tc["@id"] || tc.id
+                    body: ta["@id"] || ta.id
                 })
             )
         })
         return Promise.all(deleteList)
     })
     .then(deletedList => {
-        LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
-        itemElem.remove()
+        if(deletedList.length > 0){
+            LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
+            itemElem.remove()
+        }
+        else{
+            console.error("Unable to find the annotation linking this item to collection.  Cannot remove.")
+            console.log(itemElem)
+        }
     })
     .catch(err => {
         //We could broadcast an event to say this failed, it depends what we want to trigger in interface.

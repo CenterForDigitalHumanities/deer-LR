@@ -148,7 +148,8 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
             let name = UTILS.getLabel(val,(val.type || val['@type'] || index))
-            let removeBtn = `<input type="button" class="button error removeCollectionItem" onclick="LR.ui.removeCollectionEntry('${val["@id"]}', this)" />`
+            let removeBtn = `<input value="remove" type="button" class="button error removeCollectionItem"
+            onclick="LR.utils.removeCollectionEntry('${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')" />`
             tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name}${removeBtn}</li>`
         })
         tmpl += `</ul>`
