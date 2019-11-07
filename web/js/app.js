@@ -6,8 +6,8 @@
 
 const LR = {}
 LR.VERSION = "0.2.0"
-LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90" //This is the sandbox id, we aren't using lived-religion-dev
-//Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
@@ -99,7 +99,8 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName
         method: "POST",
         mode: "cors",
         body: JSON.stringify(queryObj)
-    }).then(response => response.json())
+    })
+    .then(response => response.json())
     .then(pointers => {
         //Remember, there may be multiple annotations that place this item in the collection.  Get rid of all of them.
         let deleteList = []
@@ -113,24 +114,26 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName
             )
         })
         return Promise.all(deleteList)
-    })
-    .then(deletedList => {
-        if(deletedList.length > 0){
+    }).then(deletedList => {
+        //Can't seem to fall into the Promise.all().catch() on 4XX, and perhaps other, errors...
+        let resultList = deletedList.filter(resp=>{return resp.ok})
+        if(deletedList.length === resultList.length){
             LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
             itemElem.remove()
         }
         else{
-            console.error("Unable to find the annotation linking this item to collection.  Cannot remove.")
+            //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
+            //This should suffice for now.
+            console.error("There was an error removing an item from the collection")
             console.log(itemElem)
         }
-    })
-    .catch(err => {
+    }).catch(err => {
         //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
         //This should suffice for now.
-        console.error("There was an error removing an item from the collection")
+        console.error("There was an error gathering information to remove an item from the collection")
         console.log(itemElem)
     })
-},
+},  
         
  /**
 * Broadcast a message about some event
