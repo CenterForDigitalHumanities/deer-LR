@@ -18,7 +18,7 @@
     <lr-nav></lr-nav>
     <div class="container">
         <h1 class="text-primary"> Locations </h1>
-        <deer-view id="locations" deer-collection="LivedReligionStoriesTest" class="col">No stories.</deer-view>
+        <deer-view id="stories" deer-collection="LivedReligionStoriesTest" class="col">No stories.</deer-view>
         <deer-view deer-listening="locations" class="col"></deer-view>
     </div>
     <lr-footer></lr-footer>
@@ -30,7 +30,7 @@
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if(event.target.getAttribute("id") === "locations"){
+            if(event.target.getAttribute("id") === "stories"){
                 let user = localStorage.getItem("lr-user")
                 if (user !== null) {
                     try {
