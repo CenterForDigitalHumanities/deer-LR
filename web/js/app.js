@@ -76,6 +76,12 @@ LR.ui.loginFail = function() {
     alert("The username and/or password you provided is not correct.")
 }
 
+/**
+ * Remove an item from one of the Lived Religion application collections.
+ * @param {String} itemID : The ID of the annotation connecting the item to the collection.
+ * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
+ * @return {boolean} Representing whether or not the function was successful.
+ */
 LR.utils.removeCollectionEntry = async function(itemID, itemElem){
     let historyWildcard = {"$exists":true, "$size":0}
     let queryObj = {
@@ -109,9 +115,10 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem){
     .then(deletedList => {
         LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
         itemElem.remove()
-
     })
     .catch(err => {
+        //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
+        //This should suffice for now.
         console.error("There was an error removing an item from the collection")
         console.log(itemElem)
     })
@@ -119,6 +126,7 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem){
         
  /**
 * Broadcast a message about some event
+* DO NOT collide with DEER events.  
 */
 LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
    let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
