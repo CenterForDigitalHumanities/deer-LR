@@ -85,6 +85,7 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem){
             "body.targetCollection": this.collection
         }],
         "__rerum.history.next": historyWildcard,
+        "__rerum.generatedBy":LR.APPAGENT,
         "target" : itemID
     }
     fetch(LR.URLS.QUERY, {
