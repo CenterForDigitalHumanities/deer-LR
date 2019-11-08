@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -55,16 +54,6 @@ public class TinyDelete extends HttpServlet {
           bodyString.append(line);
         }
         requestString = bodyString.toString();
-        
-        //RERUM will catch this
-        /*
-        if(!requestString.contains(Constant.RERUM_ID_PATTERN)){
-            //IT IS NOT a rerum object, we can't delete this
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Your provided id must be a RERUM URL. Pattern \""+Constant.RERUM_ID_PATTERN+"\" was not found.");
-            moveOn = false;
-            // If we throw instead, the return isn't needed.
-        }
-        */
         //If it was JSON
         String pubTok = manager.getAccessToken();
         boolean expired = manager.checkTokenExpiry();
