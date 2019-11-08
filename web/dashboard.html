@@ -39,11 +39,11 @@
     <script>
         addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
-            let buttons = `<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
-            <a class="button primary" href="place.html"> &#xFF0B; Location </a>`
+            let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>`
             if (event.detail.user.roles.administrator) {
                 buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
             }
+            buttons+=`<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>`
             document.querySelector('.entries').innerHTML = buttons
         }, false) 
         
