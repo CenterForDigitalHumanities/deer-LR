@@ -23,14 +23,14 @@
                 <input id="uploadLabel" type="text" deer-key="label" />
                 <label>Select which location this data entry is concerned with.</label>
                 <input id="loc" type="hidden" deer-key="location" />
-                <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
+                <deer-view id="locations" deer-collection="LivedReligionLocations" deer-template="locationsAsDropdown"></deer-view>
                 <!--TODO allow time range??-->
                 <label> On what date was this data gathered?</label>
                 <input type="date" deer-key="startDate" />
                 <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
                 <input deer-input-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Adam P." />
                 <!-- TODO be able to select multiple and have them stored to the hidden input for saving -->
-                <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
+                <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="personMulti"></deer-view>
                 <input type="submit" value="Continue" />
             </form>
         </div>

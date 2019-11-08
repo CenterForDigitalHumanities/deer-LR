@@ -5,19 +5,19 @@
  */
 
 const LR = {}
-LR.VERSION = "0.2.0"
-LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
-//Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
+LR.VERSION = "0.3.0"
+LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+    //Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "http://devstore.rerum.io/v1",
-    DELETE: "http://tinydev.rerum.io/app/delete",
-    CREATE: "http://tinydev.rerum.io/app/create",
-    UPDATE: "http://tinydev.rerum.io/app/update",
-    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-    QUERY: "http://tinydev.rerum.io/app/query",
-    SINCE: "http://devstore.rerum.io/v1/since"
+    BASE_ID: "http://store.rerum.io/v1",
+    DELETE: "delete",
+    CREATE: "create",
+    UPDATE: "update",
+    OVERWRITE: "overwrite",
+    QUERY: "query",
+    SINCE: "http://store.rerum.io/v1/since"
 }
 
 if (typeof(Storage) !== "undefined") {
@@ -136,13 +136,13 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName
         console.error("There was an error gathering information to remove an item from the collection")
         console.log(itemElem)
     })
-},  
-        
-/**
-* Broadcast a message about some event
-* DO NOT collide with DEER events.  
-*/
-LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
-   let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
-   element.dispatchEvent(e)
-}
+  },
+
+    /**
+     * Broadcast a message about some event
+     * DO NOT collide with DEER events.  
+     */
+    LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
+        let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
+        element.dispatchEvent(e)
+    }

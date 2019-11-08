@@ -36,7 +36,7 @@
 
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="additionalType" value="Feature">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocationsTest">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
 
                     <h4>Map Information</h4>
 
@@ -203,9 +203,9 @@
                         let locationsList = document.createElement("ul")
                         let queryObj = {
                             $or: [{
-                                "targetCollection": "LivedReligionLocationsTest"
+                                "targetCollection": "LivedReligionLocations"
                             }, {
-                                "body.targetCollection": "LivedReligionLocationsTest"
+                                "body.targetCollection": "LivedReligionLocations"
                             }]
                         }
                         fetch("query", {
@@ -292,7 +292,7 @@
         <div class="card">
             <div class="card_body">
                 <h3>Existing Locations</h3>
-                <deer-view deer-collection="LivedReligionLocationsTest">
+                <deer-view deer-collection="LivedReligionLocations">
                 </deer-view>
             </div>
         </div>

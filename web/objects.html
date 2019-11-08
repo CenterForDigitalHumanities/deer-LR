@@ -24,7 +24,7 @@
     <div class="container">
         <h1 class="text-primary"> Objects </h1>
         <div class="row">
-            <div id="objects" deer-collection="LivedReligionObjectsTest" class="deer-view col">No objects.</div>
+            <div id="objects" deer-collection="LivedReligionObjects" class="deer-view col">No objects.</div>
             <div deer-listening="objects" class="deer-view col" deer-template="entity"></div>
         </div>
     </div>
@@ -37,22 +37,21 @@
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if(event.target.getAttribute("id") === "objects"){
+            if (event.target.getAttribute("id") === "objects") {
                 let user = localStorage.getItem("lr-user")
                 if (user !== null) {
                     try {
                         user = JSON.parse(user)
-                        if(user.roles.administrator){
+                        if (user.roles.administrator) {
                             for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                         }
-                    } 
-                    catch (err) {
+                    } catch (err) {
                         console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                         localStorage.removeItem("lr-user")
                     }
                 }
             }
-        }, false) 
+        }, false)
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
