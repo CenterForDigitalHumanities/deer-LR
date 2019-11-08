@@ -119,8 +119,7 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName
         if(deletedList.length === 0){
             console.error("Could not find the annotation placing this item into the collection.  Could note remove this item.  Check your APPAGENT and annotation creator, they do not line up.")
             console.log(itemElem)
-        }
-        else{
+        } else{
             if(deletedList.length === resultList.length) {
                 LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
                 itemElem.remove()
