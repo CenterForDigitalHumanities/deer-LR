@@ -1,50 +1,65 @@
 <!DOCTYPE html>
 <!--
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    @author: cubap@slu.edu
     -->
 <html>
 
 <head>
-    <title>Lived Religions Participants</title>
+    <title>Religion In Place Person</title>
     <meta charset="UTF-8">
-    <!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
-    <style>
-        select[sub] {
-            display: none;
-        }
-    </style>
 </head>
 
 <body>
     <lr-nav></lr-nav>
 
     <div class="container">
-        <survey-top id="surveyTitle">Add or Find Participants</survey-top>
-        <div class="card">
+        <h2 class="text-primary">Create a New Person</h2>
+        <div class="card bd-primary">
             <div class="card_body">
-                <input type="button" class="btn btn-primary" value="Register New Participant" onclick="LR.ui.togglePersonAddition()" />
                 <form id="newPersonForm" class="hidden" deer-type="Person" deer-context="http://schema.org">
-                    <label>Name (Can be anonymous):</label>
-                    <input type="text" deer-key="name" deer-source="">
                     <input type="hidden" deer-key="creator" value="loading">
-                    <input type="hidden" deer-key="performerIn" value="LivedReligionEvent">
-                    <label>Birth Date</label>
-                    <input type="date" deer-key="birthDate" deer-source="">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionPeopleTest">
+                    <div class="grouped">
+                        <label>Name:</label>
+                        <input type="text" deer-key="name">
+                        <label>Birth Date:</label>
+                        <input type="date" deer-key="birthDate">
+                    </div>
+                    <div class="grouped">
+                        <label>E‑mail:</label>
+                        <input type="text" deer-key="email">
+                        <label>Phone Number:</label>
+                        <input type="text" deer-key="telephone">
+                    </div>
+                    <label>Description:</label>
+                    <textarea deer-key="description"></textarea>
 
-                    <label>E-mail:</label>
-                    <input type="text" deer-key="email" deer-source="">
-
-                    <label>Phone Number:</label>
-                    <input type="text" deer-key="telephone" deer-source="">
+                    <h3>Additional Details</h3>
 
                     <div class="row">
                         <div class="traditionWrapper col">
                             <label>Religious Tradition:</label>
-                            <select deer-key="religious_tradition" deer-source="">
-                                <option value="Christian" sub="christianSub">Christian</option>
-                                <option value="Jewish" sub="jewishSub">Jewish</option>
+                            <select deer-key="religious_tradition">
+                                <optgroup label="Christian">
+                                    <option value="Evangelical Protestant">Evangelical Protestant</option>
+                                    <option value="Mainline Protestant">Mainline Protestant</option>
+                                    <option value="Historically Black Protestant">Historically Black Protestant</option>
+                                    <option value="Catholic">Catholic</option>
+                                    <option value="Mormon">Mormon</option>
+                                    <option value="Othodox Christian">Orthodox Christian</option>
+                                    <option value="Jehova's Witness">Jehovah’s Witness</option>
+                                    <option value="Other Christian">Other Christian</option>
+                                </optgroup>
+                                <optgroup label="Jewish">
+                                    <option value="Conservative">Conservative</option>
+                                    <option value="Reform">Reform</option>
+                                    <option value="Orthodox">Orthodox</option>
+                                    <option value="Reconstructionist">Reconstructionist</option>
+                                    <option value="Other">Other</option>
+                                </optgroup>
                                 <option value="Muslim">Muslim</option>
                                 <option value="Buddhist">Buddhist</option>
                                 <option value="Daoist">Daoist</option>
@@ -62,27 +77,10 @@
                                 <option value="Humanist">Humanist</option>
                                 <option value="Nothing in particular">Nothing in particular</option>
                             </select>
-                            <select sub="christianSub" deer-key="religious_tradition" deer-source="">
-                                <option value="Evangelical Protestant">Evangelical Protestant</option>
-                                <option value="Mainline Protestant">Mainline Protestant</option>
-                                <option value="Historically Black Protestant">Historically Black Protestant</option>
-                                <option value="Catholic">Catholic</option>
-                                <option value="Mormon">Mormon</option>
-                                <option value="Othodox Christian">Orthodox Christian</option>
-                                <option value="Jehova's Witness">Jehovah’s Witness</option>
-                                <option value="Other Christian">Other Christian</option>
-                            </select>
-                            <select sub="jewishSub" deer-key="religious_tradition" deer-source="">
-                                <option value="Conservative">Conservative</option>
-                                <option value="Reform">Reform</option>
-                                <option value="Orthodox">Orthodox</option>
-                                <option value="Reconstructionist">Reconstructionist</option>
-                                <option value="Other">Other</option>
-                            </select>
                         </div>
                         <div class="col">
                             <label>Race/Ethnicity:</label>
-                            <select deer-key="ethnicity" deer-source="">
+                            <select deer-key="ethnicity">
                                 <option value="African American/Black/African">African American/Black/African</option>
                                 <option value="Bosniak">Bosniak</option>
                                 <option value="Caribbean">Caribbean</option>
@@ -99,7 +97,7 @@
                         </div>
                         <div class="col">
                             <label>Gender & Sexuality:</label>
-                            <select deer-key="gender" deer-source="">
+                            <select deer-key="gender">
                                 <option value="Female-presenting">Female-presenting</option>
                                 <option value="Male-presenting">Male-presenting</option>
                                 <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
@@ -113,7 +111,7 @@
                         </div>
                         <div class="col">
                             <label>Education:</label>
-                            <select deer-key="education" deer-source="">
+                            <select deer-key="education">
                                 <option value="Some high school">Some high school</option>
                                 <option value="High school graduate">High school graduate</option>
                                 <option value="Some college">Some college</option>
@@ -123,32 +121,17 @@
                         </div>
                     </div>
                     <label>National Origin:</label>
-                    <input type="text" deer-key="nationality" deer-source="">
+                    <input type="text" deer-key="nationality">
 
-                    <label>Description</label>
-                    <textarea deer-key="description" deer-source=""></textarea>
                     <footer>
                         <input class="button primary" type="submit">
-                        <div id="participantResult">
-                            <!-- After deer saves this, how can I show pass/fail and/or their new ID -->
-                        </div>
-
                     </footer>
                 </form>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card_body">
-                <input type="button" value="View Existing Participants" class="btn btn-primary" onclick="LR.tricks.populateExistingParticipants()" />
-                <header>Existing Participants</header>
-                <!-- <deer-view  deer-type="List" deer-id=""> -->
-                <ul id="participants">
-                    <li>Gathering Participant Data..TODO</li>
-                </ul>
-                <!-- </deer-view> -->
-            </div>
-        </div>
+        <h3>Existing People</h3>
+        <deer-view deer-collection="LivedReligionPeopleTest"></deer-view>
     </div>
     <lr-footer></lr-footer>
 

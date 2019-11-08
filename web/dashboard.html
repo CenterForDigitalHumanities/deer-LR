@@ -20,9 +20,9 @@
         <h1 id="userDashboard" class="text-primary"> Dashboard </h1>
         <div class="row entries">
             <!-- New Entry button in here -->
-            <a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
             <a class="button primary" href="place.html"> &#xFF0B; Location </a>
             <a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>
+            <a class="button secondary" href=""> &#xFF0B; Experience </a>
         </div>
         <div>
             <!-- A kind of SPACE, OBJECT or BODY created by this user, ordered by most recent, clipped to a certain number perhaps -->
@@ -39,11 +39,11 @@
     <script>
         addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
-            let buttons = `<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
-            <a class="button primary" href="place.html"> &#xFF0B; Location </a>`
+            let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>`
             if (event.detail.user.roles.administrator) {
                 buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
             }
+            buttons+=`<a class="button secondary" href=""> &#xFF0B; Experience </a>`
             document.querySelector('.entries').innerHTML = buttons
         }, false) 
         

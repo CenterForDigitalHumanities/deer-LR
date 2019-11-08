@@ -44,10 +44,10 @@
                     <input type="hidden" deer-key="geometry" value="{}">
                     <div class="grouped">
                         <label>Latitude</label>
-                        <input id="leafLat" step=".000000001" type="number" oninput="updateGeoJSON()">
+                        <input id="leafLat" step=".000000001" type="number">
 
                         <label>Longitude</label>
-                        <input id="leafLong" step=".000000001" type="number" oninput="updateGeoJSON()">
+                        <input id="leafLong" step=".000000001" type="number">
                     </div>
 
                     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
@@ -61,7 +61,15 @@
                         }).addTo(previewMap);
                         var osmb = new OSMBuildings(previewMap).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json')
 
-                        function updateGeoJSON() {
+                        leafLat.oninput = updateGeometry
+                        leafLong.oninput = updateGeometry
+
+                        function updateGeometry(event, clickedLat, clickedLong) {
+                            event.preventDefault()
+                            if (clickedLong > -180) {
+                                leafLat.value = parseInt(clickedLat * 1000000) / 1000000
+                                leafLong.value = parseInt(clickedLong * 1000000) / 1000000
+                            }
                             let geometryInput = document.querySelector("input[deer-key='geometry']")
                             let lat = parseInt(leafLat.value * 1000000) / 1000000
                             let long = parseInt(leafLong.value * 1000000) / 1000000
@@ -74,7 +82,7 @@
                                 geometryInput.value = JSON.stringify(geometry)
                             }
                         }
-                        previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="leafLat.value=${parseInt(e.latlng.lat * 1000000) / 1000000};leafLong.value=${parseInt(e.latlng.lng * 1000000) / 1000000};return false;">Use These</button></div>`).openOn(previewMap))
+                        previewMap.on('click', e => L.popup().setLatLng(e.latlng).setContent(`<div>${e.latlng.toString()}<br><button class="tag is-small text-primary bd-primary" onclick="updateGeometry(event,${e.latlng.lat},${e.latlng.lng});">Use These</button></div>`).openOn(previewMap))
                     </script>
 
                     <h3>Description of Space</h3>

@@ -5,58 +5,55 @@
 <html>
 
 <head>
-    <title>Religion in Place Objects</title>
+    <title>Religion In Place People</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <style>
-        #objects h2 {
+        #people h2 {
             display: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
-    <!-- Yes.  If admin, entries can be edited -->
-
     <lr-nav></lr-nav>
     <div class="container">
-        <h1 class="text-primary"> Objects </h1>
+        <h1 class="text-primary"> People </h1>
         <div class="row">
-            <div id="objects" deer-collection="LivedReligionObjectsTest" class="deer-view col">No objects.</div>
-            <div deer-listening="objects" class="deer-view col" deer-template="entity"></div>
+            <div id="people" class="deer-view col" deer-collection="LivedReligionPeopleTest" deer-list="itemListElement"></div>
+            <div deer-listening="people" class="deer-view col" deer-template="person"></div>
         </div>
     </div>
     <lr-footer></lr-footer>
     <!-- Add ins -->
     <script>
         /**
-         * Determine what to do with the items in the Lived Religion Locations collection based on a users roles
+         * Determine what to do with the items in the Lived Religion People collection based on a users roles
          * @param {type} event
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if (event.target.getAttribute("id") === "objects") {
+            if(event.target.getAttribute("id") === "people"){
                 let user = localStorage.getItem("lr-user")
                 if (user !== null) {
                     try {
                         user = JSON.parse(user)
-                        if (user.roles.administrator) {
+                        if(user.roles.administrator){
                             for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                         }
-                    } catch (err) {
+                    } 
+                    catch (err) {
                         console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                         localStorage.removeItem("lr-user")
                     }
                 }
             }
-        }, false)
+        }, false) 
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
     <script src="./js/components.js" type="text/javascript"></script>
-
 </body>
 
 </html>
