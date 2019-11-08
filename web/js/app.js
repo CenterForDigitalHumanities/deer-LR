@@ -115,16 +115,21 @@ LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName
         return Promise.all(deleteList)
     }).then(deletedList => {
         //Can't seem to fall into the Promise.all().catch() on 4XX, and perhaps other, errors...
-        let resultList = deletedList.filter(resp=>{return resp.ok})
-        if(deletedList.length === resultList.length){
-            LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
-            itemElem.remove()
+        let resultList = deletedList.filter(resp => { return resp.ok })
+        if(deletedList.length === 0){
+            console.error("Could not find the annotation placing this item into the collection.  Could note remove this item.  Check your APPAGENT and annotation creator, they do not line up.")
+            console.log(itemElem)
         }
         else{
-            //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
-            //This should suffice for now.
-            console.error("There was an error removing an item from the collection")
-            console.log(itemElem)
+            if(deletedList.length === resultList.length) {
+                LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
+                itemElem.remove()
+            } else {
+                //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
+                //This should suffice for now.
+                console.error("There was an error removing an item from the collection")
+                console.log(itemElem)
+            }
         }
     }).catch(err => {
         //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
