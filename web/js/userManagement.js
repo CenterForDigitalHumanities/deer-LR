@@ -48,12 +48,12 @@ UM.action.drawUserManagement = async function(){
                     for (let user in users){
                         //We only need to know their name, so walk the top level keys, which are the name.  Ignore admin_list.
                         let buttons = `
-                            <input class="userOptions" type="button primary" value="Change Password" onclick="" />
-                            <input class="userOptions" type="button secondary" value="Change Name" onclick="" />
-                            <input class="userOptions" type="button error" value="Remove" onclick="" />
+                            <input class="button primary" type="button" value="Change Password" onclick="" />
+                            <input class="button secondary" type="button" value="Change Name" onclick="" />
+                            <input class="button error" type="button" value="Remove" onclick="" />
                         `
                         if(user !== "admin_list"){
-                            managementTemplate += `<li username=${user}> ${user} </li>`
+                            managementTemplate += `<li username=${user}> ${user} &nbsp;&nbsp; ${buttons} </li>`
                         }
                     }
                     document.getElementById("users").innerHTML = managementTemplate
