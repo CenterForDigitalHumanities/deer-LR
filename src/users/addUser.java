@@ -5,6 +5,7 @@
  */
 package users;
 
+import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -37,32 +39,30 @@ public class addUser extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String requestString;
+        String user_obj_str;
         StringBuilder sb = new StringBuilder();
+        JSONObject requestJSON;
+        //Gather user provided parameters from BODY of request, not parameters
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        requestString = bodyString.toString(); //This is the provided user info, should be JSON
+        user_obj_str = bodyString.toString();
+        //JSONObject test
+        requestJSON = JSONObject.fromObject(user_obj_str);
+        Authorize auth = new Authorize();
+        JSONObject usersFile = auth.getUserData();
+        String username = requestJSON.getString("username");
+        requestJSON.remove("username");
+        usersFile.element(username, requestJSON);
+        auth.writeUserFile(usersFile);
+        response.getWriter().print(usersFile.toString());
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -82,7 +82,7 @@ public class addUser extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Put an additional user in the users file.";
     }// </editor-fold>
 
 }

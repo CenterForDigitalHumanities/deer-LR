@@ -1,7 +1,9 @@
 package auth;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -58,6 +60,16 @@ public class Authorize {
     
     public JSONObject getUserData(){
         return userData;
+    }
+    
+    public void writeUserFile(JSONObject userJSON) throws IOException {
+        File file = new File(Authorize.class.getResource(users_file).getFile());
+        FileWriter writer = new FileWriter(file, false);
+        BufferedWriter bufferedWriter = new BufferedWriter(writer);
+        bufferedWriter.write(userJSON.toString());
+        bufferedWriter.close();
+        userData = userJSON;
+        admins_list = userData.getJSONArray("admin_list");
     }
     
 }

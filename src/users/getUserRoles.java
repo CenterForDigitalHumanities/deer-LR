@@ -39,16 +39,16 @@ public class getUserRoles extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String requestString;
+        String username;
         StringBuilder sb = new StringBuilder();
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        requestString = bodyString.toString(); //This is the name of the user
+        username = bodyString.toString(); //This is the name of the user
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
-        JSONArray roles = usersFile.getJSONObject(requestString).getJSONArray("roles");
+        JSONArray roles = usersFile.getJSONObject(username).getJSONArray("roles");
         response.getWriter().print(roles.toString());
     }
 

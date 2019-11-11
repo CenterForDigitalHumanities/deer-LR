@@ -5,6 +5,7 @@
  */
 package users;
 
+import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -36,13 +39,17 @@ public class getUserSecret extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String requestString;
+        String username;
         StringBuilder sb = new StringBuilder();
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        requestString = bodyString.toString(); //This is the name of the user
+        username = bodyString.toString(); //This is the name of the user
+        Authorize auth = new Authorize();
+        JSONObject usersFile = auth.getUserData();
+        String sec = usersFile.getJSONObject(username).getString("sec");
+        response.getWriter().print(sec);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
