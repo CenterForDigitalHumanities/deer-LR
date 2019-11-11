@@ -48,9 +48,9 @@ UM.action.drawUserManagement = async function(){
                     for (let user in users){
                         //We only need to know their name, so walk the top level keys, which are the name.  Ignore admin_list.
                         let buttons = `
-                            <input class="button primary" type="button" value="Change Password" onclick="" />
-                            <input class="button secondary" type="button" value="Change Name" onclick="" />
-                            <input class="button error" type="button" value="Remove" onclick="" />
+                            <input class="button primary" type="button" value="Change Password" onclick="UM.ui.showRolesEditor('${user}')" />
+                            <input class="button secondary" type="button" value="Change Name" onclick="UM.ui.showNameEditor('${user}')" />
+                            <input class="button error" type="button" value="Remove" onclick="UM.ui.confirmRemove('${user}')" />
                         `
                         if(user !== "admin_list"){
                             managementTemplate += `<li username=${user}> ${user} &nbsp;&nbsp; ${buttons} </li>`
@@ -79,20 +79,39 @@ UM.action.getUserRoles = async function(user){
     return roles;
 }
 
-UM.action.getUserSecret = async function(user){
-    
-}
 
 UM.action.setUserRoles = async function(user, roles){
     
+    
+}
+
+UM.action.addUser = function(username, password, roles){
+    //Remember they need a RERUM agent...
+}
+
+UM.action.removeUser = async function(user){
+    
+    this.drawUserManagement()
 }
 
 UM.action.setUserName = async function(user, name){
     
+    this.drawUserManagement()
 }
 
 UM.action.setUserSecret = async function(user, sec){
     
 }
 
+UM.ui.showRolesEditor = function(user){
+    
+}
 
+UM.ui.showNameEditor = function(user){
+    
+}
+
+UM.ui.confirmRemove = function(user){
+    
+    this.drawUserManagement()
+}

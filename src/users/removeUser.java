@@ -5,6 +5,7 @@
  */
 package users;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -29,19 +30,19 @@ public class removeUser extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet removeUser</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet removeUser at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        request.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "application/json; charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        BufferedReader bodyReader = request.getReader();
+        StringBuilder bodyString = new StringBuilder();
+        String line;
+        String requestString;
+        StringBuilder sb = new StringBuilder();
+        while ((line = bodyReader.readLine()) != null)
+        {
+          bodyString.append(line);
         }
+        requestString = bodyString.toString(); //This is the name of the user
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
