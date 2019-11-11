@@ -35,11 +35,13 @@
                 try {
                     user = JSON.parse(user)
                     if (user.roles.administrator) {
-                        UM.utils.drawUserManagement();
+                        UM.utils.drawUserManagement()
                     }
                 } catch (err) {
                     console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                     localStorage.removeItem("lr-user")
+                    alert("There was an error identifying you.  Please log in again.");
+                    document.location.reload()
                 }
             }
         })

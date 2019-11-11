@@ -56,4 +56,8 @@ public class Authorize {
         return userData.getJSONObject(user).getJSONObject("roles");
     }
     
+    public JSONObject getUserData(){
+        return userData;
+    }
+    
 }
