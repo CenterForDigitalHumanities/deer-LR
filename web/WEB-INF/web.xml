@@ -36,7 +36,7 @@
         <servlet-name>getUserRoles</servlet-name>
         <servlet-class>users.getUserRoles</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>getUserSecret</servlet-name>
         <servlet-class>users.getUserSecret</servlet-class>
     </servlet>
@@ -51,6 +51,14 @@
     <servlet>
         <servlet-name>setUserSecret</servlet-name>
         <servlet-class>users.setUserSecret</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addUser</servlet-name>
+        <servlet-class>users.addUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>removeUser</servlet-name>
+        <servlet-class>users.removeUser</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -103,6 +111,14 @@
     <servlet-mapping>
         <servlet-name>setUserRoles</servlet-name>
         <url-pattern>/setUserRoles</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addUser</servlet-name>
+        <url-pattern>/addUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>removeUser</servlet-name>
+        <url-pattern>/removeUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

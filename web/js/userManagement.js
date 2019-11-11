@@ -6,12 +6,17 @@ UM.URLS = {
     GETSECRET: "getUserSecret",
     SETNAME: "setUserName",
     SETROLES: "setUserRoles",
-    SETSECRET: "setUserSecret"
+    SETSECRET: "setUserSecret",
+    ADDUSER : "addUser",
+    REMOVEUSER : "removeUser"
 }
 
 UM.action = {}
 
-//Unused at the moment, since it is a helper for other helpers.
+/**
+ * Use the endpoint available to get the user file.  
+ * @returns {Object} The user file as a json object.
+ */
 UM.action.getAllUsers = async function(){
     let allUsers = await fetch(UM.URLS.GETALLUSERS, {
         method: "GET",
@@ -41,6 +46,12 @@ UM.action.drawUserManagement = async function(){
                 await this.getAllUsers()
                 .then(users => {
                     for (let user in users){
+                        //We only need to know their name, so walk the top level keys, which are the name.  Ignore admin_list.
+                        let buttons = `
+                            <input class="userOptions" type="button primary" value="Change Password" onclick="" />
+                            <input class="userOptions" type="button secondary" value="Change Name" onclick="" />
+                            <input class="userOptions" type="button error" value="Remove" onclick="" />
+                        `
                         if(user !== "admin_list"){
                             managementTemplate += `<li username=${user}> ${user} </li>`
                         }
