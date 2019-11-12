@@ -14,8 +14,16 @@
             display: none;
         }
         
-        .popoverShade{
-            
+        #popoverShade{
+            z-index : 2;
+            height: 100%;
+            width: 100%;
+            background-color: gray;
+            opacity: 75%;
+        }
+        
+        .card{
+            z-index : 3;
         }
     </style>
 </head>
@@ -42,7 +50,7 @@
                 <label>Administrator </label><input id="adminRole" values="Administrator" type="checkbox" />
                 <label>Contributor</label><input id="contributorRole" values="Contributor" type="checkbox" />
                 <footer class="is-right">
-                  <a class="button primary" onclick="UM.action.setUserRoles()">Submit</a>
+                  <a class="button primary action" onclick="UM.action.setUserRoles()">Submit</a>
                   <a class="button" onclick="UM.ui.closeCard('rolesEditor')">Cancel</a>
                 </footer>
             </div>
@@ -56,7 +64,7 @@
                 <label>Please type the new name for user <span lass="dynamicUser" id="usernameName">{{USER}}</span></label>
                 <input id="newName" type="text"/>
                 <footer class="is-right">
-                  <a class="button primary" onclick="UM.action.setUserName()">Submit</a>
+                  <a class="button primary action" onclick="UM.action.setUserName()">Submit</a>
                   <a class="button" onclick="UM.ui.closeCard('nameEditor')">Cancel</a>
                 </footer>
             </div>
@@ -70,7 +78,7 @@
                 <label>Please type the new password for user <span lass="dynamicUser" id="usernameSec">{{USER}}</span></label>
                 <input id="newSec" type="text"/>
                 <footer class="is-right">
-                  <a class="button primary" onclick="UM.action.setUserSec()">Submit</a>
+                  <a class="button primary action" onclick="UM.action.setUserSec()">Submit</a>
                   <a class="button" onclick="UM.ui.closeCard('secEditor')">Cancel</a>
                 </footer>
             </div>
@@ -87,13 +95,13 @@
                 </header>
                 <label>Are you sure you want to remove <span class="dynamicUser" id="usernameRemove">{{USER}}</span></label>
                 <footer class="is-right">
-                  <a class="button primary" onclick="UM.action.removeUser()">Yes</a>
+                  <a class="button primary action" onclick="UM.action.removeUser()">Yes</a>
                   <a class="button" onclick="UM.ui.closeCard('removeUserConfirm')">Cancel</a>
                 </footer>
             </div>
         </div>
         
-        <div class="popoverShade">
+        <div id="popoverShade" class="hidden">
             
         </div>
     </div>

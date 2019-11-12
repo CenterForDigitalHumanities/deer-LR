@@ -45,7 +45,6 @@ UM.interaction.getAllUsers = async function(){
  * Should only be able to see buttons that fire this function if user is an administrator.
  * Double down and only allow the function to fire if the user is known and is an administrator.  The server does not do this right now.  
  * 
- * @returns {undefined}
  */
 UM.interaction.drawUserManagement = async function(){
     let loggedInUser = localStorage.getItem("lr-user")
@@ -88,10 +87,14 @@ UM.interaction.drawUserManagement = async function(){
 
 UM.interaction.addUser = function(username, password, roles){
     //Remember they need a RERUM agent...
+    
+    this.closeCard("newUser")
+    this.drawUserManagement()
 }
 
 UM.interaction.removeUser = async function(user){
     
+    this.closeCard("removeUserConfirm")
     this.drawUserManagement()
 }
 
@@ -101,47 +104,68 @@ UM.interaction.getUserRoles = async function(user){
     return roles;
 }
 
-UM.interaction.setUserRoles = async function(user, roles){
-    
+UM.interaction.setUserRoles = async function(user){
+    let roles = {administrator:false, contributor:false}
+    roles.administrator = document.getElementById("adminRole").value
+    roles.contributor = document.getElementById("contributorRole").value
     alert("Roles updated for "+user)
+    this.closeCard("rolesEditor")
 }
 
-UM.interaction.setUsername = async function(user, name){
-    let newUsernmae = document.getElementById("username").value
+UM.interaction.setUsername = async function(user){
+    let newUsernmae = document.getElementById("newName").value
+    this.closeCard("nameEditor")
     this.drawUserManagement()
 }
 
-UM.interaction.setUserSecret = async function(user, sec){
-    let newSecret = document.getElementById("sec").value
+UM.interaction.setUserSecret = async function(user){
+    let newSecret = document.getElementById("newSec").value
+    this.closeCard("secEditor")
     alert("Password updated for "+user)
 }
 
-UM.ui.showRolesEditor = function(user){
-    document.getElementById("rolesEditor").classList.remove("hidden")
-    document.getElementById("usernameRole").innerHTML = user
-}
-
-UM.ui.showNameEditor = function(user){
-    document.getElementById("nameEditor").classList.remove("hidden")
-    document.getElementById("usernameName").innerHTML = user
-}
-
-UM.ui.showSecEditor = function(user){
-    document.getElementById("secEditor").classList.remove("hidden")
-    document.getElementById("usernameSec").innerHTML = user
-}
-
-UM.ui.confirmRemove = function(user){
-    document.getElementById("removeUserConfirm").classList.remove("hidden")
-    document.getElementById("usernameRemove").innerHTML = user 
-}
-
-UM.ui.closeCard = function(htmlID){
+UM.interaction.closeCard = function(htmlID){
     document.getElementById(htmlID).classList.add("hidden")
-    document.getElementById(htmlID).querySelectorAll("input[type='text']").forEach(function(el) {
+    document.getElementById("popoverShade").classList.add("hidden")
+    document.getElementById(htmlID).querySelector(".action").setAttribute("onlick", "")
+    document.getElementById(htmlID).querySelector(".dynamicUser").innerHTML = ""
+    document.getElementById(htmlID).querySelectorAll("input").forEach(function(el) {
+        el.value= ''
+    })
+    document.getElementById(htmlID).querySelectorAll("textarea").forEach(function(el) {
         el.value= ''
     })
     document.getElementById(htmlID).querySelectorAll(".dynamicUser").forEach(function(el) {
         el.innerHTML= '{{USER}}'
     })
 }
+
+UM.ui.showRolesEditor = function(user){
+    document.getElementById("popoverShade").classList.remove("hidden")
+    document.getElementById("rolesEditor").classList.remove("hidden")
+    document.getElementById("usernameRole").innerHTML = user
+    document.getElementById("rolesEditor").querySelector(".action").setAttribute("onlick", "UM.action.setUserRoles('"+user+"')")
+}
+
+UM.ui.showNameEditor = function(user){
+    document.getElementById("popoverShade").classList.remove("hidden")
+    document.getElementById("nameEditor").classList.remove("hidden")
+    document.getElementById("usernameName").innerHTML = user
+    document.getElementById("nameEditor").querySelector(".action").setAttribute("onlick", "UM.action.setUsername('"+user+"')")
+}
+
+UM.ui.showSecEditor = function(user){
+    document.getElementById("popoverShade").classList.remove("hidden")
+    document.getElementById("secEditor").classList.remove("hidden")
+    document.getElementById("usernameSec").innerHTML = user
+    document.getElementById("secEditor").querySelector(".action").setAttribute("onlick", "UM.action.setUserSec('"+user+"')")
+}
+
+UM.ui.confirmRemove = function(user){
+    document.getElementById("popoverShade").classList.remove("hidden")
+    document.getElementById("removeUserConfirm").classList.remove("hidden")
+    document.getElementById("usernameRemove").innerHTML = user 
+    document.getElementById("removeUserConfirm").querySelector(".action").setAttribute("onlick", "UM.action.removeUser('"+user+"')")
+}
+
+
