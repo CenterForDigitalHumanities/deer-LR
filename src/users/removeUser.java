@@ -5,6 +5,7 @@
  */
 package users;
 
+import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -36,13 +38,17 @@ public class removeUser extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String requestString;
-        StringBuilder sb = new StringBuilder();
+        String username;
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        requestString = bodyString.toString(); //This is the name of the user
+        username = bodyString.toString(); //This is the name of the user
+        Authorize auth = new Authorize();
+        JSONObject usersFile = auth.getUserData();
+        usersFile.remove(username);
+        auth.writeUserFile(usersFile);
+        response.getWriter().print(usersFile);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

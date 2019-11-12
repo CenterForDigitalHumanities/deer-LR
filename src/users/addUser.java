@@ -40,7 +40,6 @@ public class addUser extends HttpServlet {
         StringBuilder bodyString = new StringBuilder();
         String line;
         String user_obj_str;
-        StringBuilder sb = new StringBuilder();
         JSONObject requestJSON;
         //Gather user provided parameters from BODY of request, not parameters
         while ((line = bodyReader.readLine()) != null)
@@ -56,8 +55,7 @@ public class addUser extends HttpServlet {
         requestJSON.remove("username");
         usersFile.element(username, requestJSON);
         auth.writeUserFile(usersFile);
-        response.getWriter().print(usersFile.toString());
-        
+        response.getWriter().print(usersFile);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

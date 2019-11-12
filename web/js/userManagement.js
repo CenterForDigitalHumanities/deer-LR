@@ -1,7 +1,10 @@
 const UM = {}
-    //Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
+
+/**
+ * URLS for the available User Management back end servlets.
+ */
 UM.URLS = {
-    GETALLUSERS: "getUsers",
+    GETUSERFILE: "getUsers",
     GETROLES: "getUserRoles",
     GETSECRET: "getUserSecret",
     SETNAME: "setUserName",
@@ -11,14 +14,22 @@ UM.URLS = {
     REMOVEUSER : "removeUser"
 }
 
-UM.action = {}
+/**
+ * For the interactions with the user file that require servlets
+ */
+UM.interaction = {}
+
+/**
+ * For UI/UX around HTML elements
+ */
+UM.ui = {}
 
 /**
  * Use the endpoint available to get the user file.  
  * @returns {Object} The user file as a json object.
  */
-UM.action.getAllUsers = async function(){
-    let allUsers = await fetch(UM.URLS.GETALLUSERS, {
+UM.interaction.getAllUsers = async function(){
+    let allUsers = await fetch(UM.URLS.GETUSERFILE, {
         method: "GET",
         mode: "cors",
         headers: {
@@ -36,7 +47,7 @@ UM.action.getAllUsers = async function(){
  * 
  * @returns {undefined}
  */
-UM.action.drawUserManagement = async function(){
+UM.interaction.drawUserManagement = async function(){
     let loggedInUser = localStorage.getItem("lr-user")
     let managementTemplate = ``
     if (loggedInUser !== null) {
@@ -47,13 +58,14 @@ UM.action.drawUserManagement = async function(){
                 .then(users => {
                     for (let user in users){
                         //We only need to know their name, so walk the top level keys, which are the name.  Ignore admin_list.
+                        let role = (users[user].roles.administrator) ? "admin" : "contributor"
                         let buttons = `
-                            <input class="button primary" type="button" value="Change Password" onclick="UM.ui.showRolesEditor('${user}')" />
+                            <input class="button primary" type="button" value="Change Password" onclick="UM.ui.showSecEditor('${user}')" />
                             <input class="button secondary" type="button" value="Change Name" onclick="UM.ui.showNameEditor('${user}')" />
                             <input class="button error" type="button" value="Remove" onclick="UM.ui.confirmRemove('${user}')" />
                         `
                         if(user !== "admin_list"){
-                            managementTemplate += `<li username=${user}> ${user} &nbsp;&nbsp; ${buttons} </li>`
+                            managementTemplate += `<li class="${role}" username="${user}"> ${user} &nbsp;&nbsp; ${buttons} </li>`
                         }
                     }
                     document.getElementById("users").innerHTML = managementTemplate
@@ -74,44 +86,62 @@ UM.action.drawUserManagement = async function(){
     }
 }
 
-UM.action.getUserRoles = async function(user){
-    let roles = []
-    return roles;
-}
-
-
-UM.action.setUserRoles = async function(user, roles){
-    
-    
-}
-
-UM.action.addUser = function(username, password, roles){
+UM.interaction.addUser = function(username, password, roles){
     //Remember they need a RERUM agent...
 }
 
-UM.action.removeUser = async function(user){
+UM.interaction.removeUser = async function(user){
     
     this.drawUserManagement()
 }
 
-UM.action.setUserName = async function(user, name){
+UM.interaction.getUserRoles = async function(user){
+    let roles = {"admin":false, "contributor":false}
     
+    return roles;
+}
+
+UM.interaction.setUserRoles = async function(user, roles){
+    
+    alert("Roles updated for "+user)
+}
+
+UM.interaction.setUsername = async function(user, name){
+    let newUsernmae = document.getElementById("username").value
     this.drawUserManagement()
 }
 
-UM.action.setUserSecret = async function(user, sec){
-    
+UM.interaction.setUserSecret = async function(user, sec){
+    let newSecret = document.getElementById("sec").value
+    alert("Password updated for "+user)
 }
 
 UM.ui.showRolesEditor = function(user){
-    
+    document.getElementById("rolesEditor").classList.remove("hidden")
+    document.getElementById("usernameRole").innerHTML = user
 }
 
 UM.ui.showNameEditor = function(user){
-    
+    document.getElementById("nameEditor").classList.remove("hidden")
+    document.getElementById("usernameName").innerHTML = user
+}
+
+UM.ui.showSecEditor = function(user){
+    document.getElementById("secEditor").classList.remove("hidden")
+    document.getElementById("usernameSec").innerHTML = user
 }
 
 UM.ui.confirmRemove = function(user){
-    
-    this.drawUserManagement()
+    document.getElementById("removeUserConfirm").classList.remove("hidden")
+    document.getElementById("usernameRemove").innerHTML = user 
+}
+
+UM.ui.closeCard = function(htmlID){
+    document.getElementById(htmlID).classList.add("hidden")
+    document.getElementById(htmlID).querySelectorAll("input[type='text']").forEach(function(el) {
+        el.value= ''
+    })
+    document.getElementById(htmlID).querySelectorAll(".dynamicUser").forEach(function(el) {
+        el.innerHTML= '{{USER}}'
+    })
 }

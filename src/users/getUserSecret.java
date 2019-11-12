@@ -40,7 +40,6 @@ public class getUserSecret extends HttpServlet {
         StringBuilder bodyString = new StringBuilder();
         String line;
         String username;
-        StringBuilder sb = new StringBuilder();
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);

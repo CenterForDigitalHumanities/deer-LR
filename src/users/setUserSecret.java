@@ -5,6 +5,7 @@
  */
 package users;
 
+import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -36,13 +38,20 @@ public class setUserSecret extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String requestString;
-        StringBuilder sb = new StringBuilder();
+        JSONObject requestJSON;
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        requestString = bodyString.toString(); //This is the username and new secret
+        requestJSON = JSONObject.fromObject(bodyString);
+        String username = requestJSON.getString("username");
+        String sec = requestJSON.getString("sec");
+        Authorize auth = new Authorize();
+        JSONObject usersFile = auth.getUserData();
+        usersFile.getJSONObject(username).remove("sec");
+        usersFile.getJSONObject(username).accumulate("sec", sec);
+        auth.writeUserFile(usersFile);
+        response.getWriter().print(usersFile);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

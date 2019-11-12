@@ -37,7 +37,7 @@ public class getUsers extends HttpServlet {
         StringBuilder sb = new StringBuilder();
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
-        response.getWriter().print(usersFile.toString());
+        response.getWriter().print(usersFile);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

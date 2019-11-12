@@ -13,6 +13,10 @@
         #people h2 {
             display: none;
         }
+        
+        .popoverShade{
+            
+        }
     </style>
 </head>
 
@@ -27,6 +31,70 @@
             <ul id="users" class="col">
                 
             </ul>
+        </div>
+        
+        <div id="rolesEditor" class="card bd-primary hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Assign Roles</h4>
+                </header>
+                <label>Please check what role(s) you want <span lass="dynamicUser" id="usernameRole">{{USER}}</span> to have.</label>
+                <label>Administrator </label><input id="adminRole" values="Administrator" type="checkbox" />
+                <label>Contributor</label><input id="contributorRole" values="Contributor" type="checkbox" />
+                <footer class="is-right">
+                  <a class="button primary" onclick="UM.action.setUserRoles()">Submit</a>
+                  <a class="button" onclick="UM.ui.closeCard('rolesEditor')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div id="nameEditor" class="card hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Change Username</h4>
+                </header>
+                <label>Please type the new name for user <span lass="dynamicUser" id="usernameName">{{USER}}</span></label>
+                <input id="newName" type="text"/>
+                <footer class="is-right">
+                  <a class="button primary" onclick="UM.action.setUserName()">Submit</a>
+                  <a class="button" onclick="UM.ui.closeCard('nameEditor')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div id="secEditor" class="card hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Change Password</h4>
+                </header>
+                <label>Please type the new password for user <span lass="dynamicUser" id="usernameSec">{{USER}}</span></label>
+                <input id="newSec" type="text"/>
+                <footer class="is-right">
+                  <a class="button primary" onclick="UM.action.setUserSec()">Submit</a>
+                  <a class="button" onclick="UM.ui.closeCard('secEditor')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div id="newUser" class="card hidden">
+            New User
+        </div>
+        
+        <div id="removeUserConfirm" class="card hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Remove User</h4>
+                </header>
+                <label>Are you sure you want to remove <span class="dynamicUser" id="usernameRemove">{{USER}}</span></label>
+                <footer class="is-right">
+                  <a class="button primary" onclick="UM.action.removeUser()">Yes</a>
+                  <a class="button" onclick="UM.ui.closeCard('removeUserConfirm')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div class="popoverShade">
+            
         </div>
     </div>
     <lr-footer></lr-footer>
