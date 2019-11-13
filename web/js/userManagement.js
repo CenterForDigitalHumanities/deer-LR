@@ -87,39 +87,48 @@ UM.interaction.drawUserManagement = async function(){
 
 UM.interaction.addUser = function(username, name, email, password, roles){
     //Remember they need a RERUM agent...
-    let agentObj = {
-        "@type" : "foaf:Agent",
-        "@context" : "http://devstore.rerum.io/v1/contex.json",
-        "mbox" : email,
-        "label" : username,
-        "name" : name,
-    }
-    let newAgent = await UM.interaction.generateAgent(agentObj)
-    if(newAgent !== null){
-        let userbody = {
-            "@id":newAgent["@id"],
-            "roles":roles,
-            "sec" : password
-        }
-        let servletBody = {"username":username, "userbody":userbody}
-        fetch(UM.URLS.ADDUSER, {
-            method: "POST",
-            mode: "cors",
-            body: JSON.stringify(servletBody)
-        })
-        .then(response => response.text())
-        .then(text => {
-            alert(text)
-            this.closeCard("newUser")
-            this.drawUserManagement()
-        })
-        .catch(err => {
-           alert("Failed to add user")
-           console.error(err)         
-        })
+    let name = document.getElementById("newName").value
+    let username = document.getElementById("newUsername").value
+    let email =  document.getElementById("newEmail").value
+    let pass =  document.getElementById("newSec").value
+    if(!(username && pass && name && email)){
+        alert("You must provide all the information")
     }
     else{
-        alert("Failed to add user.  Could not create AGENT.")
+        let agentObj = {
+            "@type" : "foaf:Agent",
+            "@context" : "http://devstore.rerum.io/v1/contex.json",
+            "mbox" : email,
+            "label" : username,
+            "name" : name,
+        }
+        let newAgent = await UM.interaction.generateAgent(agentObj)
+        if(newAgent !== null){
+            let userbody = {
+                "@id":newAgent["@id"],
+                "roles":roles,
+                "sec" : pass
+            }
+            let servletBody = {"username":username, "userbody":userbody}
+            fetch(UM.URLS.ADDUSER, {
+                method: "POST",
+                mode: "cors",
+                body: JSON.stringify(servletBody)
+            })
+            .then(response => response.text())
+            .then(text => {
+                alert(text)
+                this.closeCard("newUser")
+                this.drawUserManagement()
+            })
+            .catch(err => {
+               alert("Failed to add user")
+               console.error(err)         
+            })
+        }
+        else{
+            alert("Failed to add user.  Could not create AGENT.")
+        }
     }
 }
 
@@ -152,33 +161,50 @@ UM.interaction.setUserRoles = function(user){
     let servletBody = {username:user, roles:{administrator:false, contributor:false}}
     servletBody.roles.administrator = document.getElementById("adminRole").checked
     servletBody.roles.contributor = document.getElementById("contributorRole").checked
-    fetch(UM.URLS.SETROLES, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(servletBody)
-    })
-    .then(response =>response.text())
-    .then(text =>{
-        alert(text)
-        this.closeCard("rolesEditor")
-        this.drawUserManagement()
-    })
-    .catch(err => {
-        alert("There was an error setting the roles.")
-        console.error(err)
-    })
+    if(!servletBody.roles.administrator && !servletBody.roles.contributor){
+        alert("You must select at least one role!");
+    }
+    else{
+        fetch(UM.URLS.SETROLES, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(servletBody)
+        })
+        .then(response =>response.text())
+        .then(text =>{
+            alert(text)
+            this.closeCard("rolesEditor")
+            this.drawUserManagement()
+        })
+        .catch(err => {
+            alert("There was an error setting the roles.")
+            console.error(err)
+        })
+    }  
 }
 
 UM.interaction.setUsername = async function(user){
-    let newUsernmae = document.getElementById("newName").value
-    this.closeCard("nameEditor")
-    this.drawUserManagement()
+    let newUsername = document.getElementById("newName").value
+    if(newUsername){
+        this.closeCard("nameEditor")
+        this.drawUserManagement()
+    }
+    else{
+        alert("You must provide some kind of name!")
+    }
+    
 }
 
 UM.interaction.setUserSecret = async function(user){
     let newSecret = document.getElementById("newSec").value
-    this.closeCard("secEditor")
-    alert("Password updated for "+user)
+    if(newSecret){
+        this.closeCard("secEditor")
+        alert("Password updated for "+user)
+    }
+    else{
+        alert("The password cannot be blank!")
+    }
+    
 }
 
 UM.interaction.closeCard = function(htmlID){
