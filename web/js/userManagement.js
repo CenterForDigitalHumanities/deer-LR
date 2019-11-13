@@ -85,8 +85,7 @@ UM.interaction.drawUserManagement = async function(){
     }
 }
 
-UM.interaction.addUser = function(username, name, email, password, roles){
-    //Remember they need a RERUM agent...
+UM.interaction.addUser = async function(username, name, email, password, roles){
     let name = document.getElementById("newName").value
     let username = document.getElementById("newUsername").value
     let email =  document.getElementById("newEmail").value
@@ -133,9 +132,21 @@ UM.interaction.addUser = function(username, name, email, password, roles){
 }
 
 UM.interaction.removeUser = async function(user){
-    
-    this.closeCard("removeUserConfirm")
-    this.drawUserManagement()
+    fetch(UM.URLS.REMOVEUSER, {
+        method: "POST",
+        mode: "cors",
+        body: user
+    })
+    .then(response => response.text())
+    .then(text => {
+        alert(text)
+        this.closeCard("removeUser")
+        this.drawUserManagement()
+    })
+    .catch(err => {
+       alert("Failed to remove user")
+       console.error(err)         
+    })   
 }
 
 UM.interaction.generateAgent = async function(agentObj){
@@ -185,9 +196,24 @@ UM.interaction.setUserRoles = function(user){
 
 UM.interaction.setUsername = async function(user){
     let newUsername = document.getElementById("newName").value
+    let servletBody = {"username":user, "newname":newUsername}
     if(newUsername){
-        this.closeCard("nameEditor")
-        this.drawUserManagement()
+        fetch(UM.URLS.SETUSERNAME, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(servletBody)
+        })
+        .then(response =>response.text())
+        .then(text =>{
+            alert(text)
+            this.closeCard("nameEditor")
+            this.drawUserManagement()
+        })
+        .catch(err => {
+            alert("There was an error setting the roles.")
+            console.error(err)
+        })
+        
     }
     else{
         alert("You must provide some kind of name!")
@@ -198,11 +224,25 @@ UM.interaction.setUsername = async function(user){
 UM.interaction.setUserSecret = async function(user){
     let newSecret = document.getElementById("newSec").value
     if(newSecret){
-        this.closeCard("secEditor")
-        alert("Password updated for "+user)
+        fetch(UM.URLS.SETSECRET, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(servletBody)
+        })
+        .then(response =>response.text())
+        .then(text =>{
+            alert(text)
+            this.closeCard("secEditor")
+            this.drawUserManagement()
+        })
+        .catch(err => {
+            alert("There was an error updating the password.")
+            console.error(err)
+        })
+        
     }
     else{
-        alert("The password cannot be blank!")
+        alert("You must provide some kind of password!")
     }
     
 }

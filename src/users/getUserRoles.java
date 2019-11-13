@@ -73,7 +73,7 @@ public class getUserRoles extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Get the roles of a provided username";
+        return "Get the roles of a provided user from the Lived Religion user file.";
     }// </editor-fold>
 
 }

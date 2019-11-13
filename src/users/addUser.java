@@ -80,7 +80,7 @@ public class addUser extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Put an additional user in the users file.";
+        return "Put an additional user in the Lived Religion users file.";
     }// </editor-fold>
 
 }
