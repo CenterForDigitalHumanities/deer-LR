@@ -103,13 +103,16 @@
                     <h4>Add New User</h4>
                 </header>
                 <p>Please provide the information below to add a new user.</p>
-                <input id="newUsername" type="text"/>
+                <label>Real Name: </label><input id="newName" type="text"/>
+                <label>E-mail: </label><input id="newEmail" type="text"/>
+                <label>Application Username:</label><input id="newUsername" type="text"/>
+                <label>Application Password:</label><input id="newSec" type="text"/>
+                <p> Application Roles </p>
                 <label>Administrator </label><input id="newAdminRole" values="Administrator" type="checkbox" />
                 <label>Contributor</label><input id="newContributorRole" values="Contributor" type="checkbox" />
-                <input id="newSec" type="text"/>
                 <footer class="is-right">
-                  <a class="button primary action" onclick="UM.interaction.addUser()">Yes</a>
-                  <a class="button" onclick="UM.interaction.closeCard('removeUserConfirm')">Cancel</a>
+                  <a class="button primary action" onclick="UM.interaction.addUser()">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('newUser')">Cancel</a>
                 </footer>
             </div>
         </div>

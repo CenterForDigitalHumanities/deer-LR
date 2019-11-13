@@ -11,7 +11,8 @@ UM.URLS = {
     SETROLES: "setUserRoles",
     SETSECRET: "setUserSecret",
     ADDUSER : "addUser",
-    REMOVEUSER : "removeUser"
+    REMOVEUSER : "removeUser",
+    CREATE : "create"
 }
 
 /**
@@ -84,17 +85,67 @@ UM.interaction.drawUserManagement = async function(){
     }
 }
 
-UM.interaction.addUser = function(username, password, roles){
+UM.interaction.addUser = function(username, name, email, password, roles){
     //Remember they need a RERUM agent...
-    alert("Still Under Development")
-    this.closeCard("newUser")
-    //this.drawUserManagement()
+    let agentObj = {
+        "@type" : "foaf:Agent",
+        "@context" : "http://devstore.rerum.io/v1/contex.json",
+        "mbox" : email,
+        "label" : username,
+        "name" : name,
+    }
+    let newAgent = await UM.interaction.generateAgent(agentObj)
+    if(newAgent !== null){
+        let userbody = {
+            "@id":newAgent["@id"],
+            "roles":roles,
+            "sec" : password
+        }
+        let servletBody = {"username":username, "userbody":userbody}
+        fetch(UM.URLS.ADDUSER, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(servletBody)
+        })
+        .then(response => response.text())
+        .then(text => {
+            alert(text)
+            this.closeCard("newUser")
+            this.drawUserManagement()
+        })
+        .catch(err => {
+           alert("Failed to add user")
+           console.error(err)         
+        })
+    }
+    else{
+        alert("Failed to add user.  Could not create AGENT.")
+    }
 }
 
 UM.interaction.removeUser = async function(user){
     
     this.closeCard("removeUserConfirm")
     this.drawUserManagement()
+}
+
+UM.interaction.generateAgent = async function(agentObj){
+    //Create an agent in rerum
+    let returnAgent
+    fetch(UM.URLS.CREATE, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(agentObj)
+    })
+    .then(response => response.json())
+    .then(agent = > {
+        returnAgent = agent;
+    })
+    .catch(err => {
+        //alert("Error generating agent for user.  Could not add user.")
+        console.error(err)
+    })
+    return returnAgent
 }
 
 UM.interaction.setUserRoles = function(user){
