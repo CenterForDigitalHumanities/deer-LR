@@ -108,7 +108,7 @@
                 <label>Contributor</label><input id="newContributorRole" values="Contributor" type="checkbox" />
                 <input id="newSec" type="text"/>
                 <footer class="is-right">
-                  <a class="button primary action" onclick="UM.action.addUser()">Yes</a>
+                  <a class="button primary action" onclick="UM.interaction.addUser()">Yes</a>
                   <a class="button" onclick="UM.interaction.closeCard('removeUserConfirm')">Cancel</a>
                 </footer>
             </div>
@@ -121,7 +121,7 @@
                 </header>
                 <p>Are you sure you want to remove <span class="dynamicUser" id="usernameRemove">{{USER}}</span></p>
                 <footer class="is-right">
-                  <a class="button primary action" onclick="UM.action.removeUser()">Yes</a>
+                  <a class="button primary action" onclick="UM.interaction.removeUser()">Yes</a>
                   <a class="button" onclick="UM.interaction.closeCard('removeUserConfirm')">Cancel</a>
                 </footer>
             </div>

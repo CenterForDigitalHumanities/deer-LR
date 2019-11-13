@@ -46,15 +46,19 @@ public class setUserRoles extends HttpServlet {
         {
           bodyString.append(line);
         }
-        requestJSON = JSONObject.fromObject(bodyString);
+        requestJSON = JSONObject.fromObject(bodyString.toString());
         String username = requestJSON.getString("username");
-        JSONArray roles = requestJSON.getJSONArray("roles");
+        JSONObject roles = requestJSON.getJSONObject("roles");
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
+        System.out.println("User file before edit");
+        System.out.println(usersFile);
         usersFile.getJSONObject(username).remove("roles");
         usersFile.getJSONObject(username).accumulate("roles", roles);
+        System.out.println("User file after edit");
+        System.out.println(usersFile);
         auth.writeUserFile(usersFile);
-        response.getWriter().print(usersFile);
+        response.getWriter().print("User Roles Updated");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

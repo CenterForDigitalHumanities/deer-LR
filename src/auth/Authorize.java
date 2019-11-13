@@ -63,8 +63,7 @@ public class Authorize {
     }
     
     public void writeUserFile(JSONObject userJSON) throws IOException {
-        File file = new File(Authorize.class.getResource(users_file).getFile());
-        FileWriter writer = new FileWriter(file, false);
+        FileWriter writer = new FileWriter(users_file, false);
         BufferedWriter bufferedWriter = new BufferedWriter(writer);
         bufferedWriter.write(userJSON.toString());
         bufferedWriter.close();

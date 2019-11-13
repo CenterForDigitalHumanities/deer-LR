@@ -97,18 +97,25 @@ UM.interaction.removeUser = async function(user){
     this.drawUserManagement()
 }
 
-UM.interaction.getUserRoles = async function(user){
-    let roles = {"admin":false, "contributor":false}
-    
-    return roles;
-}
-
-UM.interaction.setUserRoles = async function(user){
-    let roles = {administrator:false, contributor:false}
-    roles.administrator = document.getElementById("adminRole").value
-    roles.contributor = document.getElementById("contributorRole").value
-    alert("Roles updated for "+user)
-    this.closeCard("rolesEditor")
+UM.interaction.setUserRoles = function(user){
+    let servletBody = {username:user, roles:{administrator:false, contributor:false}}
+    servletBody.roles.administrator = document.getElementById("adminRole").checked
+    servletBody.roles.contributor = document.getElementById("contributorRole").checked
+    fetch(UM.URLS.SETROLES, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(servletBody)
+    })
+    .then(response =>response.text())
+    .then(text =>{
+        alert(text)
+        this.closeCard("rolesEditor")
+        this.drawUserManagement()
+    })
+    .catch(err => {
+        alert("There was an error setting the roles.")
+        console.error(err)
+    })
 }
 
 UM.interaction.setUsername = async function(user){
@@ -146,7 +153,7 @@ UM.ui.showRolesEditor = function(user, event){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("rolesEditor").classList.remove("is-hidden")
     document.getElementById("usernameRole").innerHTML = user
-    document.getElementById("rolesEditor").querySelector(".action").setAttribute("onclick", "UM.action.setUserRoles('"+user+"')")
+    document.getElementById("rolesEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUserRoles('"+user+"')")
     if(role === "admin"){
         document.getElementById("adminRole").checked = true
         document.getElementById("contributorRole").checked = true
@@ -160,14 +167,14 @@ UM.ui.showNameEditor = function(user){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("nameEditor").classList.remove("is-hidden")
     document.getElementById("usernameName").innerHTML = user
-    document.getElementById("nameEditor").querySelector(".action").setAttribute("onclick", "UM.action.setUsername('"+user+"')")
+    document.getElementById("nameEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUsername('"+user+"')")
 }
 
 UM.ui.showSecEditor = function(user){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("secEditor").classList.remove("is-hidden")
     document.getElementById("usernameSec").innerHTML = user
-    document.getElementById("secEditor").querySelector(".action").setAttribute("onclick", "UM.action.setUserSec('"+user+"')")
+    document.getElementById("secEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUserSec('"+user+"')")
 }
 
 UM.ui.showUserAddition = function(user){
@@ -179,7 +186,7 @@ UM.ui.confirmRemove = function(user){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("removeUserConfirm").classList.remove("is-hidden")
     document.getElementById("usernameRemove").innerHTML = user 
-    document.getElementById("removeUserConfirm").querySelector(".action").setAttribute("onclick", "UM.action.removeUser('"+user+"')")
+    document.getElementById("removeUserConfirm").querySelector(".action").setAttribute("onclick", "UM.interaction.removeUser('"+user+"')")
 }
 
 
