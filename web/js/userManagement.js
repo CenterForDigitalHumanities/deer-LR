@@ -7,7 +7,7 @@ UM.URLS = {
     GETUSERFILE: "getUsers",
     GETROLES: "getUserRoles",
     GETSECRET: "getUserSecret",
-    SETNAME: "setUserName",
+    SETUSERNAME: "setUserName",
     SETROLES: "setUserRoles",
     SETSECRET: "setUserSecret",
     ADDUSER : "addUser",
@@ -85,13 +85,14 @@ UM.interaction.drawUserManagement = async function(){
     }
 }
 
-UM.interaction.addUser = async function(username, name, email, password, roles){
+UM.interaction.addUser = async function(){
     let name = document.getElementById("newName").value
     let username = document.getElementById("newUsername").value
     let email =  document.getElementById("newEmail").value
     let pass =  document.getElementById("newSec").value
-    if(!(username && pass && name && email)){
-        alert("You must provide all the information")
+    let roles = {administrator:document.getElementById("newAdminRole").checked, contributor:document.getElementById("newContributorRole").checked}
+    if(!(username && pass && name && email) || (!roles.administrator && !roles.contributor)){
+        alert("You must provide all the information.  Make sure to assign at least one role.")
     }
     else{
         let agentObj = {
@@ -114,7 +115,16 @@ UM.interaction.addUser = async function(username, name, email, password, roles){
                 mode: "cors",
                 body: JSON.stringify(servletBody)
             })
-            .then(response => response.text())
+            .then(response => {
+                if(response.ok){
+                    return response.text()
+                }
+                else{
+                    alert("Failed to add user")
+                    console.error(err)    
+                    return
+                }
+            })
             .then(text => {
                 alert(text)
                 this.closeCard("newUser")
@@ -137,7 +147,16 @@ UM.interaction.removeUser = async function(user){
         mode: "cors",
         body: user
     })
-    .then(response => response.text())
+    .then(response => {
+        if(response.ok){
+            return response.text()
+        }
+        else{
+            alert("Failed to remove user")
+            console.error(err)
+            return
+        }
+    })
     .then(text => {
         alert(text)
         this.closeCard("removeUser")
@@ -150,15 +169,23 @@ UM.interaction.removeUser = async function(user){
 }
 
 UM.interaction.generateAgent = async function(agentObj){
-    //Create an agent in rerum
     let returnAgent
     fetch(UM.URLS.CREATE, {
         method: "POST",
         mode: "cors",
         body: JSON.stringify(agentObj)
     })
-    .then(response => response.json())
-    .then(agent = > {
+    .then(response => {
+        if(response.ok){
+            return response.json()
+        }
+        else{
+            alert("There was an error saving the AGENT for the user.")
+            console.error(err)
+            return
+        }
+    })
+    .then(agent => {
         returnAgent = agent;
     })
     .catch(err => {
@@ -181,7 +208,16 @@ UM.interaction.setUserRoles = function(user){
             mode: "cors",
             body: JSON.stringify(servletBody)
         })
-        .then(response =>response.text())
+        .then(response => {
+            if(response.ok){
+                return response.text()
+            }
+            else{
+                alert("There was an error setting the roles.")
+                console.error(err)
+                return
+            }
+        })
         .then(text =>{
             alert(text)
             this.closeCard("rolesEditor")
@@ -196,14 +232,23 @@ UM.interaction.setUserRoles = function(user){
 
 UM.interaction.setUsername = async function(user){
     let newUsername = document.getElementById("newName").value
-    let servletBody = {"username":user, "newname":newUsername}
     if(newUsername){
+        let servletBody = {"username":user, "newname":newUsername}
         fetch(UM.URLS.SETUSERNAME, {
             method: "POST",
             mode: "cors",
             body: JSON.stringify(servletBody)
         })
-        .then(response =>response.text())
+        .then(response => {
+            if(response.ok){
+                return response.text()
+            }
+            else{
+                alert("There was an error setting the username.")
+                console.error(err)
+                return
+            }
+        })
         .then(text =>{
             alert(text)
             this.closeCard("nameEditor")
@@ -213,23 +258,31 @@ UM.interaction.setUsername = async function(user){
             alert("There was an error setting the roles.")
             console.error(err)
         })
-        
     }
     else{
         alert("You must provide some kind of name!")
     }
-    
 }
 
 UM.interaction.setUserSecret = async function(user){
     let newSecret = document.getElementById("newSec").value
     if(newSecret){
+        let servletBody = {"username":user, "newname":newSecret}
         fetch(UM.URLS.SETSECRET, {
             method: "POST",
             mode: "cors",
             body: JSON.stringify(servletBody)
         })
-        .then(response =>response.text())
+        .then(response => {
+            if(response.ok){
+                return response.text()
+            }
+            else{
+                alert("There was an error updating the password.")
+                console.error(err)
+                return
+            }
+        })
         .then(text =>{
             alert(text)
             this.closeCard("secEditor")
@@ -239,12 +292,10 @@ UM.interaction.setUserSecret = async function(user){
             alert("There was an error updating the password.")
             console.error(err)
         })
-        
     }
     else{
         alert("You must provide some kind of password!")
     }
-    
 }
 
 UM.interaction.closeCard = function(htmlID){

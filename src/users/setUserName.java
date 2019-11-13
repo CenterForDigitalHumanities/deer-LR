@@ -44,8 +44,8 @@ public class setUserName extends HttpServlet {
           bodyString.append(line);
         }
         requestJSON = JSONObject.fromObject(bodyString);
-        String origUsername = requestJSON.getString("origName");
-        String newUsername = requestJSON.getString("newName");
+        String origUsername = requestJSON.getString("username");
+        String newUsername = requestJSON.getString("newname");
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
         JSONObject origUserObj = usersFile.getJSONObject(origUsername);
