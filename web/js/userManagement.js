@@ -59,13 +59,12 @@ UM.interaction.drawUserManagement = async function(){
                         //We only need to know their name, so walk the top level keys, which are the name.  Ignore admin_list.
                         let role = (users[user].roles.administrator) ? "admin" : "contributor"
                         let buttons = `
-                            <input class="button primary" type="button" value="Change Password" onclick="UM.ui.showSecEditor('${user}')" />
-                            <input class="button secondary" type="button" value="Change Name" onclick="UM.ui.showNameEditor('${user}')" />
-                            <input class="button error" type="button" value="Remove" onclick="UM.ui.confirmRemove('${user}')" />
+                            <a role="${role}" class="button default" onclick="UM.ui.showRolesEditor('${user}', event)"> Change Roles </a>
+                            <a class="button primary" onclick="UM.ui.showSecEditor('${user}')">Change Password</a>
+                            <a class="button secondary" onclick="UM.ui.showNameEditor('${user}')">Change Name</a>
+                            <a class="button error" onclick="UM.ui.confirmRemove('${user}')">Remove</a>
                         `
-                        if(user !== "admin_list"){
-                            managementTemplate += `<li class="${role}" username="${user}"> ${user} &nbsp;&nbsp; ${buttons} </li>`
-                        }
+                        managementTemplate += `<li class="${role}" username="${user}"> ${user} &nbsp;&nbsp; ${buttons} </li>`
                     }
                     document.getElementById("users").innerHTML = managementTemplate
                 })
@@ -87,9 +86,9 @@ UM.interaction.drawUserManagement = async function(){
 
 UM.interaction.addUser = function(username, password, roles){
     //Remember they need a RERUM agent...
-    
+    alert("Still Under Development")
     this.closeCard("newUser")
-    this.drawUserManagement()
+    //this.drawUserManagement()
 }
 
 UM.interaction.removeUser = async function(user){
@@ -125,12 +124,14 @@ UM.interaction.setUserSecret = async function(user){
 }
 
 UM.interaction.closeCard = function(htmlID){
-    document.getElementById(htmlID).classList.add("hidden")
-    document.getElementById("popoverShade").classList.add("hidden")
-    document.getElementById(htmlID).querySelector(".action").setAttribute("onlick", "")
+    document.getElementById(htmlID).classList.add("is-hidden")
+    document.getElementById("popoverShade").classList.add("is-hidden")
+    document.getElementById(htmlID).querySelector(".action").setAttribute("onclick", "")
     document.getElementById(htmlID).querySelector(".dynamicUser").innerHTML = ""
     document.getElementById(htmlID).querySelectorAll("input").forEach(function(el) {
         el.value= ''
+        el.selected = false
+        el.checked = false
     })
     document.getElementById(htmlID).querySelectorAll("textarea").forEach(function(el) {
         el.value= ''
@@ -140,32 +141,45 @@ UM.interaction.closeCard = function(htmlID){
     })
 }
 
-UM.ui.showRolesEditor = function(user){
-    document.getElementById("popoverShade").classList.remove("hidden")
-    document.getElementById("rolesEditor").classList.remove("hidden")
+UM.ui.showRolesEditor = function(user, event){
+    let role = event.target.getAttribute("role")
+    document.getElementById("popoverShade").classList.remove("is-hidden")
+    document.getElementById("rolesEditor").classList.remove("is-hidden")
     document.getElementById("usernameRole").innerHTML = user
-    document.getElementById("rolesEditor").querySelector(".action").setAttribute("onlick", "UM.action.setUserRoles('"+user+"')")
+    document.getElementById("rolesEditor").querySelector(".action").setAttribute("onclick", "UM.action.setUserRoles('"+user+"')")
+    if(role === "admin"){
+        document.getElementById("adminRole").checked = true
+        document.getElementById("contributorRole").checked = true
+    }
+    else{
+        document.getElementById("contributorRole").checked = true
+    }
 }
 
 UM.ui.showNameEditor = function(user){
-    document.getElementById("popoverShade").classList.remove("hidden")
-    document.getElementById("nameEditor").classList.remove("hidden")
+    document.getElementById("popoverShade").classList.remove("is-hidden")
+    document.getElementById("nameEditor").classList.remove("is-hidden")
     document.getElementById("usernameName").innerHTML = user
-    document.getElementById("nameEditor").querySelector(".action").setAttribute("onlick", "UM.action.setUsername('"+user+"')")
+    document.getElementById("nameEditor").querySelector(".action").setAttribute("onclick", "UM.action.setUsername('"+user+"')")
 }
 
 UM.ui.showSecEditor = function(user){
-    document.getElementById("popoverShade").classList.remove("hidden")
-    document.getElementById("secEditor").classList.remove("hidden")
+    document.getElementById("popoverShade").classList.remove("is-hidden")
+    document.getElementById("secEditor").classList.remove("is-hidden")
     document.getElementById("usernameSec").innerHTML = user
-    document.getElementById("secEditor").querySelector(".action").setAttribute("onlick", "UM.action.setUserSec('"+user+"')")
+    document.getElementById("secEditor").querySelector(".action").setAttribute("onclick", "UM.action.setUserSec('"+user+"')")
+}
+
+UM.ui.showUserAddition = function(user){
+    document.getElementById("popoverShade").classList.remove("is-hidden")
+    document.getElementById("addUser").classList.remove("is-hidden")
 }
 
 UM.ui.confirmRemove = function(user){
-    document.getElementById("popoverShade").classList.remove("hidden")
-    document.getElementById("removeUserConfirm").classList.remove("hidden")
+    document.getElementById("popoverShade").classList.remove("is-hidden")
+    document.getElementById("removeUserConfirm").classList.remove("is-hidden")
     document.getElementById("usernameRemove").innerHTML = user 
-    document.getElementById("removeUserConfirm").querySelector(".action").setAttribute("onlick", "UM.action.removeUser('"+user+"')")
+    document.getElementById("removeUserConfirm").querySelector(".action").setAttribute("onclick", "UM.action.removeUser('"+user+"')")
 }
 
 

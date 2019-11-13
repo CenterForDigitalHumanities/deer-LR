@@ -20,10 +20,23 @@
             width: 100%;
             background-color: gray;
             opacity: 75%;
+            top: 0px;
+            left: 0px;
+            position: absolute;
         }
         
         .card{
-            z-index : 3;
+            z-index: 3;
+            position: fixed;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 50%;
+            top: 25%;
+        }
+        
+        .dynamicUser{
+            font-weight: bold; 
         }
     </style>
 </head>
@@ -33,7 +46,7 @@
     <div class="container">
         <h1 class="text-primary"> Users </h1>
         <div class="row entries">
-            <a class="button primary" href="place.html"> &#xFF0B; User </a>
+            <a class="button primary" onclick="UM.ui.showUserAddition()"> &#xFF0B; User </a>
         </div>
         <div class="row">
             <ul id="users" class="col">
@@ -41,78 +54,90 @@
             </ul>
         </div>
         
-        <div id="rolesEditor" class="card bd-primary hidden">
+        <div id="rolesEditor" class="card bd-primary is-hidden">
             <div class="card_body">
                 <header>
                     <h4>Assign Roles</h4>
                 </header>
-                <label>Please check what role(s) you want <span lass="dynamicUser" id="usernameRole">{{USER}}</span> to have.</label>
+                <p>Please check what role(s) you want <span class="dynamicUser" id="usernameRole">{{USER}}</span> to have.  Note Administrators are automatically Contributors as well.</p>
                 <label>Administrator </label><input id="adminRole" values="Administrator" type="checkbox" />
                 <label>Contributor</label><input id="contributorRole" values="Contributor" type="checkbox" />
                 <footer class="is-right">
-                  <a class="button primary action" onclick="UM.action.setUserRoles()">Submit</a>
-                  <a class="button" onclick="UM.ui.closeCard('rolesEditor')">Cancel</a>
+                  <a class="button primary action" onclick="">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('rolesEditor')">Cancel</a>
                 </footer>
             </div>
         </div>
         
-        <div id="nameEditor" class="card hidden">
+        <div id="nameEditor" class="card bd-primary is-hidden">
             <div class="card_body">
                 <header>
                     <h4>Change Username</h4>
                 </header>
-                <label>Please type the new name for user <span lass="dynamicUser" id="usernameName">{{USER}}</span></label>
+                <p>Please type the new name for user <span class="dynamicUser" id="usernameName">{{USER}}</span></p>
                 <input id="newName" type="text"/>
                 <footer class="is-right">
-                  <a class="button primary action" onclick="UM.action.setUserName()">Submit</a>
-                  <a class="button" onclick="UM.ui.closeCard('nameEditor')">Cancel</a>
+                  <a class="button primary action" onclick="">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('nameEditor')">Cancel</a>
                 </footer>
             </div>
         </div>
         
-        <div id="secEditor" class="card hidden">
+        <div id="secEditor" class="card bd-primary is-hidden">
             <div class="card_body">
                 <header>
                     <h4>Change Password</h4>
                 </header>
-                <label>Please type the new password for user <span lass="dynamicUser" id="usernameSec">{{USER}}</span></label>
+                <p>Please type the new password for user <span class="dynamicUser" id="usernameSec">{{USER}}</span></p>
                 <input id="newSec" type="text"/>
                 <footer class="is-right">
-                  <a class="button primary action" onclick="UM.action.setUserSec()">Submit</a>
-                  <a class="button" onclick="UM.ui.closeCard('secEditor')">Cancel</a>
+                  <a class="button primary action" onclick="">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('secEditor')">Cancel</a>
                 </footer>
             </div>
         </div>
         
-        <div id="newUser" class="card hidden">
-            New User
+        <div id="newUser" class="card bd-primary is-hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Add New User</h4>
+                </header>
+                <p>Please provide the information below to add a new user.</p>
+                <input id="newUsername" type="text"/>
+                <label>Administrator </label><input id="newAdminRole" values="Administrator" type="checkbox" />
+                <label>Contributor</label><input id="newContributorRole" values="Contributor" type="checkbox" />
+                <input id="newSec" type="text"/>
+                <footer class="is-right">
+                  <a class="button primary action" onclick="UM.action.addUser()">Yes</a>
+                  <a class="button" onclick="UM.interaction.closeCard('removeUserConfirm')">Cancel</a>
+                </footer>
+            </div>
         </div>
         
-        <div id="removeUserConfirm" class="card hidden">
+        <div id="removeUserConfirm" class="card bd-primary is-hidden">
             <div class="card_body">
                 <header>
                     <h4>Remove User</h4>
                 </header>
-                <label>Are you sure you want to remove <span class="dynamicUser" id="usernameRemove">{{USER}}</span></label>
+                <p>Are you sure you want to remove <span class="dynamicUser" id="usernameRemove">{{USER}}</span></p>
                 <footer class="is-right">
                   <a class="button primary action" onclick="UM.action.removeUser()">Yes</a>
-                  <a class="button" onclick="UM.ui.closeCard('removeUserConfirm')">Cancel</a>
+                  <a class="button" onclick="UM.interaction.closeCard('removeUserConfirm')">Cancel</a>
                 </footer>
             </div>
         </div>
-        
-        <div id="popoverShade" class="hidden">
-            
-        </div>
     </div>
     <lr-footer></lr-footer>
+    <div id="popoverShade" class="is-hidden">
+            
+    </div>
     <!-- Add ins -->
     <script>
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
             if (user !== null) {
                 if (user.hasOwnProperty("roles") && user.roles.administrator) {
-                    UM.action.drawUserManagement()
+                    UM.interaction.drawUserManagement()
                 }
                 else{
                     alert("You must be logged in as an administrator to use this page")

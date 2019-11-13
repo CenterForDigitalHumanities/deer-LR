@@ -27,7 +27,7 @@ public class Authorize {
         users_file = file.getAbsolutePath();
         String users = new String(Files.readAllBytes(Paths.get(users_file))); 
         userData = JSONObject.fromObject(users);
-        admins_list = userData.getJSONArray("admin_list");
+        //admins_list = userData.getJSONArray("admin_list");
     }
 
     public JSONArray getAdmins(){
@@ -69,7 +69,7 @@ public class Authorize {
         bufferedWriter.write(userJSON.toString());
         bufferedWriter.close();
         userData = userJSON;
-        admins_list = userData.getJSONArray("admin_list");
+        //admins_list = userData.getJSONArray("admin_list");
     }
     
 }
