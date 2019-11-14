@@ -141,7 +141,7 @@
             let user = event.detail.user
             if (user !== null) {
                 if (user.hasOwnProperty("roles") && user.roles.administrator) {
-                    localStorage.addItem("lr-user", event.detail.user) //without this, lr-user is null in drawUserManagement()
+                    //localStorage.setItem("lr-user", JSON.stringify(event.detail.user)) //without this, lr-user is null in drawUserManagement()
                     UM.interaction.drawUserManagement()
                 }
                 else{
