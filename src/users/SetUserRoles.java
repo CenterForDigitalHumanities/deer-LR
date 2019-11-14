@@ -10,20 +10,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
  *
  * @author bhaberbe
  */
-public class removeUser extends HttpServlet {
+@WebServlet(name = "setUserRoles", urlPatterns = {"/setUserRoles"})
+public class SetUserRoles extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Update the roles for a user.  JSON is provided in the body that includes
+     * username The user to update the roles for
+     * roles The new roles JSON to apply to the user
      *
      * @param request servlet request
      * @param response servlet response
@@ -38,17 +42,22 @@ public class removeUser extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String username;
+        JSONObject requestJSON;
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        username = bodyString.toString(); //This is the name of the user
+        requestJSON = JSONObject.fromObject(bodyString.toString());
+        String username = requestJSON.getString("username");
+        JSONObject roles = requestJSON.getJSONObject("roles");
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
-        usersFile.remove(username);
+        System.out.println("User file before edit");
+        System.out.println(usersFile);
+        usersFile.getJSONObject(username).remove("roles");
+        usersFile.getJSONObject(username).accumulate("roles", roles);
         auth.writeUserFile(usersFile);
-        response.getWriter().print("User has been removed.");
+        response.getWriter().print("User roles have been updated.");
     }
 
     /**
@@ -72,7 +81,7 @@ public class removeUser extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Remove a user from the Lived Religion user file.";
+        return "Set new user roles for a Lived Religion user in the user file.";
     }// </editor-fold>
 
 }

@@ -5,9 +5,7 @@ const UM = {}
  */
 UM.URLS = {
     GETUSERFILE: "getUsers",
-    GETROLES: "getUserRoles",
-    GETSECRET: "getUserSecret",
-    SETUSERNAME: "setUserName",
+    SETUSERNAME: "setUsername",
     SETROLES: "setUserRoles",
     SETSECRET: "setUserSecret",
     ADDUSER : "addUser",
@@ -43,9 +41,8 @@ UM.interaction.getAllUsers = async function(){
 }
 
 /**
- * Should only be able to see buttons that fire this function if user is an administrator.
- * Double down and only allow the function to fire if the user is known and is an administrator.  The server does not do this right now.  
- * 
+ * Draw the user management page with the information from the Users file.
+ * Ensure the logged in user is an administrator.
  */
 UM.interaction.drawUserManagement = async function(){
     let loggedInUser = localStorage.getItem("lr-user")
@@ -57,7 +54,7 @@ UM.interaction.drawUserManagement = async function(){
                 await this.getAllUsers()
                 .then(users => {
                     for (let user in users){
-                        //We only need to know their name, so walk the top level keys, which are the name.  Ignore admin_list.
+                        //Here the top level keys are the name we want
                         let role = (users[user].roles.administrator) ? "admin" : "contributor"
                         let buttons = `
                             <a role="${role}" class="button default" onclick="UM.ui.showRolesEditor('${user}', event)"> Change Roles </a>
@@ -72,7 +69,7 @@ UM.interaction.drawUserManagement = async function(){
                 .catch(err => document.getElementById("users").innerHTML = err)
             }
             else{
-                alert("You must be a logged in administrator to use this function!")
+                alert("You must be logged in as an administrator to use this!")
             }
         } catch (err) {
             console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
@@ -81,10 +78,14 @@ UM.interaction.drawUserManagement = async function(){
         }
     }
     else{
-        alert("You must be a logged in administrator to use this page!")
+        alert("You must be a logged in as an administrator to use this page!")
     }
 }
 
+/**
+ * Add a user to the users file and provide feedback for success/failure.
+ * Remember that each user has an agent associated with it.
+ */
 UM.interaction.addUser = async function(){
     let name = document.getElementById("name").value
     let username = document.getElementById("username").value
@@ -100,7 +101,7 @@ UM.interaction.addUser = async function(){
             "@context" : "http://devstore.rerum.io/v1/contex.json",
             "mbox" : email,
             "label" : username,
-            "name" : name,
+            "name" : name
         }
         let newAgent = await UM.interaction.generateAgent(agentObj)
         if(newAgent !== null && newAgent !== undefined){
@@ -142,6 +143,10 @@ UM.interaction.addUser = async function(){
     }
 }
 
+/**
+ * Remove a user from the users file.  Povide feedback for success/failure
+ * @param {String} user
+ */
 UM.interaction.removeUser = async function(user){
     fetch(UM.URLS.REMOVEUSER, {
         method: "POST",
@@ -154,7 +159,7 @@ UM.interaction.removeUser = async function(user){
         }
         else{
             alert("Failed to remove user")
-            console.error(err)
+            console.error("Failed to remove user")
             return
         }
     })
@@ -169,6 +174,11 @@ UM.interaction.removeUser = async function(user){
     })   
 }
 
+/**
+ * Generate an agent in RERUM so you can add the @id to the user JSON for the users file.
+ * @param {JSONObject} agentObj
+ * @return Promise for agent creation
+ */
 UM.interaction.generateAgent = async function(agentObj){
     return await fetch(UM.URLS.CREATE, {
         method: "POST",
@@ -192,6 +202,10 @@ UM.interaction.generateAgent = async function(agentObj){
     })
 }
 
+/**
+ * Change the roles for a user in the users file.  Porvide feedback for success/failure
+ * @param {string} user
+ */
 UM.interaction.setUserRoles = function(user){
     let servletBody = {username:user, roles:{"administrator":false, "contributor":false}}
     servletBody.roles.administrator = document.getElementById("newAdminRole").checked
@@ -227,6 +241,10 @@ UM.interaction.setUserRoles = function(user){
     }  
 }
 
+/**
+ * Change the username for a user in the users file.  Provide feedback for success/failure
+ * @param {string} user
+ */
 UM.interaction.setUsername = async function(user){
     let newUsername = document.getElementById("newName").value
     if(newUsername){
@@ -261,6 +279,10 @@ UM.interaction.setUsername = async function(user){
     }
 }
 
+/**
+ * Change the passsword for a user in the users file.  Provide feedback for success/failure
+ * @param {string} user
+ */
 UM.interaction.setUserSec = async function(user){
     let newSecret = document.getElementById("newSec").value
     if(newSecret){
@@ -295,6 +317,10 @@ UM.interaction.setUserSec = async function(user){
     }
 }
 
+/**
+ * Hide and empty the inputs inside of an HTML Element.
+ * @param {string} htmlID  The ID of the HTML Element to interact with.
+ */
 UM.interaction.closeCard = function(htmlID){
     document.getElementById(htmlID).classList.add("is-hidden")
     document.getElementById("popoverShade").classList.add("is-hidden")
@@ -313,6 +339,10 @@ UM.interaction.closeCard = function(htmlID){
     })
 }
 
+/**
+ * Show the role editing HTML.  Set the onlick functions and user to show based on the provided user
+ * @param user {string} The user this HTML will interact with
+ */
 UM.ui.showRolesEditor = function(user, event){
     let role = event.target.getAttribute("role")
     document.getElementById("popoverShade").classList.remove("is-hidden")
@@ -328,6 +358,10 @@ UM.ui.showRolesEditor = function(user, event){
     }
 }
 
+/**
+ * Show the name editing HTML.  Set the onlick functions and user to show based on the provided user
+ * @param user {string} The user this HTML will interact with
+ */
 UM.ui.showNameEditor = function(user){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("nameEditor").classList.remove("is-hidden")
@@ -335,6 +369,10 @@ UM.ui.showNameEditor = function(user){
     document.getElementById("nameEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUsername('"+user+"')")
 }
 
+/**
+ * Show the password editing HTML.  Set the onlick functions and user to show based on the provided user
+ * @param user {string} The user this HTML will interact with
+ */
 UM.ui.showSecEditor = function(user){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("secEditor").classList.remove("is-hidden")
@@ -342,12 +380,19 @@ UM.ui.showSecEditor = function(user){
     document.getElementById("secEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUserSec('"+user+"')")
 }
 
+/**
+ * Show the user addition HTML
+ */
 UM.ui.showUserAddition = function(){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("addUser").classList.remove("is-hidden")
     document.getElementById("addUser").style.top = "15%"
 }
 
+/**
+ * Show the removal confirmation HTML.  Set the onlick functions and user to show based on the provided user
+ * @param user {string} The user this HTML will interact with
+ */
 UM.ui.confirmRemove = function(user){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("removeUserConfirm").classList.remove("is-hidden")

@@ -19,11 +19,10 @@ import net.sf.json.JSONObject;
  *
  * @author bhaberbe
  */
-public class setUserSecret extends HttpServlet {
+public class RemoveUser extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Remove a user from the users file.  The username is provided in the body as a String.
      *
      * @param request servlet request
      * @param response servlet response
@@ -38,44 +37,28 @@ public class setUserSecret extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        JSONObject requestJSON;
+        String username;
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        requestJSON = JSONObject.fromObject(bodyString.toString());
-        String username = requestJSON.getString("username");
-        String sec = requestJSON.getString("newsec");
+        username = bodyString.toString();
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
-        usersFile.getJSONObject(username).remove("sec");
-        usersFile.getJSONObject(username).accumulate("sec", sec);
+        usersFile.remove(username);
         auth.writeUserFile(usersFile);
-        response.getWriter().print("The password has been updated.");
+        response.getWriter().print("User "+username+" has been removed.");
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Change the password of a user in the Lived Religion users file.";
-    }// </editor-fold>
+        return "Remove a user from the Lived Religion user file.";
+    }
 
 }

@@ -30,35 +30,35 @@
     </servlet>
     <servlet>
         <servlet-name>getUsers</servlet-name>
-        <servlet-class>users.getUsers</servlet-class>
+        <servlet-class>users.GetUsers</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>getUserRoles</servlet-name>
-        <servlet-class>users.getUserRoles</servlet-class>
+        <servlet-class>users.GetUserRoles</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>getUserSecret</servlet-name>
-        <servlet-class>users.getUserSecret</servlet-class>
+        <servlet-class>users.GetUserSecret</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>setUserRoles</servlet-name>
-        <servlet-class>users.setUserRoles</servlet-class>
+        <servlet-class>users.SetUserRoles</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>setUserName</servlet-name>
-        <servlet-class>users.setUserName</servlet-class>
+        <servlet-name>setUsername</servlet-name>
+        <servlet-class>users.SetUsername</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>setUserSecret</servlet-name>
-        <servlet-class>users.setUserSecret</servlet-class>
+        <servlet-class>users.SetUserSecret</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addUser</servlet-name>
-        <servlet-class>users.addUser</servlet-class>
+        <servlet-class>users.AddUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>removeUser</servlet-name>
-        <servlet-class>users.removeUser</servlet-class>
+        <servlet-class>users.RemoveUser</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -101,8 +101,8 @@
         <url-pattern>/getUserSecret</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>setUserName</servlet-name>
-        <url-pattern>/setUserName</url-pattern>
+        <servlet-name>setUsername</servlet-name>
+        <url-pattern>/setUsername</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>setUserSecret</servlet-name>

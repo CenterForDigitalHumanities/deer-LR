@@ -13,18 +13,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
  *
  * @author bhaberbe
  */
-public class getUserSecret extends HttpServlet {
+public class SetUserSecret extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Update the password for a given user.  JSON is provided in the body that includes
+     * username The user to update the password for
+     * sec The new password
      *
      * @param request servlet request
      * @param response servlet response
@@ -39,55 +39,31 @@ public class getUserSecret extends HttpServlet {
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String username;
+        JSONObject requestJSON;
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        username = bodyString.toString(); //This is the name of the user
+        requestJSON = JSONObject.fromObject(bodyString.toString());
+        String username = requestJSON.getString("username");
+        String sec = requestJSON.getString("newsec");
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
-        String sec = usersFile.getJSONObject(username).getString("sec");
-        response.getWriter().print(sec);
+        usersFile.getJSONObject(username).remove("sec");
+        usersFile.getJSONObject(username).accumulate("sec", sec);
+        auth.writeUserFile(usersFile);
+        response.getWriter().print("The password has been updated.");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Change the password of a user in the Lived Religion users file.";
+    }
 
 }

@@ -20,11 +20,10 @@ import net.sf.json.JSONObject;
  *
  * @author bhaberbe
  */
-public class getUserRoles extends HttpServlet {
+public class GetUserRoles extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Retrieve the roles for a given user.  The username is provided in the body as a String.
      *
      * @param request servlet request
      * @param response servlet response
@@ -44,36 +43,23 @@ public class getUserRoles extends HttpServlet {
         {
           bodyString.append(line);
         }
-        username = bodyString.toString(); //This is the name of the user
+        username = bodyString.toString();
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
         JSONArray roles = usersFile.getJSONObject(username).getJSONArray("roles");
         response.getWriter().print(roles.toString());
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        response.getWriter().print("This endpoint is currently shut off.");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Get the roles of a provided user from the Lived Religion user file.";
-    }// </editor-fold>
+    }
 
 }

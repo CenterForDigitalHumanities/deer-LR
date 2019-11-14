@@ -13,17 +13,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
  *
  * @author bhaberbe
  */
-public class addUser extends HttpServlet {
+public class GetUserSecret extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Get the passsword of a user.  The username is provided in the body as a String.
      *
      * @param request servlet request
      * @param response servlet response
@@ -32,45 +32,35 @@ public class addUser extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
-        String user_obj_str;
-        JSONObject requestJSON;
-        //Gather user provided parameters from BODY of request, not parameters
+        String username;
         while ((line = bodyReader.readLine()) != null)
         {
           bodyString.append(line);
         }
-        user_obj_str = bodyString.toString();
-        //JSONObject test
-        requestJSON = JSONObject.fromObject(user_obj_str);
+        username = bodyString.toString(); //This is the name of the user
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
-        String username = requestJSON.getString("username");
-        requestJSON.remove("username");
-        usersFile.element(username, requestJSON.getJSONObject("userbody"));
-        auth.writeUserFile(usersFile);
-        response.getWriter().print("User added to users file.");
+        String sec = usersFile.getJSONObject(username).getString("sec");
+        response.getWriter().print(sec);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        response.getWriter().print("This endpoint is currently shut off.");
     }
 
     /**
@@ -80,7 +70,7 @@ public class addUser extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Put an additional user in the Lived Religion users file.";
+        return "Get the password for a provided user from the Lived Religion users file.";
     }// </editor-fold>
 
 }
