@@ -43,15 +43,15 @@ public class setUserSecret extends HttpServlet {
         {
           bodyString.append(line);
         }
-        requestJSON = JSONObject.fromObject(bodyString);
+        requestJSON = JSONObject.fromObject(bodyString.toString());
         String username = requestJSON.getString("username");
-        String sec = requestJSON.getString("sec");
+        String sec = requestJSON.getString("newsec");
         Authorize auth = new Authorize();
         JSONObject usersFile = auth.getUserData();
         usersFile.getJSONObject(username).remove("sec");
         usersFile.getJSONObject(username).accumulate("sec", sec);
         auth.writeUserFile(usersFile);
-        response.getWriter().print(usersFile);
+        response.getWriter().print("The password has been updated.");
     }
 
     /**

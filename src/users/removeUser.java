@@ -48,7 +48,7 @@ public class removeUser extends HttpServlet {
         JSONObject usersFile = auth.getUserData();
         usersFile.remove(username);
         auth.writeUserFile(usersFile);
-        response.getWriter().print(usersFile);
+        response.getWriter().print("User has been removed.");
     }
 
     /**

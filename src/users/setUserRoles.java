@@ -58,7 +58,7 @@ public class setUserRoles extends HttpServlet {
         System.out.println("User file after edit");
         System.out.println(usersFile);
         auth.writeUserFile(usersFile);
-        response.getWriter().print("User Roles Updated");
+        response.getWriter().print("User roles have been updated.");
     }
 
     /**

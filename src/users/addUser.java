@@ -55,7 +55,7 @@ public class addUser extends HttpServlet {
         requestJSON.remove("username");
         usersFile.element(username, requestJSON.getJSONObject("userbody"));
         auth.writeUserFile(usersFile);
-        response.getWriter().print("User added to users file successfullly.");
+        response.getWriter().print("User added to users file.");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

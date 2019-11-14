@@ -43,7 +43,7 @@ public class setUserName extends HttpServlet {
         {
           bodyString.append(line);
         }
-        requestJSON = JSONObject.fromObject(bodyString);
+        requestJSON = JSONObject.fromObject(bodyString.toString());
         String origUsername = requestJSON.getString("username");
         String newUsername = requestJSON.getString("newname");
         Authorize auth = new Authorize();
@@ -52,7 +52,7 @@ public class setUserName extends HttpServlet {
         usersFile.remove(origUsername);
         usersFile.accumulate(newUsername, origUserObj);
         auth.writeUserFile(usersFile);
-        response.getWriter().print(usersFile);
+        response.getWriter().print("The username has been updated.");
     }
 
     /**

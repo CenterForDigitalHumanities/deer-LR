@@ -193,7 +193,7 @@ UM.interaction.generateAgent = async function(agentObj){
 }
 
 UM.interaction.setUserRoles = function(user){
-    let servletBody = {username:user, roles:{administrator:false, contributor:false}}
+    let servletBody = {username:user, roles:{"administrator":false, "contributor":false}}
     servletBody.roles.administrator = document.getElementById("newAdminRole").checked
     servletBody.roles.contributor = document.getElementById("newContributorRole").checked
     if(!servletBody.roles.administrator && !servletBody.roles.contributor){
@@ -261,10 +261,10 @@ UM.interaction.setUsername = async function(user){
     }
 }
 
-UM.interaction.setUserSecret = async function(user){
+UM.interaction.setUserSec = async function(user){
     let newSecret = document.getElementById("newSec").value
     if(newSecret){
-        let servletBody = {"username":user, "newname":newSecret}
+        let servletBody = {"username":user, "newsec":newSecret}
         fetch(UM.URLS.SETSECRET, {
             method: "POST",
             mode: "cors",
@@ -276,7 +276,7 @@ UM.interaction.setUserSecret = async function(user){
             }
             else{
                 alert("There was an error updating the password.")
-                console.error(err)
+                console.error("There was an error updating the password.")
                 return
             }
         })
@@ -320,11 +320,11 @@ UM.ui.showRolesEditor = function(user, event){
     document.getElementById("usernameRole").innerHTML = user
     document.getElementById("rolesEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUserRoles('"+user+"')")
     if(role === "admin"){
-        document.getElementById("adminRole").checked = true
-        document.getElementById("contributorRole").checked = true
+        document.getElementById("newAdminRole").checked = true
+        document.getElementById("newContributorRole").checked = true
     }
     else{
-        document.getElementById("contributorRole").checked = true
+        document.getElementById("newContributorRole").checked = true
     }
 }
 
