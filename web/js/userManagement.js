@@ -24,19 +24,23 @@ UM.interaction = {}
 UM.ui = {}
 
 /**
- * Use the endpoint available to get the user file.  
+ * Use the endpoint available to get the user file. Only fire if the logged in user is an administrator. 
  * @returns {Object} The user file as a json object.
  */
 UM.interaction.getAllUsers = async function(){
-    let allUsers = await fetch(UM.URLS.GETUSERFILE, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-            'Content-Type': 'application/json'
-        }    
-    })
-    .then(response => response.json())
-    .catch(err => console.error(err))
+    let allUsers = {}
+    let loggedInUser = localStorage.getItem("lr-user")
+    if(loggedInUser !== null && loggedInUser !== undefined){
+        loggedInUser = JSON.parse(loggedInUser)
+        if (loggedInUser.roles.administrator) {
+            allUsers = await fetch(UM.URLS.GETUSERFILE, {
+                method: "GET",
+                mode: "cors" 
+            })
+            .then(response => response.json())
+            .catch(err => console.error(err))
+        }
+    }
     return allUsers
 }
 
@@ -47,7 +51,7 @@ UM.interaction.getAllUsers = async function(){
 UM.interaction.drawUserManagement = async function(){
     let loggedInUser = localStorage.getItem("lr-user")
     let managementTemplate = ``
-    if (loggedInUser !== null) {
+    if (loggedInUser !== null && loggedInUser !== undefined) {
         try {
             loggedInUser = JSON.parse(loggedInUser)
             if (loggedInUser.roles.administrator) {
@@ -85,6 +89,7 @@ UM.interaction.drawUserManagement = async function(){
 /**
  * Add a user to the users file and provide feedback for success/failure.
  * Remember that each user has an agent associated with it.
+ * TODO: This should only work for administrators
  */
 UM.interaction.addUser = async function(){
     let name = document.getElementById("name").value
@@ -115,6 +120,9 @@ UM.interaction.addUser = async function(){
             fetch(UM.URLS.ADDUSER, {
                 method: "POST",
                 mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },   
                 body: JSON.stringify(servletBody)
             })
             .then(response => {
@@ -145,12 +153,16 @@ UM.interaction.addUser = async function(){
 
 /**
  * Remove a user from the users file.  Povide feedback for success/failure
+ * TODO: This should only work for administrators
  * @param {String} user
  */
 UM.interaction.removeUser = async function(user){
     fetch(UM.URLS.REMOVEUSER, {
         method: "POST",
         mode: "cors",
+        headers: {
+            'Content-Type': 'charset=utf-8'
+        },
         body: user
     })
     .then(response => {
@@ -176,6 +188,7 @@ UM.interaction.removeUser = async function(user){
 
 /**
  * Generate an agent in RERUM so you can add the @id to the user JSON for the users file.
+ * TODO: This should only work for administrators
  * @param {JSONObject} agentObj
  * @return Promise for agent creation
  */
@@ -183,6 +196,9 @@ UM.interaction.generateAgent = async function(agentObj){
     return await fetch(UM.URLS.CREATE, {
         method: "POST",
         mode: "cors",
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        },
         body: JSON.stringify(agentObj)
     })
     .then(response => {
@@ -204,6 +220,7 @@ UM.interaction.generateAgent = async function(agentObj){
 
 /**
  * Change the roles for a user in the users file.  Porvide feedback for success/failure
+ * TODO: This should only work for administrators
  * @param {string} user
  */
 UM.interaction.setUserRoles = function(user){
@@ -217,6 +234,9 @@ UM.interaction.setUserRoles = function(user){
         fetch(UM.URLS.SETROLES, {
             method: "POST",
             mode: "cors",
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
             body: JSON.stringify(servletBody)
         })
         .then(response => {
@@ -225,7 +245,7 @@ UM.interaction.setUserRoles = function(user){
             }
             else{
                 alert("There was an error setting the roles.")
-                console.error(err)
+                console.error("There was an error setting the roles.")
                 return
             }
         })
@@ -242,7 +262,8 @@ UM.interaction.setUserRoles = function(user){
 }
 
 /**
- * Change the username for a user in the users file.  Provide feedback for success/failure
+ * Change the username for a user in the users file.  Provide feedback for success/failure.
+ * TODO: This should only work for administrators
  * @param {string} user
  */
 UM.interaction.setUsername = async function(user){
@@ -252,6 +273,9 @@ UM.interaction.setUsername = async function(user){
         fetch(UM.URLS.SETUSERNAME, {
             method: "POST",
             mode: "cors",
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
             body: JSON.stringify(servletBody)
         })
         .then(response => {
@@ -260,7 +284,7 @@ UM.interaction.setUsername = async function(user){
             }
             else{
                 alert("There was an error setting the username.")
-                console.error(err)
+                console.error("There was an error setting the username.")
                 return
             }
         })
@@ -280,7 +304,8 @@ UM.interaction.setUsername = async function(user){
 }
 
 /**
- * Change the passsword for a user in the users file.  Provide feedback for success/failure
+ * Change the passsword for a user in the users file.  Provide feedback for success/failure.
+ * TODO: This should only work for administrators
  * @param {string} user
  */
 UM.interaction.setUserSec = async function(user){
@@ -290,6 +315,9 @@ UM.interaction.setUserSec = async function(user){
         fetch(UM.URLS.SETSECRET, {
             method: "POST",
             mode: "cors",
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
             body: JSON.stringify(servletBody)
         })
         .then(response => {
