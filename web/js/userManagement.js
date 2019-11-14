@@ -160,7 +160,7 @@ UM.interaction.removeUser = async function(user){
     })
     .then(text => {
         alert(text)
-        this.closeCard("removeUser")
+        this.closeCard("removeUserConfirm")
         this.drawUserManagement()
     })
     .catch(err => {
