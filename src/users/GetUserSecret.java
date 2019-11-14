@@ -71,6 +71,6 @@ public class GetUserSecret extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Get the password for a provided user from the Lived Religion users file.";
-    }// </editor-fold>
+    }
 
 }

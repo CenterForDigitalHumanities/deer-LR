@@ -80,6 +80,6 @@ public class SetUserRoles extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Set new user roles for a Lived Religion user in the user file.";
-    }// </editor-fold>
+    }
 
 }
