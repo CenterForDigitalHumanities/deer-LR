@@ -60,8 +60,8 @@
                     <h4>Assign Roles</h4>
                 </header>
                 <p>Please check what role(s) you want <span class="dynamicUser" id="usernameRole">{{USER}}</span> to have.  Note Administrators are automatically Contributors as well.</p>
-                <label>Administrator </label><input id="adminRole" values="Administrator" type="checkbox" />
-                <label>Contributor</label><input id="contributorRole" values="Contributor" type="checkbox" />
+                <label>Administrator </label><input id="newAdminRole" values="Administrator" type="checkbox" />
+                <label>Contributor</label><input id="newContributorRole" values="Contributor" type="checkbox" />
                 <footer class="is-right">
                   <a class="button primary action" onclick="">Submit</a>
                   <a class="button" onclick="UM.interaction.closeCard('rolesEditor')">Cancel</a>
@@ -97,23 +97,24 @@
             </div>
         </div>
         
-        <div id="newUser" class="card bd-primary is-hidden">
+        <div id="addUser" class="card bd-primary is-hidden">
             <div class="card_body">
                 <header>
                     <h4>Add New User</h4>
                 </header>
                 <p>Please provide the information below to add a new user.</p>
-                <label>Real Name: </label><input id="newName" type="text"/>
-                <label>E-mail: </label><input id="newEmail" type="text"/>
-                <label>Application Username:</label><input id="newUsername" type="text"/>
-                <label>Application Password:</label><input id="newSec" type="text"/>
-                <p> Application Roles </p>
-                <label>Administrator </label><input id="newAdminRole" values="Administrator" type="checkbox" />
-                <label>Contributor</label><input id="newContributorRole" values="Contributor" type="checkbox" />
+                <label>Real Name: </label><input id="name" type="text"/>
+                <label>E-mail: </label><input id="email" type="text"/>
+                <label>Application Username:</label><input id="username" type="text"/>
+                <label>Application Password:</label><input id="sec" type="text"/>
+                <label> Application Roles </label><br>
+                <label>Administrator </label><input id="adminRole" values="Administrator" type="checkbox" />
+                <label>Contributor</label><input id="contributorRole" values="Contributor" type="checkbox" />
                 <footer class="is-right">
                   <a class="button primary action" onclick="UM.interaction.addUser()">Submit</a>
-                  <a class="button" onclick="UM.interaction.closeCard('newUser')">Cancel</a>
+                  <a class="button" onclick="UM.interaction.closeCard('addUser')">Cancel</a>
                 </footer>
+                <span class="dynamicUser is-hidden"> Avoid null in closeCard() </span>
             </div>
         </div>
         

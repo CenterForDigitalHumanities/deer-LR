@@ -86,11 +86,11 @@ UM.interaction.drawUserManagement = async function(){
 }
 
 UM.interaction.addUser = async function(){
-    let name = document.getElementById("newName").value
-    let username = document.getElementById("newUsername").value
-    let email =  document.getElementById("newEmail").value
-    let pass =  document.getElementById("newSec").value
-    let roles = {administrator:document.getElementById("newAdminRole").checked, contributor:document.getElementById("newContributorRole").checked}
+    let name = document.getElementById("name").value
+    let username = document.getElementById("username").value
+    let email =  document.getElementById("email").value
+    let pass =  document.getElementById("sec").value
+    let roles = {administrator:document.getElementById("adminRole").checked, contributor:document.getElementById("contributorRole").checked}
     if(!(username && pass && name && email) || (!roles.administrator && !roles.contributor)){
         alert("You must provide all the information.  Make sure to assign at least one role.")
     }
@@ -103,7 +103,8 @@ UM.interaction.addUser = async function(){
             "name" : name,
         }
         let newAgent = await UM.interaction.generateAgent(agentObj)
-        if(newAgent !== null){
+        if(newAgent !== null && newAgent !== undefined){
+            newAgent = newAgent["new_obj_state"]
             let userbody = {
                 "@id":newAgent["@id"],
                 "roles":roles,
@@ -121,13 +122,13 @@ UM.interaction.addUser = async function(){
                 }
                 else{
                     alert("Failed to add user")
-                    console.error(err)    
+                    console.error("Failed to add user to file.")    
                     return
                 }
             })
             .then(text => {
                 alert(text)
-                this.closeCard("newUser")
+                this.closeCard("addUser")
                 this.drawUserManagement()
             })
             .catch(err => {
@@ -136,7 +137,7 @@ UM.interaction.addUser = async function(){
             })
         }
         else{
-            alert("Failed to add user.  Could not create AGENT.")
+            //alert("Failed to add user.  Could not create AGENT.")
         }
     }
 }
@@ -169,8 +170,7 @@ UM.interaction.removeUser = async function(user){
 }
 
 UM.interaction.generateAgent = async function(agentObj){
-    let returnAgent
-    fetch(UM.URLS.CREATE, {
+    return await fetch(UM.URLS.CREATE, {
         method: "POST",
         mode: "cors",
         body: JSON.stringify(agentObj)
@@ -181,24 +181,21 @@ UM.interaction.generateAgent = async function(agentObj){
         }
         else{
             alert("There was an error saving the AGENT for the user.")
-            console.error(err)
+            console.error("There was an error saving the AGENT for the user.")
             return
         }
-    })
-    .then(agent => {
-        returnAgent = agent;
     })
     .catch(err => {
         //alert("Error generating agent for user.  Could not add user.")
         console.error(err)
+        return {}
     })
-    return returnAgent
 }
 
 UM.interaction.setUserRoles = function(user){
     let servletBody = {username:user, roles:{administrator:false, contributor:false}}
-    servletBody.roles.administrator = document.getElementById("adminRole").checked
-    servletBody.roles.contributor = document.getElementById("contributorRole").checked
+    servletBody.roles.administrator = document.getElementById("newAdminRole").checked
+    servletBody.roles.contributor = document.getElementById("newContributorRole").checked
     if(!servletBody.roles.administrator && !servletBody.roles.contributor){
         alert("You must select at least one role!");
     }
@@ -345,9 +342,10 @@ UM.ui.showSecEditor = function(user){
     document.getElementById("secEditor").querySelector(".action").setAttribute("onclick", "UM.interaction.setUserSec('"+user+"')")
 }
 
-UM.ui.showUserAddition = function(user){
+UM.ui.showUserAddition = function(){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("addUser").classList.remove("is-hidden")
+    document.getElementById("addUser").style.top = "15%"
 }
 
 UM.ui.confirmRemove = function(user){

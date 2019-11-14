@@ -57,6 +57,7 @@ public class TinyTokenManager{
         setFileLocation(fileLoc);
         InputStream input = new FileInputStream(propFileLocation);
         props.load(input);
+        input.close();
         currentAccessToken = props.getProperty("access_token");
         currentRefreshToken = props.getProperty("refresh_token");
         apiSetting = props.getProperty("open_api_cors");
@@ -77,6 +78,7 @@ public class TinyTokenManager{
         props.setProperty(prop, propValue);
         // save properties to propFileLocation
         props.store(output, null);
+        output.close();
     }
     
     /**
