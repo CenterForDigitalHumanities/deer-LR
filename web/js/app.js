@@ -82,61 +82,62 @@ LR.ui.loginFail = function() {
  * @param {String} itemID : The ID of the annotation connecting the item to the collection.
  * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
  */
-LR.utils.removeCollectionEntry = async function(itemID, itemElem, collectionName){
-    let historyWildcard = {"$exists":true, "$size":0}
-    let queryObj = {
-        $or: [{
-            "targetCollection": collectionName
-        }, {
-            "body.targetCollection": collectionName
-        }],
-        "__rerum.history.next": historyWildcard,
-        "__rerum.generatedBy":LR.APPAGENT,
-        "target" : itemID
-    }
-    fetch(LR.URLS.QUERY, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(queryObj)
-    })
-    .then(response => response.json())
-    .then(pointers => {
-        //Remember, there may be multiple annotations that place this item in the collection.  Get rid of all of them.
-        let deleteList = []
-        pointers.map(ta => {
-            deleteList.push(
-                fetch(LR.URLS.DELETE, {
-                    method: "DELETE",
-                    mode: "cors",
-                    body: ta["@id"] || ta.id
+LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collectionName) {
+        let historyWildcard = { "$exists": true, "$size": 0 }
+        let queryObj = {
+            $or: [{
+                "targetCollection": collectionName
+            }, {
+                "body.targetCollection": collectionName
+            }],
+            "__rerum.history.next": historyWildcard,
+            "__rerum.generatedBy": LR.APPAGENT,
+            "target": itemID
+        }
+        fetch(LR.URLS.QUERY, {
+                method: "POST",
+                mode: "cors",
+                body: JSON.stringify(queryObj)
+            })
+            .then(response => response.json())
+            .then(pointers => {
+                //Remember, there may be multiple annotations that place this item in the collection.  Get rid of all of them.
+                let deleteList = []
+                pointers.map(ta => {
+                    deleteList.push(
+                        fetch(LR.URLS.DELETE, {
+                            method: "DELETE",
+                            mode: "cors",
+                            body: ta["@id"] || ta.id
+                        })
+                    )
                 })
-            )
-        })
-        return Promise.all(deleteList)
-    }).then(deletedList => {
-        //Can't seem to fall into the Promise.all().catch() on 4XX, and perhaps other, errors...
-        let resultList = deletedList.filter(resp => { return resp.ok })
-        if(deletedList.length === 0){
-            console.error("Could not find the annotation placing this item into the collection.  Could note remove this item.  Check your APPAGENT and annotation creator, they do not line up.")
-            console.log(itemElem)
-        } else{
-            if(deletedList.length === resultList.length) {
-                LR.utils.broadcastEvent(undefined, "collectionItemDeleted", itemElem)
-                itemElem.remove()
-            } else {
+                return Promise.all(deleteList)
+            }).then(deletedList => {
+                //Can't seem to fall into the Promise.all().catch() on 4XX, and perhaps other, errors...
+                let resultList = deletedList.filter(resp => { return resp.ok })
+                if (deletedList.length === 0) {
+                    console.error("Could not find the annotation placing this item into the collection.  Could note remove this item.  Check your APPAGENT and annotation creator, they do not line up.")
+                    console.log(itemElem)
+                } else {
+                    if (deletedList.length === resultList.length) {
+                        LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName })
+                        itemElem.remove()
+                            // TODO: redraw() added to deer elements https://github.com/CenterForDigitalHumanities/deer/issues/34
+                    } else {
+                        //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
+                        //This should suffice for now.
+                        console.error("There was an error removing an item from the collection")
+                        console.log(itemElem)
+                    }
+                }
+            }).catch(err => {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.
-                console.error("There was an error removing an item from the collection")
+                console.error("There was an error gathering information to remove an item from the collection")
                 console.log(itemElem)
-            }
-        }
-    }).catch(err => {
-        //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
-        //This should suffice for now.
-        console.error("There was an error gathering information to remove an item from the collection")
-        console.log(itemElem)
-    })
-  },
+            })
+    },
 
     /**
      * Broadcast a message about some event
