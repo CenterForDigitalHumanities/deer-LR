@@ -19,7 +19,6 @@ import net.sf.json.JSONObject;
 public class Authorize {
 
     private String users_file = "users.txt";
-    private JSONArray admins_list;
     private JSONObject userData;
     
     public Authorize() throws IOException, FileNotFoundException {
@@ -27,11 +26,11 @@ public class Authorize {
         users_file = file.getAbsolutePath();
         String users = new String(Files.readAllBytes(Paths.get(users_file))); 
         userData = JSONObject.fromObject(users);
-        //admins_list = userData.getJSONArray("admin_list");
     }
 
     public JSONArray getAdmins(){
-        return admins_list;
+        //TODO need to logic to create an array of usernames that have administrator roles.
+        return new JSONArray();
     }
 
     public boolean isAdmin(String user){
@@ -68,7 +67,6 @@ public class Authorize {
         bufferedWriter.write(userJSON.toString());
         bufferedWriter.close();
         userData = userJSON;
-        //admins_list = userData.getJSONArray("admin_list");
     }
     
 }

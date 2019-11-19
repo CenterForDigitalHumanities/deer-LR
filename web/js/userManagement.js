@@ -129,6 +129,11 @@ UM.interaction.addUser = async function(){
                 if(response.ok){
                     return response.text()
                 }
+                else if(response.status === 403){
+                    console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
+                    localStorage.removeItem("lr-user")
+                    alert("Please log in again.");
+                }
                 else{
                     alert("Failed to add user")
                     console.error("Failed to add user to file.")    
@@ -168,6 +173,11 @@ UM.interaction.removeUser = async function(user){
     .then(response => {
         if(response.ok){
             return response.text()
+        }
+        else if(response.status === 403){
+            console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
+            localStorage.removeItem("lr-user")
+            alert("Please log in again.");
         }
         else{
             alert("Failed to remove user")
@@ -243,6 +253,11 @@ UM.interaction.setUserRoles = function(user){
             if(response.ok){
                 return response.text()
             }
+            else if(response.status === 403){
+                console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
+                localStorage.removeItem("lr-user")
+                alert("Please log in again.");
+            }
             else{
                 alert("There was an error setting the roles.")
                 console.error("There was an error setting the roles.")
@@ -281,6 +296,11 @@ UM.interaction.setUsername = async function(user){
         .then(response => {
             if(response.ok){
                 return response.text()
+            }
+            else if(response.status === 403){
+                console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
+                localStorage.removeItem("lr-user")
+                alert("Please log in again.");
             }
             else{
                 alert("There was an error setting the username.")
@@ -323,6 +343,11 @@ UM.interaction.setUserSec = async function(user){
         .then(response => {
             if(response.ok){
                 return response.text()
+            }
+            else if(response.status === 403){
+                console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
+                localStorage.removeItem("lr-user")
+                alert("Please log in again.");
             }
             else{
                 alert("There was an error updating the password.")
