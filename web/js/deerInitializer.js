@@ -112,6 +112,28 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
 }
 
 /**
+ * Create a select area that is populated by some set or list of people.
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
+DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
+    try {
+        let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
+        let tmpl = ``
+        tmpl += `<select deer-key-x="contributor" multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+            <optgroup label="Researchers"> `
+        for (let obj of allObjectsInCollection) {
+            tmpl += `<option deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`
+        }
+        tmpl += `</optgroup></select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+/**
  * TODO Really this is the "data submission" template.  As far as it goes, this is the only "Event" recorded so far.  
  * This is very basic and does not contain the information describing the Event.  It needs to be built out as we begin to #14
  * describe an experience.  

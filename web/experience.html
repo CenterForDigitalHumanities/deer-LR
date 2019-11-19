@@ -42,18 +42,19 @@
         </div>
     </div>
     <!-- TODO describe the experience -->
-    <!--    <experience-artifacts>
+    <experience-artifacts>
         <generic-top>Describe your encounter at <deer-view id="theLocationName" deer-template="placeName">{Place.name}</deer-view> </generic-top>
         <div class="card">
             <div class="card-body">
                 <header class="card-title">Please check everything that applies to what you want to tell us.</header>
-                <input type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Space</span>
+                <input disabled type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Space</span>
                 <input type="checkbox" name="objects" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Objects</span>
-                <input type="checkbox" name="bodies" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Bodies</span>
+                <input disabled type="checkbox" name="bodies" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Bodies</span>
             </div>
         </div>
         <div class="card fixDynamicHeight">
-             The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information 
+             <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
+            <!--
             <div for="spaces" class="kind hidden">
                  Here the user can offer additional information about the Location.  They cannot change or delete existing information. 
                 <form id="chosenLocation" class="dataWrap" for="spaces" deer-type="Place">
@@ -125,8 +126,30 @@
                     <textarea type="text" deer-key-x="tag"> </textarea>
                 </form>
             </div>
+            -->
             <div for="objects" class="kind hidden">
-                <form id="newObjectForm" class="dataWrap" for="objects" deer-type="Object">
+                <p> Below are some objects you can choose from.  Otherwise, add an object below. </P>
+                <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
+                <h2 class="text-primary">Create a New Object</h2>
+                <div class="card bd-primary">
+                    <div class="card_body">
+                        <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
+                            <input type="hidden" deer-key="creator" value="loading">
+                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
+                            <label>Name:</label>
+                            <input type="text" deer-key="name">
+                            <label>Description:</label>
+                            <textarea deer-key="description"></textarea>
+                            <footer>
+                                <input class="button primary" type="submit">
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+                <!--
+                <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
+                    <input type="hidden" deer-key="creator" value="loading">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
                     <div class="primarySpecification" for="objects">
                         <header>What is the primary type for this object? </header>
                         <input type="radio" name="objects" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
@@ -177,7 +200,9 @@
                     <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
                     <input type="button" value="Submit" />  TODO 
                 </form>
+                -->
             </div>
+            <!--
             <div for="bodies" class="kind hidden">
                  TODO design how the experience object aggregates Sense annotations 
                 <header>What senses are prominent?</header>
@@ -270,6 +295,7 @@
                 <textarea type="text" deer-key-x="tags"> </textarea>
                 
             </div>
+            -->
         </div>
     </experience-artifacts>-->
     <!-- Add ins -->

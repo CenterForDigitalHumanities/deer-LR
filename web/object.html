@@ -22,13 +22,136 @@
                 <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                    <label>Name:</label>
-                    <input type="text" deer-key="name">
-                    <label>Description:</label>
-                    <textarea deer-key="description"></textarea>
-                    <footer>
-                        <input class="button primary" type="submit">
-                    </footer>
+                    <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                    <div class="row">
+                        <div data-rdf="Object.SacredObject" class="bd-primary text-center card col" title="Sacred Object">
+                            <header>Sacred Object</header>
+                            <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
+                        </div>
+                        <div data-rdf="Object.VisualArtwork" class="bd-primary text-center card col" title="Artwork">
+                            <header>Artwork</header>
+                            <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
+                        </div>
+                        <div data-rdf="Object.Manuscript" class="bd-primary text-center card col" title="Written Text">
+                            <header>Written</header>
+                            <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
+                        </div>
+                        <div data-rdf="Object.CivicStructure" class="bd-primary text-center card col" title="Building">
+                            <header>Building</header>
+                            <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Building" alt="Building">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div data-rdf="Object.LR:Food" class="bd-primary text-center card col" title="Food">
+                            <header>Food</header>
+                            <img class="hide-xs" src="https://icongr.am/material/earth.svg?size=64&color=##14854f" title="Food" alt="Food">
+                        </div>
+                        <div data-rdf="Object.LR:Clothing" class="bd-primary text-center card col" title="Food">
+                            <header>Food</header>
+                            <img class="hide-xs" src="https://icongr.am/material/earth.svg?size=64&color=##14854f" title="Food" alt="Food">
+                        </div>
+                        <div data-rdf="Object.LR:Natural" class="bd-primary text-center card col" title="Natural">
+                            <header>Natural</header>
+                            <img class="hide-xs" src="https://icongr.am/material/home.svg?size=64&color=##14854f" title="Natural" alt="Natural">
+                        </div>
+                        <div data-rdf="Object.LR:Manufactured" class="bd-primary text-center card col" title="Manufactured">
+                            <header>Manufactured</header>
+                            <img class="hide-xs" src="https://icongr.am/material/beach.svg?size=64&color=##14854f" title="Manufactured" alt="Manufactured">
+                        </div>
+                    </div>
+                    <h3>History of this Space:</h3>
+                    <span class="text-light">TODO:Click to select here</span>
+                    <label id="formerLocation">Former Location(s):</label>
+                    <script>
+                        let locationsList = document.createElement("ul")
+                        let queryObj = {
+                            $or: [{
+                                "targetCollection": "LivedReligionLocationsTest"
+                            }, {
+                                "body.targetCollection": "LivedReligionLocationsTest"
+                            }]
+                        }
+                        fetch("query", {
+                                method: "POST",
+                                mode: "cors",
+                                body: JSON.stringify(queryObj)
+                            }).then(response => response.json())
+                            .then(pointers => {
+                                let list = []
+                                pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
+                                    __deleted: console.log(err)
+                                }))))
+                                return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
+                            }).then(refs => {
+                                let filtered = []
+                                refs.map(item => {
+                                    let found = false
+                                    for (let i of filtered) {
+                                        if (i['@id'] === item['@id']) {
+                                            found = true
+                                            break
+                                        }
+                                    }
+                                    if (!found) {
+                                        filtered.push(item)
+                                    }
+                                })
+                                return filtered
+                            })
+                            .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
+                            .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
+                    </script>
+                    <label>Former Use(s):</label>
+                    <input type="hidden" deer-array-x="lr:formerUses" deer-array-type-x="Set" value="">
+                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                                <optgroup label="General Categories"> 
+                                    <option value="Place.Accommodation" >Accommodation</option>
+                                    <option value="Place.AdministrativeArea" >Administrative Area</option>
+                                    <option value="Place.CivicStructure" >Civic Structure</option>
+                                    <option value="Place.Landform" >Landform</option>
+                                    <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                                    <option value="Place.LocalBusiness" >Local Business</option>
+                                    <option value="Place.Residence" >Residence</option>
+                                    <option value="Placed.TouristDestination" >Tourist Destination</option>
+                                </optgroup>
+                                <Optgroup label="Precise Types">
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                                    <option value="Place.Accommodation.House" >Home</option>
+                                    <option value="Cemetery" >Cemetery</option>
+                                    <option value="Place.CivicStructure.Hospital" >Hospital</option>
+                                    <option value="Museum" >Museum</option>
+                                    <option value="Park" >Park</option>
+                                    <option value="Street" >Street</option>
+                                    <option value="Zoo" >Zoo</option>
+                                    <option value="Gym" >Gym</option>
+                                </Optgroup>
+                                <option value="OtherBuilding" >Other Building</option>
+                            </select>
+                    <label>Material(s):</label>
+                    <input disabled type="text" deer-key-x="material">
+                    <label>Typical Use: </label>
+                    <select disabled deer-key-x="typical_use" value="">
+                            <option value="Religious">Religious</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Educational">Educational</option>
+                            <option value="Civic">Civic</option>
+                            <option value="Other Public">Other Public</option>
+                        </select>
+                    <h3> Upload Media </h3>
+                    <label>Field Notes:</label>
+                    <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
+                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">
+
+                    <div class="row">
+                        <input class="button primary col" type="submit">
+                    </div>
+                </form>   
+                </div>
+           
+                    
                 </form>
             </div>
         </div>
