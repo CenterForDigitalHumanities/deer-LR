@@ -143,14 +143,14 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
  * @return {tmpl}
  */    
 DEER.TEMPLATES.list= function(obj, options={}) {
-    let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
+    let tmpl = ``
     if(options.list){
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
             let name = UTILS.getLabel(val,(val.type || val['@type'] || index))
-            let removeBtn = `<input value="remove" type="button" class="button error removeCollectionItem"
-            onclick="LR.utils.removeCollectionEntry('${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')" />`
-            tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name}${removeBtn}</li>`
+            let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem"
+            onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">×</a>`
+            tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn}</li>`
         })
         tmpl += `</ul>`
     }
