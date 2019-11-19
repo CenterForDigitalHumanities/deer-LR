@@ -8,10 +8,12 @@ package users;
 import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import net.sf.json.JSONObject;
 
 /**
@@ -38,22 +40,35 @@ public class AddUser extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
-        BufferedReader bodyReader = request.getReader();
-        StringBuilder bodyString = new StringBuilder();
-        String line;
-        String user_obj_str;
-        JSONObject requestJSON;
-        while ((line = bodyReader.readLine()) != null)
-        {
-          bodyString.append(line);
+        HttpSession sess = request.getSession();
+        if(sess.getAttribute("lr-user") != null){
+            JSONObject session_user = JSONObject.fromObject(sess.getAttribute("lr-user"));
+            if(session_user.getJSONObject("roles").getBoolean("administrator")){
+                BufferedReader bodyReader = request.getReader();
+                StringBuilder bodyString = new StringBuilder();
+                String line;
+                String user_obj_str;
+                JSONObject requestJSON;
+                while ((line = bodyReader.readLine()) != null)
+                {
+                  bodyString.append(line);
+                }
+                user_obj_str = bodyString.toString();
+                requestJSON = JSONObject.fromObject(user_obj_str);
+                Authorize auth = new Authorize();
+                JSONObject usersFile = auth.getUserData();
+                usersFile.element(requestJSON.getString("username"), requestJSON.getJSONObject("userbody"));
+                auth.writeUserFile(usersFile);
+                response.getWriter().print("User "+requestJSON.getString("username")+" added to users file.");
+            }
+            else{
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
         }
-        user_obj_str = bodyString.toString();
-        requestJSON = JSONObject.fromObject(user_obj_str);
-        Authorize auth = new Authorize();
-        JSONObject usersFile = auth.getUserData();
-        usersFile.element(requestJSON.getString("username"), requestJSON.getJSONObject("userbody"));
-        auth.writeUserFile(usersFile);
-        response.getWriter().print("User "+requestJSON.getString("username")+" added to users file.");
+        else{
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        }
+        
     }
 
     @Override
