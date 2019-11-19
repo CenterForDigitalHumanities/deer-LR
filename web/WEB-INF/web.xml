@@ -36,11 +36,6 @@
         <servlet-name>getUserRoles</servlet-name>
         <servlet-class>users.GetUserRoles</servlet-class>
     </servlet>
-    <!-- Ready, but unused -->
-<!--    <servlet>
-        <servlet-name>getUserSecret</servlet-name>
-        <servlet-class>users.GetUserSecret</servlet-class>
-    </servlet>-->
     <servlet>
         <servlet-name>setUserRoles</servlet-name>
         <servlet-class>users.SetUserRoles</servlet-class>
@@ -96,10 +91,6 @@
     <servlet-mapping>
         <servlet-name>getUserRoles</servlet-name>
         <url-pattern>/getUserRoles</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>getUserSecret</servlet-name>
-        <url-pattern>/getUserSecret</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>setUsername</servlet-name>
