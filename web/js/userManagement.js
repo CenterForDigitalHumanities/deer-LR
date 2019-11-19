@@ -45,7 +45,7 @@ UM.interaction.getAllUsers = async function(){
                     console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
                     localStorage.removeItem("lr-user")
                     alert("Please log in again.")
-                    return
+                    document.location.reload()
                 }
                 else{
                     alert("Failed to add user")
@@ -93,7 +93,9 @@ UM.interaction.drawUserManagement = async function(){
         } catch (err) {
             console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
             localStorage.removeItem("lr-user")
-            alert("There was an error identifying you.  Please log in again.");
+            alert("There was an error identifying you.  Please log in again.")
+            document.location.reload()
+            
         }
     }
     else{
@@ -148,7 +150,7 @@ UM.interaction.addUser = async function(){
                     console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
                     localStorage.removeItem("lr-user")
                     alert("Please log in again.")
-                    return
+                    document.location.reload()
                 }
                 else{
                     alert("Failed to add user")
@@ -194,7 +196,7 @@ UM.interaction.removeUser = async function(user){
             console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
             localStorage.removeItem("lr-user")
             alert("Please log in again.")
-            return
+            document.location.reload()
         }
         else{
             alert("Failed to remove user")
@@ -274,7 +276,7 @@ UM.interaction.setUserRoles = function(user){
                 console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
                 localStorage.removeItem("lr-user")
                 alert("Please log in again.")
-                return
+                document.location.reload()
             }
             else{
                 alert("There was an error setting the roles.")
@@ -319,7 +321,7 @@ UM.interaction.setUsername = async function(user){
                 console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
                 localStorage.removeItem("lr-user")
                 alert("Please log in again.")
-                return
+                document.location.reload()
             }
             else{
                 alert("There was an error setting the username.")
@@ -367,7 +369,7 @@ UM.interaction.setUserSec = async function(user){
                 console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
                 localStorage.removeItem("lr-user")
                 alert("Please log in again.")
-                return
+                document.location.reload()
             }
             else{
                 alert("There was an error updating the password.")
