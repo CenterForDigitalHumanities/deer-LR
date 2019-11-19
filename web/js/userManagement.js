@@ -117,7 +117,7 @@ UM.interaction.addUser = async function(){
     }
     else{
         let agentObj = {
-            "@type" : "foaf:Agent",
+            "@type" : "Agent",
             "@context" : "http://devstore.rerum.io/v1/contex.json",
             "mbox" : email,
             "label" : username,
