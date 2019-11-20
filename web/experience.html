@@ -136,71 +136,133 @@
                         <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                             <input type="hidden" deer-key="creator" value="loading">
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <label>Name:</label>
-                            <input type="text" deer-key="name">
-                            <label>Description:</label>
-                            <textarea deer-key="description"></textarea>
-                            <footer>
-                                <input class="button primary" type="submit">
-                            </footer>
-                        </form>
+                            <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                            <div class="row">
+                                <div data-rdf="Object.SacredObject" class="bd-primary text-center card col" title="Sacred Object">
+                                    <header>Sacred Object</header>
+                                    <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
+                                </div>
+                                <div data-rdf="Object.VisualArtwork" class="bd-primary text-center card col" title="Artwork">
+                                    <header>Artwork</header>
+                                    <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
+                                </div>
+                                <div data-rdf="Object.Manuscript" class="bd-primary text-center card col" title="Written Text">
+                                    <header>Written</header>
+                                    <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
+                                </div>
+                                <div data-rdf="Object.CivicStructure" class="bd-primary text-center card col" title="Building">
+                                    <header>Building</header>
+                                    <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Building" alt="Building">
+                                </div>
+                            </div>
+                            <script>
+                                var data_key_elements = document.querySelectorAll("[data-rdf]")
+                                Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
+
+                                function setPrimaryType(event) {
+                                    let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                                    additionalTypeInput.value = val
+                                    Array.from(data_key_elements).forEach(el => {
+                                        el = el.closest("[data-rdf]")
+                                        if (el.getAttribute("data-rdf") === val) {
+                                            el.classList.add("bg-light")
+                                        } else {
+                                            el.classList.remove("bg-light")
+                                        }
+                                    })
+                                }
+                            </script>
+                            <div class="grouped">
+                                <label>Further Options</label>
+                                <select oninput="setPrimaryType(this)">
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                                    <option value="LR:Natural">Natural</option>
+                                    <option value="LR:Manufactured">Manufactured</option>
+                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                                    <option value="http://id.loc.gov/authorities/subjects/sh85126434.html">Spoken</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <h3>History of this Space:</h3>
+                            <span class="text-light">TODO:Click to select here</span>
+                            <label id="formerLocation">Former Location(s):</label>
+                            <script>
+                                let locationsList = document.createElement("ul")
+                                let queryObj = {
+                                    $or: [{
+                                        "targetCollection": "LivedReligionLocationsTest"
+                                    }, {
+                                        "body.targetCollection": "LivedReligionLocationsTest"
+                                    }]
+                                }
+                                fetch("query", {
+                                        method: "POST",
+                                        mode: "cors",
+                                        body: JSON.stringify(queryObj)
+                                    }).then(response => response.json())
+                                    .then(pointers => {
+                                        let list = []
+                                        pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
+                                            __deleted: console.log(err)
+                                        }))))
+                                        return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
+                                    }).then(refs => {
+                                        let filtered = []
+                                        refs.map(item => {
+                                            let found = false
+                                            for (let i of filtered) {
+                                                if (i['@id'] === item['@id']) {
+                                                    found = true
+                                                    break
+                                                }
+                                            }
+                                            if (!found) {
+                                                filtered.push(item)
+                                            }
+                                        })
+                                        return filtered
+                                    })
+                                    .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
+                                    .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
+                            </script>
+                            <label>Former Use(s):</label>
+                            <input type="hidden" deer-array-x="lr:formerUses" deer-array-type-x="Set" value="">
+                            <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                                <input type="checkbox" name="objects" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
+                                <input type="checkbox" name="objects" value="Artwork"><span class="chk_lbl">Artwork</span>
+                                <input type="checkbox" name="objects" value="Clothing"><span class="chk_lbl">Clothing</span>
+                                <input type="checkbox" name="objects" value="Food"><span class="chk_lbl">Food</span>
+                                <input type="checkbox" name="objects" value="Building"><span class="chk_lbl">Building</span>
+                                <input type="checkbox" name="objects" value="Natural"><span class="chk_lbl">Natural</span>
+                                <input type="checkbox" name="objects" value="Manufactured"><span class="chk_lbl">Manufactured</span>
+                                <input type="checkbox" name="objects" value="Found"><span class="chk_lbl">Found</span>
+                                <input type="checkbox" name="objects" value="Written"><span class="chk_lbl">Written</span>
+                                <input type="checkbox" name="objects" value="Spoken"><span class="chk_lbl">Spoken</span>
+                                <input type="checkbox" name="objects" value="Other"><span class="chk_lbl">Other</span>
+                            </select>
+                            <label>Material(s):</label>
+                            <input disabled type="text" deer-key-x="material">
+                            <label>Typical Use: </label>
+                            <select disabled deer-key-x="typical_use" value="">
+                                <option value="Religious">Religious</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Educational">Educational</option>
+                                <option value="Civic">Civic</option>
+                                <option value="Other Public">Other Public</option>
+                            </select>
+                            <h3> Upload Media </h3>
+                            <label>Field Notes:</label>
+                            <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
+                            <label>Tags separated by ',':</label>
+                            <input disabled type="text" deer-key-x="LR:Tags">
+
+                            <div class="row">
+                                <input class="button primary col" type="submit">
+                            </div>
+                        </form>   
                     </div>
                 </div>
-                <!--
-                <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
-                    <input type="hidden" deer-key="creator" value="loading">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                    <div class="primarySpecification" for="objects">
-                        <header>What is the primary type for this object? </header>
-                        <input type="radio" name="objects" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
-                        <input type="radio" name="objects" value="Artwork"><span class="chk_lbl">Artwork</span>
-                        <input type="radio" name="objects" value="Clothing"><span class="chk_lbl">Clothing</span>
-                        <input type="radio" name="objects" value="Food"><span class="chk_lbl">Food</span>
-                        <input type="radio" name="objects" value="Building"><span class="chk_lbl">Building</span>
-                        <input type="radio" name="objects" value="Natural"><span class="chk_lbl">Natural</span>
-                        <input type="radio" name="objects" value="Manufactured"><span class="chk_lbl">Manufactured</span>
-                        <input type="radio" name="objects" value="Found"><span class="chk_lbl">Found</span>
-                        <input type="radio" name="objects" value="Written"><span class="chk_lbl">Written</span>
-                        <input type="radio" name="objects" value="Spoken"><span class="chk_lbl">Spoken</span>
-                        <input type="radio" name="objects" value="Other"><span class="chk_lbl">Other</span>
-                        <div class="reactiveOther hidden" for="objects">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
-                        <input type="button" onclick="LR.ui.assignPrimarySpecification(event, 'objects')" value="Choose" />
-                        <div for="objects" class="chosenPrimarySpecification">None Chosen</div>
-                    </div>
-                    <div class="secondarySpecification hidden" for="objects">
-                        <header>Check all other types that apply. </header>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Artwork"><span class="chk_lbl">Artwork</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Clothing"><span class="chk_lbl">Clothing</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Food"><span class="chk_lbl">Food</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Building"><span class="chk_lbl">Building</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Natural"><span class="chk_lbl">Natural</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Manufactured"><span class="chk_lbl">Manufactured</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Found"><span class="chk_lbl">Found</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Written"><span class="chk_lbl">Written</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Spoken"><span class="chk_lbl">Spoken</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'objects')" value="Other"><span class="chk_lbl">Other</span>
-                    </div>
-                    <input type="hidden" deer-key-x="additionalType" value="[]" />
-                    <header>History of Object:</header>
-                    <label>Former Use(s):</label>
-                    <textarea type="text" deer-key-x="TODO"> </textarea>
-                    <label>Creator:</label>
-                    <input type="text" deer-key-x="TODO" />
-                    <label>Material(s):</label>
-                    <textarea type="text" deer-key-x="material"> </textarea>
-                    <div> Upload Media </div>
-                    <label>Field Notes:</label>
-                    <textarea type="text" deer-key-x="notes"> </textarea>
-                    <label>Tags:</label>
-                    <textarea type="text" deer-key-x="tags"> </textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
-                    <input type="button" value="Submit" />  TODO 
-                </form>
-                -->
             </div>
             <!--
             <div for="bodies" class="kind hidden">
