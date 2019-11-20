@@ -13,7 +13,7 @@
 
 <body class="container">
     <lr-nav></lr-nav>
-    <h2 class="text-primary" id="surveyTitle">Upload Data From An Experience</h2>
+    <h2 class="text-primary">Upload Data From An Experience</h2>
     <div class="card bd-primary">
         <div class="card_body">
             <form id="theExperience" class="experience" deer-type="Event">
@@ -35,81 +35,213 @@
             </form>
         </div>
     </div>
-    <h3 id="surveyTitle">Uploaded Experience</h3>
+<!--    <h3 id="surveyTitle">Uploaded Experience</h3>
     <div class="card">
         <div class="card_body">
             <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
         </div>
-    </div>
+    </div>-->
     <!-- TODO describe the experience -->
-    <experience-artifacts>
-        <generic-top>Describe your encounter at <deer-view id="theLocationName" deer-template="placeName">{Place.name}</deer-view> </generic-top>
-        <div class="card">
-            <div class="card-body">
-                <header class="card-title">Please check everything that applies to what you want to tell us.</header>
-                <input disabled type="checkbox" name="spaces" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Space</span>
-                <input type="checkbox" name="objects" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Objects</span>
-                <input disabled type="checkbox" name="bodies" onchange="LR.ui.reactiveHierarchy(event)" /><span class="chk_lbl">Bodies</span>
-            </div>
+    <h2 class="text-primary">Describe your encounter at <span id="theLocationName" deer-template="placeName">{Place.name}</span> </generic-top>
+    <div class="card">
+        <div class="card-body">
+            <a class="button bg-secondary is-small"  name="spaces" onclick="">Space</a>
+            <a class="button bg-primary is-small" name="objects" onchange="LR.ui.showExperienceSection(event)">Objects</a>
+            <a class="button bg-secondary is-small" name="bodies" onclick="">Bodies</a>
         </div>
-        <div class="card fixDynamicHeight">
-             <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
-            <!--
-            <div for="spaces" class="kind hidden">
-                 Here the user can offer additional information about the Location.  They cannot change or delete existing information. 
-                <form id="chosenLocation" class="dataWrap" for="spaces" deer-type="Place">
-                     TODO make tyhe deer-id of this the id from the chosen location.  Preload information into the form. 
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <label> Primary Type </label>
-                    <input disabled type="text" deer-key-x="type" />
-                    <div class="secondarySpecification hidden" for="spaces">
-                        <header>Check all other types for this space.</header>
-                        <label>General Specification</label>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Accommodation" /><span class="chk_lbl">Accommodation</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
-                        <br>
-                        <label>More Specific</label>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Residence" /><span class="chk_lbl">Residence</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Home" /><span class="chk_lbl">Home</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span>
-                        <input deer-key-x="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        <div class="reactiveOther hidden" for="spaces">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
+    </div>
+    <div class="card fixDynamicHeight">
+         <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
+        <!--
+        <div for="spaces" class="kind hidden">
+             Here the user can offer additional information about the Location.  They cannot change or delete existing information. 
+            <form id="chosenLocation" class="dataWrap" for="spaces" deer-type="Place">
+                 TODO make tyhe deer-id of this the id from the chosen location.  Preload information into the form. 
+                <input type="hidden" deer-key-x="annoConnectingToExperience" />
+                <label> Primary Type </label>
+                <input disabled type="text" deer-key-x="type" />
+                <div class="secondarySpecification hidden" for="spaces">
+                    <header>Check all other types for this space.</header>
+                    <label>General Specification</label>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Accommodation" /><span class="chk_lbl">Accommodation</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                    same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
+                    <br>
+                    <label>More Specific</label>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Residence" /><span class="chk_lbl">Residence</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Home" /><span class="chk_lbl">Home</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
+                    <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span>
+                    <input deer-key-x="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
+                    <div class="reactiveOther hidden" for="spaces">
+                        <label>Please tell us what you mean by other:</label>
+                        <textarea type="text"> </textarea>
                     </div>
-                    <input type="hidden" deer-array-type-x="Set" deer-key-x="additionalType" />
-                    <label>What is this space named?:</label>
-                    <input disabled type="text" deer-key-x="name" />
-                    <header>History of this Space:</header>
-                    <textarea type="text" deer-key-x="LR::SpaceHistory"> </textarea>
-                    <label>Former Location(s):</label>
-                    <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
-                    <label>Former Use(s):</label>
-                    <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
-                    <label>Creator:</label>
-                    <input disabled type="text" deer-key-x="creator" />
-                    <label>Material(s):</label>
-                    <textarea type="text" deer-key-x="material"> </textarea>
-                    <label>Further Description:</label>
-                    <textarea type="text" deer-key-x="description"> </textarea>
-                    <div class="dataWrap">
+                </div>
+                <input type="hidden" deer-array-type-x="Set" deer-key-x="additionalType" />
+                <label>What is this space named?:</label>
+                <input disabled type="text" deer-key-x="name" />
+                <header>History of this Space:</header>
+                <textarea type="text" deer-key-x="LR::SpaceHistory"> </textarea>
+                <label>Former Location(s):</label>
+                <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
+                <label>Former Use(s):</label>
+                <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
+                <label>Creator:</label>
+                <input disabled type="text" deer-key-x="creator" />
+                <label>Material(s):</label>
+                <textarea type="text" deer-key-x="material"> </textarea>
+                <label>Further Description:</label>
+                <textarea type="text" deer-key-x="description"> </textarea>
+                <div class="dataWrap">
+                    <label>Typical Use: </label>
+                    <select disabled deer-key-x="typical_use" value="">
+                        <option value="Religious">Religious</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Educational">Educational</option>
+                        <option value="Civic">Civic</option>
+                        <option value="Other Public">Other Public</option>
+                    </select>
+                </div>
+                <div> Upload Media </div>
+                <label>Field Notes:</label>
+                <textarea type="text" deer-key-x="notes"> </textarea>
+                <label>Tags separated by ',':</label>
+                <textarea type="text" deer-key-x="tag"> </textarea>
+            </form>
+        </div>
+        -->
+        <div for="objects" class="kind is-hidden">
+            <!-- TODO Pick from existing object or add new objects, one at a time -->
+            <p> Below are some objects you can choose from.  Otherwise, add an object below. </P>
+            <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
+            <h2 class="text-primary">Create a New Object</h2>
+            <div class="card bd-primary">
+                <div class="card_body">
+                    <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
+                        <input type="hidden" deer-key="creator" value="loading">
+                        <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
+                        <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                        <div class="row">
+                            <div data-rdf="Object.SacredObject" class="bd-primary text-center card col" title="Sacred Object">
+                                <header>Sacred Object</header>
+                                <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
+                            </div>
+                            <div data-rdf="Object.VisualArtwork" class="bd-primary text-center card col" title="Artwork">
+                                <header>Artwork</header>
+                                <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
+                            </div>
+                            <div data-rdf="Object.Manuscript" class="bd-primary text-center card col" title="Written Text">
+                                <header>Written</header>
+                                <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
+                            </div>
+                            <div data-rdf="Object.CivicStructure" class="bd-primary text-center card col" title="Building">
+                                <header>Building</header>
+                                <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Building" alt="Building">
+                            </div>
+                        </div>
+                        <script>
+                            var data_key_elements = document.querySelectorAll("[data-rdf]")
+                            Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
+
+                            function setPrimaryType(event) {
+                                let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                                additionalTypeInput.value = val
+                                Array.from(data_key_elements).forEach(el => {
+                                    el = el.closest("[data-rdf]")
+                                    if (el.getAttribute("data-rdf") === val) {
+                                        el.classList.add("bg-light")
+                                    } else {
+                                        el.classList.remove("bg-light")
+                                    }
+                                })
+                            }
+                        </script>
+                        <div class="grouped">
+                            <label>Further Options</label>
+                            <select oninput="setPrimaryType(this)">
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                                <option value="LR:Natural">Natural</option>
+                                <option value="LR:Manufactured">Manufactured</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <h3>History of this Space:</h3>
+                        <span class="text-light">TODO:Click to select here</span>
+                        <label id="formerLocation">Former Location(s):</label>
+                        <script>
+                            let locationsList = document.createElement("ul")
+                            let queryObj = {
+                                $or: [{
+                                    "targetCollection": "LivedReligionLocationsTest"
+                                }, {
+                                    "body.targetCollection": "LivedReligionLocationsTest"
+                                }]
+                            }
+                            fetch("query", {
+                                    method: "POST",
+                                    mode: "cors",
+                                    body: JSON.stringify(queryObj)
+                                }).then(response => response.json())
+                                .then(pointers => {
+                                    let list = []
+                                    pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
+                                        __deleted: console.log(err)
+                                    }))))
+                                    return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
+                                }).then(refs => {
+                                    let filtered = []
+                                    refs.map(item => {
+                                        let found = false
+                                        for (let i of filtered) {
+                                            if (i['@id'] === item['@id']) {
+                                                found = true
+                                                break
+                                            }
+                                        }
+                                        if (!found) {
+                                            filtered.push(item)
+                                        }
+                                    })
+                                    return filtered
+                                })
+                                .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
+                                .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
+                        </script>
+                        <label>Former Use(s):</label>
+                        <input type="hidden" deer-array-x="lr:formerUses" deer-array-type-x="Set" value="">
+                        <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                            <input type="checkbox" name="objects" value="Object.SacredObject"><span class="chk_lbl">Sacred Object</span>
+                            <input type="checkbox" name="objects" value="Object.VisualArtwork"><span class="chk_lbl">Artwork</span>
+                            <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html"><span class="chk_lbl">Clothing</span>
+                            <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html"><span class="chk_lbl">Food</span>
+                            <input type="checkbox" name="objects" value="Object.CivicStructure"><span class="chk_lbl">Building</span>
+                            <input type="checkbox" name="objects" value="LR:Natural"><span class="chk_lbl">Natural</span>
+                            <input type="checkbox" name="objects" value="LR:Manufactured"><span class="chk_lbl">Manufactured</span>
+                            <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html"><span class="chk_lbl">Found</span>
+                            <input type="checkbox" name="objects" value="Object.Manuscript"><span class="chk_lbl">Written</span>
+                            <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html"><span class="chk_lbl">Spoken</span>
+                            <input type="checkbox" name="objects" value="Other"><span class="chk_lbl">Other</span>
+                        </select>
+                        <label>Material(s):</label>
+                        <input disabled type="text" deer-key-x="material">
                         <label>Typical Use: </label>
                         <select disabled deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
@@ -118,248 +250,113 @@
                             <option value="Civic">Civic</option>
                             <option value="Other Public">Other Public</option>
                         </select>
-                    </div>
-                    <div> Upload Media </div>
-                    <label>Field Notes:</label>
-                    <textarea type="text" deer-key-x="notes"> </textarea>
-                    <label>Tags separated by ',':</label>
-                    <textarea type="text" deer-key-x="tag"> </textarea>
-                </form>
-            </div>
-            -->
-            <div for="objects" class="kind hidden">
-                <p> Below are some objects you can choose from.  Otherwise, add an object below. </P>
-                <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
-                <h2 class="text-primary">Create a New Object</h2>
-                <div class="card bd-primary">
-                    <div class="card_body">
-                        <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
-                            <input type="hidden" deer-key="creator" value="loading">
-                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
-                            <div class="row">
-                                <div data-rdf="Object.SacredObject" class="bd-primary text-center card col" title="Sacred Object">
-                                    <header>Sacred Object</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
-                                </div>
-                                <div data-rdf="Object.VisualArtwork" class="bd-primary text-center card col" title="Artwork">
-                                    <header>Artwork</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
-                                </div>
-                                <div data-rdf="Object.Manuscript" class="bd-primary text-center card col" title="Written Text">
-                                    <header>Written</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
-                                </div>
-                                <div data-rdf="Object.CivicStructure" class="bd-primary text-center card col" title="Building">
-                                    <header>Building</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Building" alt="Building">
-                                </div>
-                            </div>
-                            <script>
-                                var data_key_elements = document.querySelectorAll("[data-rdf]")
-                                Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
-
-                                function setPrimaryType(event) {
-                                    let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
-                                    additionalTypeInput.value = val
-                                    Array.from(data_key_elements).forEach(el => {
-                                        el = el.closest("[data-rdf]")
-                                        if (el.getAttribute("data-rdf") === val) {
-                                            el.classList.add("bg-light")
-                                        } else {
-                                            el.classList.remove("bg-light")
-                                        }
-                                    })
-                                }
-                            </script>
-                            <div class="grouped">
-                                <label>Further Options</label>
-                                <select oninput="setPrimaryType(this)">
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                                    <option value="LR:Natural">Natural</option>
-                                    <option value="LR:Manufactured">Manufactured</option>
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
-                                    <option value="http://id.loc.gov/authorities/subjects/sh85126434.html">Spoken</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <h3>History of this Space:</h3>
-                            <span class="text-light">TODO:Click to select here</span>
-                            <label id="formerLocation">Former Location(s):</label>
-                            <script>
-                                let locationsList = document.createElement("ul")
-                                let queryObj = {
-                                    $or: [{
-                                        "targetCollection": "LivedReligionLocationsTest"
-                                    }, {
-                                        "body.targetCollection": "LivedReligionLocationsTest"
-                                    }]
-                                }
-                                fetch("query", {
-                                        method: "POST",
-                                        mode: "cors",
-                                        body: JSON.stringify(queryObj)
-                                    }).then(response => response.json())
-                                    .then(pointers => {
-                                        let list = []
-                                        pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
-                                            __deleted: console.log(err)
-                                        }))))
-                                        return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
-                                    }).then(refs => {
-                                        let filtered = []
-                                        refs.map(item => {
-                                            let found = false
-                                            for (let i of filtered) {
-                                                if (i['@id'] === item['@id']) {
-                                                    found = true
-                                                    break
-                                                }
-                                            }
-                                            if (!found) {
-                                                filtered.push(item)
-                                            }
-                                        })
-                                        return filtered
-                                    })
-                                    .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
-                                    .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
-                            </script>
-                            <label>Former Use(s):</label>
-                            <input type="hidden" deer-array-x="lr:formerUses" deer-array-type-x="Set" value="">
-                            <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
-                                <input type="checkbox" name="objects" value="Sacred Object"><span class="chk_lbl">Sacred Object</span>
-                                <input type="checkbox" name="objects" value="Artwork"><span class="chk_lbl">Artwork</span>
-                                <input type="checkbox" name="objects" value="Clothing"><span class="chk_lbl">Clothing</span>
-                                <input type="checkbox" name="objects" value="Food"><span class="chk_lbl">Food</span>
-                                <input type="checkbox" name="objects" value="Building"><span class="chk_lbl">Building</span>
-                                <input type="checkbox" name="objects" value="Natural"><span class="chk_lbl">Natural</span>
-                                <input type="checkbox" name="objects" value="Manufactured"><span class="chk_lbl">Manufactured</span>
-                                <input type="checkbox" name="objects" value="Found"><span class="chk_lbl">Found</span>
-                                <input type="checkbox" name="objects" value="Written"><span class="chk_lbl">Written</span>
-                                <input type="checkbox" name="objects" value="Spoken"><span class="chk_lbl">Spoken</span>
-                                <input type="checkbox" name="objects" value="Other"><span class="chk_lbl">Other</span>
-                            </select>
-                            <label>Material(s):</label>
-                            <input disabled type="text" deer-key-x="material">
-                            <label>Typical Use: </label>
-                            <select disabled deer-key-x="typical_use" value="">
-                                <option value="Religious">Religious</option>
-                                <option value="Commercial">Commercial</option>
-                                <option value="Educational">Educational</option>
-                                <option value="Civic">Civic</option>
-                                <option value="Other Public">Other Public</option>
-                            </select>
-                            <h3> Upload Media </h3>
-                            <label>Field Notes:</label>
-                            <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
-                            <label>Tags separated by ',':</label>
-                            <input disabled type="text" deer-key-x="LR:Tags">
-
-                            <div class="row">
-                                <input class="button primary col" type="submit">
-                            </div>
-                        </form>   
-                    </div>
+                        <h3> Upload Media </h3>
+                        <label>Field Notes:</label>
+                        <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
+                        <label>Tags separated by ',':</label>
+                        <input disabled type="text" deer-key-x="LR:Tags">                           
+                        <div class="row">
+                            <input class="button primary col" type="submit">
+                        </div>
+                    </form>   
                 </div>
             </div>
-            <!--
-            <div for="bodies" class="kind hidden">
-                 TODO design how the experience object aggregates Sense annotations 
-                <header>What senses are prominent?</header>
-                <form id="senses" deer-id-x="" deer-type-x="Sense">
-                    <input type="radio" value="LR::Sight" name="sense"><span class="chk_lbl">Sight</span>
-                    <input type="radio" value="LR::Smell" name="sense"><span class="chk_lbl">Smell</span>
-                    <input type="radio" value="LR::Sound" name="sense"><span class="chk_lbl">Sound</span>
-                    <input type="radio" value="LR::Touch" name="sense"><span class="chk_lbl">Touch</span>
-                    <input type="radio" value="LR::Taste" name="sense"><span class="chk_lbl">Taste</span>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <header>Describe Sense Further:</header>
-                    <textarea id="further_sense" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
-                    <input type="button" onclick="LR.ui.addPieceAndReset(event, 'sense')" value="Add Sense" />
-                </form>
-                 TODO: Catch the created event for a sense and add into this area 
-                <ul id="added_sense">
-                    <li>
-                        <header> Added Senses </header>
-                    </li>
-                </ul>
-                 TODO Design how experience object aggregates practices.  Is this a collection? 
-                 TODO Design what a distinct practice object looks like 
-                <header>What practices are occurring? Add one at a time.</header>
-                <form id="practices" deer-id-x="" deer-type-x="Practice">
-                    <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
-                    <input name="practice" type="radio" value="Playing"><span class="chk_lbl">Playing</span>
-                    <input name="practice" type="radio" value="Clothing"><span class="chk_lbl">Clothing</span>
-                    <input name="practice" type="radio" value="Singing"><span class="chk_lbl">Singing</span>
-                    <input name="practice" type="radio" value="Moving"><span class="chk_lbl">Moving</span>
-                    <input name="practice" type="radio" value="Sitting"><span class="chk_lbl">Sitting</span>
-                    <input name="practice" type="radio" value="Standing"><span class="chk_lbl">Standing</span>
-                    <input name="practice" type="radio" value="Kneeling"><span class="chk_lbl">Kneeling</span>
-                    <input name="practice" type="radio" value="Traveling"><span class="chk_lbl">Traveling</span>
-                    <input name="practice" type="radio" value="Dancing"><span class="chk_lbl">Dancing</span>
-                    <input name="practice" type="radio" value="Cooking"><span class="chk_lbl">Cooking</span>
-                    <input name="practice" type="radio" value="Working"><span class="chk_lbl">Working</span>
-                    <input name="practice" type="radio" value="Other"><span class="chk_lbl">Other</span>
-                    <div class="reactiveOther hidden" for="practice">
-                        <label>Please tell us what you mean by other:</label>
-                        <textarea type="text"> </textarea>
-                    </div>
-                    <header>Describe Practice Further:</header>
-                    <textarea id="further_practice" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
-                    <input type="button" onclick="LR.ui.addPieceAndReset(event, 'practice')" value="Add Practice" />
-                </form>
-                 TODO 
-                <ul id="added_practice">
-                    <li>
-                        <header> Added Practices </header>
-                    </li>
-                </ul>
-                 TODO Design how experience object aggregates contexts and relates them to the aggregated practices.
-                 TODO Design what a distinct practice object looks like 
-                <header>What is the context of these practices? Add one at a time.</header>
-                <form id="contexts">
-                    <input name="context" type="radio" value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
-                    <input name="context" type="radio" value="Community Event"><span class="chk_lbl">Community Event</span>
-                    <input name="context" type="radio" value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
-                    <input name="context" type="radio" value="Commercial"><span class="chk_lbl">Commercial</span>
-                    <input name="context" type="radio" value="Public"><span class="chk_lbl">Public</span>
-                    <input name="context" type="radio" value="Private"><span class="chk_lbl">Private</span>
-                    <input name="context" type="radio" value="Planned"><span class="chk_lbl">Planned</span>
-                    <input name="context" type="radio" value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
-                    <input name="context" type="radio" value="Individual"><span class="chk_lbl">Individual</span>
-                    <input name="context" type="radio" value="Collective"><span class="chk_lbl">Collective</span>
-                    <input name="context" type="radio" value="Other"><span class="chk_lbl">Other</span>
-                    <div class="reactiveOther hidden" for="context">
-                        <label>Please tell us what you mean by other:</label>
-                        <textarea type="text"> </textarea>
-                    </div>
-                    <header>Describe Context Further:</header>
-                    <textarea id="further_context" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToPractices" />  TODO 
-                    <input type="button" onclick="LR.ui.addPieceAndReset(event, 'context')" value="Add Context" />
-                </form>
-                 TODO 
-                <ul id="added_context">
-                    <li>
-                        <header> Added Contexts </header>
-                    </li>
-                </ul>
-                 TODO note that these don't make much sense here... 
-                
-                <div> Upload Media </div>
-                <label>Field Notes:</label>
-                <textarea type="text" deer-key-x="notes"> </textarea>
-                <label>Tags:</label>
-                <textarea type="text" deer-key-x="tags"> </textarea>
-                
-            </div>
-            -->
         </div>
-    </experience-artifacts>-->
+        <!--
+        <div for="bodies" class="kind hidden">
+             TODO design how the experience object aggregates Sense annotations 
+            <header>What senses are prominent?</header>
+            <form id="senses" deer-id-x="" deer-type-x="Sense">
+                <input type="radio" value="LR::Sight" name="sense"><span class="chk_lbl">Sight</span>
+                <input type="radio" value="LR::Smell" name="sense"><span class="chk_lbl">Smell</span>
+                <input type="radio" value="LR::Sound" name="sense"><span class="chk_lbl">Sound</span>
+                <input type="radio" value="LR::Touch" name="sense"><span class="chk_lbl">Touch</span>
+                <input type="radio" value="LR::Taste" name="sense"><span class="chk_lbl">Taste</span>
+                <input type="hidden" deer-key-x="annoConnectingToExperience" />
+                <header>Describe Sense Further:</header>
+                <textarea id="further_sense" type="text" deer-key-x="description"></textarea>
+                <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
+                <input type="button" onclick="LR.ui.addPieceAndReset(event, 'sense')" value="Add Sense" />
+            </form>
+             TODO: Catch the created event for a sense and add into this area 
+            <ul id="added_sense">
+                <li>
+                    <header> Added Senses </header>
+                </li>
+            </ul>
+             TODO Design how experience object aggregates practices.  Is this a collection? 
+             TODO Design what a distinct practice object looks like 
+            <header>What practices are occurring? Add one at a time.</header>
+            <form id="practices" deer-id-x="" deer-type-x="Practice">
+                <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
+                <input name="practice" type="radio" value="Playing"><span class="chk_lbl">Playing</span>
+                <input name="practice" type="radio" value="Clothing"><span class="chk_lbl">Clothing</span>
+                <input name="practice" type="radio" value="Singing"><span class="chk_lbl">Singing</span>
+                <input name="practice" type="radio" value="Moving"><span class="chk_lbl">Moving</span>
+                <input name="practice" type="radio" value="Sitting"><span class="chk_lbl">Sitting</span>
+                <input name="practice" type="radio" value="Standing"><span class="chk_lbl">Standing</span>
+                <input name="practice" type="radio" value="Kneeling"><span class="chk_lbl">Kneeling</span>
+                <input name="practice" type="radio" value="Traveling"><span class="chk_lbl">Traveling</span>
+                <input name="practice" type="radio" value="Dancing"><span class="chk_lbl">Dancing</span>
+                <input name="practice" type="radio" value="Cooking"><span class="chk_lbl">Cooking</span>
+                <input name="practice" type="radio" value="Working"><span class="chk_lbl">Working</span>
+                <input name="practice" type="radio" value="Other"><span class="chk_lbl">Other</span>
+                <div class="reactiveOther hidden" for="practice">
+                    <label>Please tell us what you mean by other:</label>
+                    <textarea type="text"> </textarea>
+                </div>
+                <header>Describe Practice Further:</header>
+                <textarea id="further_practice" type="text" deer-key-x="description"></textarea>
+                <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
+                <input type="button" onclick="LR.ui.addPieceAndReset(event, 'practice')" value="Add Practice" />
+            </form>
+             TODO 
+            <ul id="added_practice">
+                <li>
+                    <header> Added Practices </header>
+                </li>
+            </ul>
+             TODO Design how experience object aggregates contexts and relates them to the aggregated practices.
+             TODO Design what a distinct practice object looks like 
+            <header>What is the context of these practices? Add one at a time.</header>
+            <form id="contexts">
+                <input name="context" type="radio" value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
+                <input name="context" type="radio" value="Community Event"><span class="chk_lbl">Community Event</span>
+                <input name="context" type="radio" value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
+                <input name="context" type="radio" value="Commercial"><span class="chk_lbl">Commercial</span>
+                <input name="context" type="radio" value="Public"><span class="chk_lbl">Public</span>
+                <input name="context" type="radio" value="Private"><span class="chk_lbl">Private</span>
+                <input name="context" type="radio" value="Planned"><span class="chk_lbl">Planned</span>
+                <input name="context" type="radio" value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
+                <input name="context" type="radio" value="Individual"><span class="chk_lbl">Individual</span>
+                <input name="context" type="radio" value="Collective"><span class="chk_lbl">Collective</span>
+                <input name="context" type="radio" value="Other"><span class="chk_lbl">Other</span>
+                <div class="reactiveOther hidden" for="context">
+                    <label>Please tell us what you mean by other:</label>
+                    <textarea type="text"> </textarea>
+                </div>
+                <header>Describe Context Further:</header>
+                <textarea id="further_context" type="text" deer-key-x="description"></textarea>
+                <input type="hidden" deer-key-x="annoConnectingToPractices" />  TODO 
+                <input type="button" onclick="LR.ui.addPieceAndReset(event, 'context')" value="Add Context" />
+            </form>
+             TODO 
+            <ul id="added_context">
+                <li>
+                    <header> Added Contexts </header>
+                </li>
+            </ul>
+             TODO note that these don't make much sense here... 
+
+            <div> Upload Media </div>
+            <label>Field Notes:</label>
+            <textarea type="text" deer-key-x="notes"> </textarea>
+            <label>Tags:</label>
+            <textarea type="text" deer-key-x="tags"> </textarea>
+
+        </div>
+        -->
+    </div>
     <!-- Add ins -->
     <script>
         addEventListener('lrUserKnown', event => {
