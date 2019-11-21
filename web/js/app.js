@@ -78,6 +78,24 @@ LR.ui.loginFail = function() {
 }
 
 /**
+ * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.ui.toggleAreas = function(event){
+    let area = event.target.getAttribute("area");
+    let elems = document.querySelectorAll("div[tog='"+area+"']")
+    for(let elem of elems){
+        if(elem.classList.contains("is-hidden")){
+            elem.classList.remove("is-hidden")
+        }  
+        else{
+            elem.classList.add("is-hidden")
+        }
+    }
+}
+
+/**
  * Remove an item from one of the Lived Religion application collections.
  * @param {String} itemID : The ID of the annotation connecting the item to the collection.
  * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.

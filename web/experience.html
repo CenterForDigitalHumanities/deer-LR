@@ -24,7 +24,7 @@
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
                     <input id="loc" type="hidden" deer-key="location" />
-                    <deer-view id="locations" deer-collection="LivedReligionLocations" deer-template="locationsAsDropdown"></deer-view>
+                    <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
@@ -35,11 +35,16 @@
                 </form>
             </div>
         </div>
+        <div id="experienceReview" class="card is-hidden">
+            <div class="card_body">
+                <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
+            </div>
+        </div>
         <h2 class="text-primary">Describe your encounter at <span id="theLocationName" deer-template="placeName">{Place.name}</span> </h2>
         <div class="row">
-            <a class="button bg-secondary is-small"  name="spaces" onclick="">Space</a>
-            <a class="button bg-primary is-small" name="objects" onchange="LR.ui.showExperienceSection(event)">Objects</a>
-            <a class="button bg-secondary is-small" name="bodies" onclick="">Bodies</a>
+            <a class="button bg-secondary is-small"  area="spaces" onclick="">Space</a>
+            <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)">Objects</a>
+            <a class="button bg-secondary is-small" area="bodies" onclick="">Bodies</a>
         </div>
         <div class="fixDynamicHeight">
              <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
@@ -116,9 +121,12 @@
                 </form>
             </div>
             -->
-            <div for="objects" class="kind is-hidden">
+            <div tog="objects" class="kind is-hidden">
                 <!-- TODO Pick from existing object or add new objects, one at a time -->
-                <p> Below are some objects you can choose from.  Otherwise, add an object below. </P>
+                <p> Below are some objects you can choose from.  You may also add your own objects. </P>
+                <ul id="objectsInExperience">
+                    <li>Objects You Add Will Appear Here</li>
+                </ul>
                 <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
                 <h2 class="text-primary">Create a New Object</h2>
                 <div class="card bd-primary">
@@ -126,23 +134,24 @@
                         <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                             <input type="hidden" deer-key="creator" value="loading">
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
+                            <input type="hidden" deer-key="containedIn" value="{{Experience}}"> <!-- containedIn is really for a Place containedIn Place -->
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
                             <div class="row">
                                 <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
                                     <header>Sacred Object</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
+                                    <img class="hide-xs" src="https://icongr.am/material/star-four-points-outline.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
                                 </div>
                                 <div data-rdf="VisualArtwork" class="bd-primary text-center card col" title="Artwork">
                                     <header>Artwork</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
+                                    <img class="hide-xs" src="https://icongr.am/material/account-box-outline.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
                                 </div>
                                 <div data-rdf="Manuscript" class="bd-primary text-center card col" title="Written Text">
-                                    <header>Written</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
+                                    <header>Written Text</header>
+                                    <img class="hide-xs" src="https://icongr.am/material/book-open.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
                                 </div>
                                 <div data-rdf="CivicStructure" class="bd-primary text-center card col" title="Building">
                                     <header>Building</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Building" alt="Building">
+                                    <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Building" alt="Building">
                                 </div>
                             </div>
                             <script>
@@ -175,62 +184,24 @@
                                 </select>
                             </div>
                             <h3>History of this Space:</h3>
-                            <span class="text-light">TODO:Click to select here</span>
-                            <label id="formerLocation">Former Location(s):</label>
-                            <script>
-                                let locationsList = document.createElement("ul")
-                                let queryObj = {
-                                    $or: [{
-                                        "targetCollection": "LivedReligionLocationsTest"
-                                    }, {
-                                        "body.targetCollection": "LivedReligionLocationsTest"
-                                    }]
-                                }
-                                fetch("query", {
-                                        method: "POST",
-                                        mode: "cors",
-                                        body: JSON.stringify(queryObj)
-                                    }).then(response => response.json())
-                                    .then(pointers => {
-                                        let list = []
-                                        pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
-                                            __deleted: console.log(err)
-                                        }))))
-                                        return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
-                                    }).then(refs => {
-                                        let filtered = []
-                                        refs.map(item => {
-                                            let found = false
-                                            for (let i of filtered) {
-                                                if (i['@id'] === item['@id']) {
-                                                    found = true
-                                                    break
-                                                }
-                                            }
-                                            if (!found) {
-                                                filtered.push(item)
-                                            }
-                                        })
-                                        return filtered
-                                    })
-                                    .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
-                                    .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
-                            </script>
-                            <label>Former Use(s):</label>
-                            <input type="hidden" deer-key="LR:formerUses" deer-array-type="Set">
+                            <label>Choose Former Location(s):</label>
+                            <input type="hidden" deer-array-type="List" deer-key="LR:FormerLocations"/>
+                            <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
+                            <label>Provide Former Use(s):</label>
+                            <input type="hidden" deer-key="LR:formerUses" deer-array-type="List">
                             <!-- Looking at these as "former types", so just reuse the type values -->
                             <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
-                                <input type="checkbox" name="objects" value="SacredObject"><span class="chk_lbl">Sacred Object</span>
-                                <input type="checkbox" name="objects" value="VisualArtwork"><span class="chk_lbl">Artwork</span>
-                                <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html"><span class="chk_lbl">Clothing</span>
-                                <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html"><span class="chk_lbl">Food</span>
-                                <input type="checkbox" name="objects" value="CivicStructure"><span class="chk_lbl">Building</span>
-                                <input type="checkbox" name="objects" value="LR:Natural"><span class="chk_lbl">Natural</span>
-                                <input type="checkbox" name="objects" value="LR:Manufactured"><span class="chk_lbl">Manufactured</span>
-                                <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html"><span class="chk_lbl">Found</span>
-                                <input type="checkbox" name="objects" value="Manuscript"><span class="chk_lbl">Written</span>
-                                <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html"><span class="chk_lbl">Spoken</span>
-                                <input type="checkbox" name="objects" value="Other"><span class="chk_lbl">Other</span>
+                                <option value="SacredObject">Sacred Object</option>
+                                <option value="VisualArtwork">Artwork</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                                <option value="CivicStructure">Building</option>
+                                <option value="LR:Natural">Natural</option>
+                                <option value="LR:Manufactured">Manufactured</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                                <option value="Manuscript">Written Text</option>
+                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                                <option value="Other">Other</option>
                             </select>
                             <label>Material(s) this object is made of:</label>
                             <textarea deer-key="material"> </textarea>
@@ -251,7 +222,7 @@
                                 <input class="button primary col" type="submit">
                             </div>
                         </form>   
-                    </div>
+                    </div>       
                 </div>
             </div>
             <!--
@@ -356,6 +327,32 @@
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
             document.querySelector("[deer-key='creator']").value = user['@id']
+        })
+        
+        
+        addEventListener('deer-created', event => {
+            //Once the experience is created, show the area(s) for adding experience artifcats
+            //Also show the created experience details. Set theLocationName.
+            let what = event
+            switch(what){
+                case "experienceInitiated":
+                    //When an experience is started, you can show the next area.
+                    //Items in those next areas require their containedIn deer-key to have the value of the new experience ID.
+                break
+                case "objectEntryCreated":
+                    //Add this object item by some name to a list, perhaps with a "remove" option
+                    //Empty newObjectForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                break
+                case "senseEntryCreated":
+                    //Add this sense item by some name to a list, perhaps with a "remove" option
+                    //Empty newSenseForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                break
+                case "practiceEntryCreated":
+                    //Add this object item by some name to a list, perhaps with a "remove" option
+                    //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                break
+                default:
+            }
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
