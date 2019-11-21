@@ -30,19 +30,11 @@
                     <input type="date" deer-key="startDate" />
                     <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Adam P." />
-                    <!-- TODO be able to select multiple and have them stored to the hidden input for saving -->
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
                     <input type="submit" value="Continue" />
                 </form>
             </div>
         </div>
-    <!--    <h3 id="surveyTitle">Uploaded Experience</h3>
-        <div class="card">
-            <div class="card_body">
-                <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
-            </div>
-        </div>-->
-        <!-- TODO describe the experience -->
         <h2 class="text-primary">Describe your encounter at <span id="theLocationName" deer-template="placeName">{Place.name}</span> </h2>
         <div class="row">
             <a class="button bg-secondary is-small"  name="spaces" onclick="">Space</a>
@@ -136,19 +128,19 @@
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
                             <div class="row">
-                                <div data-rdf="Object.SacredObject" class="bd-primary text-center card col" title="Sacred Object">
+                                <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
                                     <header>Sacred Object</header>
                                     <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
                                 </div>
-                                <div data-rdf="Object.VisualArtwork" class="bd-primary text-center card col" title="Artwork">
+                                <div data-rdf="VisualArtwork" class="bd-primary text-center card col" title="Artwork">
                                     <header>Artwork</header>
                                     <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
                                 </div>
-                                <div data-rdf="Object.Manuscript" class="bd-primary text-center card col" title="Written Text">
+                                <div data-rdf="Manuscript" class="bd-primary text-center card col" title="Written Text">
                                     <header>Written</header>
                                     <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
                                 </div>
-                                <div data-rdf="Object.CivicStructure" class="bd-primary text-center card col" title="Building">
+                                <div data-rdf="CivicStructure" class="bd-primary text-center card col" title="Building">
                                     <header>Building</header>
                                     <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Building" alt="Building">
                                 </div>
@@ -225,33 +217,34 @@
                                     .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
                             </script>
                             <label>Former Use(s):</label>
-                            <input type="hidden" deer-array-x="lr:formerUses" deer-array-type-x="Set" value="">
+                            <input type="hidden" deer-key="LR:formerUses" deer-array-type="Set">
+                            <!-- Looking at these as "former types", so just reuse the type values -->
                             <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
-                                <input type="checkbox" name="objects" value="Object.SacredObject"><span class="chk_lbl">Sacred Object</span>
-                                <input type="checkbox" name="objects" value="Object.VisualArtwork"><span class="chk_lbl">Artwork</span>
+                                <input type="checkbox" name="objects" value="SacredObject"><span class="chk_lbl">Sacred Object</span>
+                                <input type="checkbox" name="objects" value="VisualArtwork"><span class="chk_lbl">Artwork</span>
                                 <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html"><span class="chk_lbl">Clothing</span>
                                 <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html"><span class="chk_lbl">Food</span>
-                                <input type="checkbox" name="objects" value="Object.CivicStructure"><span class="chk_lbl">Building</span>
+                                <input type="checkbox" name="objects" value="CivicStructure"><span class="chk_lbl">Building</span>
                                 <input type="checkbox" name="objects" value="LR:Natural"><span class="chk_lbl">Natural</span>
                                 <input type="checkbox" name="objects" value="LR:Manufactured"><span class="chk_lbl">Manufactured</span>
                                 <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html"><span class="chk_lbl">Found</span>
-                                <input type="checkbox" name="objects" value="Object.Manuscript"><span class="chk_lbl">Written</span>
+                                <input type="checkbox" name="objects" value="Manuscript"><span class="chk_lbl">Written</span>
                                 <input type="checkbox" name="objects" value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html"><span class="chk_lbl">Spoken</span>
                                 <input type="checkbox" name="objects" value="Other"><span class="chk_lbl">Other</span>
                             </select>
-                            <label>Material(s):</label>
-                            <input disabled type="text" deer-key-x="material">
+                            <label>Material(s) this object is made of:</label>
+                            <textarea deer-key="material"> </textarea>
                             <label>Typical Use: </label>
-                            <select disabled deer-key-x="typical_use" value="">
+                            <select disabled deer-key="purpose" >
                                 <option value="Religious">Religious</option>
                                 <option value="Commercial">Commercial</option>
                                 <option value="Educational">Educational</option>
                                 <option value="Civic">Civic</option>
                                 <option value="Other Public">Other Public</option>
                             </select>
-                            <h3> Upload Media </h3>
+                            <!--<h3> Upload Media </h3>-->
                             <label>Field Notes:</label>
-                            <textarea disabled type="text" deer-key-x="LR:FieldNotes"> </textarea>
+                            <textarea disabled type="text" deer-key="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                             <label>Tags separated by ',':</label>
                             <input disabled type="text" deer-key-x="LR:Tags">                           
                             <div class="row">
