@@ -165,3 +165,17 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         let e = new CustomEvent(type, { detail: Object.assign(obj, { target: event.target }), bubbles: true })
         element.dispatchEvent(e)
     }
+    
+    /**
+     * Disassociate a particular object from the experience.  This means that the 'object' annotation on the experience
+     * and the 'containedIn' property of the Object need alterations.  
+     * @param {string} The @id of the particular object
+     * @param {string} The @#id of the experience to disaasociate it from
+     * @return {Promise}
+     */
+    LR.utils.disassociateObject = async function(objectID, experienceID){
+        //TODO
+        //let obj =  await fetch(objectID).then(response => response.json()).catch(error => error)
+        //let exp = await expand(experienceID)
+        
+    }

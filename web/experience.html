@@ -20,6 +20,7 @@
                 <form id="theExperience" class="experience" deer-type="Event">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="@context" value="https://schema.org/" />
+                    <input id="objectsAtExperience" type="hidden" deer-key="object" deer-input-type="Set" />
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -31,6 +32,7 @@
                     <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Adam P." />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
+                    <input id="objects" deer-input-type="Set" type="hidden" deer-key="object" />
                     <input type="submit" value="Continue" />
                 </form>
             </div>
@@ -38,14 +40,22 @@
         <div id="experienceReview" class="card is-hidden">
             <div class="card_body">
                 <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
+                <h4>Objects at experience "<span id="theExperienceName"></span>"</h4>
+                <ul id="objectsInExperience">
+                    <li>Objects you add will appear here and can be removed, but not edited.</li>
+                </ul>
             </div>
         </div>
-        <h2 class="text-primary">Describe your encounter at <span id="theLocationName" deer-template="placeName">{Place.name}</span> </h2>
         <div class="row">
-            <a class="button bg-secondary is-small"  area="spaces" onclick="">Space</a>
-            <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)">Objects</a>
-            <a class="button bg-secondary is-small" area="bodies" onclick="">Bodies</a>
+            <h2 class="text-primary">Describe your encounter at <span id="theLocationName">{Place.name}</span> </h2>
+            <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
+            <div class="row">
+                <a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>
+                <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
+                <a class="button bg-secondary is-small" area="bodies" onclick="" title="Record information about others' behaviors during the experience.">Bodies</a>
+            </div>
         </div>
+        
         <div class="fixDynamicHeight">
              <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
@@ -88,7 +98,7 @@
                             <textarea type="text"> </textarea>
                         </div>
                     </div>
-                    <input type="hidden" deer-array-type-x="Set" deer-key-x="additionalType" />
+                    <input type="hidden" deer-input-type-x="Set" deer-key-x="additionalType" />
                     <label>What is this space named?:</label>
                     <input disabled type="text" deer-key-x="name" />
                     <header>History of this Space:</header>
@@ -122,11 +132,8 @@
             </div>
             -->
             <div tog="objects" class="kind is-hidden">
-                <!-- TODO Pick from existing object or add new objects, one at a time -->
-                <p> Below are some objects you can choose from.  You may also add your own objects. </P>
-                <ul id="objectsInExperience">
-                    <li>Objects You Add Will Appear Here</li>
-                </ul>
+                <h2> Objects </h2>
+                <p> Below are some objects you can choose from.  You may also opt to record a new object. </p>
                 <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
                 <h2 class="text-primary">Create a New Object</h2>
                 <div class="card bd-primary">
@@ -134,8 +141,11 @@
                         <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                             <input type="hidden" deer-key="creator" value="loading">
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <input type="hidden" deer-key="containedIn" value="{{Experience}}"> <!-- containedIn is really for a Place containedIn Place -->
+                            <input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">
+                            <label>Name:</label>
+                            <input type="text" deer-key="name">
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                            <label>Type:</label>
                             <div class="row">
                                 <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
                                     <header>Sacred Object</header>
@@ -185,10 +195,10 @@
                             </div>
                             <h3>History of this Space:</h3>
                             <label>Choose Former Location(s):</label>
-                            <input type="hidden" deer-array-type="List" deer-key="LR:FormerLocations"/>
+                            <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                             <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Provide Former Use(s):</label>
-                            <input type="hidden" deer-key="LR:formerUses" deer-array-type="List">
+                            <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
                             <!-- Looking at these as "former types", so just reuse the type values -->
                             <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
                                 <option value="SacredObject">Sacred Object</option>
@@ -221,7 +231,8 @@
                             <div class="row">
                                 <input class="button primary col" type="submit">
                             </div>
-                        </form>   
+                        </form>
+                    </div>
                     </div>       
                 </div>
             </div>
@@ -329,19 +340,45 @@
             document.querySelector("[deer-key='creator']").value = user['@id']
         })
         
-        
         addEventListener('deer-created', event => {
             //Once the experience is created, show the area(s) for adding experience artifcats
             //Also show the created experience details. Set theLocationName.
-            let what = event
+            let what = event.target.id
+            let newObjID = event.detail["@id"]
+            let newObjName = (event.detail.hasOwnProperty("name")) ? event.detail.name : (event.detail.hasOwnProperty("label")) ?  event.detail.label : (event.detail.hasOwnProperty("title")) ? event.detail.title : "Name Unknown"
             switch(what){
-                case "experienceInitiated":
-                    //When an experience is started, you can show the next area.
-                    //Items in those next areas require their containedIn deer-key to have the value of the new experience ID.
+                case "theExperience":
+                    document.getElementById("theExperience").classList.add("is-hidden")
+                    document.getElementById("nextArea").classList.remove("is-hidden")
+                    document.getElementById("experienceReview").classList.remove("is-hidden")
+                    document.getElementById("theExperienceName").text = newObjName
+                    let e = event.target.getElementById("locations")
+                    let locName = e.options[e.selectedIndex].text
+                    document.getElementById("theLocationName").text = locName
+                    let expRefs = document.querySelectorAll(".expReference")
+                    for(let elem of expRefs){
+                        elem.value = newObjID
+                    }
                 break
-                case "objectEntryCreated":
+                case "newObjectForm":
                     //Add this object item by some name to a list, perhaps with a "remove" option
-                    //Empty newObjectForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                    document.querySwlector("a[area='objects']").click()
+                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
+                    let list = document.getElementById("objectsInExperience")
+                    let li = `<li >${newObjName}<a class="button error is-small" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
+                    list.innerHTML += li
+                    event.target.reset() //Empty the form?
+                    let trackedObjs = document.getElementById("objects").value
+                    if(trackedObjs){
+                        //Assuming the delimieter is ,
+                        trackedObjs += `,${newObjName}`
+                    }
+                    else{
+                        trackedObjs = newObjName
+                    }
+                    document.getElementById("theExperience").submit() //Update experience form with new object arra
+                    //Fire the submit on the experience form so it updates the object annotation.
+                    //Redraw all object collection renderings?
                 break
                 case "senseEntryCreated":
                     //Add this sense item by some name to a list, perhaps with a "remove" option
@@ -350,6 +387,16 @@
                 case "practiceEntryCreated":
                     //Add this object item by some name to a list, perhaps with a "remove" option
                     //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                break
+                default:
+            }
+        })
+        
+        addEventListener('deer-updated', event => {
+            let what = event
+            switch(what){
+                case "experienceUpdated":
+                    //Probably because an object-body-space alteration occurred where someone is adding or removing one from the 3experience
                 break
                 default:
             }
