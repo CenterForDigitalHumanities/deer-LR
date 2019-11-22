@@ -6,17 +6,15 @@
 package servlets;
 
 import auth.Authorize;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import net.sf.json.JSONObject;
 
 /**
@@ -55,9 +53,11 @@ public class Login extends HttpServlet {
         if(authorizer.isAuthorized(user, pwd)){
            //Check if the password for that user matches 
            response.setStatus(HttpServletResponse.SC_OK);
+           HttpSession sess = request.getSession(true);
            jo_return.element("name", user);
            jo_return.element("@id", authorizer.getUserID(user));
            jo_return.element("roles", authorizer.getUserRoles(user));
+           sess.setAttribute("lr-user", jo_return);
         }
         else{
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -65,9 +65,7 @@ public class Login extends HttpServlet {
         }
         response.addHeader("Content-Type", "application/json; charset=utf-8");
         response.setContentType("UTF-8");
-        PrintWriter out = response.getWriter();
-        Gson bldr = new GsonBuilder().setPrettyPrinting().create();
-        out.write(bldr.toJson(jo_return));
+        response.getWriter().print(jo_return);
         
     }
 

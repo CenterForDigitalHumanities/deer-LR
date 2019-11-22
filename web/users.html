@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+-->
+<html>
+
+<head>
+    <title>User Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        #people h2 {
+            display: none;
+        }
+        #popoverShade{
+            z-index : 2;
+            height: 100%;
+            width: 100%;
+            background-color: gray;
+            opacity: 75%;
+            top: 0px;
+            left: 0px;
+            position: absolute;
+        }
+        .card{
+            z-index: 3;
+            position: fixed;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 50%;
+            top: 25%;
+        }
+        .dynamicUser{
+            font-weight: bold; 
+        }
+    </style>
+</head>
+
+<body>
+    <lr-nav></lr-nav>
+    <div class="container">
+        <h1 class="text-primary"> Users </h1>
+        <div class="row entries">
+            <a class="button primary" onclick="UM.ui.showUserAddition()"> &#xFF0B; User </a>
+        </div>
+        <div class="row">
+            <ul id="users" class="col"></ul>
+        </div>
+        
+        <div id="rolesEditor" class="card bd-primary is-hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Assign Roles</h4>
+                </header>
+                <p>Please check what role(s) you want <span class="dynamicUser" id="usernameRole">{{USER}}</span> to have.  Note Administrators are automatically Contributors as well.</p>
+                <label>Administrator </label><input id="newAdminRole" values="Administrator" type="checkbox" />
+                <label>Contributor</label><input id="newContributorRole" values="Contributor" type="checkbox" />
+                <footer class="is-right">
+                  <a class="button primary action" onclick="">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('rolesEditor')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div id="nameEditor" class="card bd-primary is-hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Change Username</h4>
+                </header>
+                <p>Please type the new username for user <span class="dynamicUser" id="usernameName">{{USER}}</span></p>
+                <input id="newName" type="text"/>
+                <footer class="is-right">
+                  <a class="button primary action" onclick="">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('nameEditor')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div id="secEditor" class="card bd-primary is-hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Change Password</h4>
+                </header>
+                <p>Please type the new password for user <span class="dynamicUser" id="usernameSec">{{USER}}</span></p>
+                <input id="newSec" type="text"/>
+                <footer class="is-right">
+                  <a class="button primary action" onclick="">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('secEditor')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        
+        <div id="addUser" class="card bd-primary is-hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Add New User</h4>
+                </header>
+                <p>Please provide the information below to add a new user.</p>
+                <label>Real Name: </label><input id="name" type="text"/>
+                <label>E-mail: </label><input id="email" type="text"/>
+                <label>Application Username:</label><input id="username" type="text"/>
+                <label>Application Password:</label><input id="sec" type="text"/>
+                <label> Application Roles </label><br>
+                <label>Administrator </label><input id="adminRole" values="Administrator" type="checkbox" />
+                <label>Contributor</label><input id="contributorRole" values="Contributor" type="checkbox" />
+                <footer class="is-right">
+                  <a class="button primary action" onclick="UM.interaction.addUser()">Submit</a>
+                  <a class="button" onclick="UM.interaction.closeCard('addUser')">Cancel</a>
+                </footer>
+                <span class="dynamicUser is-hidden"> Avoid null in closeCard() </span>
+            </div>
+        </div>
+        
+        <div id="removeUserConfirm" class="card bd-primary is-hidden">
+            <div class="card_body">
+                <header>
+                    <h4>Remove User</h4>
+                </header>
+                <p>Are you sure you want to remove <span class="dynamicUser" id="usernameRemove">{{USER}}</span></p>
+                <footer class="is-right">
+                  <a class="button primary action" onclick="UM.interaction.removeUser()">Yes</a>
+                  <a class="button" onclick="UM.interaction.closeCard('removeUserConfirm')">Cancel</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <lr-footer></lr-footer>
+    <div id="popoverShade" class="is-hidden"> </div>
+    <!-- Add ins -->
+    <script>
+        /**
+         * Only draw the users if the user that is currently logged in has the administrator role.
+         */
+        addEventListener('lrUserKnown', event => {
+            let user = event.detail.user
+            if (user !== null) {
+                //localStorage.setItem("lr-user", JSON.stringify(event.detail.user)) //without this, lr-user is null in drawUserManagement()
+                UM.interaction.drawUserManagement()
+            }
+            else{
+                console.log("User identity reset; user is null")
+                localStorage.removeItem("lr-user")
+                alert("There was an error identifying you.  Please log in again.");
+                document.location.reload()
+            }
+        })
+
+    </script>
+    <script src="./js/userManagement.js" type="text/javascript"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+    <script src="./js/components.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -28,9 +28,34 @@
         <servlet-name>TinyUpdate</servlet-name>
         <servlet-class>crud.TinyUpdate</servlet-class>
     </servlet>
-    
-    
-    
+    <servlet>
+        <servlet-name>getUsers</servlet-name>
+        <servlet-class>users.GetUsers</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getUserRoles</servlet-name>
+        <servlet-class>users.GetUserRoles</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>setUserRoles</servlet-name>
+        <servlet-class>users.SetUserRoles</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>setUsername</servlet-name>
+        <servlet-class>users.SetUsername</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>setUserSecret</servlet-name>
+        <servlet-class>users.SetUserSecret</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addUser</servlet-name>
+        <servlet-class>users.AddUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>removeUser</servlet-name>
+        <servlet-class>users.RemoveUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
@@ -58,6 +83,34 @@
     <servlet-mapping>
         <servlet-name>TinyUpdate</servlet-name>
         <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getUsers</servlet-name>
+        <url-pattern>/getUsers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getUserRoles</servlet-name>
+        <url-pattern>/getUserRoles</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>setUsername</servlet-name>
+        <url-pattern>/setUsername</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>setUserSecret</servlet-name>
+        <url-pattern>/setUserSecret</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>setUserRoles</servlet-name>
+        <url-pattern>/setUserRoles</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addUser</servlet-name>
+        <url-pattern>/addUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>removeUser</servlet-name>
+        <url-pattern>/removeUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
