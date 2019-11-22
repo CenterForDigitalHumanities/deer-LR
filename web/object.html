@@ -22,14 +22,94 @@
                 <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                    <label>Name:</label>
-                    <input type="text" deer-key="name">
-                    <label>Description:</label>
-                    <textarea deer-key="description"></textarea>
-                    <footer>
-                        <input class="button primary" type="submit">
-                    </footer>
-                </form>
+                    <input type="hidden" deer-key="containedIn" value="{{Experience}}"> <!-- containedIn is really for a Place containedIn Place -->
+                    <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                    <div class="row">
+                        <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
+                            <header>Sacred Object</header>
+                            <img class="hide-xs" src="https://icongr.am/material/star-four-points-outline.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
+                        </div>
+                        <div data-rdf="VisualArtwork" class="bd-primary text-center card col" title="Artwork">
+                            <header>Artwork</header>
+                            <img class="hide-xs" src="https://icongr.am/material/account-box-outline.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
+                        </div>
+                        <div data-rdf="Manuscript" class="bd-primary text-center card col" title="Written Text">
+                            <header>Written Text</header>
+                            <img class="hide-xs" src="https://icongr.am/material/book-open.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
+                        </div>
+                        <div data-rdf="CivicStructure" class="bd-primary text-center card col" title="Building">
+                            <header>Building</header>
+                            <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Building" alt="Building">
+                        </div>
+                    </div>
+                    <script>
+                        var data_key_elements = document.querySelectorAll("[data-rdf]")
+                        Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
+
+                        function setPrimaryType(event) {
+                            let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                            additionalTypeInput.value = val
+                            Array.from(data_key_elements).forEach(el => {
+                                el = el.closest("[data-rdf]")
+                                if (el.getAttribute("data-rdf") === val) {
+                                    el.classList.add("bg-light")
+                                } else {
+                                    el.classList.remove("bg-light")
+                                }
+                            })
+                        }
+                    </script>
+                    <div class="grouped">
+                        <label>Further Options</label>
+                        <select oninput="setPrimaryType(this)">
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                            <option value="LR:Natural">Natural</option>
+                            <option value="LR:Manufactured">Manufactured</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <h3>History of this Space:</h3>
+                    <label>Choose Former Location(s):</label>
+                    <input type="hidden" deer-array-type="List" deer-key="LR:FormerLocations"/>
+                    <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
+                    <label>Provide Former Use(s):</label>
+                    <input type="hidden" deer-key="LR:formerUses" deer-array-type="List">
+                    <!-- Looking at these as "former types", so just reuse the type values -->
+                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                        <option value="SacredObject">Sacred Object</option>
+                        <option value="VisualArtwork">Artwork</option>
+                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
+                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                        <option value="CivicStructure">Building</option>
+                        <option value="LR:Natural">Natural</option>
+                        <option value="LR:Manufactured">Manufactured</option>
+                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                        <option value="Manuscript">Written Text</option>
+                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label>Material(s) this object is made of:</label>
+                    <textarea deer-key="material"> </textarea>
+                    <label>Typical Use: </label>
+                    <select disabled deer-key="purpose" >
+                        <option value="Religious">Religious</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Educational">Educational</option>
+                        <option value="Civic">Civic</option>
+                        <option value="Other Public">Other Public</option>
+                    </select>
+                    <!--<h3> Upload Media </h3>-->
+                    <label>Field Notes:</label>
+                    <textarea disabled type="text" deer-key="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">                           
+                    <div class="row">
+                        <input class="button primary col" type="submit">
+                    </div>
+                </form>   
             </div>
         </div>
 
