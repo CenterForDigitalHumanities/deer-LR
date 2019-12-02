@@ -15,7 +15,7 @@
     <lr-nav></lr-nav>
     <div class="container">
         <h2 class="text-primary">Upload Data From An Experience</h2>
-        <div class="card bd-primary">
+        <div id="startExperience" class="card bd-primary">
             <div class="card_body">
                 <form id="theExperience" class="experience" deer-type="Event">
                     <input type="hidden" deer-key="creator" />
@@ -46,7 +46,7 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
+        <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
             <h2 class="text-primary">Describe your encounter at <span id="theLocationName">{Place.name}</span> </h2>
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
@@ -54,9 +54,6 @@
                 <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
                 <a class="button bg-secondary is-small" area="bodies" onclick="" title="Record information about others' behaviors during the experience.">Bodies</a>
             </div>
-        </div>
-        
-        <div class="fixDynamicHeight">
              <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
             <div for="spaces" class="kind hidden">
@@ -349,13 +346,13 @@
             let newObjName = (event.detail.hasOwnProperty("name")) ? event.detail.name : (event.detail.hasOwnProperty("label")) ?  event.detail.label : (event.detail.hasOwnProperty("title")) ? event.detail.title : "Name Unknown"
             switch(what){
                 case "theExperience":
-                    document.getElementById("theExperience").classList.add("is-hidden")
-                    document.getElementById("nextArea").classList.remove("is-hidden")
+                    document.getElementById("startExperience").classList.add("is-hidden")
+                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("theExperienceName").text = newObjName
-                    let e = event.target.getElementById("locations")
+                    document.getElementById("theExperienceName").innerHTML = newObjName
+                    let e = document.getElementById("locations").children[0]
                     let locName = e.options[e.selectedIndex].text
-                    document.getElementById("theLocationName").text = locName
+                    document.getElementById("theLocationName").innerHTML = locName
                     let expRefs = document.querySelectorAll(".expReference")
                     for(let elem of expRefs){
                         elem.value = newObjID
