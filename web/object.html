@@ -22,8 +22,11 @@
                 <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                    <input type="hidden" deer-key="containedIn" value="{{Experience}}"> <!-- containedIn is really for a Place containedIn Place -->
+                    <!--<input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">-->
+                    <label>Name:</label>
+                    <input type="text" deer-key="name">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
+                    <label>Type:</label>
                     <div class="row">
                         <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
                             <header>Sacred Object</header>
@@ -62,36 +65,37 @@
                     <div class="grouped">
                         <label>Further Options</label>
                         <select oninput="setPrimaryType(this)">
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                            <option value="LR:Natural">Natural</option>
-                            <option value="LR:Manufactured">Manufactured</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                            <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                            <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                            <option value="LR:Natural" context=""">Natural</option>
+                            <option value="LR:Manufactured" context="">Manufactured</option>
+                            <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                            <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                             <option value="Other">Other</option>
                         </select>
                     </div>
                     <h3>History of this Space:</h3>
-                    <label>Choose Former Location(s):</label>
-                    <input type="hidden" deer-array-type="List" deer-key="LR:FormerLocations"/>
+                    <label>Select Former Location(s):</label>
+                    <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                     <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
-                    <label>Provide Former Use(s):</label>
-                    <input type="hidden" deer-key="LR:formerUses" deer-array-type="List">
+                    <label>Select Former Use(s):</label>
+                    <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
                     <!-- Looking at these as "former types", so just reuse the type values -->
                     <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
                         <option value="SacredObject">Sacred Object</option>
                         <option value="VisualArtwork">Artwork</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                        <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
+                        <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                         <option value="CivicStructure">Building</option>
                         <option value="LR:Natural">Natural</option>
                         <option value="LR:Manufactured">Manufactured</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                        <option value="LR:Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
                         <option value="Manuscript">Written Text</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                        <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                         <option value="Other">Other</option>
                     </select>
                     <label>Material(s) this object is made of:</label>
+                    <!-- This should probably be a Set -->
                     <textarea deer-key="material"> </textarea>
                     <label>Typical Use: </label>
                     <select disabled deer-key="purpose" >
@@ -101,15 +105,16 @@
                         <option value="Civic">Civic</option>
                         <option value="Other Public">Other Public</option>
                     </select>
+                    <!-- TODO -->
                     <!--<h3> Upload Media </h3>-->
                     <label>Field Notes:</label>
-                    <textarea disabled type="text" deer-key="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                    <textarea type="text" deer-key="LR:FieldNotes" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                     <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="LR:Tags">                           
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
-                </form>   
+                </form>  
             </div>
         </div>
 

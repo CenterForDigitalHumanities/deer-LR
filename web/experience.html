@@ -141,7 +141,7 @@
                         <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                             <input type="hidden" deer-key="creator" value="loading">
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">
+                            <!--<input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">-->
                             <label>Name:</label>
                             <input type="text" deer-key="name">
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -184,12 +184,12 @@
                             <div class="grouped">
                                 <label>Further Options</label>
                                 <select oninput="setPrimaryType(this)">
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                                    <option value="LR:Natural">Natural</option>
-                                    <option value="LR:Manufactured">Manufactured</option>
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
-                                    <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                                    <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                                    <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                                    <option value="LR:Natural" context=""">Natural</option>
+                                    <option value="LR:Manufactured" context="">Manufactured</option>
+                                    <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                                    <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
@@ -203,17 +203,18 @@
                             <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
                                 <option value="SacredObject">Sacred Object</option>
                                 <option value="VisualArtwork">Artwork</option>
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                                <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
+                                <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                                 <option value="CivicStructure">Building</option>
                                 <option value="LR:Natural">Natural</option>
                                 <option value="LR:Manufactured">Manufactured</option>
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                                <option value="LR:Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
                                 <option value="Manuscript">Written Text</option>
-                                <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                                <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                                 <option value="Other">Other</option>
                             </select>
                             <label>Material(s) this object is made of:</label>
+                            <!-- This should probably be a Set -->
                             <textarea deer-key="material"> </textarea>
                             <label>Typical Use: </label>
                             <select disabled deer-key="purpose" >
@@ -223,17 +224,17 @@
                                 <option value="Civic">Civic</option>
                                 <option value="Other Public">Other Public</option>
                             </select>
+                            <!-- TODO -->
                             <!--<h3> Upload Media </h3>-->
                             <label>Field Notes:</label>
-                            <textarea type="text" deer-key="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                            <textarea type="text" deer-key="LR:FieldNotes" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                             <label>Tags separated by ',':</label>
                             <input disabled type="text" deer-key-x="LR:Tags">                           
                             <div class="row">
                                 <input class="button primary col" type="submit">
                             </div>
                         </form>
-                    </div>
-                    </div>       
+                    </div>   
                 </div>
             </div>
             <!--
@@ -397,7 +398,7 @@
             let what = event
             switch(what){
                 case "experienceUpdated":
-                    //Probably because an object-body-space alteration occurred where someone is adding or removing one from the 3experience
+                    //Probably because an object-body-space alteration occurred where someone is adding or removing one from the experience
                 break
                 default:
             }

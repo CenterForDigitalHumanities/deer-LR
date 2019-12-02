@@ -167,8 +167,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
     }
     
     /**
-     * Disassociate a particular object from the experience.  This means that the 'object' annotation on the experience
-     * and the 'containedIn' property of the Object need alterations.  
+     * Disassociate a particular object from the experience.  This means that the 'object' annotation on the experience needs alterations.  
      * @param {string} The @id of the particular object
      * @param {string} The @#id of the experience to disaasociate it from
      * @return {Promise}
