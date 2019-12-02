@@ -194,10 +194,10 @@
                                 </select>
                             </div>
                             <h3>History of this Space:</h3>
-                            <label>Choose Former Location(s):</label>
+                            <label>Select Former Location(s):</label>
                             <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                             <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
-                            <label>Provide Former Use(s):</label>
+                            <label>Select Former Use(s):</label>
                             <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
                             <!-- Looking at these as "former types", so just reuse the type values -->
                             <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
@@ -225,7 +225,7 @@
                             </select>
                             <!--<h3> Upload Media </h3>-->
                             <label>Field Notes:</label>
-                            <textarea disabled type="text" deer-key="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                            <textarea type="text" deer-key="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                             <label>Tags separated by ',':</label>
                             <input disabled type="text" deer-key-x="LR:Tags">                           
                             <div class="row">
@@ -362,16 +362,17 @@
                 break
                 case "newObjectForm":
                     //Add this object item by some name to a list, perhaps with a "remove" option
-                    document.querySwlector("a[area='objects']").click()
+                    document.querySelector("a[area='objects']").click()
                     let expID = document.getElementById("theExperience").getAttribute("deer-id")
                     let list = document.getElementById("objectsInExperience")
                     let li = `<li >${newObjName}<a class="button error is-small" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
                     list.innerHTML += li
                     event.target.reset() //Empty the form?
                     let trackedObjs = document.getElementById("objects").value
+                    let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(trackedObjs){
                         //Assuming the delimieter is ,
-                        trackedObjs += `,${newObjName}`
+                        trackedObjs += `${delim}${newObjName}`
                     }
                     else{
                         trackedObjs = newObjName
