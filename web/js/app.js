@@ -20,6 +20,8 @@ LR.URLS = {
     SINCE: "http://devstore.rerum.io/v1/since"
 }
 
+LR.INPUTS = ["input", "textarea", "dataset", "select"]
+
 if (typeof(Storage) !== "undefined") {
     LR.localInfo = window.localStorage
 } else {
@@ -206,4 +208,12 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
      */
     LR.utils.scrubForm = function(form){
         console.log("PROPOSED FORM SCRUBBING SOLUTION NEEDED!!")
+        return false
+        form.removeAttribute("deer-id")
+        form.removeAttribute("deer-source")
+        form.querySelectorAll(LR.INPUTS.join(",")).forEach(i => {
+            i.value = ""
+            i.removeAttribute("deer-source")
+            i.removeAttribute("deeer-id")
+        })
     }
