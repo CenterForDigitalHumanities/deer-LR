@@ -189,3 +189,11 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             document.getElementById("theExperience").querySelector("input[type='submit']").click()
         }
     }
+    
+    /**
+     * Set the required fields for attribution to have a value of this user's @id.
+     * @param {object} userInfo A JSON object representing the user, the standard Lived Religion user object from event handlers.
+     */
+    LR.utils.setUserAttributionFields = function(userInfo){
+        document.querySelectorAll("[deer-key='creator']").forEach(elem => elem.value = userInfo['@id'])
+    }
