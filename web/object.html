@@ -126,7 +126,7 @@
     <script>
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
-            document.querySelector("[deer-key='creator']").value = user['@id']
+            document.querySelectorAll("[deer-key='creator']").forEach(elem => elem.value = user['@id'])
             if (user.roles.administrator) {
                 const urlParams = new URLSearchParams(window.location.search);
                 const researcherId = urlParams.get('id');
