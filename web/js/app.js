@@ -181,7 +181,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             document.getElementById("objects").value = trackedObjs
             document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
             /**
-            * A valueable lesson learned here:
+            * A valuable lesson learned here:
             * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
             * It is assumed that if the programmer calls form.submit() then the script already did all related processing.
             * This means the event listener does not fire, which we specifically need here because of DEER.
@@ -197,4 +197,13 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
     LR.utils.setUserAttributionFields = function(userInfo){
         let attributionElemSelectors = ["[deer-key='creator']"]//Maybe should be a config or const??
         attributionElemSelectors.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
+    }
+    
+    /**
+     * PROPOSED
+     * Clear out all DEER attributes and input values of the form so that the next submission of this form creates a new object and new annotations.  
+     * @param {HTMLElement} The form to perform this action on
+     */
+    LR.utils.scrubForm = function(form){
+        console.log("PROPOSED FORM SCRUBBING SOLUTION NEEDED!!")
     }

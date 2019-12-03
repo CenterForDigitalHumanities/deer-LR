@@ -352,10 +352,7 @@
                     let e = document.getElementById("locations").children[0]
                     let locName = e.options[e.selectedIndex].text
                     document.getElementById("theLocationName").innerHTML = locName
-                    let expRefs = document.querySelectorAll(".expReference")
-                    for(let elem of expRefs){
-                        elem.value = newObjID
-                    }
+                    document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
                 break
                 case "newObjectForm":
                     //DEER has reported this item created and is ready to track updates against it.  We need to completely clear this form out
@@ -363,9 +360,8 @@
                     document.querySelector("a[area='objects']").click()
                     let expID = document.getElementById("theExperience").getAttribute("deer-id")
                     let list = document.getElementById("objectsInExperience")
-                    let li = `<li >${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
+                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
                     list.innerHTML += li
-                    
                     let trackedObjs = document.getElementById("objects").value
                     let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(trackedObjs){
@@ -374,15 +370,20 @@
                     else{
                         trackedObjs = newObjName
                     }
+                    /**
+                     * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
+                     * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
+                     */
                     document.getElementById("objects").value = trackedObjs
                     document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
                     /**
-                     * A valueable lesson learned here:
+                     * A valuable lesson learned here:
                      * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
                      * It is assumed that if the programmer calls form.submit() then the script already did all related processing.
                      * This means the event listener does not fire, which we specifically need here because of DEER.
                      */
-                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object arra
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                     alert("Object Added!")
                 break
                 case "senseEntryCreated":
