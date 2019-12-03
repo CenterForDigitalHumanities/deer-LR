@@ -365,17 +365,17 @@
                     let list = document.getElementById("objectsInExperience")
                     let li = `<li >${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
                     list.innerHTML += li
-                    event.target.reset() 
+                    //event.target.reset() 
                     let trackedObjs = document.getElementById("objects").value
                     let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(trackedObjs){
-                        //Assuming the delimieter is ,
                         trackedObjs += `${delim}${newObjName}`
                     }
                     else{
                         trackedObjs = newObjName
                     }
                     document.getElementById("objects").value = trackedObjs
+                    document.getElementById("objects").$isDirty = true //This was tricky to know off hand.  3rd party developers may struggle to know to do this.
                     /**
                      * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
                      * It is assumed that if the programmer calls form.submit() then the script already did all related processing.

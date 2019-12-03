@@ -176,7 +176,10 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         let trackedObjs = document.getElementById("objects").value
         let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
         let trackedArr = trackedObjs.split(delim)
-        trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
-        document.getElementById("objects").value = trackedObjs
-        document.getElementById("theExperience").querySelector("input[type='submit']").click()
+        if(trackedArr.indexOf(objectID) > -1){
+            trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
+            document.getElementById("objects").value = trackedObjs
+            document.getElementById("objects").$isDirty = true
+            document.getElementById("theExperience").querySelector("input[type='submit']").click()
+        }
     }
