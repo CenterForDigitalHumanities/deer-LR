@@ -195,5 +195,6 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
      * @param {object} userInfo A JSON object representing the user, the standard Lived Religion user object from event handlers.
      */
     LR.utils.setUserAttributionFields = function(userInfo){
-        document.querySelectorAll("[deer-key='creator']").forEach(elem => elem.value = userInfo['@id'])
+        let attributionItemSelectors = ["[deer-key='creator']"]//Maybe should be a config or const??
+        attributionItemSelectors.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
     }
