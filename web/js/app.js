@@ -179,7 +179,13 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         if(trackedArr.indexOf(objectID) > -1){
             trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
             document.getElementById("objects").value = trackedObjs
-            document.getElementById("objects").$isDirty = true
+            document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+            /**
+            * A valueable lesson learned here:
+            * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
+            * It is assumed that if the programmer calls form.submit() then the script already did all related processing.
+            * This means the event listener does not fire, which we specifically need here because of DEER.
+            */
             document.getElementById("theExperience").querySelector("input[type='submit']").click()
         }
     }

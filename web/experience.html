@@ -359,13 +359,14 @@
                     }
                 break
                 case "newObjectForm":
-                    //Add this object item by some name to a list, perhaps with a "remove" option
+                    //DEER has reported this item created and is ready to track updates against it.  We need to completely clear this form out
+                    //so that deer knows we are trying to add a completely new one and to stop tracking the old one, including the annotations
                     document.querySelector("a[area='objects']").click()
                     let expID = document.getElementById("theExperience").getAttribute("deer-id")
                     let list = document.getElementById("objectsInExperience")
                     let li = `<li >${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
                     list.innerHTML += li
-                    //event.target.reset() 
+                    
                     let trackedObjs = document.getElementById("objects").value
                     let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(trackedObjs){
@@ -375,8 +376,9 @@
                         trackedObjs = newObjName
                     }
                     document.getElementById("objects").value = trackedObjs
-                    document.getElementById("objects").$isDirty = true //This was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
                     /**
+                     * A valueable lesson learned here:
                      * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
                      * It is assumed that if the programmer calls form.submit() then the script already did all related processing.
                      * This means the event listener does not fire, which we specifically need here because of DEER.
@@ -393,6 +395,7 @@
                     //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
                 break
                 default:
+                    console.log("Default created event handler for " +what)
             }
         })
         
@@ -403,6 +406,7 @@
                     //Probably because an object-body-space alteration occurred where someone is adding or removing one from the experience
                 break
                 default:
+                    console.log("Default update handler for " + what)
             }
         })
     </script>
