@@ -173,8 +173,10 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
      * @return {Promise}
      */
     LR.utils.disassociateObject = async function(objectID, experienceID){
-        //TODO
-        //let obj =  await fetch(objectID).then(response => response.json()).catch(error => error)
-        //let exp = await expand(experienceID)
-        
+        let trackedObjs = document.getElementById("objects").value
+        let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
+        let trackedArr = trackedObjs.split(delim)
+        trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
+        document.getElementById("objects").value = trackedObjs
+        document.getElementById("theExperience").querySelector("input[type='submit']").click()
     }

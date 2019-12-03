@@ -363,9 +363,9 @@
                     document.querySelector("a[area='objects']").click()
                     let expID = document.getElementById("theExperience").getAttribute("deer-id")
                     let list = document.getElementById("objectsInExperience")
-                    let li = `<li >${newObjName}<a class="button error is-small" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
+                    let li = `<li >${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.crud.disassociateObject('${newObjID}', '${expID}')">Remove</a></li>`
                     list.innerHTML += li
-                    event.target.reset() //Empty the form?
+                    event.target.reset() 
                     let trackedObjs = document.getElementById("objects").value
                     let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(trackedObjs){
@@ -375,9 +375,14 @@
                     else{
                         trackedObjs = newObjName
                     }
-                    document.getElementById("theExperience").submit() //Update experience form with new object arra
-                    //Fire the submit on the experience form so it updates the object annotation.
-                    //Redraw all object collection renderings?
+                    document.getElementById("objects").value = trackedObjs
+                    /**
+                     * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
+                     * It is assumed that if the programmer calls form.submit() then the script already did all related processing.
+                     * This means the event listener does not fire, which we specifically need here because of DEER.
+                     */
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object arra
+                    alert("Object Added!")
                 break
                 case "senseEntryCreated":
                     //Add this sense item by some name to a list, perhaps with a "remove" option
@@ -404,7 +409,6 @@
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
     <script src="./js/components.js" type="text/javascript"></script>
-    
 </body>
 
 </html>
