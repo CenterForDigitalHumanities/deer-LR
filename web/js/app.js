@@ -174,7 +174,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
      * @param {string} The @#id of the experience to disaasociate it from
      * @return {Promise}
      */
-    LR.utils.disassociateObject = async function(objectID, experienceID){
+    LR.utils.disassociateObject = function(event, objectID, experienceID){
         let trackedObjs = document.getElementById("objects").value
         let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
         let trackedArr = trackedObjs.split(delim)
@@ -182,13 +182,11 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
             document.getElementById("objects").value = trackedObjs
             document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
-            /**
-            * A valuable lesson learned here:
-            * To submit a form to the server manually, we can call form.submit().  Then the submit event is not generated. 
-            * It is assumed that if the programmer calls form.submit() then the script already did all related processing.
-            * This means the event listener does not fire, which we specifically need here because of DEER.
-            */
+            //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
             document.getElementById("theExperience").querySelector("input[type='submit']").click()
+            //FIXME this should really only happen if the form submit seen above is successful
+            event.target.parentNode.remove() //TODO feedback
+            alert("Object Removed")//TODO feedback
         }
     }
     
@@ -197,29 +195,26 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
      * @param {object} userInfo A JSON object representing the user, the standard Lived Religion user object from event handlers.
      */
     LR.utils.setUserAttributionFields = function(userInfo){
-        let attributionElemSelectors = ["[deer-key='creator']"]//Maybe should be a config or const??
+        let attributionElemSelectors = ["[deer-key='creator']"]//Maybe should be a config or const?
         attributionElemSelectors.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
     }
     
     /**
-     * PROPOSED
      * Clear out all DEER attributes and input values of the form so that the next submission of this form creates a new object and new annotations.  
      * @param {HTMLElement} The form to perform this action on
      */
     LR.utils.scrubForm = function(form){
-        console.log("PROPOSED FORM SCRUBBING SOLUTION NEEDED!!")
-        //return false
         form.removeAttribute("deer-id")
         form.removeAttribute("deer-source")
-        //Do we need to do something with $isDirty on the form?
         form.querySelectorAll(LR.INPUTS.join(",")).forEach(i => {
+            //Anything you need to ignore should go here
             if(i.getAttribute("type") !== "submit" && i.getAttribute("deer-key") !== "creator"){
                 i.value = ""
                 i.removeAttribute("deer-source")
                 i.removeAttribute("deeer-id")
-                //Do we need to do something with $isDirty on the input? 
             }
         })
+        //Special primary type selector
         form.querySelectorAll("[data-rdf").forEach(el => {
             el.classList.remove("bg-light")
         })

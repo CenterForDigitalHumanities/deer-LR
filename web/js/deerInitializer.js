@@ -165,18 +165,19 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
  * @return {default.TEMPLATES.Event.tmpl, String}
  */
 DEER.TEMPLATES.Event = function(obj, options = {}) {
-        try {
-            let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
-            let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
-            let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
-            let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
-            let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
-            tmpl += place + date + researchers
-            return tmpl
-        } catch (err) {
-            return null
-        }
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
+        let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
+        let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+        let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
+        //FIXME we would really like to have the location label here
+        let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
+        tmpl += place + date + researchers
+        return tmpl
+    } catch (err) {
+        return null
     }
+}
 
 /**
  * This is to override the normal behavior for drawing collection types.  
