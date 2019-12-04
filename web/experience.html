@@ -365,10 +365,10 @@
                     let trackedObjs = document.getElementById("objects").value
                     let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(trackedObjs){
-                        trackedObjs += `${delim}${newObjName}`
+                        trackedObjs += `${delim}${newObjID}`
                     }
                     else{
-                        trackedObjs = newObjName
+                        trackedObjs = newObjID
                     }
                     /**
                      * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
@@ -383,8 +383,8 @@
                      * This means the event listener does not fire, which we specifically need here because of DEER.
                      */
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
-                    alert("Object Added!")
+                    
+                    alert("Object Added!") //TODO FEEDBACK
                 break
                 case "senseEntryCreated":
                     //Add this sense item by some name to a list, perhaps with a "remove" option
@@ -395,19 +395,31 @@
                     //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
                 break
                 default:
-                    console.log("Default created event handler for " +what)
+                    
             }
         })
         
         addEventListener('deer-updated', event => {
-            let what = event
+            let what = event.target.id
+            //Not sure we will do anything with this.  We could use it to offer feedback.  
             switch(what){
                 case "experienceUpdated":
-                    //Probably because an object-body-space alteration occurred where someone is adding or removing one from the experience
-                    //Updates should really only happen to the experience unless we offer live time editing of experience artifacts. 
+                    //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal
                 break
                 default:
                     console.log("Default update handler for " + what)
+            }
+        })
+        
+        addEventListener('deer-loaded', event => {
+            let what = event.target.id
+            switch(what){
+                case "newObjectForm":
+                    //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
+                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
+                break
+                default:
+                    
             }
         })
     </script>

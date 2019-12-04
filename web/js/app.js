@@ -208,12 +208,19 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
      */
     LR.utils.scrubForm = function(form){
         console.log("PROPOSED FORM SCRUBBING SOLUTION NEEDED!!")
-        return false
+        //return false
         form.removeAttribute("deer-id")
         form.removeAttribute("deer-source")
+        //Do we need to do something with $isDirty on the form?
         form.querySelectorAll(LR.INPUTS.join(",")).forEach(i => {
-            i.value = ""
-            i.removeAttribute("deer-source")
-            i.removeAttribute("deeer-id")
+            if(i.getAttribute("type") !== "submit" && i.getAttribute("deer-key") !== "creator"){
+                i.value = ""
+                i.removeAttribute("deer-source")
+                i.removeAttribute("deeer-id")
+                //Do we need to do something with $isDirty on the input? 
+            }
+        })
+        form.querySelectorAll("[data-rdf").forEach(el => {
+            el.classList.remove("bg-light")
         })
     }
