@@ -77,12 +77,34 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
  */
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
-        let tmpl = `<select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key-x="location">`
+        let tmpl = `<select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key="location">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
         }
         tmpl += `</select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+/**
+ * Create a select dropdown containing Places.  
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
+DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
+    try {
+        let allLocationsInCollection = UTILS.getValue(obj.itemListElement)
+        let tmpl = ``
+        tmpl += `<select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+            <optgroup label="Locations"> `
+        for (let loc of allLocationsInCollection) {
+            tmpl += `<option deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
+        }
+        tmpl += `</optgroup></select>`
         return tmpl
     } catch (err) {
         return null
@@ -99,10 +121,32 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select deer-key-x="contributor" multiple="" disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Researchers"> `
         for (let person of allPeopleInCollection) {
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
+        }
+        tmpl += `</optgroup></select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+/**
+ * Create a select area that is populated by some set or list of people.
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
+DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
+    try {
+        let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
+        let tmpl = ``
+        tmpl += `<select deer-array-type="Set" multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+            <optgroup label="Objects"> `
+        for (let obj of allObjectsInCollection) {
+            tmpl += `<option deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`
         }
         tmpl += `</optgroup></select>`
         return tmpl
@@ -121,18 +165,19 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
  * @return {default.TEMPLATES.Event.tmpl, String}
  */
 DEER.TEMPLATES.Event = function(obj, options = {}) {
-        try {
-            let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
-            let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
-            let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
-            let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
-            let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
-            tmpl += place + date + researchers
-            return tmpl
-        } catch (err) {
-            return null
-        }
+    try {
+        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
+        let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
+        let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+        let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
+        //FIXME we would really like to have the location label here
+        let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
+        tmpl += place + date + researchers
+        return tmpl
+    } catch (err) {
+        return null
     }
+}
 
 /**
  * This is to override the normal behavior for drawing collection types.  

@@ -9,6 +9,7 @@ class LrFooter extends HTMLElement {
         this.classList.add('nav', 'nav-center', 'text-primary', 'is-fixed', 'is-full-width', 'is-vertical-align')
         this.style.bottom = 0
         this.style.backgroundColor = "#FFF"
+        this.style.zIndex = 1
         let spacer = document.createElement('div')
         spacer.style.position = "relative"
         spacer.style.display = "block"
