@@ -101,9 +101,9 @@ public class TinyOverwrite extends HttpServlet {
                 }
                 reader.close();
                 for (Map.Entry<String, List<String>> entries : connection.getHeaderFields().entrySet()) {
-                String values = "";
-                for (String value : entries.getValue()) {
-                    values += value + ",";
+                    String values = "";
+                    for (String value : entries.getValue()) {
+                        values += value + ",";
                     }
                     if(null != entries.getKey() && !entries.getKey().equals("Transfer-Encoding")){
                         response.setHeader(entries.getKey(), values);
