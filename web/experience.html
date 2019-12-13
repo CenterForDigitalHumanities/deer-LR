@@ -15,25 +15,29 @@
     <lr-nav></lr-nav>
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
+        <h2 class="text-primary">Upload Data From An Experience</h2>
         <div id="fieldNotesFloater">
             <button> Toggle Me </button>
             <p>Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-            <textarea id="fieldNotesFromExperience" type="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
-            <input type="button" value="Save Notes" onclick="LR.utils.updateFieldNotes(event)" />
+            <form id="fiedlNotes" deer-type="Comment" deer-simple>
+                <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
+                <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
+                <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                <div class="row">
+                    <input class="button primary col" type="Save Notes">
+                </div>
+            </form>
         </div>
-        
-        <h2 class="text-primary">Upload Data From An Experience</h2>
         <div id="startExperience" class="card bd-primary">
             <div class="card_body">
                 <!-- TODO make this EVENT somehow uniquely known as an experienceUpload, for /queryiong -->
                 <form id="theExperience" class="experience" deer-type="Event">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="@context" value="https://schema.org/" />
-                    <input type="hidden" deer-key="notes" />
-                    
-                    <input id="objectsAtExperience" type="hidden" deer-key="object" deer-input-type="Set" />
-                    <input id="sensesAtExperience" type="hidden" deer-key-x="LR:Senses" deer-input-type="Set" />
-                    <input id="practicesAtExpereience" type="hidden" deer-key-x="LR:Practices" deer-input-type="Set" />
+                    <input id="notesKey" type="hidden" deer-key="comment" />
+                    <input id="senses" type="hidden" deer-key-x="LR:Senses" deer-input-type="Set" />
+                    <input id="practices" type="hidden" deer-key-x="LR:Practices" deer-input-type="Set" />
+                    <input id="objects" deer-input-type="Set" type="hidden" deer-key="object" />
                     
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
@@ -46,7 +50,10 @@
                     <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Adam P." />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
-                    <input id="objects" deer-input-type="Set" type="hidden" deer-key="object" />
+                    <label>Provide a description of what prompted you to do this</label>
+                    <textarea deer-key="description"></textarea>
+                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">           
                     <input type="submit" value="Continue" />
                 </form>
             </div>
@@ -69,7 +76,7 @@
             </div>
         </div>
         <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
-            <h2 class="text-primary">Describe your encounter at <span id="theLocationName">{Place.name}</span> </h2>
+            <h2 class="text-primary">Describe your encounter at <span class="theLocationName">{Place.name}</span> </h2>
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
                 <!--<a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>-->
@@ -190,13 +197,14 @@
                 <h2>Bodies</h2>
                 <p> More intimate information about what you are feeling and perceiving. </p>
                 <header>What senses are prominent?  Add one at a time.</header>
-                <form id="senses" deer-id-x="" deer-type-x="SenseAction">
-                    <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
-                    <input type="hidden" deer-key-x="targetEvent" value=""> <!-- At this experience -->
-                    <input type="hidden" deer-key-x="targetLoc" value=""> <!-- At this location AKA Geo -->
-                    <input type="hidden" deer-key-x="object" value=""> <!-- because of this object/thing -->
-                    <deer-view id="senses" deer-template="sensesAsDropdown"></deer-view>
+                <!-- I smelled this, I heard that, ... -->
+                <form id="senseForm" deer-id-x="" deer-type-x="ConsumeAction" deer-simple>
+                    <input type="hidden" deer-key="agent" value="loading"> <!-- Sense I had -->
+                    <input class="expReference" type="hidden" deer-key-x="location" value=""> <!-- At this location AKA Geo -->
+                    <input type="hidden" deer-key-x="additionalType"> <!-- This type of consume action as mapped to a sense -->
+                    <deer-view id="senseTypes" deer-template="sensesAsDropdown"></deer-view>
                     <header>Was there a specific object at the experience caused this sense (if applicable)?</header>
+                    <input type="hidden" deer-key-x="object" value=""> <!-- I heard {object} -->
                     <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                     <header>Describe Sense Further:</header>
                     <textarea id="further_sense" type="text" deer-key-x="description"></textarea>
@@ -206,8 +214,12 @@
                 </form>
                 
                 <header>What practices are occurring? Add one at a time.</header>
-                <form id="practiceForm" deer-id-x="" deer-type-x="Practice">
-                    <deer-view id="practices" deer-template="practicesAsDropdown"></deer-view>
+                <!-- https://schema.org/ViewAction -->
+                <!-- https://schema.org/WatchAction -->
+                <form id="practiceForm" deer-type-x="Action" deer-simple>
+                    <input class="expReference" type="hidden" deer-key-x="event">
+                    <input type="hidden" deer-key-x="additionalType">
+                    <deer-view deer-template="practicesAsDropdown"></deer-view>
 <!--                    <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
                     <input name="practice" type="radio" value="Playing"><span class="chk_lbl">Playing</span>
                     <input name="practice" type="radio" value="Clothing"><span class="chk_lbl">Clothing</span>
@@ -235,13 +247,13 @@
                     <input name="context" type="radio" value="Individual"><span class="chk_lbl">Individual</span>
                     <input name="context" type="radio" value="Collective"><span class="chk_lbl">Collective</span>
                     <input name="context" type="radio" value="Other"><span class="chk_lbl">Other</span>-->
+                    <header>Is there a particular object this practice is associated with?</header>
+                    <input type="hidden" deer-key-x="object" value=""> <!-- I heard {object} -->
+                    <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
-                </form>
-                <div> Upload Media </div>
-                <label>Tags separated by ',':</label>
-                <input disabled type="text" deer-key-x="LR:Tags">                           
+                </form>                  
             </div>
         </div>
     </div>
@@ -307,6 +319,13 @@
                     //Add this object item by some name to a list, perhaps with a "remove" option
                     //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
                 break
+                case "fieldNotes":
+                    document.getElementById("notesKey").value = document.getElementById("fieldNotesFromExperience").value
+                    document.getElementById("notesKey").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new field notes
+                    alert("Notes Saved!") //TODO FEEDBACK
+                break
                 default:
                     
             }
@@ -318,6 +337,10 @@
             switch(what){
                 case "experienceUpdated":
                     //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal
+                break
+                case "fieldNotesUpdated":
+                    //Add this object item by some name to a list, perhaps with a "remove" option
+                    //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
                 break
                 default:
                     

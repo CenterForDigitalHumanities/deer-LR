@@ -219,3 +219,8 @@ LR.utils.scrubForm = function(form){
         el.classList.remove("bg-light")
     })
 }
+
+LR.utils.updateFieldNotes = function(){
+    document.getElementById("notesKey").value = document.getElementById("fieldNotesFromExperience").value
+    document.getElementById("notesKey").$isDirty = true
+}
