@@ -9,6 +9,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        #fieldNotesFloater{
+            position: fixed;
+            left: 0;
+            width: 1px;
+        }
+        .innards{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,17 +26,19 @@
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
         <h2 class="text-primary">Upload Data From An Experience</h2>
-        <div id="fieldNotesFloater">
-            <button> Toggle Me </button>
-            <p>Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-            <form id="fiedlNotes" deer-type="Comment" deer-simple>
-                <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
-                <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
-                <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
-                <div class="row">
-                    <input class="button primary col" type="Save Notes">
-                </div>
-            </form>
+        <!--<div class="button secondary" onclick="LR.ui.toggleFieldNotes()"> Field Notes </div>-->
+        <div class="" id="fieldNotesFloater">
+            <div class="card_body">
+                <p class="innards">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
+                <form id="fiedlNotes" class="innards" deer-type="Comment" deer-simple>
+                    <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
+                    <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
+                    <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                    <div class="row">
+                        <input class="button primary col" type="Save Notes">
+                    </div>
+                </form>
+            </div>
         </div>
         <div id="startExperience" class="card bd-primary">
             <div class="card_body">
@@ -53,7 +65,8 @@
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
                     <label>Tags separated by ',':</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">           
+                    <input disabled type="text" deer-key-x="LR:Tags">   
+                    
                     <input type="submit" value="Continue" />
                 </form>
             </div>
@@ -72,6 +85,10 @@
                 <h4>Practices occurring at experience "<span class="theExperienceName"></span>"</h4>
                 <ul id="practicesInExperience">
                     <li>Objects you add will appear here and can be removed, but not edited.</li>
+                </ul>
+                <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "<span class="theExperienceName"></span>"</h4>
+                <ul id="fieldNotesInExperience">
+                    <li>The field notes for the experience will appear here as yoy make changes to them.</li>
                 </ul>
             </div>
         </div>
