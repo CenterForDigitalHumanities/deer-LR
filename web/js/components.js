@@ -29,7 +29,11 @@ class LrNav extends HTMLElement {
             <a href="stories.html">Stories</a> 
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
-            <a href="researchers.html">Researchers</a>`
+            <a href="researchers.html">Researchers</a>
+            `
+            if(event.detail.user.roles.administrator){
+                this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+            }
         })
     }
     connectedCallback() {
