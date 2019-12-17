@@ -98,7 +98,7 @@
             <div class="row">
                 <!--<a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>-->
                 <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button bg-secondary is-small" area="bodies" onclick="" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
+                <a class="button bg-primatry is-small" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
             </div>
              <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
@@ -210,67 +210,71 @@
                     </div>   
                 </div>
             </div>
-            <div tog="bodies" class="kind hidden">
+            <div tog="bodies" class="kind is-hidden">
                 <h2>Bodies</h2>
                 <p> More intimate information about what you are feeling and perceiving. </p>
-                <header>What senses are prominent?  Add one at a time.</header>
-                <!-- I smelled this, I heard that, ... -->
-                <form id="senseForm" deer-id-x="" deer-type-x="ConsumeAction" deer-simple>
-                    <input type="hidden" deer-key="agent" value="loading"> <!-- Sense I had -->
-                    <input class="expReference" type="hidden" deer-key-x="location" value=""> <!-- At this location AKA Geo -->
-                    <input type="hidden" deer-key-x="additionalType"> <!-- This type of consume action as mapped to a sense -->
-                    <deer-view id="senseTypes" deer-template="sensesAsDropdown"></deer-view>
-                    <header>Was there a specific object at the experience caused this sense (if applicable)?</header>
-                    <input type="hidden" deer-key-x="object" value=""> <!-- I heard {object} -->
-                    <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                    <header>Describe Sense Further:</header>
-                    <textarea id="further_sense" type="text" deer-key-x="description"></textarea>
-                    <div class="row">
-                        <input class="button primary col" type="submit">
+                <div class="card bd-primary">
+                    <div class="card_body">
+                        <!-- I smelled this, I heard that, ... -->
+                        <form id="senseForm"  deer-type="ConsumeAction" deer-simple>
+                            <h4>What senses are prominent?  Add one at a time.</h4>
+                            <input type="hidden" deer-key="agent" value="loading"> <!-- Sense I had -->
+                            <input class="expReference" type="hidden" deer-key="location" value=""> <!-- At this location AKA Geo -->
+                            <input type="hidden" deer-key="additionalType"> <!-- This type of consume action as mapped to a sense -->
+                            <deer-view id="senseTypes" deer-template="sensesAsDropdown"></deer-view>
+                            <header>Was there a specific object at the experience caused this sense (if applicable)?</header>
+                            <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
+                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                            <header>Abstract About Sense</header>
+                            <textarea id="further_sense" type="text" deer-key="description"></textarea>
+                            <div class="row">
+                                <input class="button primary col" type="submit">
+                            </div>
+                        </form>
+
+                        <h4>What practices are occurring? Add one at a time.</h4>
+                        <!-- https://schema.org/ViewAction -->
+                        <!-- https://schema.org/WatchAction -->
+                        <form id="practiceForm" deer-type="Action">
+                            <input class="expReference" type="hidden" deer-key-x="event">
+                            <input type="hidden" deer-key-x="additionalType">
+                            <deer-view deer-template="practicesAsDropdown"></deer-view>
+        <!--                    <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
+                            <input name="practice" type="radio" value="Playing"><span class="chk_lbl">Playing</span>
+                            <input name="practice" type="radio" value="Clothing"><span class="chk_lbl">Clothing</span>
+                            <input name="practice" type="radio" value="Singing"><span class="chk_lbl">Singing</span>
+                            <input name="practice" type="radio" value="Moving"><span class="chk_lbl">Moving</span>
+                            <input name="practice" type="radio" value="Sitting"><span class="chk_lbl">Sitting</span>
+                            <input name="practice" type="radio" value="Standing"><span class="chk_lbl">Standing</span>
+                            <input name="practice" type="radio" value="Kneeling"><span class="chk_lbl">Kneeling</span>
+                            <input name="practice" type="radio" value="Traveling"><span class="chk_lbl">Traveling</span>
+                            <input name="practice" type="radio" value="Dancing"><span class="chk_lbl">Dancing</span>
+                            <input name="practice" type="radio" value="Cooking"><span class="chk_lbl">Cooking</span>
+                            <input name="practice" type="radio" value="Working"><span class="chk_lbl">Working</span>
+                            <input name="practice" type="radio" value="Other"><span class="chk_lbl">Other</span>-->
+                            <header>Describe Practice Further:</header>
+                            <textarea id="further_practice" type="text" deer-key-x="description"></textarea>
+                            <deer-view id="contexts" deer-template="contextsAsDropdown"></deer-view>
+        <!--                    <input name="context" type="radio" value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
+                            <input name="context" type="radio" value="Community Event"><span class="chk_lbl">Community Event</span>
+                            <input name="context" type="radio" value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
+                            <input name="context" type="radio" value="Commercial"><span class="chk_lbl">Commercial</span>
+                            <input name="context" type="radio" value="Public"><span class="chk_lbl">Public</span>
+                            <input name="context" type="radio" value="Private"><span class="chk_lbl">Private</span>
+                            <input name="context" type="radio" value="Planned"><span class="chk_lbl">Planned</span>
+                            <input name="context" type="radio" value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
+                            <input name="context" type="radio" value="Individual"><span class="chk_lbl">Individual</span>
+                            <input name="context" type="radio" value="Collective"><span class="chk_lbl">Collective</span>
+                            <input name="context" type="radio" value="Other"><span class="chk_lbl">Other</span>-->
+                            <header>Is there a particular object this practice is associated with?</header>
+                            <input type="hidden" deer-key-x="object" value=""> <!-- I heard {object} -->
+                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                            <div class="row">
+                                <input class="button primary col" type="submit">
+                            </div>
+                        </form>        
                     </div>
-                </form>
-                
-                <header>What practices are occurring? Add one at a time.</header>
-                <!-- https://schema.org/ViewAction -->
-                <!-- https://schema.org/WatchAction -->
-                <form id="practiceForm" deer-type-x="Action" deer-simple>
-                    <input class="expReference" type="hidden" deer-key-x="event">
-                    <input type="hidden" deer-key-x="additionalType">
-                    <deer-view deer-template="practicesAsDropdown"></deer-view>
-<!--                    <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
-                    <input name="practice" type="radio" value="Playing"><span class="chk_lbl">Playing</span>
-                    <input name="practice" type="radio" value="Clothing"><span class="chk_lbl">Clothing</span>
-                    <input name="practice" type="radio" value="Singing"><span class="chk_lbl">Singing</span>
-                    <input name="practice" type="radio" value="Moving"><span class="chk_lbl">Moving</span>
-                    <input name="practice" type="radio" value="Sitting"><span class="chk_lbl">Sitting</span>
-                    <input name="practice" type="radio" value="Standing"><span class="chk_lbl">Standing</span>
-                    <input name="practice" type="radio" value="Kneeling"><span class="chk_lbl">Kneeling</span>
-                    <input name="practice" type="radio" value="Traveling"><span class="chk_lbl">Traveling</span>
-                    <input name="practice" type="radio" value="Dancing"><span class="chk_lbl">Dancing</span>
-                    <input name="practice" type="radio" value="Cooking"><span class="chk_lbl">Cooking</span>
-                    <input name="practice" type="radio" value="Working"><span class="chk_lbl">Working</span>
-                    <input name="practice" type="radio" value="Other"><span class="chk_lbl">Other</span>-->
-                    <header>Describe Practice Further:</header>
-                    <textarea id="further_practice" type="text" deer-key-x="description"></textarea>
-                    <deer-view id="contexts" deer-template="contextsAsDropdown"></deer-view>
-<!--                    <input name="context" type="radio" value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
-                    <input name="context" type="radio" value="Community Event"><span class="chk_lbl">Community Event</span>
-                    <input name="context" type="radio" value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
-                    <input name="context" type="radio" value="Commercial"><span class="chk_lbl">Commercial</span>
-                    <input name="context" type="radio" value="Public"><span class="chk_lbl">Public</span>
-                    <input name="context" type="radio" value="Private"><span class="chk_lbl">Private</span>
-                    <input name="context" type="radio" value="Planned"><span class="chk_lbl">Planned</span>
-                    <input name="context" type="radio" value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
-                    <input name="context" type="radio" value="Individual"><span class="chk_lbl">Individual</span>
-                    <input name="context" type="radio" value="Collective"><span class="chk_lbl">Collective</span>
-                    <input name="context" type="radio" value="Other"><span class="chk_lbl">Other</span>-->
-                    <header>Is there a particular object this practice is associated with?</header>
-                    <input type="hidden" deer-key-x="object" value=""> <!-- I heard {object} -->
-                    <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                    <div class="row">
-                        <input class="button primary col" type="submit">
-                    </div>
-                </form>                  
+                </div>                    
             </div>
         </div>
     </div>
@@ -301,7 +305,7 @@
                     document.getElementById("theExperienceName").innerHTML = newObjName
                     let e = document.getElementById("locations").children[0]
                     let locName = e.options[e.selectedIndex].text
-                    document.getElementById("theLocationName").innerHTML = locName
+                    document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
                     document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
                 break
                 case "newObjectForm":
