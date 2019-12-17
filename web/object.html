@@ -14,7 +14,6 @@
 
 <body>
     <lr-nav></lr-nav>
-
     <div class="container">
         <h2 class="text-primary">Create a New Object</h2>
         <div class="card bd-primary">
@@ -23,10 +22,11 @@
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
                     <!--<input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">-->
-                    <label>Name:</label>
+                    <label>Name or Label</label>
                     <input type="text" deer-key="name">
+                    <h4> Descriptive Properties </h4>
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
-                    <label>Type:</label>
+                    <label>Type</label>
                     <div class="row">
                         <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
                             <header>Sacred Object</header>
@@ -62,23 +62,38 @@
                             })
                         }
                     </script>
-                    <div class="grouped">
-                        <label>Further Options</label>
-                        <select oninput="setPrimaryType(this)">
-                            <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
-                            <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                            <option value="LR:Natural" context=""">Natural</option>
-                            <option value="LR:Manufactured" context="">Manufactured</option>
-                            <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
-                            <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <h3>History of this Space:</h3>
+                    <label>More Type Options</label>
+                    <select oninput="setPrimaryType(this)">
+                        <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                        <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                        <option value="LR:Natural" context="">Natural</option>
+                        <option value="LR:Manufactured" context="">Manufactured</option>
+                        <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                        <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label title="The materials the object is comprised of">Material(s)</label>
+                    <!-- This should probably be a Set -->
+                    <textarea deer-key="material"> </textarea>
+                    <label>Typical Use </label>
+                    <select disabled deer-key="purpose" >
+                        <option value="Religious">Religious</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Educational">Educational</option>
+                        <option value="Civic">Civic</option>
+                        <option value="Other Public">Other Public</option>
+                    </select>
+                    <!-- TODO -->
+                    <!--<h3> Upload Media </h3>-->
+                    <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Abstract</label>
+                    <textarea title="Provide a short decription of this object with otherwise unprovided or disambiguating details." type="text" deer-key="description"> </textarea>
+                    <label>Tags separated by ','</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">       
+                    <h4>Historical Information</h4>
                     <label>Select Former Location(s):</label>
                     <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                     <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
-                    <label>Select Former Use(s):</label>
+                    <label>Select Former Use(s)</label>
                     <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
                     <!-- Looking at these as "former types", so just reuse the type values -->
                     <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
@@ -94,23 +109,7 @@
                         <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                         <option value="Other">Other</option>
                     </select>
-                    <label>Material(s) this object is made of:</label>
-                    <!-- This should probably be a Set -->
-                    <textarea deer-key="material"> </textarea>
-                    <label>Typical Use: </label>
-                    <select disabled deer-key="purpose" >
-                        <option value="Religious">Religious</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Educational">Educational</option>
-                        <option value="Civic">Civic</option>
-                        <option value="Other Public">Other Public</option>
-                    </select>
-                    <!-- TODO -->
-                    <!--<h3> Upload Media </h3>-->
-                    <label>Field Notes:</label>
-                    <textarea type="text" deer-key="LR:FieldNotes" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
-                    <label>Tags separated by ',':</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">                           
+                                        
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -146,6 +145,11 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
                 // TODO: rerender the list view.
+        })
+        
+        addEventListener('deer-created', event => {
+            //TODO feedback of success and continued editing
+            document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>

@@ -62,6 +62,11 @@
             let lists = Array.from(document.querySelectorAll(selector))
                 // TODO: rerender the list view.
         })
+        
+        addEventListener('deer-created', event => {
+            //TODO feedback of success and continued editing
+            document.location.reload()
+        })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>

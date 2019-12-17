@@ -164,7 +164,6 @@
                             <script>
                                 var data_key_elements = document.querySelectorAll("[data-rdf]")
                                 Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
-
                                 function setPrimaryType(event) {
                                     let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
                                     additionalTypeInput.value = val
@@ -319,13 +318,11 @@
                     </li>
                 </ul>
                  TODO note that these don't make much sense here... 
-
                 <div> Upload Media </div>
                 <label>Field Notes:</label>
                 <textarea type="text" deer-key-x="notes"> </textarea>
                 <label>Tags:</label>
                 <textarea type="text" deer-key-x="tags"> </textarea>
-
             </div>
             -->
         </div>

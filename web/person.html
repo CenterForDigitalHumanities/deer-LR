@@ -22,26 +22,27 @@
                 <form id="newPersonForm" class="hidden" deer-type="Person" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionPeopleTest">
+                    <h4>Contact Details</h4>
                     <div class="grouped">
-                        <label>Name:</label>
+                        <label>Name</label>
                         <input type="text" deer-key="name">
-                        <label>Birth Date:</label>
+                        <label>Birth Date</label>
                         <input type="date" deer-key="birthDate">
                     </div>
                     <div class="grouped">
-                        <label>E‑mail:</label>
+                        <label>E‑mail</label>
                         <input type="text" deer-key="email">
-                        <label>Phone Number:</label>
+                        <label>Phone Number</label>
                         <input type="text" deer-key="telephone">
                     </div>
-                    <label>Description:</label>
-                    <textarea deer-key="description"></textarea>
-
-                    <h3>Additional Details</h3>
-
+                    <label>Address</label>
+                    <textarea type="text" deer-key="address"></textarea>
+                    <h4 title="This information is more personal and sensitive information and is not required.">Additional Details</h4>
+                    <label title="Provide a short decription of this person with otherwise unprovided or disambiguating details.">Abstract</label>
+                    <textarea  title="Provide a short decription of this person with otherwise unprovided or disambiguating details."deer-key="description"></textarea>
                     <div class="row">
                         <div class="traditionWrapper col">
-                            <label>Religious Tradition:</label>
+                            <label>Religious Tradition</label>
                             <select deer-key="religious_tradition">
                                 <optgroup label="Christian">
                                     <option value="Evangelical Protestant">Evangelical Protestant</option>
@@ -79,7 +80,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <label>Race/Ethnicity:</label>
+                            <label>Race/Ethnicity</label>
                             <select deer-key="ethnicity">
                                 <option value="African American/Black/African">African American/Black/African</option>
                                 <option value="Bosniak">Bosniak</option>
@@ -96,7 +97,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <label>Gender & Sexuality:</label>
+                            <label>Gender & Sexuality</label>
                             <select deer-key="gender">
                                 <option value="Female-presenting">Female-presenting</option>
                                 <option value="Male-presenting">Male-presenting</option>
@@ -110,7 +111,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <label>Education:</label>
+                            <label>Education</label>
                             <select deer-key="education">
                                 <option value="Some high school">Some high school</option>
                                 <option value="High school graduate">High school graduate</option>
@@ -120,9 +121,8 @@
                             </select>
                         </div>
                     </div>
-                    <label>National Origin:</label>
+                    <label>National Origin</label>
                     <input type="text" deer-key="nationality">
-
                     <footer>
                         <input class="button primary" type="submit">
                     </footer>
@@ -158,6 +158,11 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
                 // TODO: rerender the list view.
+        })
+        
+        addEventListener('deer-created', event => {
+            //TODO feedback of success and continued editing
+            document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
