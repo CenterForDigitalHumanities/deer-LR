@@ -267,7 +267,7 @@
                                 <option value="OtherBuilding" >Other Building</option>
                             </select>
                     <label>Material(s):</label>
-                    <input disabled type="text" deer-key-x="material">
+                    <input  type="text" deer-key="material">
                     <label>Typical Use: </label>
                     <select disabled deer-key-x="typical_use" value="">
                             <option value="Religious">Religious</option>
@@ -322,6 +322,11 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
                 // TODO: rerender the list view.
+        })
+        
+        addEventListener('deer-created', event => {
+            //TODO feedback of success and continued editing
+            document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
