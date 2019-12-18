@@ -30,7 +30,7 @@
         <div class="" id="fieldNotesFloater">
             <div class="card_body">
                 <p class="innards">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <form id="fiedlNotes" class="innards" deer-type="Comment" deer-simple>
+                <form id="fiedlNotes" class="innards" deer-type="Comment" deer-item-type="simple">
                     <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
                     <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
                     <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
@@ -177,7 +177,7 @@
                                 <option value="SacredObject">Sacred Object</option>
                                 <option value="VisualArtwork">Artwork</option>
                                 <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                                <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                                <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                                 <option value="CivicStructure">Building</option>
                                 <option value="LR:Natural">Natural</option>
                                 <option value="LR:Manufactured">Manufactured</option>
@@ -214,13 +214,19 @@
                 <p> More intimate information about what you are feeling and perceiving. </p>
                 <div class="card bd-primary">
                     <div class="card_body">
-                        <!-- I smelled this, I heard that, ... -->
-                        <form id="senseForm" deer-type="ConsumeAction" deer-simple>
+                        <!-- I smelled this, I heard that, during this event (geo)... -->
+                        <form id="senseForm" deer-type="ConsumeAction" deer-item-type="simple">
                             <h4>What senses are prominent?  Add one at a time.</h4>
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
                             <input class="expReference" type="hidden" deer-key="event" value=""> <!-- At this location AKA Geo -->
-
-                            <h4>Was there a specific object at the experience caused this sense (if applicable)?</h4>
+                            <select deer-key="additionalType">
+                                <option value="LR:Sight">I see...</option>
+                                <option value="LR:Sound">I hear...</option>
+                                <option value="LR:Taste">I taste...</option>
+                                <option value="LR:Touch">I feel...</option>
+                                <option value="LR:Smell">I smell...</option>
+                            </select>
+                            <h4>Was there a specific object at the experience involved with this sense?</h4>
                             <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
                             <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             <header>Abstract About Sense</header>
@@ -231,11 +237,11 @@
                         </form>
 
                         <h4>What practices are occurring? Add one at a time.</h4>
-                        <!-- https://schema.org/ViewAction -->
-                        <!-- https://schema.org/WatchAction -->
-                        <form id="practiceForm" deer-type="Action">
-                            <input class="expReference" type="hidden" deer-key="event">
+                        <form id="practiceForm" deer-type="Action" deer-item-type="simple">
+                            <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
+                            <input class="expReference" type="hidden" deer-key="event"> <!-- At this event/location/geo -->
                             <select deer-key="additionalType">
+                                <option value="None">None Noted</option>
                                 <option value="EatAction">Eating</option>
                                 <option value="DrinkAction">Drinking</option>
                                 <option value="PlayAction">Playing</option>
@@ -272,7 +278,7 @@
                                 <option value="Other">Other</option>
                             </select>
                             <h4>Is there a particular object this practice is associated with?</h4>
-                            <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
+                            <input type="hidden" deer-key="object" value=""> <!-- Listening to {object} -->
                             <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             <div class="row">
                                 <input class="button primary col" type="submit">

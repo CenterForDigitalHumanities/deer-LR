@@ -77,6 +77,7 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
  */
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
+        //TODO NONE or NEW Location should be a choice
         let tmpl = `<select oninput="this.previousNode.value=this.selectedOptions[0].value">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
@@ -97,6 +98,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
  */
 DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
     try {
+         //TODO NONE or NEW Object should be a choice
         let tmpl = `<select oninput="this.previousNode.value=this.selectedOptions[0].value">`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         for (let o of allObjectsInCollection) {
