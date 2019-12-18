@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -98,6 +100,14 @@ public class TinyOverwrite extends HttpServlet {
                     sb.append(line);
                 }
                 reader.close();
+                for (Map.Entry<String, List<String>> entries : connection.getHeaderFields().entrySet()) {
+                    String values = "";
+                    String removeBraks = entries.getValue().toString();
+                    values = removeBraks.substring(1, removeBraks.length() -1);
+                    if(null != entries.getKey() && !entries.getKey().equals("Transfer-Encoding")){
+                        response.setHeader(entries.getKey(), values);
+                    }
+                }
             }
             catch(IOException ex){
                 //Need to get the response RERUM sent back.
@@ -109,7 +119,12 @@ public class TinyOverwrite extends HttpServlet {
                 error.close();
             }
             connection.disconnect();
+            if(manager.getAPISetting().equals("true")){
+                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+            }
             response.setStatus(codeOverwrite);
+            response.setHeader("Content-Type", "application/json; charset=utf-8");
+            response.setCharacterEncoding("UTF-8");
             response.getWriter().print(sb.toString());
         }
         

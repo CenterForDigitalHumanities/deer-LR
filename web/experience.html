@@ -141,7 +141,6 @@
                             <script>
                                 var data_key_elements = document.querySelectorAll("[data-rdf]")
                                 Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
-
                                 function setPrimaryType(event) {
                                     let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
                                     additionalTypeInput.value = val

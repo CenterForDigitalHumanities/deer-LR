@@ -162,7 +162,7 @@
         
         addEventListener('deer-created', event => {
             //TODO feedback of success and continued editing
-            document.location.reload()
+            setTimeout(function(){ document.location.reload() }, 3000);
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
