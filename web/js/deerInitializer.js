@@ -77,10 +77,30 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
  */
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
-        let tmpl = `<select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key="location">`
+        let tmpl = `<select oninput="this.previousNode.value=this.selectedOptions[0].value">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
+        }
+        tmpl += `</select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+/**
+ * Create a select dropdown containing Objects.  
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
+DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
+    try {
+        let tmpl = `<select oninput="this.previousNode.value=this.selectedOptions[0].value">`
+        let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
+        for (let o of allObjectsInCollection) {
+            tmpl += `<option deer-id="${o['@id']}" value="${o['@id']}">${UTILS.getLabel(o)}</option>`
         }
         tmpl += `</select>`
         return tmpl
