@@ -21,7 +21,8 @@
         <div class="row entries">
             <!-- New Entry button in here -->
             <a class="button primary" href="place.html"> &#xFF0B; Location </a>
-            <a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>
+            <a class="button primary" href="person.html"> &#xFF0B; Person </a>
+            <a class="button primary" href="object.html"> &#xFF0B; Object </a>
             <a class="button secondary" href=""> &#xFF0B; Experience </a>
         </div>
         <div>
@@ -39,12 +40,17 @@
     <script>
         addEventListener('lrUserKnown', event => {
             getUserEntries(event.detail.user)
-            let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>`
+            let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>
+                <a class="button primary" href="object.html"> &#xFF0B; Object </a>
+                <a class="button primary" href="person.html"> &#xFF0B; Person </a>
+                `
             if (event.detail.user.roles.administrator) {
                 buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
+                document.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
             }
             buttons+=`<a class="button secondary" href=""> &#xFF0B; Experience </a>`
             document.querySelector('.entries').innerHTML = buttons
+            
         }, false) 
         
         async function getUserEntries(user) {

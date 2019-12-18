@@ -19,9 +19,9 @@
         <h2 class="text-primary">Create a New Researcher</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="newPersonForm" class="hidden" deer-type="Person" deer-context="http://schema.org">
+                <form id="newResearcherForm" deer-type="Person" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionResearchers">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionResearchersTest">
                     <div class="grouped">
                         <label>Name:</label>
                         <input type="text" deer-key="name">
@@ -33,15 +33,39 @@
             </div>
         </div>
         <h3>Existing Researchers</h3>
-        <deer-view deer-collection="LivedReligionResearchers"></deer-view>
+        <deer-view deer-collection="LivedReligionResearchersTest" deer-link="?id="></deer-view>
     </div>
-    
+
     <lr-footer></lr-footer>
-    
+
     <script>
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
-            document.querySelector("[deer-key='creator']").value = user['@id']
+            LR.utils.setUserAttributionFields(user)
+            if (user.roles.administrator) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const researcherId = urlParams.get('id');
+                if (researcherId) {
+                    newResearcherForm.setAttribute("deer-id", researcherId)
+                    document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
+                    document.querySelector("input[type='submit']").value = "Update"
+                    let btn = document.createElement("a")
+                    btn.href = window.location.pathname
+                    btn.innerHTML = "Reset Page"
+                    newResearcherForm.append(btn)
+                }
+            }
+            // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
+        })
+        addEventListener('lrCollectionItemDeleted', event => {
+            let selector = '[deer-collection=' + event.detail.collection + ']'
+            let lists = Array.from(document.querySelectorAll(selector))
+                // TODO: rerender the list view.
+        })
+        
+        addEventListener('deer-created', event => {
+            //TODO feedback of success and continued editing
+            document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>

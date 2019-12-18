@@ -9,6 +9,7 @@ class LrFooter extends HTMLElement {
         this.classList.add('nav', 'nav-center', 'text-primary', 'is-fixed', 'is-full-width', 'is-vertical-align')
         this.style.bottom = 0
         this.style.backgroundColor = "#FFF"
+        this.style.zIndex = 1
         let spacer = document.createElement('div')
         spacer.style.position = "relative"
         spacer.style.display = "block"
@@ -26,7 +27,13 @@ class LrNav extends HTMLElement {
             this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
             <a href="places.html">Locations</a>
             <a href="stories.html">Stories</a> 
-            <a href="objects.html">Objects</a>`
+            <a href="objects.html">Objects</a>
+            <a href="people.html">People</a>
+            <a href="researchers.html">Researchers</a>
+            `
+            if(event.detail.user.roles.administrator){
+                this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+            }
         })
     }
     connectedCallback() {
@@ -36,6 +43,8 @@ class LrNav extends HTMLElement {
             <a href="places.html">Locations</a>
             <a href="stories.html">Stories</a>
             <a href="objects.html">Objects</a>
+            <a href="people.html">People</a>
+            <a href="researchers.html">Researchers</a>
         </div>
     </div>
     <div class="nav-right">
