@@ -105,13 +105,13 @@ LR.ui.toggleFieldNotes = function(event){
         floater.setAttribute("expanded", "false")
         floater.style.width = "40px"
         floater.style.height = "40px"
-        document.querySelectorAll(".innards").forEach(elem => elem.classList.add("is-hidden"))
+        document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.add("is-hidden"))
     }
     else{
         floater.setAttribute("expanded", "true")
         floater.style.width = "550px"
         floater.style.height = "400px"
-        document.querySelectorAll(".innards").forEach(elem => elem.classList.remove("is-hidden"))
+        document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
     }
     
 }
@@ -217,6 +217,8 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
 LR.utils.setUserAttributionFields = function(userInfo){
     let attributionElemSelectors = ["[deer-key='creator']"]//Maybe should be a config or const?
     attributionElemSelectors.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
+    //Also populate anything that is supposed to know the username
+    document.querySelectorAll(".theUserName").forEach(elem => elem.innerHTML = userInfo.name)
 }
 
 /**

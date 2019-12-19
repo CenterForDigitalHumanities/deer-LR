@@ -10,6 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <style>
+        #experienceReview h4{
+            margin: 0px;
+        }
+        
+        #experienceReview p{
+            font-size:10pt;
+        }
+        
+      
         #fieldNotesFloater{
             position: fixed;
             left: 0;
@@ -20,7 +29,7 @@
             background-color: lightgray
         }
         
-        .innards{
+        .fieldNotesInnards{
             
         }
         
@@ -42,6 +51,17 @@
             position: relative;
             top: 40px;
         }
+        
+        #notesTitle{
+            text-align:center;
+        }
+        
+        #fieldNotes textarea{
+            height: 185px;
+            max-width: 500px;
+            max-height: 300px;
+            font-size: 90%;
+        }
     </style>
 </head>
 
@@ -52,18 +72,18 @@
         <h2 class="text-primary">Upload Data From An Experience</h2>
         <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
             <div class="card_body">
-                <h4 id="notesTitle" class="innards" > Field Notes </h4>
+                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
-                <p id="notesInfo" class="innards">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <!-- This is it's own schema.org/Comment object which is about the expereience created by the experience creator-->
-                <!-- When rendering an expereience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
-                <form id="fiedlNotes" class="innards" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
+                <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
+                <!-- This is it's own schema.org/Comment object which is about the experience created by the experience creator-->
+                <!-- When rendering an experience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
+                <form id="fiedlNotes" class="fieldNotesInnards is-hidden" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
                     <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
-                     <input type="hidden" deer-key="additionalType" value="LR:FieldNotes">
+                    <input type="hidden" deer-key="additionalType" value="LR:FieldNotes">
                     <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about.  Experience itself does not track these like other annotations/artifacts -->
                     <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                     <div class="row">
-                        <input type="submit" value="Save Notes"
+                        <input class="button primary" type="submit" value="Save Notes" />.
                         <!--<a class="button primary col" onclick="LR.utils.updateFieldNotes(event)"> Save Notes </a>-->
                     </div>
                 </form>
@@ -122,8 +142,8 @@
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
                 <!--<a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>-->
-                <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button bg-primary is-small" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
+                <a class="button primary" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
+                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
             </div>
             <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
@@ -192,7 +212,7 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <h3>History of this Object</h3>
+                            <h4>History of this Object</h4>
                             <label>Select Former Location(s):</label>
                             <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                             <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
@@ -212,6 +232,7 @@
                                 <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <h4>Descriptive Information</h4>
                             <label>Material(s) this object is made of:</label>
                             <!-- This should probably be a Set -->
                             <textarea deer-key="material"> </textarea>
@@ -225,9 +246,10 @@
                             </select>
                             <!-- TODO -->
                             <!--<h3> Upload Media </h3>-->
-                            <textarea type="text" deer-key="description"> </textarea>
+                            <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Abstract About Object</label>
+                            <textarea id="further_object" type="text" deer-key="description"></textarea>
                             <label>Tags separated by ',':</label>
-                            <input disabled type="text" deer-key-x="LR:Tags">                           
+                            <input disabled type="text" deer-key-x="LR:Tags">  
                             <div class="row">
                                 <input class="button primary col" type="submit">
                             </div>
@@ -253,10 +275,10 @@
                                 <option value="LR:Touch">I feel...</option>
                                 <option value="LR:Smell">I smell...</option>
                             </select>
-                            <h4>Was there a specific object at the experience involved with this sense?</h4>
+                            <label>Was there a specific object at the experience connected with this sense?</label>
                             <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
                             <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                            <header>Abstract About Sense</header>
+                            <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Abstract About Sense</label>
                             <textarea id="further_sense" type="text" deer-key="description"></textarea>
                             <div class="row">
                                 <input class="button primary col" type="submit">
@@ -290,7 +312,7 @@
                                 <option value="GiveAction">Donating</option>
                                 <option value="Other">Other</option>
                             </select>
-                            <header>Describe Practice Further:</header>
+                            <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
                             <textarea id="further_practice" type="text" deer-key="description"></textarea>
                             <select deer-key="LR:ActionContext">
                                 <option value="Religious Ritual">Religious Ritual</option>
@@ -305,8 +327,8 @@
                                 <option value="Collective">Collective</option>
                                 <option value="Other">Other</option>
                             </select>
-                            <h4>Is there a particular object this practice is associated with?</h4>
-                            <input type="hidden" deer-key="object" value=""> <!-- Listening to {object} -->
+                            <label>Is there a particular object this practice is associated with?</label>
+                            <input type="hidden" deer-key="object" value=""> 
                             <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             <div class="row">
                                 <input class="button primary col" type="submit">
