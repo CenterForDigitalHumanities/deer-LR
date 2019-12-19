@@ -452,12 +452,11 @@
             let what = event.target.id
             //Not sure we will do anything with this.  We could use it to offer feedback.  
             switch(what){
-                case "experienceUpdated":
-                    //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal
+                case "theExperience":
+                    //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal, which has its own feedback
                 break
-                case "fieldNotesUpdated":
-                    //Add this object item by some name to a list, perhaps with a "remove" option
-                    //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                case "fieldNotes":
+                    //TODO We need to offer some kind of feedback here.  
                 break
                 default:
                     
@@ -469,17 +468,14 @@
             switch(what){
                 case "newObjectForm":
                     //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
-                    //This appears to run twice each time an object is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
                 case "newSenseForm":
-                    //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
-                    //This appears to run twice each time an object is created.
+                    //A sense form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
                 case "newPracticeForm":
-                    //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
-                    //This appears to run twice each time an object is created.
+                    //A practice form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
                 default:
