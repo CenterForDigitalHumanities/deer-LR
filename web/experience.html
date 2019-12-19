@@ -13,10 +13,34 @@
         #fieldNotesFloater{
             position: fixed;
             left: 0;
-            width: 1px;
+            width: 40px;
+            height: 40px;
+            transition: width 1.5s;
+            -webkit-transition: width 1.5s;
+            background-color: lightgray
         }
+        
         .innards{
             display: none;
+        }
+        
+        #notesIcon{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 40px;
+            width: 40px;
+            max-width: initial;
+            cursor: pointer;
+        }
+        
+        #notesIcon:hover{
+            border: 2px solid black;
+        }
+        
+        #notesInfo{
+            position: relative;
+            top: 40px;
         }
     </style>
 </head>
@@ -26,16 +50,17 @@
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
         <h2 class="text-primary">Upload Data From An Experience</h2>
-        <!--<div class="button secondary" onclick="LR.ui.toggleFieldNotes()"> Field Notes </div>-->
-        <div class="" id="fieldNotesFloater">
+        <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
             <div class="card_body">
-                <p class="innards">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
+                <h4 id="notesTitle" class="innards" > Field Notes </h4>
+                <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
+                <p id="notesInfo" class="innards">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
                 <form id="fiedlNotes" class="innards" deer-type="Comment" deer-item-type="simple">
                     <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
                     <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
                     <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                     <div class="row">
-                        <input class="button primary col" type="Save Notes">
+                        <a class="button primary col" onclick="LR.utils.updateFieldNotes(event)"> Save Notes </a>
                     </div>
                 </form>
             </div>
@@ -313,9 +338,10 @@
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("theExperienceName").innerHTML = newObjName
+                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let e = document.getElementById("locations").children[0]
                     let locName = e.options[e.selectedIndex].text
+                    document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
                     document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
                     document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
                 break

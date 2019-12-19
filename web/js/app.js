@@ -99,6 +99,23 @@ LR.ui.toggleAreas = function(event){
     }
 }
 
+LR.ui.toggleFieldNotes = function(event){
+    let floater = document.getElementById("fieldNotesFloater");
+    if(floater.getAttribute("expanded") === "true"){
+        floater.setAttribute("expanded", "false")
+        floater.style.width = "40px"
+        floater.style.height = "40px"
+        document.querySelectorAll(".innards").forEach(elem => elem.classList.add("is-hidden"))
+    }
+    else{
+        floater.setAttribute("expanded", "true")
+        floater.style.width = "550px"
+        floater.style.height = "400px"
+        document.querySelectorAll(".innards").forEach(elem => elem.classList.remove("is-hidden"))
+    }
+    
+}
+
 /**
  * Remove an item from one of the Lived Religion application collections.
  * @param {String} itemID : The ID of the annotation connecting the item to the collection.
@@ -225,4 +242,6 @@ LR.utils.scrubForm = function(form){
 LR.utils.updateFieldNotes = function(){
     document.getElementById("notesKey").value = document.getElementById("fieldNotesFromExperience").value
     document.getElementById("notesKey").$isDirty = true
+    //And submit the form?? 
+    document.getElementById("theExperience").querySelector("input[type='submit']").click()
 }

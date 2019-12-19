@@ -194,7 +194,8 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
         let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
         //FIXME we would really like to have the location label here
         let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
-        tmpl += place + date + researchers
+        let description = `<dt>Location</dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>`
+        tmpl += place + date + researchers + description
         return tmpl
     } catch (err) {
         return null
