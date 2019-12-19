@@ -32,7 +32,6 @@ public class GetUsers extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         HttpSession sess = request.getSession();
         if(sess.getAttribute("lr-user") != null){

@@ -77,10 +77,32 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
  */
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
-        let tmpl = `<select oninput="document.getElementById('loc').value=this.selectedOptions[0].value" deer-key="location">`
+        //TODO NONE or NEW Location should be a choice
+        let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
+        }
+        tmpl += `</select>`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+/**
+ * Create a select dropdown containing Objects.  
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
+DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
+    try {
+         //TODO NONE or NEW Object should be a choice
+        let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
+        for (let o of allObjectsInCollection) {
+            tmpl += `<option deer-id="${o['@id']}" value="${o['@id']}">${UTILS.getLabel(o)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -172,7 +194,8 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
         let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
         //FIXME we would really like to have the location label here
         let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
-        tmpl += place + date + researchers
+        let description = `<dt>Description</dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>`
+        tmpl += place + date + researchers + description
         return tmpl
     } catch (err) {
         return null

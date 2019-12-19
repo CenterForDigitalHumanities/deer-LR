@@ -55,7 +55,7 @@
         
         async function getUserEntries(user) {
             let historyWildcard = {"$exists":true, "$size":0}
-            let experiences = await fetch("query", {
+            let experiences = await fetch(LR.URLS.QUERY, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'

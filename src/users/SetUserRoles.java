@@ -8,15 +8,12 @@ package users;
 import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -39,8 +36,7 @@ public class SetUserRoles extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "text/html; charset=utf-8");
         HttpSession sess = request.getSession();
         if(sess.getAttribute("lr-user") != null){
             JSONObject session_user = JSONObject.fromObject(sess.getAttribute("lr-user"));

@@ -193,7 +193,7 @@
                                 "body.targetCollection": "LivedReligionLocationsTest"
                             }]
                         }
-                        fetch("query", {
+                        fetch(LR.URLS.QUERY, {
                                 method: "POST",
                                 mode: "cors",
                                 body: JSON.stringify(queryObj)
@@ -300,15 +300,20 @@
             }
             // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
         })
+        /**
+         * Determine what to do when a collection item is deleted
+         * @param {type} event
+         * @returns {undefined}
+         */
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
-                // TODO: rerender the list view.
+            // TODO: rerender the list view.
         })
         
         addEventListener('deer-created', event => {
             //TODO feedback of success and continued editing
-            setTimeout(function(){ document.location.reload() }, 3000);
+            setTimeout(function(){ document.location.reload() }, 2000);
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>

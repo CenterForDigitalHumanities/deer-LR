@@ -9,30 +9,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        #experienceReview h4{
+            margin: 0px;
+        }
+        
+        #experienceReview p{
+            font-size:10pt;
+        }
+        
+      
+        #fieldNotesFloater{
+            position: fixed;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            transition: width 1.5s, box-shadow 2s;
+            -webkit-transition: width 1.5s, box-shadow 2s;
+            background-color: lightgray;
+        }
+        
+        .fieldNotesInnards{
+            
+        }
+        
+        #notesIcon{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+        }
+        
+        #notesIcon:hover{
+            border: 2px solid black;
+        }
+        
+        #notesInfo{
+            position: relative;
+        }
+        
+        #notesTitle{
+            text-align:center;
+        }
+        
+        #fieldNotes textarea{
+            height: 185px;
+            max-width: 500px;
+            max-height: 300px;
+            font-size: 90%;
+        }
+    </style>
 </head>
 
 <body>
     <lr-nav></lr-nav>
     <div class="container">
+        <!-- Make this show-hide in a corner or something. -->
         <h2 class="text-primary">Upload Data From An Experience</h2>
+        <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
+            <div class="card_body">
+                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
+                <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
+                <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
+                <!-- This is it's own schema.org/Comment object which is about the experience created by the experience creator-->
+                <!-- When rendering an experience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
+                <form id="fieldNotes" class="fieldNotesInnards is-hidden" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
+                    <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
+                    <input type="hidden" deer-key="additionalType" value="LR:FieldNotes">
+                    <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about.  Experience itself does not track these like other annotations/artifacts -->
+                    <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                    <div class="row">
+                        <input class="button primary" type="submit" value="Save Notes" />.
+                        <!--<a class="button primary col" onclick="LR.utils.updateFieldNotes(event)"> Save Notes </a>-->
+                    </div>
+                </form>
+            </div>
+        </div>
         <div id="startExperience" class="card bd-primary">
             <div class="card_body">
                 <form id="theExperience" class="experience" deer-type="Event">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="@context" value="https://schema.org/" />
-                    <input id="objectsAtExperience" type="hidden" deer-key="object" deer-input-type="Set" />
+                    <input type="hidden" deer-key="additionalType" value="LR:ExperienceUpload"/>
+                    <!-- We are going to do field notes a little differently and not track them as annotations, but as independent objects to query for separately. -->
+                    <!--<input type="hidden" deer-key="comment" />-->
+                    <input id="senses" type="hidden" deer-key="LR:Senses" deer-input-type="Set" />
+                    <input id="practices" type="hidden" deer-key="LR:Practices" deer-input-type="Set" />
+                    <input id="objects"  type="hidden" deer-key="object"  deer-input-type="Set"  />
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
-                    <input id="loc" type="hidden" deer-key="location" />
-                    <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
+                    <input type="hidden" deer-key="location" />
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
                     <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Adam P." />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
-                    <input id="objects" deer-input-type="Set" type="hidden" deer-key="object" />
+                    <label>Provide a description of what prompted you to do this</label>
+                    <textarea deer-key="description"></textarea>
+                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">   
                     <input type="submit" value="Continue" />
                 </form>
             </div>
@@ -40,92 +120,32 @@
         <div id="experienceReview" class="card is-hidden">
             <div class="card_body">
                 <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
-                <h4>Objects at experience "<span id="theExperienceName"></span>"</h4>
-                <ul id="objectsInExperience">
-                    <li>Objects you add will appear here and can be removed, but not edited.</li>
+                <h4>Objects at experience "<span class="theExperienceName"></span>"</h4>
+                <p>Objects you add will appear here and can be removed, but not edited.</p>
+                <ul id="objectsInExperience"></ul>
+                <h4>Senses at experience "<span class="theExperienceName"></span>"</h4>
+                <p>Senses you add will appear here and can be removed, but not edited.</p>
+                <ul id="sensesInExperience"></ul>
+                <h4>Practices occurring at experience "<span class="theExperienceName"></span>"</h4>
+                <p>Practices you add will appear here and can be removed, but not edited.</p>
+                <ul id="practicesInExperience"></ul>
+                <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "<span class="theExperienceName"></span>"</h4>
+                <ul id="fieldNotesInExperience">
+                    <li>The field notes for the experience will appear here as yoy make changes to them.</li>
                 </ul>
             </div>
         </div>
         <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
-            <h2 class="text-primary">Describe your encounter at <span id="theLocationName">{Place.name}</span> </h2>
+            <h2 class="text-primary">Describe your encounter at <span class="theLocationName">{Place.name}</span> </h2>
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
-                <a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>
-                <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button bg-secondary is-small" area="bodies" onclick="" title="Record information about others' behaviors during the experience.">Bodies</a>
+                <!--<a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>-->
+                <a class="button primary" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
+                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
             </div>
-             <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
+            <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
-            <div for="spaces" class="kind hidden">
-                 Here the user can offer additional information about the Location.  They cannot change or delete existing information. 
-                <form id="chosenLocation" class="dataWrap" for="spaces" deer-type="Place">
-                     TODO make tyhe deer-id of this the id from the chosen location.  Preload information into the form. 
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <label> Primary Type </label>
-                    <input disabled type="text" deer-key-x="type" />
-                    <div class="secondarySpecification hidden" for="spaces">
-                        <header>Check all other types for this space.</header>
-                        <label>General Specification</label>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Accommodation" /><span class="chk_lbl">Accommodation</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="AdministrativeArea" /><span class="chk_lbl">Administrative Area</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Civic Structure" /><span class="chk_lbl">Civic Structure</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landform" /><span class="chk_lbl">Landform</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        same properties as Place and Intangible in schema, but this is like LR::Imagined because no schema exists
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Imagined" /><span class="chk_lbl">Imagined</span>
-                        <br>
-                        <label>More Specific</label>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Landmarks or Historical Buildings" /><span class="chk_lbl">Landmarks or Historical Buildings</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Local Business" /><span class="chk_lbl">Local Business</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Residence" /><span class="chk_lbl">Residence</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="School" /><span class="chk_lbl">School</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Tourist Destination" /><span class="chk_lbl">Tourist Destination</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Neighborhood" /><span class="chk_lbl">Neighborhood</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Home" /><span class="chk_lbl">Home</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Cemetery" /><span class="chk_lbl">Cemetery</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Hospital" /><span class="chk_lbl">Hospital</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Museum" /><span class="chk_lbl">Museum</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Park" /><span class="chk_lbl">Park</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Street" /><span class="chk_lbl">Street</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Zoo" /><span class="chk_lbl">Zoo</span>
-                        <input type="checkbox" onchange="LR.ui.reactiveSecondaryType(event, 'spaces')" value="Gym" /><span class="chk_lbl">Gym</span>
-                        <input deer-key-x="additionalType" type="checkbox" onchange="LR.ui.reactiveOther(event, 'spaces')" value="Other Building" /><span class="chk_lbl">Other Building</span>
-                        <div class="reactiveOther hidden" for="spaces">
-                            <label>Please tell us what you mean by other:</label>
-                            <textarea type="text"> </textarea>
-                        </div>
-                    </div>
-                    <input type="hidden" deer-input-type-x="Set" deer-key-x="additionalType" />
-                    <label>What is this space named?:</label>
-                    <input disabled type="text" deer-key-x="name" />
-                    <header>History of this Space:</header>
-                    <textarea type="text" deer-key-x="LR::SpaceHistory"> </textarea>
-                    <label>Former Location(s):</label>
-                    <textarea type="text" deer-key-x="LR::FormerLocations"> </textarea>
-                    <label>Former Use(s):</label>
-                    <textarea type="text" deer-key-x="LR::FormerUses"> </textarea>
-                    <label>Creator:</label>
-                    <input disabled type="text" deer-key-x="creator" />
-                    <label>Material(s):</label>
-                    <textarea type="text" deer-key-x="material"> </textarea>
-                    <label>Further Description:</label>
-                    <textarea type="text" deer-key-x="description"> </textarea>
-                    <div class="dataWrap">
-                        <label>Typical Use: </label>
-                        <select disabled deer-key-x="typical_use" value="">
-                            <option value="Religious">Religious</option>
-                            <option value="Commercial">Commercial</option>
-                            <option value="Educational">Educational</option>
-                            <option value="Civic">Civic</option>
-                            <option value="Other Public">Other Public</option>
-                        </select>
-                    </div>
-                    <div> Upload Media </div>
-                    <label>Field Notes:</label>
-                    <textarea type="text" deer-key-x="notes"> </textarea>
-                    <label>Tags separated by ',':</label>
-                    <textarea type="text" deer-key-x="tag"> </textarea>
-                </form>
+            <div tog="spaces" class="kind hidden">
             </div>
             -->
             <div tog="objects" class="kind is-hidden">
@@ -136,9 +156,10 @@
                 <div class="card bd-primary">
                     <div class="card_body">
                         <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
-                            <input type="hidden" deer-key="creator" value="loading">
-                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <!--<input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">-->
+                            <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
+                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
+                            <!-- That was referenced as being at this experience, supposed to be for Place so not exactly kosher -->
+                            <input class="expReference" type="hidden" deer-key="containedIn">  <!--That was referenced as being at this experience or location, supposed to be for Place so not exactly kosher -->
                             <label>Name:</label>
                             <input type="text" deer-key="name">
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -189,10 +210,10 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <h3>History of this Space:</h3>
+                            <h4>History of this Object</h4>
                             <label>Select Former Location(s):</label>
                             <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
-                            <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
+                            <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
                             <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
                             <!-- Looking at these as "former types", so just reuse the type values -->
@@ -200,7 +221,7 @@
                                 <option value="SacredObject">Sacred Object</option>
                                 <option value="VisualArtwork">Artwork</option>
                                 <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                                <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                                <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                                 <option value="CivicStructure">Building</option>
                                 <option value="LR:Natural">Natural</option>
                                 <option value="LR:Manufactured">Manufactured</option>
@@ -209,6 +230,7 @@
                                 <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <h4>Descriptive Information</h4>
                             <label>Material(s) this object is made of:</label>
                             <!-- This should probably be a Set -->
                             <textarea deer-key="material"> </textarea>
@@ -222,10 +244,10 @@
                             </select>
                             <!-- TODO -->
                             <!--<h3> Upload Media </h3>-->
-                            <label>Field Notes:</label>
-                            <textarea type="text" deer-key="LR:FieldNotes" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+                            <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Abstract About Object</label>
+                            <textarea id="further_object" type="text" deer-key="description"></textarea>
                             <label>Tags separated by ',':</label>
-                            <input disabled type="text" deer-key-x="LR:Tags">                           
+                            <input disabled type="text" deer-key-x="LR:Tags">  
                             <div class="row">
                                 <input class="button primary col" type="submit">
                             </div>
@@ -233,98 +255,86 @@
                     </div>   
                 </div>
             </div>
-            <!--
-            <div for="bodies" class="kind hidden">
-                 TODO design how the experience object aggregates Sense annotations 
-                <header>What senses are prominent?</header>
-                <form id="senses" deer-id-x="" deer-type-x="Sense">
-                    <input type="radio" value="LR::Sight" name="sense"><span class="chk_lbl">Sight</span>
-                    <input type="radio" value="LR::Smell" name="sense"><span class="chk_lbl">Smell</span>
-                    <input type="radio" value="LR::Sound" name="sense"><span class="chk_lbl">Sound</span>
-                    <input type="radio" value="LR::Touch" name="sense"><span class="chk_lbl">Touch</span>
-                    <input type="radio" value="LR::Taste" name="sense"><span class="chk_lbl">Taste</span>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />
-                    <header>Describe Sense Further:</header>
-                    <textarea id="further_sense" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
-                    <input type="button" onclick="LR.ui.addPieceAndReset(event, 'sense')" value="Add Sense" />
-                </form>
-                 TODO: Catch the created event for a sense and add into this area 
-                <ul id="added_sense">
-                    <li>
-                        <header> Added Senses </header>
-                    </li>
-                </ul>
-                 TODO Design how experience object aggregates practices.  Is this a collection? 
-                 TODO Design what a distinct practice object looks like 
-                <header>What practices are occurring? Add one at a time.</header>
-                <form id="practices" deer-id-x="" deer-type-x="Practice">
-                    <input name="practice" type="radio" value="Eating"><span class="chk_lbl">Eating</span>
-                    <input name="practice" type="radio" value="Playing"><span class="chk_lbl">Playing</span>
-                    <input name="practice" type="radio" value="Clothing"><span class="chk_lbl">Clothing</span>
-                    <input name="practice" type="radio" value="Singing"><span class="chk_lbl">Singing</span>
-                    <input name="practice" type="radio" value="Moving"><span class="chk_lbl">Moving</span>
-                    <input name="practice" type="radio" value="Sitting"><span class="chk_lbl">Sitting</span>
-                    <input name="practice" type="radio" value="Standing"><span class="chk_lbl">Standing</span>
-                    <input name="practice" type="radio" value="Kneeling"><span class="chk_lbl">Kneeling</span>
-                    <input name="practice" type="radio" value="Traveling"><span class="chk_lbl">Traveling</span>
-                    <input name="practice" type="radio" value="Dancing"><span class="chk_lbl">Dancing</span>
-                    <input name="practice" type="radio" value="Cooking"><span class="chk_lbl">Cooking</span>
-                    <input name="practice" type="radio" value="Working"><span class="chk_lbl">Working</span>
-                    <input name="practice" type="radio" value="Other"><span class="chk_lbl">Other</span>
-                    <div class="reactiveOther hidden" for="practice">
-                        <label>Please tell us what you mean by other:</label>
-                        <textarea type="text"> </textarea>
+            <div tog="bodies" class="kind is-hidden">
+                <h2>Bodies</h2>
+                <p> More intimate information about what you are feeling and perceiving. </p>
+                <div class="card bd-primary">
+                    <div class="card_body">
+                        <!-- I smelled this, I heard that, during this event (geo)... -->
+                        <form id="newSenseForm" deer-type="ConsumeAction" deer-item-type="simple">
+                            <h4>What senses are prominent?  Add one at a time.</h4>
+                            <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
+                             <!-- At this location AKA Geo -->
+                            <input class="expReference" type="hidden" deer-key="event" value="">
+                            <select deer-key="additionalType">
+                                <option value="LR:Sight">I see...</option>
+                                <option value="LR:Sound">I hear...</option>
+                                <option value="LR:Taste">I taste...</option>
+                                <option value="LR:Touch">I feel...</option>
+                                <option value="LR:Smell">I smell...</option>
+                            </select>
+                            <label>Was there a specific object at the experience connected with this sense?</label>
+                            <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
+                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                            <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Abstract About Sense</label>
+                            <textarea id="further_sense" type="text" deer-key="description"></textarea>
+                            <div class="row">
+                                <input class="button primary col" type="submit">
+                            </div>
+                        </form>
+
+                        <h4>What practices are occurring? Add one at a time.</h4>
+                        <form id="newPracticeForm" deer-type="Action" deer-item-type="simple">
+                            <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
+                            <!-- At this event/location/geo -->
+                            <input class="expReference" type="hidden" deer-key="event"> 
+                            <select deer-key="additionalType">
+                                <option value="None">None Noted</option>
+                                <option value="EatAction">Eating</option>
+                                <option value="DrinkAction">Drinking</option>
+                                <option value="PlayAction">Playing</option>
+                                <option value="LR:ClotheAction">Clothing</option>
+                                <option value="LR:SingAction">Singing</option>
+                                <option value="MoveAction">Moving</option>
+                                <option value="LR:SitAction">Sitting</option>
+                                <option value="LR:StandAction">Standing</option>
+                                <option value="LR:KneelAction">Kneeling</option>
+                                <option value="LR:TravelAction">Traveling</option>
+                                <option value="LR:DanceAction">Dancing</option>
+                                <option value="CookAction">Cooking</option>
+                                <option value="LR:WorkAction">Working</option>
+                                <option value="ListenAction">Listening</option>
+                                <option value="WatchAction">Watching</option>
+                                <option value="WriteAction">Writing</option>
+                                <option value="TradeAction">Trading</option>
+                                <option value="GiveAction">Donating</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
+                            <textarea id="further_practice" type="text" deer-key="description"></textarea>
+                            <select deer-key="LR:ActionContext">
+                                <option value="Religious Ritual">Religious Ritual</option>
+                                <option value="Community Event">Community Event</option>
+                                <option value="Civic Ritual">Civic Ritual</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Public">Public</option>
+                                <option value="Private">Private</option>
+                                <option value="Planned">Planned</option>
+                                <option value="Spontaneous">Spontaneous</option>
+                                <option value="Individual">Individual</option>
+                                <option value="Collective">Collective</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <label>Is there a particular object this practice is associated with?</label>
+                            <input type="hidden" deer-key="object" value=""> 
+                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                            <div class="row">
+                                <input class="button primary col" type="submit">
+                            </div>
+                        </form>        
                     </div>
-                    <header>Describe Practice Further:</header>
-                    <textarea id="further_practice" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToExperience" />  TODO 
-                    <input type="button" onclick="LR.ui.addPieceAndReset(event, 'practice')" value="Add Practice" />
-                </form>
-                 TODO 
-                <ul id="added_practice">
-                    <li>
-                        <header> Added Practices </header>
-                    </li>
-                </ul>
-                 TODO Design how experience object aggregates contexts and relates them to the aggregated practices.
-                 TODO Design what a distinct practice object looks like 
-                <header>What is the context of these practices? Add one at a time.</header>
-                <form id="contexts">
-                    <input name="context" type="radio" value="Religious Ritual"><span class="chk_lbl">Religious Ritual</span>
-                    <input name="context" type="radio" value="Community Event"><span class="chk_lbl">Community Event</span>
-                    <input name="context" type="radio" value="Civic Ritual"><span class="chk_lbl">Civic Ritual</span>
-                    <input name="context" type="radio" value="Commercial"><span class="chk_lbl">Commercial</span>
-                    <input name="context" type="radio" value="Public"><span class="chk_lbl">Public</span>
-                    <input name="context" type="radio" value="Private"><span class="chk_lbl">Private</span>
-                    <input name="context" type="radio" value="Planned"><span class="chk_lbl">Planned</span>
-                    <input name="context" type="radio" value="Spontaneous"><span class="chk_lbl">Spontaneous</span>
-                    <input name="context" type="radio" value="Individual"><span class="chk_lbl">Individual</span>
-                    <input name="context" type="radio" value="Collective"><span class="chk_lbl">Collective</span>
-                    <input name="context" type="radio" value="Other"><span class="chk_lbl">Other</span>
-                    <div class="reactiveOther hidden" for="context">
-                        <label>Please tell us what you mean by other:</label>
-                        <textarea type="text"> </textarea>
-                    </div>
-                    <header>Describe Context Further:</header>
-                    <textarea id="further_context" type="text" deer-key-x="description"></textarea>
-                    <input type="hidden" deer-key-x="annoConnectingToPractices" />  TODO 
-                    <input type="button" onclick="LR.ui.addPieceAndReset(event, 'context')" value="Add Context" />
-                </form>
-                 TODO 
-                <ul id="added_context">
-                    <li>
-                        <header> Added Contexts </header>
-                    </li>
-                </ul>
-                 TODO note that these don't make much sense here... 
-                <div> Upload Media </div>
-                <label>Field Notes:</label>
-                <textarea type="text" deer-key-x="notes"> </textarea>
-                <label>Tags:</label>
-                <textarea type="text" deer-key-x="tags"> </textarea>
+                </div>                    
             </div>
-            -->
         </div>
     </div>
     <lr-footer></lr-footer>
@@ -346,30 +356,31 @@
             let what = event.target.id
             let newObjID = event.detail["@id"]
             let newObjName = (event.detail.hasOwnProperty("name")) ? event.detail.name : (event.detail.hasOwnProperty("label")) ?  event.detail.label : (event.detail.hasOwnProperty("title")) ? event.detail.title : "Name Unknown"
+            let expID = document.getElementById("theExperience").getAttribute("deer-id")
             switch(what){
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("theExperienceName").innerHTML = newObjName
-                    let e = document.getElementById("locations").children[0]
+                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+                    let e = event.target.querySelector(".locDropdown")
                     let locName = e.options[e.selectedIndex].text
-                    document.getElementById("theLocationName").innerHTML = locName
+                    document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
+                    document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
                     document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
                 break
                 case "newObjectForm":
                     document.querySelector("a[area='objects']").click()
-                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
-                    let list = document.getElementById("objectsInExperience")
-                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    list.innerHTML += li
-                    let trackedObjs = document.getElementById("objects").value
-                    let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
-                    if(trackedObjs){
-                        trackedObjs += `${delim}${newObjID}`
+                    let obj_list = document.getElementById("objectsInExperience")
+                    let obj_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    obj_list.innerHTML += obj_li
+                    let objs_tracked = document.getElementById("objects").value
+                    let objs_delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
+                    if(objs_tracked){
+                        objs_tracked += `${objs_delim}${newObjID}`
                     }
                     else{
-                        trackedObjs = newObjID
+                        objs_tracked = newObjID
                     }
                     /**
                      * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
@@ -377,17 +388,60 @@
                      */
                     document.getElementById("objects").value = trackedObjs
                     document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     alert("Object Added!") //TODO FEEDBACK
                 break
-                case "senseEntryCreated":
-                    //Add this sense item by some name to a list, perhaps with a "remove" option
-                    //Empty newSenseForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                case "newSenseForm": 
+                    document.querySelector("a[area='bodies']").click()
+                    let sense_list = document.getElementById("sensesInExperience")
+                    let sense_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    sense_list.innerHTML += sense_li
+                    let senses_tracked = document.getElementById("senses").value
+                    let senses_delim = document.getElementById("senses").hasAttribute("deer-array-delimeter") ? document.getElementById("senses").getAttribute("deer-array-delimeter") : ","
+                    if(senses_tracked){
+                        senses_tracked += `${senses_delim}${newObjID}`
+                    }
+                    else{
+                        senses_tracked = newObjID
+                    }
+                    /**
+                     * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
+                     * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
+                     */
+                    document.getElementById("senses").value = senses_tracked
+                    document.getElementById("senses").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("theExperience").$isDirty = true
+                    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    alert("Sense Recorded!");
+                case "newPracticeForm":
+                    document.querySelector("a[area='bodies']").click()
+                    let practice_list = document.getElementById("practicesInExperience")
+                    let practice_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    practice_list.innerHTML += practice_li
+                    let practices_tracked = document.getElementById("practices").value
+                    let practices_delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
+                    if(practices_tracked){
+                        practices_tracked += `${practices_delim}${newObjID}`
+                    }
+                    else{
+                        practices_tracked = newObjID
+                    }
+                    /**
+                     * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
+                     * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
+                     */
+                    document.getElementById("practices").value = practices_tracked
+                    document.getElementById("practices").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("theExperience").$isDirty = true
+                    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    alert("Practice Recorded")
                 break
-                case "practiceEntryCreated":
-                    //Add this object item by some name to a list, perhaps with a "remove" option
-                    //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                case "fieldNotes":
+                    alert("Notes Saved!") //TODO FEEDBACK
                 break
                 default:
                     
@@ -398,8 +452,11 @@
             let what = event.target.id
             //Not sure we will do anything with this.  We could use it to offer feedback.  
             switch(what){
-                case "experienceUpdated":
-                    //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal
+                case "theExperience":
+                    //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal, which has its own feedback
+                break
+                case "fieldNotes":
+                    //TODO We need to offer some kind of feedback here.  
                 break
                 default:
                     
@@ -411,7 +468,14 @@
             switch(what){
                 case "newObjectForm":
                     //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
-                    //This appears to run twice each time an object is created.
+                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
+                break
+                case "newSenseForm":
+                    //A sense form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
+                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
+                break
+                case "newPracticeForm":
+                    //A practice form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
                 default:
