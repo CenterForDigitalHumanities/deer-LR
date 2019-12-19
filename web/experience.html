@@ -59,6 +59,7 @@
                 <!-- When rendering an expereience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
                 <form id="fiedlNotes" class="innards" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
                     <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
+                     <input type="hidden" deer-key="additionalType" value="LR:FieldNotes">
                     <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
                     <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                     <div class="row">
@@ -125,7 +126,7 @@
                 <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
                 <a class="button bg-primatry is-small" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
             </div>
-             <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
+            <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
             <div tog="spaces" class="kind hidden">
             </div>
@@ -138,9 +139,10 @@
                 <div class="card bd-primary">
                     <div class="card_body">
                         <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
-                            <input type="hidden" deer-key="creator" value="loading">
-                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <!--<input class="expReference" type="hidden" deer-key="containedIn" value="{{Experience}}">-->
+                            <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
+                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
+                            <!-- That was referenced as being at this experience, supposed to be for Place so not exactly kosher -->
+                            <!--<input class="expReference" type="hidden" deer-key="containedIn">  That was referenced as being at this experience, supposed to be for Place so not exactly kosher -->
                             <label>Name:</label>
                             <input type="text" deer-key="name">
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -243,7 +245,8 @@
                         <form id="senseForm" deer-type="ConsumeAction" deer-item-type="simple">
                             <h4>What senses are prominent?  Add one at a time.</h4>
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
-                            <input class="expReference" type="hidden" deer-key="event" value=""> <!-- At this location AKA Geo -->
+                             <!-- At this location AKA Geo -->
+                            <!--<input class="expReference" type="hidden" deer-key="event" value="">-->
                             <select deer-key="additionalType">
                                 <option value="LR:Sight">I see...</option>
                                 <option value="LR:Sound">I hear...</option>
@@ -264,7 +267,8 @@
                         <h4>What practices are occurring? Add one at a time.</h4>
                         <form id="practiceForm" deer-type="Action" deer-item-type="simple">
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
-                            <input class="expReference" type="hidden" deer-key="event"> <!-- At this event/location/geo -->
+                            <!-- At this event/location/geo -->
+                            <!--<input class="expReference" type="hidden" deer-key="event">--> 
                             <select deer-key="additionalType">
                                 <option value="None">None Noted</option>
                                 <option value="EatAction">Eating</option>
