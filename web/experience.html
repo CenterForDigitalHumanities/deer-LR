@@ -101,7 +101,7 @@
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
-                    <input id="locations" type="hidden" deer-key="location" />
+                    <input type="hidden" deer-key="location" />
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
@@ -363,7 +363,7 @@
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
-                    let e = document.getElementById("locations").children[0]
+                    let e = event.target.querySelector(".locDropdown")
                     let locName = e.options[e.selectedIndex].text
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
                     document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)

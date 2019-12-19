@@ -9,7 +9,7 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-config.js'
+import { default as DEER } from '.https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-config.js'
 
 // Identify a UTILS package
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-utils.js'
@@ -78,7 +78,7 @@ DEER.TEMPLATES.person = function(obj, options = {}) {
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
         //TODO NONE or NEW Location should be a choice
-        let tmpl = `<select oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
@@ -99,7 +99,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
     try {
          //TODO NONE or NEW Object should be a choice
-        let tmpl = `<select oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         for (let o of allObjectsInCollection) {
             tmpl += `<option deer-id="${o['@id']}" value="${o['@id']}">${UTILS.getLabel(o)}</option>`
