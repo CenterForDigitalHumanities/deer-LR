@@ -48,7 +48,6 @@
         
         #notesInfo{
             position: relative;
-            top: 40px;
         }
         
         #notesTitle{
@@ -76,7 +75,7 @@
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
                 <!-- This is it's own schema.org/Comment object which is about the experience created by the experience creator-->
                 <!-- When rendering an experience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
-                <form id="fiedlNotes" class="fieldNotesInnards is-hidden" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
+                <form id="fieldNotes" class="fieldNotesInnards is-hidden" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
                     <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
                     <input type="hidden" deer-key="additionalType" value="LR:FieldNotes">
                     <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about.  Experience itself does not track these like other annotations/artifacts -->
