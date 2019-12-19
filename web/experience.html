@@ -103,17 +103,14 @@
             <div class="card_body">
                 <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
                 <h4>Objects at experience "<span class="theExperienceName"></span>"</h4>
-                <ul id="objectsInExperience">
-                    <li>Objects you add will appear here and can be removed, but not edited.</li>
-                </ul>
+                <p>Objects you add will appear here and can be removed, but not edited.</p>
+                <ul id="objectsInExperience"></ul>
                 <h4>Senses at experience "<span class="theExperienceName"></span>"</h4>
-                <ul id="sensesInExperience">
-                    <li>Objects you add will appear here and can be removed, but not edited.</li>
-                </ul>
+                <p>Senses you add will appear here and can be removed, but not edited.</p>
+                <ul id="sensesInExperience"></ul>
                 <h4>Practices occurring at experience "<span class="theExperienceName"></span>"</h4>
-                <ul id="practicesInExperience">
-                    <li>Objects you add will appear here and can be removed, but not edited.</li>
-                </ul>
+                <p>Practices you add will appear here and can be removed, but not edited.</p>
+                <ul id="practicesInExperience"></ul>
                 <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "<span class="theExperienceName"></span>"</h4>
                 <ul id="fieldNotesInExperience">
                     <li>The field notes for the experience will appear here as yoy make changes to them.</li>
@@ -339,6 +336,7 @@
             let what = event.target.id
             let newObjID = event.detail["@id"]
             let newObjName = (event.detail.hasOwnProperty("name")) ? event.detail.name : (event.detail.hasOwnProperty("label")) ?  event.detail.label : (event.detail.hasOwnProperty("title")) ? event.detail.title : "Name Unknown"
+            let expID = document.getElementById("theExperience").getAttribute("deer-id")
             switch(what){
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
@@ -353,17 +351,16 @@
                 break
                 case "newObjectForm":
                     document.querySelector("a[area='objects']").click()
-                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
-                    let list = document.getElementById("objectsInExperience")
-                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    list.innerHTML += li
-                    let trackedObjs = document.getElementById("objects").value
-                    let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
-                    if(trackedObjs){
-                        trackedObjs += `${delim}${newObjID}`
+                    let obj_list = document.getElementById("objectsInExperience")
+                    let obj_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    obj_list.innerHTML += obj_li
+                    let objs_tracked = document.getElementById("objects").value
+                    let objs_delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
+                    if(objs_tracked){
+                        objs_tracked += `${objs_delim}${newObjID}`
                     }
                     else{
-                        trackedObjs = newObjID
+                        objs_tracked = newObjID
                     }
                     /**
                      * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
@@ -378,23 +375,22 @@
                 break
                 case "newSenseForm": 
                     document.querySelector("a[area='bodies']").click()
-                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
-                    let list = document.getElementById("sensesInExperience")
-                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    list.innerHTML += li
-                    let trackedObjs = document.getElementById("senses").value
-                    let delim = document.getElementById("senses").hasAttribute("deer-array-delimeter") ? document.getElementById("senses").getAttribute("deer-array-delimeter") : ","
-                    if(trackedObjs){
-                        trackedObjs += `${delim}${newObjID}`
+                    let sense_list = document.getElementById("sensesInExperience")
+                    let sense_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    sense_list.innerHTML += sense_li
+                    let senses_tracked = document.getElementById("senses").value
+                    let senses_delim = document.getElementById("senses").hasAttribute("deer-array-delimeter") ? document.getElementById("senses").getAttribute("deer-array-delimeter") : ","
+                    if(senses_tracked){
+                        senses_tracked += `${senses_delim}${newObjID}`
                     }
                     else{
-                        trackedObjs = newObjID
+                        senses_tracked = newObjID
                     }
                     /**
                      * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
-                    document.getElementById("senses").value = trackedObjs
+                    document.getElementById("senses").value = senses_tracked
                     document.getElementById("senses").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
                     document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
@@ -402,23 +398,22 @@
                     alert("Sense Recorded!");
                 case "newPracticeForm":
                     document.querySelector("a[area='bodies']").click()
-                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
-                    let list = document.getElementById("practicesInExperience")
-                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    list.innerHTML += li
-                    let trackedObjs = document.getElementById("practices").value
-                    let delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
-                    if(trackedObjs){
-                        trackedObjs += `${delim}${newObjID}`
+                    let practice_list = document.getElementById("practicesInExperience")
+                    let practice_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    practice_list.innerHTML += practice_li
+                    let practices_tracked = document.getElementById("practices").value
+                    let practices_delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
+                    if(practices_tracked){
+                        practices_tracked += `${practices_delim}${newObjID}`
                     }
                     else{
-                        trackedObjs = newObjID
+                        practices_tracked = newObjID
                     }
                     /**
                      * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
-                    document.getElementById("practices").value = trackedObjs
+                    document.getElementById("practices").value = practices_tracked
                     document.getElementById("practices").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
                     document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
@@ -426,11 +421,6 @@
                     alert("Practice Recorded")
                 break
                 case "fieldNotes":
-                    document.getElementById("notesKey").value = document.getElementById("fieldNotesFromExperience").value
-                    document.getElementById("notesKey").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
-                    document.getElementById("fieldNotes").$isDirty = true
-                    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
-                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new field notes
                     alert("Notes Saved!") //TODO FEEDBACK
                 break
                 default:
