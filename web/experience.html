@@ -21,7 +21,7 @@
         }
         
         .innards{
-            display: none;
+            
         }
         
         #notesIcon{
@@ -83,8 +83,8 @@
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
-                    <input id="loc" type="hidden" deer-key="location" />
-                    <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
+                    <input id="locations" type="hidden" deer-key="location" />
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
@@ -126,7 +126,7 @@
             <div class="row">
                 <!--<a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>-->
                 <a class="button bg-primary is-small" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button bg-primatry is-small" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
+                <a class="button bg-primary is-small" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
             </div>
             <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
             <!--
@@ -195,10 +195,10 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <h3>History of this Space:</h3>
+                            <h3>History of this Object</h3>
                             <label>Select Former Location(s):</label>
                             <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
-                            <deer-view id="locations" deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
+                            <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
                             <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
                             <!-- Looking at these as "former types", so just reuse the type values -->
@@ -244,7 +244,7 @@
                 <div class="card bd-primary">
                     <div class="card_body">
                         <!-- I smelled this, I heard that, during this event (geo)... -->
-                        <form id="senseForm" deer-type="ConsumeAction" deer-item-type="simple">
+                        <form id="newSenseForm" deer-type="ConsumeAction" deer-item-type="simple">
                             <h4>What senses are prominent?  Add one at a time.</h4>
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
                              <!-- At this location AKA Geo -->
@@ -267,7 +267,7 @@
                         </form>
 
                         <h4>What practices are occurring? Add one at a time.</h4>
-                        <form id="practiceForm" deer-type="Action" deer-item-type="simple">
+                        <form id="newPracticeForm" deer-type="Action" deer-item-type="simple">
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
                             <!-- At this event/location/geo -->
                             <input class="expReference" type="hidden" deer-key="event"> 
@@ -371,21 +371,64 @@
                      */
                     document.getElementById("objects").value = trackedObjs
                     document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     alert("Object Added!") //TODO FEEDBACK
                 break
-                case "senseEntryCreated":
-                    //Add this sense item by some name to a list, perhaps with a "remove" option
-                    //Empty newSenseForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
-                break
-                case "practiceEntryCreated":
-                    //Add this object item by some name to a list, perhaps with a "remove" option
-                    //Empty newPracticeForm inputs and prepare it to add another item.  It will never load a known item for edit here.  
+                case "newSenseForm": 
+                    document.querySelector("a[area='bodies']").click()
+                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
+                    let list = document.getElementById("sensesInExperience")
+                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    list.innerHTML += li
+                    let trackedObjs = document.getElementById("senses").value
+                    let delim = document.getElementById("senses").hasAttribute("deer-array-delimeter") ? document.getElementById("senses").getAttribute("deer-array-delimeter") : ","
+                    if(trackedObjs){
+                        trackedObjs += `${delim}${newObjID}`
+                    }
+                    else{
+                        trackedObjs = newObjID
+                    }
+                    /**
+                     * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
+                     * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
+                     */
+                    document.getElementById("senses").value = trackedObjs
+                    document.getElementById("senses").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("theExperience").$isDirty = true
+                    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    alert("Sense Recorded!");
+                case "newPracticeForm":
+                    document.querySelector("a[area='bodies']").click()
+                    let expID = document.getElementById("theExperience").getAttribute("deer-id")
+                    let list = document.getElementById("practicesInExperience")
+                    let li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    list.innerHTML += li
+                    let trackedObjs = document.getElementById("practices").value
+                    let delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
+                    if(trackedObjs){
+                        trackedObjs += `${delim}${newObjID}`
+                    }
+                    else{
+                        trackedObjs = newObjID
+                    }
+                    /**
+                     * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
+                     * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
+                     */
+                    document.getElementById("practices").value = trackedObjs
+                    document.getElementById("practices").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("theExperience").$isDirty = true
+                    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+                    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    alert("Practice Recorded")
                 break
                 case "fieldNotes":
                     document.getElementById("notesKey").value = document.getElementById("fieldNotesFromExperience").value
                     document.getElementById("notesKey").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+                    document.getElementById("fieldNotes").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new field notes
                     alert("Notes Saved!") //TODO FEEDBACK
@@ -415,6 +458,16 @@
             let what = event.target.id
             switch(what){
                 case "newObjectForm":
+                    //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
+                    //This appears to run twice each time an object is created.
+                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
+                break
+                case "newSenseForm":
+                    //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
+                    //This appears to run twice each time an object is created.
+                    LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
+                break
+                case "newPracticeForm":
                     //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     //This appears to run twice each time an object is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE

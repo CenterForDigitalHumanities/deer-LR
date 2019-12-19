@@ -201,6 +201,7 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
         trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
         document.getElementById("objects").value = trackedObjs
         document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+        document.getElementById("theExperience").$isDirty = true
         //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
         //FIXME this should really only happen if the form submit seen above is successful
