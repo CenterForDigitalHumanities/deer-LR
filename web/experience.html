@@ -55,27 +55,28 @@
                 <h4 id="notesTitle" class="innards" > Field Notes </h4>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
                 <p id="notesInfo" class="innards">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <form id="fiedlNotes" class="innards" deer-type="Comment" deer-item-type="simple">
+                <!-- This is it's own schema.org/Comment object which is about the expereience created by the experience creator-->
+                <!-- When rendering an expereience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
+                <form id="fiedlNotes" class="innards" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
                     <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
                     <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about -->
                     <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
                     <div class="row">
-                        <a class="button primary col" onclick="LR.utils.updateFieldNotes(event)"> Save Notes </a>
+                        <input type="submit" value="Save Notes"
+                        <!--<a class="button primary col" onclick="LR.utils.updateFieldNotes(event)"> Save Notes </a>-->
                     </div>
                 </form>
             </div>
         </div>
         <div id="startExperience" class="card bd-primary">
             <div class="card_body">
-                <!-- TODO make this EVENT somehow uniquely known as an experienceUpload, for /queryiong -->
                 <form id="theExperience" class="experience" deer-type="Event">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="@context" value="https://schema.org/" />
-                    <input id="notesKey" type="hidden" deer-key="comment" />
+                    <input type="hidden" deer-key="additionalType" value="LR:ExperienceUpload">
                     <input id="senses" type="hidden" deer-key="LR:Senses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="LR:Practices" deer-input-type="Set" />
                     <input id="objects"  type="hidden" deer-key="object"  deer-input-type="Set"  />
-                    
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -91,7 +92,6 @@
                     <textarea deer-key="description"></textarea>
                     <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="LR:Tags">   
-                    
                     <input type="submit" value="Continue" />
                 </form>
             </div>
