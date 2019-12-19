@@ -9,7 +9,7 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from '.https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-config.js'
+import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-config.js'
 
 // Identify a UTILS package
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-utils.js'
