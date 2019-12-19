@@ -20,7 +20,7 @@
             <div class="card_body">
                 <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionObjects"> <!-- into this collection -->
                     <label>Name:</label>
                     <input type="text" deer-key="name">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -116,7 +116,7 @@
             </div>
         </div>
         <h3>Existing Objects</h3>
-        <deer-view deer-collection="LivedReligionObjectsTest" deer-link="?id="></deer-view>
+        <deer-view deer-collection="LivedReligionObjects" deer-link="?id="></deer-view>
     </div>
     <lr-footer></lr-footer>
 
