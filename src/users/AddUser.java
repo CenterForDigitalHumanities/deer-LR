@@ -8,7 +8,6 @@ package users;
 import auth.Authorize;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
