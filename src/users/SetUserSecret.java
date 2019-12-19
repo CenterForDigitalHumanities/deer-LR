@@ -36,9 +36,7 @@ public class SetUserSecret extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setCharacterEncoding("UTF-8");
-        
+        response.setHeader("Content-Type", "text/html; charset=utf-8");        
         HttpSession sess = request.getSession();
         if(sess.getAttribute("lr-user") != null){
             JSONObject session_user = JSONObject.fromObject(sess.getAttribute("lr-user"));

@@ -36,10 +36,8 @@ public class AddUser extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "text/html; charset=utf-8");
         HttpSession sess = request.getSession();
         if(sess.getAttribute("lr-user") != null){
             JSONObject session_user = JSONObject.fromObject(sess.getAttribute("lr-user"));

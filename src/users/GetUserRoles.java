@@ -36,7 +36,6 @@ public class GetUserRoles extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setCharacterEncoding("UTF-8");
         HttpSession sess = request.getSession();
         if(sess.getAttribute("lr-user") != null){
             JSONObject session_user = JSONObject.fromObject(sess.getAttribute("lr-user"));
