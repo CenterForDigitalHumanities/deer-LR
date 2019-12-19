@@ -57,10 +57,15 @@
             }
             // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
         })
+        /**
+         * Determine what to do when a collection item is deleted
+         * @param {type} event
+         * @returns {undefined}
+         */
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
-                // TODO: rerender the list view.
+            // TODO: rerender the list view.
         })
         
         addEventListener('deer-created', event => {
