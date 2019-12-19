@@ -105,12 +105,14 @@ LR.ui.toggleFieldNotes = function(event){
         floater.setAttribute("expanded", "false")
         floater.style.width = "40px"
         floater.style.height = "40px"
+        floater.style["box-shadow"] = "none";
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.add("is-hidden"))
     }
     else{
         floater.setAttribute("expanded", "true")
         floater.style.width = "550px"
         floater.style.height = "400px"
+        floater.style["box-shadow"] = "1px 1px 18px black";
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
     }
     
