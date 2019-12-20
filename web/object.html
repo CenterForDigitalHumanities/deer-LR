@@ -156,6 +156,10 @@
             LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Added!`, true)
         })
         
+        addEventListener('deer-updated', event => {
+            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Information Updated!`, true)
+        })
+        
         /**
          * A hack to force redraw by refreshing the page.
          */

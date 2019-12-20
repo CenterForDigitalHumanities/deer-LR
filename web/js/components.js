@@ -158,7 +158,7 @@ class LrGlobalFeedback extends HTMLElement {
         this.style.bottom = 0
         this.style.right = "-30px"
         this.style.width = '0px'
-        this.style.backgroundColor = 'green'
+        this.style.backgroundColor = '#14854f'
         this.style.zIndex = 1
         this.style.bottom = '125px' //Get over the footer at all screen sizes!
         this.style.textAlign = 'center'

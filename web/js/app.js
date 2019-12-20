@@ -119,7 +119,7 @@ LR.ui.toggleFieldNotes = function(event){
 }
 
 /*
- * Proide a feedback message for users.
+ * Proide a feedback message for users.  This is meant to encompas any generic feedback message.
  * @param {DOMEvent} The event triggering this feedback
  * @param {string} message The message to show as feedback
  
@@ -131,7 +131,7 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
     feedbackAreaHTML.style.width="102%"
     feedbackAreaHTML.style.right="0"
     if(success){
-        feedbackAreaHTML.style.backgroundColor = "green"
+        feedbackAreaHTML.style.backgroundColor = "14854f"
     }
     else{
         feedbackAreaHTML.style.backgroundColor = "red"
@@ -141,7 +141,7 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
         feedbackAreaHTML.style.right="-30px"
         feedbackAreaHTML.style.width="0px"
         LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
-    }, 1200);
+    }, 2250);
 }
 
 /**

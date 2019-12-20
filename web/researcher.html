@@ -67,12 +67,15 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
              //TODO redraw lists
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true, true) //false and make it red, cuz remove??
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
         })
         
         addEventListener('deer-created', event => {
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true, true)
-            
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true)
+        })
+        
+        addEventListener('deer-updated', event => {
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Information Updated!`, true)
         })
         
         /**
