@@ -66,12 +66,13 @@
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
+             //TODO redraw lists
             LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
         })
         
         addEventListener('deer-created', event => {
             LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true)
-            //TODO pagination - render views
+            
         })
         
         /**
