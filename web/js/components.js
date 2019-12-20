@@ -147,3 +147,27 @@ class LrLogin extends HTMLElement {
     }
 }
 customElements.define("lr-login", LrLogin)
+
+class LrGlobalFeedback extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = `
+            <div id="globalFeedbackMessage" class="col is-marginless">lorem ipsum epsum salt urum </div>
+        `
+        this.id = 'globalFeedbackArea'
+        this.classList.add('row','is-fixed')
+        this.style.bottom = 0
+        this.style.right = "-30px"
+        this.style.width = '0px'
+        this.style.backgroundColor = 'green'
+        this.style.zIndex = 1
+        this.style.bottom = '50px' //Get over the footer!
+        this.style.textAlign = 'center'
+        this.style.fontSize = '14pt'
+        this.style.padding = '20px'
+        this.style.color = 'white'
+        this.style.transition='width 1s' 
+        this.style.webkitTransition = 'width 1s'
+        this.style.mozTransition = 'width 1s'
+    }
+}
+customElements.define("lr-global-feedback", LrGlobalFeedback)

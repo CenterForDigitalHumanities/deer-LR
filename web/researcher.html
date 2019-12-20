@@ -35,7 +35,7 @@
         <h3>Existing Researchers</h3>
         <deer-view deer-collection="LivedReligionResearchersTest" deer-link="?id="></deer-view>
     </div>
-
+    <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
 
     <script>
@@ -66,11 +66,19 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
             // TODO: rerender the list view.
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, false) //true and make it red, cuz remove??
         })
         
         addEventListener('deer-created', event => {
-            //TODO feedback of success and continued editing
-            setTimeout(function(){ document.location.reload() }, 2000);
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, false)
+            //TODO pagination
+        })
+        
+        /**
+         * A hack to force redraw by refreshing the page.
+         */
+        addEventListener('globalFeedbackFinished', event => {
+           document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
