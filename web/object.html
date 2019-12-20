@@ -148,7 +148,7 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
              //TODO redraw lists
-            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
+            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Removed!`, true) 
         })
         
         addEventListener('deer-created', event => {
