@@ -57,6 +57,7 @@
             }
             // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
         })
+        
         /**
          * Determine what to do when a collection item is deleted
          * @param {type} event
@@ -65,13 +66,12 @@
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
-            // TODO: rerender the list view.
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, false) //true and make it red, cuz remove??
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
         })
         
         addEventListener('deer-created', event => {
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, false)
-            //TODO pagination
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true)
+            //TODO pagination - render views
         })
         
         /**

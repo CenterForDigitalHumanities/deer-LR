@@ -160,14 +160,14 @@ class LrGlobalFeedback extends HTMLElement {
         this.style.width = '0px'
         this.style.backgroundColor = 'green'
         this.style.zIndex = 1
-        this.style.bottom = '50px' //Get over the footer!
+        this.style.bottom = '125px' //Get over the footer at all screen sizes!
         this.style.textAlign = 'center'
         this.style.fontSize = '14pt'
         this.style.padding = '20px'
         this.style.color = 'white'
         this.style.transition='width 1s' 
-        this.style.webkitTransition = 'width 1s'
-        this.style.mozTransition = 'width 1s'
+//        this.style.webkitTransition = 'width 1s'
+//        this.style.mozTransition = 'width 1s'
     }
 }
 customElements.define("lr-global-feedback", LrGlobalFeedback)

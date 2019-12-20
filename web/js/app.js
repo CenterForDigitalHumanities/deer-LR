@@ -124,24 +124,24 @@ LR.ui.toggleFieldNotes = function(event){
  * @param {string} message The message to show as feedback
  
  */
-LR.ui.globalFeedbackBlip = function(event, message, fail){
+LR.ui.globalFeedbackBlip = function(event, message, success){
     let feedbackMessageHTML = document.getElementById("globalFeedbackMessage")
     let feedbackAreaHTML = document.getElementById("globalFeedbackArea")
     feedbackMessageHTML.innerHTML = message
-    feedbackAreaHTML.style.width="101%"
+    feedbackAreaHTML.style.width="102%"
     feedbackAreaHTML.style.right="0"
-    if(fail){
-        feedbackAreaHTML.style.backgroundColor = "red"
+    if(success){
+        feedbackAreaHTML.style.backgroundColor = "green"
     }
     else{
-        feedbackAreaHTML.style.backgroundColor = "green"
+        feedbackAreaHTML.style.backgroundColor = "red"
     }
     setTimeout(function(){ 
         //Give animation a couple seconds
         feedbackAreaHTML.style.right="-30px"
         feedbackAreaHTML.style.width="0px"
         LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
-    }, 2000);
+    }, 2500);
 }
 
 /**

@@ -308,12 +308,19 @@
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
-            // TODO: rerender the list view.
+            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
         })
         
         addEventListener('deer-created', event => {
-            //TODO feedback of success and continued editing
-            setTimeout(function(){ document.location.reload() }, 2000);
+            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Added!`, true)
+            //TODO pagination - render views
+        })
+        
+        /**
+         * A hack to force redraw by refreshing the page.
+         */
+        addEventListener('globalFeedbackFinished', event => {
+           document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
