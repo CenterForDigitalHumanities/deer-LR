@@ -35,7 +35,7 @@
         <h3>Existing Researchers</h3>
         <deer-view deer-collection="LivedReligionResearchersTest" deer-link="?id="></deer-view>
     </div>
-
+    <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
 
     <script>
@@ -57,6 +57,7 @@
             }
             // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
         })
+        
         /**
          * Determine what to do when a collection item is deleted
          * @param {type} event
@@ -65,12 +66,23 @@
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
-            // TODO: rerender the list view.
+             //TODO redraw lists
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
         })
         
         addEventListener('deer-created', event => {
-            //TODO feedback of success and continued editing
-            setTimeout(function(){ document.location.reload() }, 2000);
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true)
+        })
+        
+        addEventListener('deer-updated', event => {
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Information Updated!`, true)
+        })
+        
+        /**
+         * A hack to force redraw by refreshing the page.
+         */
+        addEventListener('globalFeedbackFinished', event => {
+           document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>

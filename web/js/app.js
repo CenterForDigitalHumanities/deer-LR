@@ -118,6 +118,32 @@ LR.ui.toggleFieldNotes = function(event){
     
 }
 
+/*
+ * Proide a feedback message for users.  This is meant to encompas any generic feedback message.
+ * @param {DOMEvent} The event triggering this feedback
+ * @param {string} message The message to show as feedback
+ 
+ */
+LR.ui.globalFeedbackBlip = function(event, message, success){
+    let feedbackMessageHTML = document.getElementById("globalFeedbackMessage")
+    let feedbackAreaHTML = document.getElementById("globalFeedbackArea")
+    feedbackMessageHTML.innerHTML = message
+    feedbackAreaHTML.style.width="102%"
+    feedbackAreaHTML.style.right="0"
+    if(success){
+        feedbackAreaHTML.style.backgroundColor = "14854f"
+    }
+    else{
+        feedbackAreaHTML.style.backgroundColor = "red"
+    }
+    setTimeout(function(){ 
+        //Give animation a couple seconds
+        feedbackAreaHTML.style.right="-30px"
+        feedbackAreaHTML.style.width="0px"
+        LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
+    }, 2150);
+}
+
 /**
  * Remove an item from one of the Lived Religion application collections.
  * @param {String} itemID : The ID of the annotation connecting the item to the collection.
@@ -125,6 +151,7 @@ LR.ui.toggleFieldNotes = function(event){
  */
 LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collectionName) {
     let historyWildcard = { "$exists": true, "$size": 0 }
+    let name = event.target.previousElementSibling.text
     let queryObj = {
         $or: [{
             "targetCollection": collectionName
@@ -162,7 +189,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             console.log(itemElem)
         } else {
             if (deletedList.length === resultList.length) {
-                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName })
+                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
                 itemElem.remove()
                     // TODO: redraw() added to deer elements https://github.com/CenterForDigitalHumanities/deer/issues/34
             } else {

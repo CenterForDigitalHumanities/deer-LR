@@ -30,6 +30,7 @@
             <div id="researchers" class="deer-view col" deer-collection="LivedReligionResearchersTest" deer-list="itemListElement" deer-link="researcher.html?id="></div>
         </div>
     </div>
+    <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
     <!-- Add ins -->
     <script>
@@ -63,7 +64,15 @@
         addEventListener('lrCollectionItemDeleted', event => {
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
-            // TODO: rerender the list view.
+             //TODO redraw lists
+            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
+        })
+        
+        /**
+         * A hack to force redraw by refreshing the page.
+         */
+        addEventListener('globalFeedbackFinished', event => {
+           document.location.reload()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
