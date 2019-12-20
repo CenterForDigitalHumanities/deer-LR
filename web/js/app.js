@@ -141,7 +141,7 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
         feedbackAreaHTML.style.right="-30px"
         feedbackAreaHTML.style.width="0px"
         LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
-    }, 2250);
+    }, 2150);
 }
 
 /**
