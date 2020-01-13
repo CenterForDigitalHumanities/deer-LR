@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+logout on the back end, then remove user from localStorage in front end, then redirect to the dashboard.
+-->
+<html>
+    <head>
+        <title>Logout</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script>
+            fetch('logout', {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            })
+            .then(res =>{
+                if(res.ok){
+                    localStorage.removeItem("lr-user")
+                    document.location.href="dashboard.html"
+                }
+                else{
+                    //TODO maybe handle special?
+                    localStorage.removeItem("lr-user")
+                    document.location.href="dashboard.html"
+                }
+            })
+            .catch(err =>{
+                alert(err)
+                localStorage.removeItem("lr-user")
+                document.location.href="dashboard.html"
+            })
+        </script>
+    </body>
+</html>
