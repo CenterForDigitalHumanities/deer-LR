@@ -43,8 +43,8 @@
             if (event.detail.user !== null) {
                 getUserEntries(event.detail.user)
                 let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>
-                    <a class="button primary" href="object.html"> &#xFF0B; Object </a>
                     <a class="button primary" href="person.html"> &#xFF0B; Person </a>
+                    <a class="button primary" href="object.html"> &#xFF0B; Object </a>
                     `
                 if (event.detail.user.roles.administrator) {
                     buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`

@@ -44,7 +44,7 @@ UM.interaction.getAllUsers = async function(){
                 else if(response.status === 403){
                     console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
                     document.location.href="logout.html"
-                    return
+                    return "Please log in again"
                 }
                 else{
                     alert("Failed to get user information.")
@@ -64,7 +64,7 @@ UM.interaction.getAllUsers = async function(){
 UM.interaction.drawUserManagement = async function(){
     let loggedInUser = localStorage.getItem("lr-user")
     let managementTemplate = ``
-    if (loggedInUser !== null && loggedInUser !== undefined) {
+    if (loggedInUser !== null) {
         try {
             loggedInUser = JSON.parse(loggedInUser)
             if (loggedInUser.roles.administrator) {
@@ -87,6 +87,7 @@ UM.interaction.drawUserManagement = async function(){
             }
             else{
                 alert("You must be logged in as an administrator to use this!")
+                document.location.href="dashboard.html"
             }
         } catch (err) {
             console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
@@ -148,9 +149,8 @@ UM.interaction.addUser = async function(){
                     return "Please log in again."
                 }
                 else{
-                    alert("Failed to add user")
                     console.error("Failed to add user to file.")    
-                    return "Please log in again."
+                    return "Failed to add user."
                 }
             })
             .then(text => {
@@ -162,9 +162,6 @@ UM.interaction.addUser = async function(){
                alert("Failed to add user")
                console.error(err)         
             })
-        }
-        else{
-            //alert("Failed to add user.  Could not create AGENT.")
         }
     }
 }

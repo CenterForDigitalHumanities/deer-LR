@@ -56,6 +56,10 @@
                         newResearcherForm.append(btn)
                     }
                 }
+                else{
+                    alert("You must be logged in as an administrator to use this!")
+                    document.location.href="dashboard.html"
+                }
             }
             else{
                 console.log("User identity reset; user is null. ")
