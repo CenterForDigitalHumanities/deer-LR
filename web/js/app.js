@@ -76,11 +76,6 @@ LR.err.handleHTTPError = function(response) {
 }
     /** END Error handlers */
 
-LR.ui.loginFail = function() {
-    LR.sessionInfo.removeItem("authorized")
-    alert("The username and/or password you provided is not correct.")
-}
-
 /**
  * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
  * @param {type} event
@@ -269,4 +264,9 @@ LR.utils.scrubForm = function(form){
     form.querySelectorAll("[data-rdf").forEach(el => {
         el.classList.remove("bg-light")
     })
+}
+
+LR.utils.logout = function(){
+    
+    
 }

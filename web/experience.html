@@ -346,7 +346,13 @@
          * Ex. input[deer-key="creator"]
          */
         addEventListener('lrUserKnown', event => {
-            LR.utils.setUserAttributionFields(event.detail.user)
+            if(event.detail.user !== null){
+                LR.utils.setUserAttributionFields(event.detail.user)
+            }
+            else{
+                console.log("User identity reset; user is null. ")
+                document.location.href="logout.html"
+            }
         })
         
         /**

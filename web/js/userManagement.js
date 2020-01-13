@@ -43,14 +43,12 @@ UM.interaction.getAllUsers = async function(){
                 }
                 else if(response.status === 403){
                     console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
-                    localStorage.removeItem("lr-user")
-                    alert("Please log in again.")
-                    document.location.reload()
+                    document.location.href="logout.html"
+                    return
                 }
                 else{
-                    alert("Failed to add user")
-                    console.error("Failed to add user to file.")    
-                    return
+                    alert("Failed to get user information.")
+                    return "Failed to get user information."
                 }
             })
             .catch(err => console.error(err))
@@ -92,10 +90,8 @@ UM.interaction.drawUserManagement = async function(){
             }
         } catch (err) {
             console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-            localStorage.removeItem("lr-user")
             alert("There was an error identifying you.  Please log in again.")
-            document.location.reload()
-            
+            document.location.href="logout.html"
         }
     }
     else{
@@ -148,14 +144,13 @@ UM.interaction.addUser = async function(){
                 }
                 else if(response.status === 403){
                     console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
-                    localStorage.removeItem("lr-user")
-                    alert("Please log in again.")
-                    document.location.reload()
+                    document.location.href="logout.html"
+                    return "Please log in again."
                 }
                 else{
                     alert("Failed to add user")
                     console.error("Failed to add user to file.")    
-                    return
+                    return "Please log in again."
                 }
             })
             .then(text => {
@@ -194,14 +189,12 @@ UM.interaction.removeUser = async function(user){
         }
         else if(response.status === 403){
             console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
-            localStorage.removeItem("lr-user")
-            alert("Please log in again.")
-            document.location.reload()
+            document.location.href="logout.html"
+            return "Please log in again."
         }
         else{
-            alert("Failed to remove user")
             console.error("Failed to remove user")
-            return
+            return "Failed to remove user."
         }
     })
     .then(text => {
@@ -274,14 +267,12 @@ UM.interaction.setUserRoles = function(user){
             }
             else if(response.status === 403){
                 console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
-                localStorage.removeItem("lr-user")
-                alert("Please log in again.")
-                document.location.reload()
+                document.location.href="logout.html"
+                return "Please log in again."
             }
             else{
-                alert("There was an error setting the roles.")
                 console.error("There was an error setting the roles.")
-                return
+                return "There was an error setting the roles."
             }
         })
         .then(text =>{
@@ -319,14 +310,12 @@ UM.interaction.setUsername = async function(user){
             }
             else if(response.status === 403){
                 console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
-                localStorage.removeItem("lr-user")
-                alert("Please log in again.")
-                document.location.reload()
+                document.location.href="logout.html"
+                return "Please log in again."
             }
             else{
-                alert("There was an error setting the username.")
                 console.error("There was an error setting the username.")
-                return
+                return "There was an error setting the username."
             }
         })
         .then(text =>{
@@ -367,14 +356,12 @@ UM.interaction.setUserSec = async function(user){
             }
             else if(response.status === 403){
                 console.log("User identity reset; user session ended. ", localStorage.getItem("lr-user"))
-                localStorage.removeItem("lr-user")
-                alert("Please log in again.")
-                document.location.reload()
+                document.location.href="logout.html"
+                return "Please log in again."
             }
             else{
-                alert("There was an error updating the password.")
                 console.error("There was an error updating the password.")
-                return
+                return "There was an error updating the password."
             }
         })
         .then(text =>{

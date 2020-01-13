@@ -48,7 +48,7 @@
                         }
                     } catch (err) {
                         console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-                        localStorage.removeItem("lr-user")
+                        document.location.href="logout.html"
                     }
                 }
             }
