@@ -112,8 +112,7 @@ class LrLogin extends HTMLElement {
             this.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
                 let data = new FormData(this)
-                let authenticatedUser = {name:"AutoLogin",'@id':"httpDummy",roles:{administrator:true,contributor:true}} || // shorted out
-                await fetch('login', {
+                let authenticatedUser = await fetch('login', {
                     method: "POST",
                     mode: "cors",
                     cache: "no-cache",
