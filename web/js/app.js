@@ -268,7 +268,7 @@ LR.utils.scrubForm = function(form){
 
 /**
  * Remove a user from Session storage on the back end and localStorage on the front end. 
- * Broadcast an event for the logout. Redirect to the dashboard.
+ * Broadcast an event for the logout.
  */
 LR.utils.logout = function(){
     fetch('logout', {
