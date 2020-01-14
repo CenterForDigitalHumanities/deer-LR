@@ -283,20 +283,20 @@ LR.utils.logout = function(){
         if(res.ok){
             localStorage.removeItem("lr-user")
             LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
-            //Could move redirect into event handling, if desired.
-            document.location.href="dashboard.html"
+            //document.location.href="dashboard.html"
         }
         else{
             //TODO maybe handle special?  Something didn't work right, but we can still clear them from localStorage
             localStorage.removeItem("lr-user")
             LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
-            document.location.href="dashboard.html"
+            //document.location.href="dashboard.html"
         }
     })
     .catch(err =>{
         alert(err)
         localStorage.removeItem("lr-user")
         LR.utils.broadcastEvent({}, "logoutError", document, { message: err })
+        //document.location.href="dashboard.html"
     })
     
 }

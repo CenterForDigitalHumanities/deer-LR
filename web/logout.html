@@ -8,10 +8,13 @@ Should this broadcast an event??  Make it a utils function and include app.js he
         <title>Logout</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
         <script src="./js/app.js" type="text/javascript"></script>
     </head>
     <body>
         <script>
+            local_socket.broadcast('logout', {fun : LR.utils.logout()}) //OOOOof this can't pass functions
+            //iT WILL NOT BE ABLE TO HEAR ITS OWN BROADCAST.  This is normal and it's OK, just fire the function.
             LR.utils.logout()
         </script>
     </body>
