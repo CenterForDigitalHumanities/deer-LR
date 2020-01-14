@@ -15,7 +15,7 @@ Should this broadcast an event??  Make it a utils function and include app.js he
         <script>
              //OOOOof this can't pass functions because of object clonings that happen, event with JSON.parse(JSON.stringify(thing)) trick.
              //sysendBroadcaster.js:140 Uncaught DOMException: Failed to execute 'postMessage' on 'BroadcastChannel': function(){return LR.utils.logout()} could not be cloned.
-            local_socket.broadcast('logout', {message:"Lived Religion Logout"})
+            
             //iT WILL NOT BE ABLE TO HEAR ITS OWN BROADCAST.  This is normal and it's OK, just fire the function.
             LR.utils.logout()
             document.location.href="dashboard.html"

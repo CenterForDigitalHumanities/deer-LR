@@ -282,21 +282,17 @@ LR.utils.logout = function(){
     .then(res =>{
         if(res.ok){
             localStorage.removeItem("lr-user")
-            LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
-            //document.location.href="dashboard.html"
+            local_socket.broadcast('logoutFinished', {message:"Lived Religion Logout"})
         }
         else{
             //TODO maybe handle special?  Something didn't work right, but we can still clear them from localStorage
             localStorage.removeItem("lr-user")
-            LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
-            //document.location.href="dashboard.html"
+            local_socket.broadcast('logoutFinished', {message:"Lived Religion Logout"})
         }
     })
     .catch(err =>{
-        alert(err)
         localStorage.removeItem("lr-user")
-        LR.utils.broadcastEvent({}, "logoutError", document, { message: err })
-        //document.location.href="dashboard.html"
+        local_socket.broadcast('logoutError', {message:err})
     })
     
 }

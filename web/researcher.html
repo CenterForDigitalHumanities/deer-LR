@@ -98,15 +98,21 @@
         /**
          * Handle Login and Logout across tabs
          */
-        addEventListener('logoutError', event => {
+        local_socket.on('loginError', function(obj) {
+            alert("There was a problem logging in.  Refresh the page and try again.")
+        })
+
+        local_socket.on('loginFinished', function(obj) {
+            document.location.reload()
+        })
+        
+        local_socket.on('logoutError', function(obj) {
             alert("There was a problem logging out.  Refresh the page and try again.")
         })
-        addEventListener('logoutFinished', event => {
-            document.location.href="dashboard.html"
-        })
-        local_socket.on('logout', function(obj) {
+
+        local_socket.on('logoutFinished', function(obj) {
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
-            LR.utils.logout()
+            document.location.href="dashboard.html"
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
