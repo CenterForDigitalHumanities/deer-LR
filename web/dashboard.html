@@ -14,9 +14,7 @@
 <body>
     <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
     <!-- Yes.  If admin, entries can be edited -->
-
     <lr-nav></lr-nav>
-    <a id="a" class="button primary"> Send Dashboard Notification </a>
     <div id="dashboard" class="container">
         <h1 id="userDashboard" class="text-primary"> Dashboard </h1>
         <div class="row entries">
@@ -99,27 +97,8 @@
                 :`<p class="text-error">There are no recent experiences for this user.</p>`
             */
         }
-        
-        /**
-         * Will this work across tabs?
-         */
-        addEventListener('logoutFinished', event => {
-            alert("User has been logged out")
-        }, false)
-        
-        a.onclick = function() {
-            broadcaster.broadcast('dashboard_notification')
-        }
-        broadcaster.on('post_message', function(obj) {
-            document.getElementById("userDashboard").innerHTML = obj.message
-        })
-        broadcaster.on('notification', function(obj) {
-            document.getElementById("userDashboard").innerHTML = "A NOTIFICATION"
-        })
-        broadcaster.proxy('http://lived-religion-dev.rerum.io/deer-lr/')
-        broadcaster.proxy('http://leaflet.rerum.io/leaflet/')
+
     </script>
-    
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
     <script src="./js/components.js" type="text/javascript"></script>
