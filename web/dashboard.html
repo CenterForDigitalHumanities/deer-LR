@@ -104,7 +104,8 @@
             document.location.reload()
         })
         local_socket.on('logout', function(obj) {
-            obj.fun()
+            //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...
+            LR.utils.logout()
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>

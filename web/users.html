@@ -153,7 +153,8 @@
             document.location.href="dashboard.html"
         })
         local_socket.on('logout', function(obj) {
-            obj.fun()
+            //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...
+            LR.utils.logout()
         })
 
     </script>
