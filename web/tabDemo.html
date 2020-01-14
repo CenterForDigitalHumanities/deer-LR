@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="robots" content="noindex,nofollow"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+</head>
+<body>
+    <h2>Open this page in two different tabs</h2>
+    <p>It will also work cross-domain if you open <a href="http://leaflet.rerum.io/leaflet/tabDemo.html">this page</a></p>
+    <input type="text" id="theInput"/>
+    <button id="a">Post JSON containing {message:'your input'}</button>
+    <button id="b">Trigger Notification</button>
+    <pre></pre>
+    
+    <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
+    <script>
+        let pre = document.getElementsByTagName('pre')[0]
+        function message(msg) {
+            pre.innerHTML += msg + '\n';
+        }
+        local_socket.on('post_message', function(obj) {
+            message("RECIEVED MESSAGE '"+obj.message+"'")
+        })
+        local_socket.on('notification', function(obj) {
+            message('RECIEVED A NOTIFICATION')
+        })
+        local_socket.on('dashboard_notification', function(obj) {
+            message('RECIEVED __DASHBOARD_NOTIFICATION__')
+        })
+        let a = document.getElementById('a')
+        let b = document.getElementById('b')
+        let input = document.getElementById('theInput')
+        a.onclick = function() {
+            local_socket.broadcast('post_message', {message: input.value});
+            message('This tab/window posted the message "'+input.value+'"')
+        }
+        b.onclick = function() {
+            local_socket.broadcast('notification')
+            message('This tab/window sent a notification')
+        }
+        local_socket.proxy('http://lived-religion-dev.rerum.io/deer-lr/')
+        local_socket.proxy('http://leaflet.rerum.io/leaflet/')
+    </script>
+</body>
+</html>
