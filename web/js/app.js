@@ -266,7 +266,37 @@ LR.utils.scrubForm = function(form){
     })
 }
 
+/**
+ * Remove a user from Session storage on the back end and localStorage on the front end. 
+ * Broadcast an event for the logout. Redirect to the dashboard.
+ */
 LR.utils.logout = function(){
-    
+    fetch('logout', {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+            'Content-Type': 'text/plain'
+        }
+    })
+    .then(res =>{
+        if(res.ok){
+            localStorage.removeItem("lr-user")
+            LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
+            //Cold move redirect into event handling, if desired.
+            document.location.href="dashboard.html"
+        }
+        else{
+            //TODO maybe handle special?  Something didn't work right, but we can still clear them from localStorage
+            localStorage.removeItem("lr-user")
+            LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
+            document.location.href="dashboard.html"
+        }
+    })
+    .catch(err =>{
+        alert(err)
+        localStorage.removeItem("lr-user")
+        LR.utils.broadcastEvent({}, "logoutError", document, { message: err })
+    })
     
 }
