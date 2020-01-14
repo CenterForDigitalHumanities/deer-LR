@@ -95,6 +95,9 @@
            document.location.reload()
         })
         
+        /**
+         * Handle Login and Logout across tabs
+         */
         addEventListener('logoutError', event => {
             alert("There was a problem logging out.  Refresh the page and try again.")
         })
@@ -102,7 +105,7 @@
             document.location.href="dashboard.html"
         })
         local_socket.on('logout', function(obj) {
-            //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...
+            //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
             LR.utils.logout()
         })
     </script>
