@@ -283,7 +283,7 @@ LR.utils.logout = function(){
         if(res.ok){
             localStorage.removeItem("lr-user")
             LR.utils.broadcastEvent({}, "logoutFinished", document, { message: "Logout Successful" })
-            //Cold move redirect into event handling, if desired.
+            //Could move redirect into event handling, if desired.
             document.location.href="dashboard.html"
         }
         else{

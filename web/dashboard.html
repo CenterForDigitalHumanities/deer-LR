@@ -97,6 +97,13 @@
                 :`<p class="text-error">There are no recent experiences for this user.</p>`
             */
         }
+        
+        /**
+         * Will this work across tabs?
+         */
+        addEventListener('logoutFinished', event => {
+            alert("User has been logged out")
+        }, false)
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
