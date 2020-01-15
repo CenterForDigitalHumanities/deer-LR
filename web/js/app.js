@@ -270,6 +270,47 @@ LR.utils.scrubForm = function(form){
  * Remove a user from Session storage on the back end and localStorage on the front end. 
  * Broadcast the logout across tabs. 
  */
+LR.utils.login = async function(loginWidget, formData, submitEvent){
+    let authenticatedUser = await fetch('login', {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: data.get("user"),
+            password: data.get("pwd")
+        })
+    })
+    .then(res => res.json())
+    .catch(err => console.error(err))
+    
+    if (authenticatedUser && authenticatedUser["@id"]) {
+        localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
+        local_socket.broadcast('loginFinished', {message:"Lived Religion Login", customEvent : new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } })})
+        //dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
+        //<a>${authenticatedUser.name}</a>
+        loginWidget.innerHTML = `<div class="tabs">
+            <a title="${authenticatedUser.name}" href="logout.html">Logout</a>
+        </div>`
+        this.closest('BACKDROP').remove()
+        document.body.style.overflowY = ''
+        return authenticatedUser
+    } 
+    else {
+        let error = document.createElement('P')
+        error.classList.add('bg-error')
+        error.textContent = `Login failed.`
+        this.querySelector('fieldset').insertBefore(error, this.querySelector('legend'))
+        return null
+    }
+}
+
+/**
+ * Remove a user from Session storage on the back end and localStorage on the front end. 
+ * Broadcast the logout across tabs. 
+ */
 LR.utils.logout = function(){
     fetch('logout', {
         method: "POST",
