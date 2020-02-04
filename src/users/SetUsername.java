@@ -56,7 +56,7 @@ public class SetUsername extends HttpServlet {
                 usersFile.remove(origUsername);
                 usersFile.accumulate(newUsername, origUserObj);
                 auth.writeUserFile(usersFile);
-                response.getWriter().print("The username '"+origUsername+"' has been updated to "+newUsername+".");
+                response.getWriter().print("The username '"+origUsername+"' has been updated to '"+newUsername+"'.");
             }
             else{
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

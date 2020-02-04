@@ -56,7 +56,7 @@ public class AddUser extends HttpServlet {
                 JSONObject usersFile = auth.getUserData();
                 usersFile.element(requestJSON.getString("username"), requestJSON.getJSONObject("userbody"));
                 auth.writeUserFile(usersFile);
-                response.getWriter().print("User "+requestJSON.getString("username")+" added to users file.");
+                response.getWriter().print("User '"+requestJSON.getString("username")+"' added to users file.");
             }
             else{
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

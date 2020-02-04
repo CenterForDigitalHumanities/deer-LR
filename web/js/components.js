@@ -24,15 +24,17 @@ class LrNav extends HTMLElement {
         super()
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
-            this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
-            <a href="places.html">Locations</a>
-            <a href="stories.html">Stories</a> 
-            <a href="objects.html">Objects</a>
-            <a href="people.html">People</a>
-            <a href="researchers.html">Researchers</a>
-            `
-            if(event.detail.user.roles.administrator){
-                this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+            if(user !== null){
+                this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
+                <a href="places.html">Locations</a>
+                <a href="stories.html">Stories</a> 
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="researchers.html">Researchers</a>
+                `
+                if(user.roles.administrator){
+                    this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+                }
             }
         })
     }
@@ -66,14 +68,14 @@ class LrLogin extends HTMLElement {
                 dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: user }, composed: true, bubbles: true }))
             } catch (err) {
                 console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-                localStorage.removeItem("lr-user")
+                document.location.href="logout.html"
             }
         }
         if (this.hasAttribute("lr-user")) {
-            this.innerHTML = `<span>
-                Logged in as ${user.name}
-                <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
-            </span>`
+            //<a>${user.name}</a>
+            this.innerHTML = `<div class="tabs">
+                <a title="${user.name}" href="logout.html">Logout</a>
+            </div>`
         } else {
             this.innerHTML = `
             <style>
@@ -109,7 +111,8 @@ class LrLogin extends HTMLElement {
     }
     connectedCallback() {
         try {
-            this.querySelector('FORM').onsubmit = async function(event) {
+            let lrLogin = this
+            lrLogin.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
                 let data = new FormData(this)
                 let authenticatedUser = await fetch('login', {
@@ -125,12 +128,12 @@ class LrLogin extends HTMLElement {
                     })
                 }).then(res => res.json()).catch(err => console.error(err))
                 if (authenticatedUser && authenticatedUser["@id"]) {
-                    dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
                     localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
-                    this.innerHTML = `<span>
-                Logged in as <strong>${authenticatedUser.name}</strong>
-                <a href="logout" onclick="localStorage.removeItem('lr-user')">Logout</a>
-                </span>`
+                    dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
+                    //<a>${authenticatedUser.name}</a>
+                    lrLogin.innerHTML = `<div class="tabs">
+                        <a title="${authenticatedUser.name}" href="logout.html">Logout</a>
+                    </div>`
                     this.closest('BACKDROP').remove()
                     document.body.style.overflowY = ''
                 } else {

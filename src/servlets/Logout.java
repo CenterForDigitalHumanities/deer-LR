@@ -19,8 +19,7 @@ import javax.servlet.http.HttpSession;
 public class Logout extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * LOGOUT.  there is a local storage user and a session user, take care of the session user here.  
      *
      * @param request servlet request
      * @param response servlet response
@@ -33,22 +32,6 @@ public class Logout extends HttpServlet {
         HttpSession sess = request.getSession();
         sess.removeAttribute("lr-user");
         response.getWriter().print("Logged Out");
-        response.sendRedirect("dashboard.html");  
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -72,7 +55,7 @@ public class Logout extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Lived Religion logout.";
     }// </editor-fold>
 
 }

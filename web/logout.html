@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!--
+logout on the back end, then remove user from localStorage in front end, then redirect to the dashboard.
+Should this broadcast an event??  Make it a utils function and include app.js here if so.
+-->
+<html>
+    <head>
+        <title>Logout</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
+        <script src="./js/app.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <script>
+             //OOOOof this can't pass functions because of object clonings that happen, event with JSON.parse(JSON.stringify(thing)) trick.
+             //sysendBroadcaster.js:140 Uncaught DOMException: Failed to execute 'postMessage' on 'BroadcastChannel': function(){return LR.utils.logout()} could not be cloned.
+            
+            //iT WILL NOT BE ABLE TO HEAR ITS OWN BROADCAST.  This is normal and it's OK, just fire the function.
+            LR.utils.logout()
+            document.location.href="dashboard.html"
+        </script>
+    </body>
+</html>

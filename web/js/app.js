@@ -76,11 +76,6 @@ LR.err.handleHTTPError = function(response) {
 }
     /** END Error handlers */
 
-LR.ui.loginFail = function() {
-    LR.sessionInfo.removeItem("authorized")
-    alert("The username and/or password you provided is not correct.")
-}
-
 /**
  * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
  * @param {type} event
@@ -269,4 +264,35 @@ LR.utils.scrubForm = function(form){
     form.querySelectorAll("[data-rdf").forEach(el => {
         el.classList.remove("bg-light")
     })
+}
+
+/**
+ * Remove a user from Session storage on the back end and localStorage on the front end. 
+ * Broadcast the logout across tabs. 
+ */
+LR.utils.logout = function(){
+    fetch('logout', {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+            'Content-Type': 'text/plain'
+        }
+    })
+    .then(res =>{
+        if(res.ok){
+            localStorage.removeItem("lr-user")
+            local_socket.broadcast('logoutFinished', {message:"Lived Religion Logout"})
+        }
+        else{
+            //TODO maybe handle special?  Something didn't work right, but we can still clear them from localStorage
+            localStorage.removeItem("lr-user")
+            local_socket.broadcast('logoutFinished', {message:"Lived Religion Logout"})
+        }
+    })
+    .catch(err =>{
+        localStorage.removeItem("lr-user")
+        local_socket.broadcast('logoutError', {message:err})
+    })
+    
 }
