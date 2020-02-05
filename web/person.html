@@ -192,17 +192,16 @@
         /**
          * Handle Login and Logout across tabs
          */
-        /**
-         * Handle Login and Logout across tabs
-         */
         local_socket.on('loginError', function(obj) {
             alert("There was a problem logging in.  Refresh the page and try again.")
         })
 
         local_socket.on('loginFinished', function(obj) {
+            //Perhaps it could be more elegant to dispatch the lrUserKnown event.  Socket events are not caught on the page they are generated...
+            //Reload does everything we want inside the framework we already built in <lr-login> elements
             document.location.reload()
         })
-        
+
         local_socket.on('logoutError', function(obj) {
             alert("There was a problem logging out.  Refresh the page and try again.")
         })

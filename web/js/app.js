@@ -270,7 +270,7 @@ LR.utils.scrubForm = function(form){
  * Remove a user from Session storage on the back end and localStorage on the front end. 
  * Broadcast the logout across tabs. 
  */
-LR.utils.login = async function(loginWidget, formData, submitEvent){
+LR.utils.login = async function(loginWidget, data, submitEvent){
     let authenticatedUser = await fetch('login', {
         method: "POST",
         mode: "cors",
@@ -283,29 +283,38 @@ LR.utils.login = async function(loginWidget, formData, submitEvent){
             password: data.get("pwd")
         })
     })
-    .then(res => res.json())
-    .catch(err => console.error(err))
+    .then(res =>{
+        if(res.ok){
+            return res.json()
+        }
+        else{
+            //TODO maybe handle special?  
+            throw new Error("There was a server error logging in.")
+        }
+    })
+    .catch(err => {
+        console.error(err)
+        return {}
+    })
     
     if (authenticatedUser && authenticatedUser["@id"]) {
         localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
-        local_socket.broadcast('loginFinished', {message:"Lived Religion Login", customEvent : new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } })})
-        //dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
-        //<a>${authenticatedUser.name}</a>
-        loginWidget.innerHTML = `<div class="tabs">
-            <a title="${authenticatedUser.name}" href="logout.html">Logout</a>
-        </div>`
-        this.closest('BACKDROP').remove()
-        document.body.style.overflowY = ''
-        return authenticatedUser
+        //There is an error in the sysend broadcaster because this CustomEvent cannot be cloned, so we cannot attach the lrUserKnown or similar events here.  Too bad, that would be neat.
+        //local_socket.broadcast('loginFinished', {message:"Lived Religion Login", customEvent : new CustomEvent('lrUserKnown', { detail: { "user": authenticatedUser } })})
+        
+        //This simple object can be cloned and can be a part of the broadcast, so we can fire custom events in the local_socket event handlers
+        local_socket.broadcast('loginFinished', {message:"Lived Religion Login", "user": authenticatedUser })
+        //The socket does not fire on the page they are generated, so we are doing whatever UI logic is necessary here just like the socket handlers on the html pages
+        document.location.reload() 
     } 
     else {
-        let error = document.createElement('P')
-        error.classList.add('bg-error')
-        error.textContent = `Login failed.`
-        this.querySelector('fieldset').insertBefore(error, this.querySelector('legend'))
+        localStorage.removeItem("lr-user")
+        local_socket.broadcast('loginError', {message:"Login Error"})
         return null
     }
 }
+
+
 
 /**
  * Remove a user from Session storage on the back end and localStorage on the front end. 
