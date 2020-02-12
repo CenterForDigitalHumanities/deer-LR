@@ -115,33 +115,8 @@ class LrLogin extends HTMLElement {
             lrLogin.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
                 let data = new FormData(this)
-                let authenticatedUser = await fetch('login', {
-                    method: "POST",
-                    mode: "cors",
-                    cache: "no-cache",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: data.get("user"),
-                        password: data.get("pwd")
-                    })
-                }).then(res => res.json()).catch(err => console.error(err))
-                if (authenticatedUser && authenticatedUser["@id"]) {
-                    localStorage.setItem("lr-user", JSON.stringify(authenticatedUser))
-                    dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: authenticatedUser } }))
-                    //<a>${authenticatedUser.name}</a>
-                    lrLogin.innerHTML = `<div class="tabs">
-                        <a title="${authenticatedUser.name}" href="logout.html">Logout</a>
-                    </div>`
-                    this.closest('BACKDROP').remove()
-                    document.body.style.overflowY = ''
-                } else {
-                    let error = document.createElement('P')
-                    error.classList.add('bg-error')
-                    error.textContent = `Login failed.`
-                    this.querySelector('fieldset').insertBefore(error, this.querySelector('legend'))
-                }
+                let userData = await LR.utils.login(lrLogin, data, event)
+                
             }
         } catch (err) {
             // already logged in or other error
