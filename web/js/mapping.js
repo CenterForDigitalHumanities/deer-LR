@@ -19,7 +19,7 @@ MAPPER.URLS = {
 }
 
 MAPPER.init =  async function(){
-    let latlong = [12, 12] //default starting coords
+    let latlong = [38.6360699, -90.2348349] //default starting coords
     let historyWildcard = {"$exists":true, "$size":0}
     let geoWildcard = {"$exists":true}
     let geos = []
@@ -62,10 +62,9 @@ MAPPER.init =  async function(){
                 .catch(err => {return null})
                 if(targetObj){
                     //This application created its annotations aa bit differently, so we have to shim the output here.  
-                    isIIIF = MAPPER.checkForIIIF(targetObj)
                     targetObjDescription = targetObj.description ? targetObj.description : "Target Description Unknown"
                     targetObjLabel = targetObj.label ? targetObj.label : targetObj.name ? targetObj.name : "Target Label Unknown"
-                    targetProps = {"targetID":annotation.target, "label":targetObjLabel, "description":targetObjDescription, "madeByApp":"Lived_Religion", "isIIIF":isIIIF}
+                    targetProps = {"targetID":annotation.target, "label":targetObjLabel, "description":targetObjDescription, "madeByApp":"Lived_Religion"}
                 }
                 else{
                     //alert("Target URI could not be resolved.  The annotationtation will still be created and target the URI provided, but certain information will be unknown.")
@@ -91,7 +90,7 @@ MAPPER.initializeMap = async function(coords, geoMarkers){
         id: 'mapbox.satellite', //mapbox.streets
         accessToken: 'pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ'
     }).addTo(MAPPER.mymap);
-    MAPPER.mymap.setView(coords,8);
+    MAPPER.mymap.setView(coords,4);
 
     L.geoJSON(geoMarkers, {
         pointToLayer: function (feature, latlng) {
