@@ -27,7 +27,7 @@ MAPPER.init =  async function(){
     document.getElementById("leafLong").oninput = MAPPER.updateGeometry
 
     //for my LR app
-    let LRDemoQueryObj = {
+    let LRQueryObj = {
         "__rerum.history.next": {"$exists":true, "$size":0},
         "type"  : "Annotation",
         "body.geometry" : {"$exists":true}
@@ -35,7 +35,7 @@ MAPPER.init =  async function(){
     let LRDemoGeos = await fetch(MAPPER.URLS.QUERY, {
         method: "POST",
         mode: "cors",
-        body: JSON.stringify(LRDemoQueryObj)
+        body: JSON.stringify(LRQueryObj)
     })
     .then(response => response.json())
     .then(geoMarkers => {
@@ -47,9 +47,8 @@ MAPPER.init =  async function(){
     })
     .then(async function(annotations) {
         let targetObjDescription, targetObjLabel = ""
-        let isIIIF = false
         let allGeos = await annotations.map(async function(annotation){ 
-            let targetProps = {"label":"Target Label Unknown","description":"Target Description Unknown",  "madeByApp" : "Lived_Religion", "isIIIF":false}
+            let targetProps = {"label":"Target Label Unknown","description":"Target Description Unknown",  "madeByApp" : "Lived_Religion"}
             targetProps.targetID = annotation.target
             if(annotation.body.hasOwnProperty("properties") && (annotation.body.properties.label || annotation.body.properties.description) ){
                 targetProps = annotation.properties
@@ -90,7 +89,7 @@ MAPPER.initializeMap = async function(coords, geoMarkers){
         id: 'mapbox.satellite', //mapbox.streets
         accessToken: 'pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ'
     }).addTo(MAPPER.mymap);
-    MAPPER.mymap.setView(coords,4);
+    MAPPER.mymap.setView(coords,9);
 
     L.geoJSON(geoMarkers, {
         pointToLayer: function (feature, latlng) {
@@ -136,9 +135,6 @@ MAPPER.pointEachFeature = function (feature, layer) {
     layer.isHiding = false
     let popupContent = ""
     if (feature.properties) {
-        if(feature.properties.isIIIF){
-            popupContent += `<p class="color6 featureCompliance">IIIF Compliant Target</p>`
-        }
         if(feature.properties.label) {
             popupContent += `<div class="featureInfo"><label>Target Label:</label>${feature.properties.label}</div>`
         }
@@ -172,14 +168,7 @@ MAPPER.filterMarkers = async function(event){
     MAPPER.mymap.eachLayer(function(layer) {
         let skipCheck = false
         if ( layer.hasMyPoints ) {
-            //remove [pomts nased pm a point.madeByApp property
-            if(app === "isIIIF"){
-                //Special handler to toggle on this property existing instead of basing it on the creating app (any aapp could have target a IIIF resource).
-                if(layer.feature.properties && layer.feature.properties.isIIIF){
-                    skipCheck = true
-                }
-            }
-            if(skipCheck || (layer.feature.properties && layer.feature.properties.madeByApp && layer.feature.properties.madeByApp === app)){
+            if(layer.feature.properties && layer.feature.properties.madeByApp && layer.feature.properties.madeByApp === app){
                 if(layer.isHiding){
                     layer.isHiding = false
                     let creating_app = layer.feature.properties.madeByApp ? layer.feature.properties.madeByApp : "Unknown"
@@ -219,39 +208,4 @@ MAPPER.filterMarkers = async function(event){
         }
     })
 }
-                      
-MAPPER.getTargetProperties = async function(event){
-    targetProps = {"label":"Unknown","description":"Unknown", "@id":"", "madeByApp":"IIIF_Coordinates_Annotator", "isIIIF":false}
-    let target = document.getElementById('objURI').value
-    let isIIIF = false
-    targetProps["@id"] = target
-    let targetObjDescription = "Unknown"
-    let targetObjLabel = "Unknown"
-    let targetObj = await fetch(target)
-        .then(resp => resp.json())
-        .catch(err => {return null})
-    if(targetObj){
-        if(targetObj["@context"]){
-            if(Array.isArray(targetObj["@context"])){
-                isIIIF = targetObj["@context"].includes("http://iiif.io/api/presentation/3/context.json") || targetObj["@context"].includes("http://iiif.io/api/presentation/2/context.json")
-            }
-            else if(typeof targetObj["@context"] === "string"){
-               isIIIF = targetObj["@context"] === "http://iiif.io/api/presentation/3/context.json" || targetObj["@context"] === "http://iiif.io/api/presentation/2/context.json" 
-            }
-
-        }
-        targetObjDescription = targetObj.description ? targetObj.description : "Unknown"
-        targetObjLabel = targetObj.label ? targetObj.label : targetObj.name ? targetObj.name : "Unknown"
-        targetProps = {"@id":target, "label":targetObjLabel, "description":targetObjDescription, "madeByApp":"T-PEN", "isIIIF":isIIIF}
-        return targetProps
-    }
-    else{
-        alert("Target URI could not be resolved.  The annotation will still be created and target the URI provided, but certain information will be unknown.")
-        return targetProps
-    }
-} 
-
-
-
-
 
