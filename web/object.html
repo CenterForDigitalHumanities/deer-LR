@@ -53,7 +53,8 @@
                                 el = el.closest("[data-rdf]")
                                 if (el.getAttribute("data-rdf") === val) {
                                     el.classList.add("bg-light")
-                                } else {
+                                } 
+                                else {
                                     el.classList.remove("bg-light")
                                 }
                             })
@@ -61,7 +62,7 @@
                     </script>
                     <div class="grouped">
                         <label>Further Options</label>
-                        <select oninput="setPrimaryType(this)">
+                        <select oninput="setPrimaryType(event)">
                             <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
                             <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
                             <option value="LR:Natural" context=""">Natural</option>
@@ -76,16 +77,16 @@
                     <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                     <label>Select Former Use(s):</label>
-                    <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
+                    <input type="hidden" deer-key="LR:formerUses" deer-input-type="List" context="">
                     <!-- Looking at these as "former types", so just reuse the type values -->
-                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                    <select multiple oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
                         <option value="SacredObject">Sacred Object</option>
                         <option value="VisualArtwork">Artwork</option>
                         <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
                         <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                         <option value="CivicStructure">Building</option>
-                        <option value="LR:Natural">Natural</option>
-                        <option value="LR:Manufactured">Manufactured</option>
+                        <option value="LR:Natural" context="">Natural</option>
+                        <option value="LR:Manufactured" context="">Manufactured</option>
                         <option value="LR:Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
                         <option value="Manuscript">Written Text</option>
                         <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
