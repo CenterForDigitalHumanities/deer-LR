@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Coordinate Assertions</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+        <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
+        <script src="js/leafletHelper.js"></script>  
+        <script src="js/mapping.js"></script>  
+        <style>
+           #leafletInstanceContainer { 
+               height: 44em;
+               background-image: url(images/earth.gif);
+               background-repeat: no-repeat;
+               background-attachment: local;
+               background-position: center -19em;
+               background-size: 85em;
+               border: 1px solid black;
+           }
+           #loadingMessage{
+               text-align: center;
+               background-color: white;
+               animation-name: color;
+               animation-duration: 2s;
+               animation-iteration-count: infinite;
+           }
+           #currentCoords{
+               font-weight: bold;
+           }
+           
+           .color1{
+               background-color: #336699;
+           }
+           
+           .color2{
+               background-color: #00cc00;
+           }
+           
+           .color3{
+               background-color: #ff9900;
+           }
+           
+           .color4{
+               background-color: #ff3333;
+           }
+           
+           .color5{
+               background-color: #800060;
+           }
+           
+           .color6{
+               background-color: #b5a4a3;
+           }
+           
+           .tag{
+               color:white;
+           }
+           
+           .grouped input{
+                height: 1.5em;
+                width: 5em !important;
+            }
+            
+            .featureInfo{
+                margin: 4px 0px;
+                font-family: monospace;
+            }
+            
+            .featureInfo label{
+                margin-right: 6px;
+                font-family: sans-serif;
+            }
+            
+            .featureCompliance{
+                text-align:center;
+            }
+            
+            #howTo{
+                font-size: 10pt;
+            }
+            
+            #goToCoords{
+                color: black;
+                border: 1px solid black;
+            }
+            
+            input[app]{
+                margin: 2px 0px 5px 0px;
+            }
+            
+            @keyframes color {
+            0% {
+              background-color: white;
+            }
+            50% {
+              background-color: darkgrey;
+            }
+            100 {
+              background-color: white;
+            }
+          }
+
+           
+        </style>
+    </head>
+    
+    <body class="container">
+        <p id='howTo'> 
+            View the map below for rendered coordinate information.  Pan and zoom are supported. Supplying direct coordinates is available below the map.
+            <a onclick="MAPPER.mymap.flyTo([12,12],2)">[Shift] + [Z]</a> will zoom out for a holistic view.  
+            Clicking any dot on the map will show applicable information about the target when the URI is resolvable.
+        </p>
+        <div id="leafletInstanceContainer"><div id="loadingMessage" style="text-align: center;">Gathering Coordinates from the Lived Religion Corpus...</div></div>
+        
+        <!--
+        <div class="col">
+            <div class="row">
+                <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color1" value="Demo" app="MapDemo" onclick="MAPPER.filterMarkers(event)"/>
+                <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color2" value="Lived Religion" app="Lived_Religion" onclick="MAPPER.filterMarkers(event)" />
+                <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color3" value="T-PEN"  app="T-PEN" onclick="MAPPER.filterMarkers(event)" />
+                <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color4" value="Mirador" app="Mirador" onclick="MAPPER.filterMarkers(event)" />
+                <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color5" value="IIIF App" app="IIIF_Coordinates_Annotator" onclick="MAPPER.filterMarkers(event)" />
+                <input title="Toggle annotations that target IIIF resources." type="button" class="tag is-small color6" value="IIIFy" app="isIIIF" onclick="MAPPER.filterMarkers(event)" />
+            </div>
+        </div>
+        -->
+        
+        <div class="card">
+            <header>Supply a latitude and longitude to fly to.  Last Supplied Coordinates <span id="currentCoords">[12,12]</span></header>
+            <div class="card_body">
+                <div class="grouped">
+                    <label>Latitude</label><input id="leafLat" type="number" />
+                    <label>Longitude</label><input id="leafLong" type="number" />
+                </div>
+            </div>
+            <footer>
+                <input id='goToCoords' value="Go To Coordinates" type="button" class="tag is-small" onclick="MAPPER.goToCoords(event)"/>
+                <!--<input value="Refresh Markers" type="button" class="tag is-small" onclick="MAPPER.refreshMarkers(event)"/>--> 
+            </footer>
+        </div>
+
+    </body>
+    
+    <script>
+        
+        //let latlang = [38.6360699, -90.2348349] //SLU in lat,long order
+        MAPPER.init()
+        /**
+         * Use Shift + Z to do the zoom out to xsee dots across the globe.
+         */
+        document.addEventListener("keydown", function(event){
+            let key;
+            let isShift;
+            if (window.event) {
+              key = event.keyCode;
+              isShift = !!event.shiftKey; // typecast to boolean
+            } 
+            else {
+              key = event.which;
+              isShift = !!event.shiftKey;
+            }
+            if ( isShift ) {
+                switch (key) {
+                  case 90: 
+                      //Shift + Z will do the zoom out behavior
+                      MAPPER.mymap.flyTo([12,12],2)
+                    break
+                  default:
+                }
+              }
+        })    
+        
+    </script>
+</html>

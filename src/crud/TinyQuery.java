@@ -91,6 +91,7 @@ public class TinyQuery extends HttpServlet {
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
+                requestJSON.element("__rerum.generatedBy", Constant.RERUM_AGENT);
                 byte[] toWrite = requestJSON.toString().getBytes("UTF-8");
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
                 //out.writeBytes(requestJSON.toString());
