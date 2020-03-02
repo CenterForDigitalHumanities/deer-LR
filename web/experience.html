@@ -215,7 +215,7 @@
                             <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
                             <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
-                            <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
+                            <input type="hidden" deer-key="LR:FormerUses" deer-input-type="List">
                             <!-- Looking at these as "former types", so just reuse the type values -->
                             <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
                                 <option value="SacredObject">Sacred Object</option>

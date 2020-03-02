@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title>Lived Religions events</title>
+    <title>Lived Religions Location</title>
     <meta charset="UTF-8">
     <!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -224,7 +224,7 @@
                             .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
                     </script>
                     <label>Former Use(s)</label>
-                    <input type="hidden" deer-array-x="LR:formerUses" value="">
+                    <input type="hidden" deer-array-x="LR:FormerUses" value="">
                     <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
                         <optgroup label="General Categories"> 
                             <option value="Place.Accommodation" >Accommodation</option>

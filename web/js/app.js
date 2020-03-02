@@ -346,3 +346,46 @@ LR.utils.logout = function(){
     })
     
 }
+
+/**
+ * This happens on a per form basis.  A form's loaded event will fire this.
+ * @param {type} event
+ * @param {type} fromTemplate
+ * @return {undefined}
+ */
+LR.utils.handleMultiSelect = function(event, fromTemplate){
+    let sel = event.target
+    let arr = Array.from(sel.selectedOptions).map(option=>option.value)
+    let input = (fromTemplate) ? sel.parentElement.previousElementSibling : sel.previousElementSibling
+    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+    let str_arr = arr.join(delim)
+    input.value=str_arr
+    input.setAttribute("value", str_arr)
+}
+
+/**
+ * Make sure not to select options outside the <form> and <select> involved here.  
+ * @param {type} annotationData
+ * @param {type} keys
+ * @return {undefined}
+ */
+LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
+    keys.forEach(key =>{
+        let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
+        let input = form.querySelector("input[deer-key='"+key+"']")
+        let sel = input.nextElementSibling
+        if(sel.tagName !== "SELECT"){
+            //Then it is a template and we need to get the child to have the select
+            sel = sel.firstElementChild
+        }
+        data_arr.forEach(val => {
+            let option = sel.querySelector("option[value='"+val+"']")
+            if(option){
+                option.selected = true
+            }
+            else{
+                //The <option> is not available in the <select> HTML.
+            }  
+        })
+    })
+}

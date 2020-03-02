@@ -121,7 +121,7 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
     try {
         let allLocationsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Locations"> `
         for (let loc of allLocationsInCollection) {
             tmpl += `<option deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
@@ -143,7 +143,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Researchers"> `
         for (let person of allPeopleInCollection) {
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
@@ -165,7 +165,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     try {
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select deer-array-type="Set" multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select deer-array-type="Set" multiple oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
             <optgroup label="Objects"> `
         for (let obj of allObjectsInCollection) {
             tmpl += `<option deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`
