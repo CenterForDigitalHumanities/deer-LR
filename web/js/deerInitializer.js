@@ -244,6 +244,7 @@ import { default as renderer, initializeDeerViews } from '/deer-lr/localdeer/dee
 import { default as record, initializeDeerForms } from '/deer-lr/localdeer/deer-record.js'
 
 // fire up the element detection as needed
-initializeDeerViews(DEER)
-    //Need to make the form initializer wait on view initializer, these cannot run syncronously.  
-initializeDeerForms(DEER)
+
+//intializeDeerViews does not treat each view as its own Promise.  Since views can be pieces of forms, views must finish before processing data into forms
+//It would need to to ensure each innerHTML=`template` truly finishes so that it can be manipulated in the DOM with post processing
+initializeDeerViews(DEER).then(() => initializeDeerForms(DEER))

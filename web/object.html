@@ -125,13 +125,12 @@
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         
-        addEventListener('VIEWDRAWN', event => {
+        addEventListener('VIEW_ELEMENT_RENDERED', event => {
             let whatElem = event.target
-            let annotationData = event.detail
-            let whatView = annotationData.name
+            let whatData = event.detail
         })
         
-        addEventListener('RECORDDRAWN', event => {
+        addEventListener('FORM_DATA_LOADED', event => {
             let whatRecordForm = event.target.id
             let annotationData = event.detail
             switch(whatRecordForm){
@@ -141,6 +140,12 @@
                 default:
                     
             }
+        })
+        
+        //This was previously a combination of the two events above, a great example of why I need
+        addEventListener('deer-loaded', event => {
+            let whatElem = event.target
+            let whatData = event.detail
         })
         
         addEventListener('lrUserKnown', event => {
