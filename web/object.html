@@ -18,7 +18,7 @@
         <h2 class="text-primary">Create a New Object</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
+                <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
                     <label>Name:</label>
@@ -125,11 +125,17 @@
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         
-        addEventListener('locationsMultiTemplateDrawn', event => {
-            let whatForm = event.target.id
+        addEventListener('VIEWDRAWN', event => {
+            let whatElem = event.target
             let annotationData = event.detail
-            switch(whatForm){
-                case "newObjectForm":
+            let whatView = annotationData.name
+        })
+        
+        addEventListener('RECORDDRAWN', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch(whatRecordForm){
+                case "objectForm":
                     LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target) 
                 break
                 default:
@@ -145,13 +151,13 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     const researcherId = urlParams.get('id');
                     if (researcherId) {
-                        newObjectForm.setAttribute("deer-id", researcherId)
+                        objectForm.setAttribute("deer-id", researcherId)
                         document.querySelector("h2.text-primary").innerHTML = "Update Object"
                         document.querySelector("input[type='submit']").value = "Update"
                         let btn = document.createElement("a")
                         btn.href = window.location.pathname
                         btn.innerHTML = "Reset Page"
-                        newObjectForm.append(btn)
+                        objectForm.append(btn)
                     }
                 } 
             }

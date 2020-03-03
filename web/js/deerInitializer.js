@@ -9,10 +9,10 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-config.js'
+import { default as DEER } from '/deer-lr/localdeer/deer-config.js'
 
 // Identify a UTILS package
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-utils.js'
+import { default as UTILS } from '/deer-lr/localdeer/deer-utils.js'
 
 // Overwrite or add certain values to the configuration to customize.
 
@@ -237,11 +237,11 @@ DEER.TEMPLATES.list= function(obj, options={}) {
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
+import { default as renderer, initializeDeerViews } from '/deer-lr/localdeer/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
+import { default as record, initializeDeerForms } from '/deer-lr/localdeer/deer-record.js'
 
 // fire up the element detection as needed
 initializeDeerViews(DEER)
