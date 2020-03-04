@@ -89,12 +89,12 @@ RENDER.element = function(elem, obj) {
             if(newViews.length){
                 UTILS.broadcast(undefined, DEER.EVENTS.NEW_VIEW, elem, { set: newViews })
             } 
-            UTILS.broadcast(undefined, "VIEW_ELEMENT_RENDERED", elem, obj)
+            UTILS.broadcast(undefined, DEER.EVENTS.FORM_RENDERED, elem, obj)
         }, 0)
         
         if (typeof templateResponse.then === "function") { templateResponse.then(elem, obj, options) }
-        //Note this is deprecated for the "VIEW_ELEMENT_RENDERED" event.  above.  
-        //UTILS.broadcast(undefined, DEER.EVENTS.LOADED, elem, obj) 
+        //Note this is deprecated for the "deer-view-rendered" event.  above.  
+        UTILS.broadcast(undefined, DEER.EVENTS.LOADED, elem, obj) 
     })
 }
 

@@ -195,13 +195,13 @@ export default class DeerReport {
                          *  
                          *  This event works because of deerInitializer.js.  It loads all views in a Promise that uses a timeout
                          *  in its resolve state, giving all innerHTML = `something` calls time to make it to the DOM before this event broadcasts.  
-                         *  You will notice that the "VIEW_ELEMENT_RENDERED" events all happen before this event is fired on respective HTML pages.
+                         *  You will notice that the "deer-view-rendered" events all happen before this event is fired on respective HTML pages.
                          *  This lets the script know forms are open for dynamic rendering interaction, like pre-filling or pre-selecting values.
                          */
-                        UTILS.broadcast(undefined, "FORM_DATA_LOADED", elem, obj)
+                        UTILS.broadcast(undefined, DEER.EVENTS.FORM_RENDERED, elem, obj)
                     }, 0)
-                    //Note this is deprecated for the "FORM_DATA_LOADED" event.
-                    //UTILS.broadcast(undefined, DEER.EVENTS.LOADED, elem, obj) 
+                    //Note this is deprecated for the "deer-form-rendered" event.
+                    UTILS.broadcast(undefined, DEER.EVENTS.LOADED, elem, obj) 
                 }).bind(this))
                 .then(() => elem.click())
         } else {

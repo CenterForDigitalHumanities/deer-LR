@@ -25,7 +25,7 @@
         <h2 class="text-primary">Create a New Location</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="newLocationForm" deer-type="Place" deer-context="http://schema.org">
+                <form id="locationForm" deer-type="Place" deer-context="http://schema.org">
                     <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
@@ -225,7 +225,7 @@
                     </script>
                     <label>Former Use(s)</label>
                     <input type="hidden" deer-array-x="LR:FormerUses" value="">
-                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                    <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                         <optgroup label="General Categories"> 
                             <option value="Place.Accommodation" >Accommodation</option>
                             <option value="Place.AdministrativeArea" >Administrative Area</option>
@@ -254,13 +254,13 @@
                     <label title="The materials this location is comprised of.">Material(s), if applicable:</label>
                     <input  type="text" deer-key="material">
                     <label>Typical Use </label>
-                    <select disabled deer-key-x="typical_use" value="">
-                            <option value="Religious">Religious</option>
-                            <option value="Commercial">Commercial</option>
-                            <option value="Educational">Educational</option>
-                            <option value="Civic">Civic</option>
-                            <option value="Other Public">Other Public</option>
-                        </select>
+                    <select  deer-key="purpose">
+                        <option value="Religious">Religious</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Educational">Educational</option>
+                        <option value="Civic">Civic</option>
+                        <option value="Other Public">Other Public</option>
+                    </select>
                     <!--<h3> Upload Media </h3>-->
                     <label>Tags separated by ','</label>
                     <input disabled type="text" deer-key-x="LR:Tags">
@@ -292,13 +292,13 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     const researcherId = urlParams.get('id');
                     if (researcherId) {
-                        newLocationForm.setAttribute("deer-id", researcherId)
+                        locationForm.setAttribute("deer-id", researcherId)
                         document.querySelector("h2.text-primary").innerHTML = "Update Location"
                         document.querySelector("input[type='submit']").value = "Update"
                         let btn = document.createElement("a")
                         btn.href = window.location.pathname
                         btn.innerHTML = "Reset Page"
-                        newLocationForm.append(btn)
+                        locationForm.append(btn)
                     }
                 }
             }
@@ -332,6 +332,34 @@
          */
         addEventListener('globalFeedbackFinished', event => {
            document.location.reload()
+        })
+        
+        /**
+         * Detects that HTML has finished drawing in the DOM and can be interacted with.
+         * This most often occures when drawing a deer-view on page load or from redraws.
+         * @see deer-render.js RENDER.element
+         */
+        addEventListener('deer-view-rendered', event => {
+            let whatElem = event.target
+            let whatData = event.detail
+        })
+        
+        /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all deer-view-rendered events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
+        addEventListener('deer-form-rendered', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch(whatRecordForm){
+                case "locationForm":
+                break
+                
+                default:
+                    
+            }
         })
         
         /**

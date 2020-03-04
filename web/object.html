@@ -97,7 +97,7 @@
                     <!-- This should probably be a Set -->
                     <textarea deer-key="material"> </textarea>
                     <label>Typical Use: </label>
-                    <select disabled deer-key="purpose" >
+                    <select deer-key="purpose" >
                         <option value="Religious">Religious</option>
                         <option value="Commercial">Commercial</option>
                         <option value="Educational">Educational</option>
@@ -130,7 +130,7 @@
          * This most often occures when drawing a deer-view on page load or from redraws.
          * @see deer-render.js RENDER.element
          */
-        addEventListener('VIEW_ELEMENT_RENDERED', event => {
+        addEventListener('deer-view-rendered', event => {
             let whatElem = event.target
             let whatData = event.detail
         })
@@ -138,10 +138,10 @@
         /**
          * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
          * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
-         * This event will come after all VIEW_ELEMENT_RENDERED events have finished.
+         * This event will come after all deer-view-rendered events have finished.
          * @see deer-record.js DeerReport.constructor()  
          */
-        addEventListener('FORM_DATA_LOADED', event => {
+        addEventListener('deer-form-rendered', event => {
             let whatRecordForm = event.target.id
             let annotationData = event.detail
             switch(whatRecordForm){
