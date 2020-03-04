@@ -156,7 +156,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
 }
 
 /**
- * Create a select area that is populated by some set or list of people.
+ * Create a select area that is populated by some set or list of Objects.
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -165,7 +165,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     try {
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select deer-array-type="Set" multiple oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select deer-array-type="Set" multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Objects"> `
         for (let obj of allObjectsInCollection) {
             tmpl += `<option deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`

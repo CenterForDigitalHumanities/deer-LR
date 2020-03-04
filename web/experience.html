@@ -97,7 +97,7 @@
                     <!--<input type="hidden" deer-key="comment" />-->
                     <input id="senses" type="hidden" deer-key="LR:Senses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="LR:Practices" deer-input-type="Set" />
-                    <input id="objects"  type="hidden" deer-key="object"  deer-input-type="Set"  />
+                    <input id="objects"  type="hidden" deer-key="LR:RelatedObjects"  deer-input-type="Set"  />
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -151,6 +151,7 @@
             <div tog="objects" class="kind is-hidden">
                 <h2> Objects </h2>
                 <p> Below are some objects you can choose from.  You may also opt to record a new object. </p>
+                <input type="hidden" deer-input-type="Set" deer-key="LR:RelatedObjects"/>
                 <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
                 <h2 class="text-primary">Create a New Object</h2>
                 <div class="card bd-primary">
@@ -212,12 +213,12 @@
                             </div>
                             <h4>History of this Object</h4>
                             <label>Select Former Location(s):</label>
-                            <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
+                            <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations"/>
                             <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
-                            <input type="hidden" deer-key="LR:FormerUses" deer-input-type="List">
+                            <input type="hidden" deer-key="LR:FormerUses" deer-input-type="Set">
                             <!-- Looking at these as "former types", so just reuse the type values -->
-                            <select multiple  oninput="LR.utils.handleMultiSelect(event,false)">
+                            <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                                 <option value="SacredObject">Sacred Object</option>
                                 <option value="VisualArtwork">Artwork</option>
                                 <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
@@ -511,7 +512,11 @@
             let whatRecordForm = event.target.id
             let annotationData = event.detail
             switch(whatRecordForm){
+                case "theExperience":
+                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "LR:RelatedPractices", "LR:RelatedSenses", "LR:RelatedObjects"], event.target)
+                break
                 case "objectForm":
+                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target)
                 break
                 
                 case "senseForm":
