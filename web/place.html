@@ -30,7 +30,7 @@
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocationsTest">
-
+                    <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
                     <div title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually." id="leafletPreview" class="col"></div>
                     <input type="hidden" deer-key="geometry" value="{}">
@@ -153,8 +153,9 @@
                     </script>
                     <label title="If there are secondary functions for this location, note them here.">Additional Types (if any)</label>
                     Hold <kbd>CTRL</kbd> to make multiple selections.
-                    <input id="additionalTypeInput" type="hidden" deer-input-type="Set" deer-key="additionalType" >
-                    <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
+                    <!-- We are already using additionalType... -->
+                    <input type="hidden" deer-input-type-x="Set" deer-key-x="LR:SecondaryTypes" >
+                    <select multiple disabled oninput="LR.utils.handleMultiSelect(event, false)">
                         <optgroup label="General Categories"> 
                             <option value="Place.Accommodation" >Accommodation</option>
                             <option value="Place.AdministrativeArea" >Administrative Area</option>
@@ -182,45 +183,8 @@
                     </select>
                     <h4>Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
-                    <script>
-                        let locationsList = document.createElement("ul")
-                        let queryObj = {
-                            $or: [{
-                                "targetCollection": "LivedReligionLocationsTest"
-                            }, {
-                                "body.targetCollection": "LivedReligionLocationsTest"
-                            }]
-                        }
-                        fetch(LR.URLS.QUERY, {
-                                method: "POST",
-                                mode: "cors",
-                                body: JSON.stringify(queryObj)
-                            }).then(response => response.json())
-                            .then(pointers => {
-                                let list = []
-                                pointers.map(tc => list.push(fetch(tc.target || tc["@id"] || tc.id).then(response => response.json().catch(err => {
-                                    __deleted: console.log(err)
-                                }))))
-                                return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
-                            }).then(refs => {
-                                let filtered = []
-                                refs.map(item => {
-                                    let found = false
-                                    for (let i of filtered) {
-                                        if (i['@id'] === item['@id']) {
-                                            found = true
-                                            break
-                                        }
-                                    }
-                                    if (!found) {
-                                        filtered.push(item)
-                                    }
-                                })
-                                return filtered
-                            })
-                            .then(list => list.map(item => locationsList.innerHTML += `<li class="deer-view" deer-template="prop" deer-key="name" deer-id="${item['@id']}">${item.name}</li>`))
-                            .then(() => formerLocation.parentNode.insertBefore(locationsList, formerLocation.nextElementSibling))
-                    </script>
+                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations" value="">
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view>
                     <label>Former Use(s)</label>
                     <input type="hidden" deer-input-type="Set" deer-key="LR:FormerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
@@ -353,7 +317,7 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "locationForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "additionalType"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations", "LR:SecondaryTypes"], event.target)
                 break
                 
                 default:

@@ -373,21 +373,28 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
  */
 LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
     keys.forEach(key =>{
-        let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
-        let input = form.querySelector("input[deer-key='"+key+"']")
-        let sel = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
-        if(sel.tagName !== "SELECT"){
-            //Then it is a <deer-view> template and we need to get the child to have the <select>
-            sel = sel.firstElementChild
-        }
-        data_arr.forEach(val => {
-            let option = sel.querySelector("option[value='"+val+"']")
-            if(option){
-                option.selected = true
+        if(annotationData.hasOwnProperty(key)){
+            let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            let sel = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
+            if(sel.tagName !== "SELECT"){
+                //Then it is a <deer-view> template and we need to get the child to have the <select>
+                sel = sel.firstElementChild
             }
-            else{
-                //The <option> is not available in the <select> HTML.
-            }  
-        })
+            data_arr.forEach(val => {
+                let option = sel.querySelector("option[value='"+val+"']")
+                if(option){
+                    option.selected = true
+                }
+                else{
+                    //The <option> is not available in the <select> HTML.
+                }  
+            })
+        }
+        else{
+            //There is no annotation data for this key.
+            console.warn("LR App tried to find '"+key+"' in this form data and could not.  A multi select may not be preselected.")
+        }
+        
     })
 }
