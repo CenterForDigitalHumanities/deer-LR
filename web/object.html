@@ -125,11 +125,22 @@
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         
+        /**
+         * Detects that HTML has finished drawing in the DOM and can be interacted with.
+         * This most often occures when drawing a deer-view on page load or from redraws.
+         * @see deer-render.js RENDER.element
+         */
         addEventListener('VIEW_ELEMENT_RENDERED', event => {
             let whatElem = event.target
             let whatData = event.detail
         })
         
+        /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all VIEW_ELEMENT_RENDERED events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
         addEventListener('FORM_DATA_LOADED', event => {
             let whatRecordForm = event.target.id
             let annotationData = event.detail
@@ -142,11 +153,11 @@
             }
         })
         
-        //This was previously a combination of the two events above, a great example of why I need
-        addEventListener('deer-loaded', event => {
-            let whatElem = event.target
-            let whatData = event.detail
-        })
+        /*This was previously a combination of the two events above.  uncomment to see when this event ires and why it doesn't work.*/
+//        addEventListener('deer-loaded', event => {
+//            let whatElem = event.target
+//            let whatData = event.detail
+//        })
         
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user

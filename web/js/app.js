@@ -348,10 +348,10 @@ LR.utils.logout = function(){
 }
 
 /**
- * This happens on a per form basis.  A form's loaded event will fire this.
- * @param {type} event
- * @param {type} fromTemplate
- * @return {undefined}
+ * Populate the value of the <input> tracking the options selected in the <select multiple>.
+ * @param {type} event A change in the options selected in a <select multipe>.
+ * @param {type} fromTemplate Indicates this multi select is from a template and wrapped in a <deer-view> element.
+ * @return None
  */
 LR.utils.handleMultiSelect = function(event, fromTemplate){
     let sel = event.target
@@ -364,18 +364,20 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
 }
 
 /**
+ * 
  * Make sure not to select options outside the <form> and <select> involved here.  
- * @param {type} annotationData
- * @param {type} keys
- * @return {undefined}
+ * @param {Object} annotationData The expanded containing all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData
+ * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
+ * @return None
  */
 LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
     keys.forEach(key =>{
         let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
         let input = form.querySelector("input[deer-key='"+key+"']")
-        let sel = input.nextElementSibling
+        let sel = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
         if(sel.tagName !== "SELECT"){
-            //Then it is a template and we need to get the child to have the select
+            //Then it is a <deer-view> template and we need to get the child to have the <select>
             sel = sel.firstElementChild
         }
         data_arr.forEach(val => {
