@@ -165,7 +165,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     try {
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select deer-array-type="Set" multiple oninput="LR.utils.handleMultiSelect(event, true)">
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Objects"> `
         for (let obj of allObjectsInCollection) {
             tmpl += `<option deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`
