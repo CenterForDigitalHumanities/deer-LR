@@ -97,7 +97,7 @@
                     <!--<input type="hidden" deer-key="comment" />-->
                     <input id="senses" type="hidden" deer-key="LR:Senses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="LR:Practices" deer-input-type="Set" />
-                    <input id="objects"  type="hidden" deer-key="object"  deer-input-type="Set"  />
+                    <input id="objects"  type="hidden" deer-key="LR:RelatedObjects"  deer-input-type="Set"  />
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -151,11 +151,12 @@
             <div tog="objects" class="kind is-hidden">
                 <h2> Objects </h2>
                 <p> Below are some objects you can choose from.  You may also opt to record a new object. </p>
+                <input type="hidden" deer-input-type="Set" deer-key="LR:RelatedObjects"/>
                 <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
                 <h2 class="text-primary">Create a New Object</h2>
                 <div class="card bd-primary">
                     <div class="card_body">
-                        <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
+                        <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
                             <!-- That was referenced as being at this experience, supposed to be for Place so not exactly kosher -->
@@ -212,12 +213,12 @@
                             </div>
                             <h4>History of this Object</h4>
                             <label>Select Former Location(s):</label>
-                            <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
+                            <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations"/>
                             <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
-                            <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
+                            <input type="hidden" deer-key="LR:FormerUses" deer-input-type="Set">
                             <!-- Looking at these as "former types", so just reuse the type values -->
-                            <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                            <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                                 <option value="SacredObject">Sacred Object</option>
                                 <option value="VisualArtwork">Artwork</option>
                                 <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
@@ -235,7 +236,7 @@
                             <!-- This should probably be a Set -->
                             <textarea deer-key="material"> </textarea>
                             <label>Typical Use: </label>
-                            <select disabled deer-key="purpose" >
+                            <select deer-key="purpose" >
                                 <option value="Religious">Religious</option>
                                 <option value="Commercial">Commercial</option>
                                 <option value="Educational">Educational</option>
@@ -261,7 +262,7 @@
                 <div class="card bd-primary">
                     <div class="card_body">
                         <!-- I smelled this, I heard that, during this event (geo)... -->
-                        <form id="newSenseForm" deer-type="ConsumeAction" deer-item-type="simple">
+                        <form id="senseForm" deer-type="ConsumeAction" deer-item-type="simple">
                             <h4>What senses are prominent?  Add one at a time.</h4>
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
                              <!-- At this location AKA Geo -->
@@ -284,7 +285,7 @@
                         </form>
 
                         <h4>What practices are occurring? Add one at a time.</h4>
-                        <form id="newPracticeForm" deer-type="Action" deer-item-type="simple">
+                        <form id="practiceForm" deer-type="Action" deer-item-type="simple">
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
                             <!-- At this event/location/geo -->
                             <input class="expReference" type="hidden" deer-key="event"> 
@@ -377,7 +378,7 @@
                     document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
                     document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
                 break
-                case "newObjectForm":
+                case "objectForm":
                     document.querySelector("a[area='objects']").click()
                     let obj_list = document.getElementById("objectsInExperience")
                     let obj_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
@@ -401,7 +402,7 @@
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     alert("Object Added!") //TODO FEEDBACK
                 break
-                case "newSenseForm": 
+                case "senseForm": 
                     document.querySelector("a[area='bodies']").click()
                     let sense_list = document.getElementById("sensesInExperience")
                     let sense_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
@@ -424,7 +425,7 @@
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     alert("Sense Recorded!");
-                case "newPracticeForm":
+                case "practiceForm":
                     document.querySelector("a[area='bodies']").click()
                     let practice_list = document.getElementById("practicesInExperience")
                     let practice_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
@@ -474,20 +475,57 @@
         addEventListener('deer-loaded', event => {
             let what = event.target.id
             switch(what){
-                case "newObjectForm":
+                case "objectForm":
                     //An object form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
-                case "newSenseForm":
+                case "senseForm":
                     //A sense form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
-                case "newPracticeForm":
+                case "practiceForm":
                     //A practice form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
                 default:
                     
+            }
+        })
+        
+        /**
+         * Detects that HTML has finished drawing in the DOM and can be interacted with.
+         * This most often occures when drawing a deer-view on page load or from redraws.
+         * @see deer-render.js RENDER.element
+         */
+        addEventListener('deer-view-rendered', event => {
+            let whatElem = event.target
+            let whatData = event.detail
+        })
+        
+        /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all deer-view-rendered events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
+        addEventListener('deer-form-rendered', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch(whatRecordForm){
+                case "theExperience":
+                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "LR:RelatedPractices", "LR:RelatedSenses", "LR:RelatedObjects"], event.target)
+                break
+                case "objectForm":
+                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target)
+                break
+                
+                case "senseForm":
+                break
+                
+                case "practiceForm":
+                break
+                
+                default:
             }
         })
         

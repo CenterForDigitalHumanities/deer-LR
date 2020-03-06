@@ -18,7 +18,7 @@
         <h2 class="text-primary">Create a New Object</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="newObjectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
+                <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
                     <label>Name:</label>
@@ -53,7 +53,8 @@
                                 el = el.closest("[data-rdf]")
                                 if (el.getAttribute("data-rdf") === val) {
                                     el.classList.add("bg-light")
-                                } else {
+                                } 
+                                else {
                                     el.classList.remove("bg-light")
                                 }
                             })
@@ -61,7 +62,7 @@
                     </script>
                     <div class="grouped">
                         <label>Further Options</label>
-                        <select oninput="setPrimaryType(this)">
+                        <select oninput="setPrimaryType(event)">
                             <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
                             <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
                             <option value="LR:Natural" context=""">Natural</option>
@@ -73,19 +74,19 @@
                     </div>
                     <h4>History of this Object</h4>
                     <label>Select Former Location(s):</label>
-                    <input type="hidden" deer-input-type="List" deer-key="LR:FormerLocations"/>
+                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations"/>
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                     <label>Select Former Use(s):</label>
-                    <input type="hidden" deer-key="LR:formerUses" deer-input-type="List">
+                    <input type="hidden" deer-key="LR:FormerUses" deer-input-type="Set" context="">
                     <!-- Looking at these as "former types", so just reuse the type values -->
-                    <select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+                    <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
                         <option value="SacredObject">Sacred Object</option>
                         <option value="VisualArtwork">Artwork</option>
                         <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
                         <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                         <option value="CivicStructure">Building</option>
-                        <option value="LR:Natural">Natural</option>
-                        <option value="LR:Manufactured">Manufactured</option>
+                        <option value="LR:Natural" context="">Natural</option>
+                        <option value="LR:Manufactured" context="">Manufactured</option>
                         <option value="LR:Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
                         <option value="Manuscript">Written Text</option>
                         <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
@@ -96,7 +97,7 @@
                     <!-- This should probably be a Set -->
                     <textarea deer-key="material"> </textarea>
                     <label>Typical Use: </label>
-                    <select disabled deer-key="purpose" >
+                    <select deer-key="purpose" >
                         <option value="Religious">Religious</option>
                         <option value="Commercial">Commercial</option>
                         <option value="Educational">Educational</option>
@@ -123,6 +124,7 @@
 
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
+        
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
             if(user !== null){
@@ -131,13 +133,13 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     const researcherId = urlParams.get('id');
                     if (researcherId) {
-                        newObjectForm.setAttribute("deer-id", researcherId)
+                        objectForm.setAttribute("deer-id", researcherId)
                         document.querySelector("h2.text-primary").innerHTML = "Update Object"
                         document.querySelector("input[type='submit']").value = "Update"
                         let btn = document.createElement("a")
                         btn.href = window.location.pathname
                         btn.innerHTML = "Reset Page"
-                        newObjectForm.append(btn)
+                        objectForm.append(btn)
                     }
                 } 
             }
@@ -171,6 +173,34 @@
          */
         addEventListener('globalFeedbackFinished', event => {
            document.location.reload()
+        })
+        
+        /**
+         * Detects that HTML has finished drawing in the DOM and can be interacted with.
+         * This most often occures when drawing a deer-view on page load or from redraws.
+         * @see deer-render.js RENDER.element
+         */
+        addEventListener('deer-view-rendered', event => {
+            let whatElem = event.target
+            let whatData = event.detail
+        })
+        
+        /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all deer-view-rendered events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
+        addEventListener('deer-form-rendered', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch(whatRecordForm){
+                case "objectForm":
+                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target) 
+                break
+                default:
+                    
+            }
         })
         
         /**

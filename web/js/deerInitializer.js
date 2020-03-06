@@ -121,7 +121,7 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
     try {
         let allLocationsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Locations"> `
         for (let loc of allLocationsInCollection) {
             tmpl += `<option deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
@@ -143,7 +143,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Researchers"> `
         for (let person of allPeopleInCollection) {
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
@@ -156,7 +156,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
 }
 
 /**
- * Create a select area that is populated by some set or list of people.
+ * Create a select area that is populated by some set or list of Objects.
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -165,7 +165,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     try {
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        tmpl += `<select deer-array-type="Set" multiple disabled oninput="this.previousElementSibling.value=JSON.stringify(Array.from(this.selectedOptions).map(e=>e.value))">
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Objects"> `
         for (let obj of allObjectsInCollection) {
             tmpl += `<option deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`
@@ -244,6 +244,10 @@ import { default as renderer, initializeDeerViews } from 'https://centerfordigit
 import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
 
 // fire up the element detection as needed
-initializeDeerViews(DEER)
-    //Need to make the form initializer wait on view initializer, these cannot run syncronously.  
-initializeDeerForms(DEER)
+/**
+ * Note that VIEWS can be building blocks of FORMS.  VIEWS may also be the FORM in its entirety.
+ * It follows that VIEWS must finish populating to the DOM before initializing forms which interact with the
+ * elements in the DOM to do things like pre-filling or pre-select values, which much exist in the DOM for such interaction.
+ * We seek to streamline the logic around these threads in the near future.  Make sure these remain treated as asyncronous.
+ */
+initializeDeerViews(DEER).then(() => initializeDeerForms(DEER))

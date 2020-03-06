@@ -346,3 +346,55 @@ LR.utils.logout = function(){
     })
     
 }
+
+/**
+ * Populate the value of the <input> tracking the options selected in the <select multiple>.
+ * @param {type} event A change in the options selected in a <select multipe>.
+ * @param {type} fromTemplate Indicates this multi select is from a template and wrapped in a <deer-view> element.
+ * @return None
+ */
+LR.utils.handleMultiSelect = function(event, fromTemplate){
+    let sel = event.target
+    let arr = Array.from(sel.selectedOptions).map(option=>option.value)
+    let input = (fromTemplate) ? sel.parentElement.previousElementSibling : sel.previousElementSibling
+    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+    let str_arr = arr.join(delim)
+    input.value=str_arr
+    input.setAttribute("value", str_arr)
+}
+
+/**
+ * 
+ * Make sure not to select options outside the <form> and <select> involved here.  
+ * @param {Object} annotationData The expanded containing all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData
+ * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
+ * @return None
+ */
+LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
+    keys.forEach(key =>{
+        if(annotationData.hasOwnProperty(key)){
+            let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            let sel = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
+            if(sel.tagName !== "SELECT"){
+                //Then it is a <deer-view> template and we need to get the child to have the <select>
+                sel = sel.firstElementChild
+            }
+            data_arr.forEach(val => {
+                let option = sel.querySelector("option[value='"+val+"']")
+                if(option){
+                    option.selected = true
+                }
+                else{
+                    //The <option> is not available in the <select> HTML.
+                }  
+            })
+        }
+        else{
+            //There is no annotation data for this key.
+            console.warn("LR App tried to find '"+key+"' in this form data and could not.  A multi select may not be preselected.")
+        }
+        
+    })
+}
