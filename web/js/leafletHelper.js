@@ -5,16 +5,7 @@
  */
 
         let leafy = {}
-        
-        leafy.URLS = {
-            BASE_ID: "http://devstore.rerum.io/v1",
-            DELETE: "http://tinydev.rerum.io/app/delete",
-            CREATE: "http://tinydev.rerum.io/app/create",
-            UPDATE: "http://tinydev.rerum.io/app/update",
-            QUERY: "http://tinydev.rerum.io/app/query",
-            OVERWRITE: "http://tinydev.rerum.io/app/overwrite"
-        }
-        
+
         leafy.mymap = ""
         leafy.util = {}
         leafy.err = {}
