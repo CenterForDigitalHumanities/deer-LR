@@ -102,7 +102,7 @@
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
-                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsAsDropdown"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="locationsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
@@ -152,13 +152,13 @@
                 <h2> Objects </h2>
                 <p> Below are some objects you can choose from.  You may also opt to record a new object. </p>
                 <input type="hidden" deer-input-type="Set" deer-key="LR:RelatedObjects"/>
-                <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
+                <div id="objectsCollection" deer-collection="LivedReligionObjects" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
                 <h2 class="text-primary">Create a New Object</h2>
                 <div class="card bd-primary">
                     <div class="card_body">
                         <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
-                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
+                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjects"> <!-- into this collection -->
                             <!-- That was referenced as being at this experience, supposed to be for Place so not exactly kosher -->
                             <input class="expReference" type="hidden" deer-key="containedIn">  <!--That was referenced as being at this experience or location, supposed to be for Place so not exactly kosher -->
                             <label>Name:</label>
@@ -214,7 +214,7 @@
                             <h4>History of this Object</h4>
                             <label>Select Former Location(s):</label>
                             <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations"/>
-                            <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
+                            <deer-view deer-collection="LivedReligionLocations" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
                             <input type="hidden" deer-key="LR:FormerUses" deer-input-type="Set">
                             <!-- Looking at these as "former types", so just reuse the type values -->
@@ -276,7 +276,7 @@
                             </select>
                             <label>Was there a specific object at the experience connected with this sense?</label>
                             <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
-                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                            <div deer-collection="LivedReligionObjects" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Abstract About Sense</label>
                             <textarea id="further_sense" type="text" deer-key="description"></textarea>
                             <div class="row">
@@ -328,7 +328,7 @@
                             </select>
                             <label>Is there a particular object this practice is associated with?</label>
                             <input type="hidden" deer-key="object" value=""> 
-                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                            <div deer-collection="LivedReligionObjects" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             <div class="row">
                                 <input class="button primary col" type="submit">
                             </div>
