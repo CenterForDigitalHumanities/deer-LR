@@ -6,19 +6,19 @@
 
 const LR = {}
 LR.VERSION = "0.4.0"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 //Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    SINCE: "http://devstore.rerum.io/v1/since"
-//}
+LR.URLS = {
+    LOGIN: "login",
+    LOGOUT: "logout",
+    BASE_ID: "http://devstore.rerum.io/v1",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since"
+}
 
 
 
