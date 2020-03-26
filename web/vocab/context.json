@@ -1,11 +1,6 @@
 {
    "@context":{
-      "as":"http://www.w3.org/ns/activitystreams#",
-      "xsd":"http://www.w3.org/2001/XMLSchema#",
-      "dcterms":"http://purl.org/dc/terms/",
-      "prov":"https://www.w3.org/TR/prov/#",
-      "foaf":"http://xmlns.com/foaf/spec/#term_",
-      "lr":"http://lived-religion.rerum.io/deer-lr/vocab/#",
+      "lr":"http://lived-religion.rerum.io/deer-lr/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "id":"@id",
       "type":"@type",
@@ -13,61 +8,137 @@
          "@id":"rerum_v1:__rerum",
          "@type":"@id"
       },
-      "alpha":{
-         "@id":"rerum_v1:alpha",
-         "@type":"xsd:boolean"
-      },
-      "createdAt":{
-         "@id":"dcterms:created",
-         "@type":"xsd:dateTime"
-      },
-      "generatedBy":{
-         "@id":"as:generator",
+      "FieldNotes":{
+         "@id":"lr:FieldNotes",
          "@type":"@id"
       },
-      "isReleased":{
-         "@id":"dcterms:issued",
-         "@type":"xsd:dateTime"
+      "ExperienceUpload":{
+         "@id":"lr:ExperienceUpload",
+         "@type":"@id"
       },
-      "isOverwritten":{
-         "@id":"rerum_v1:isOverwritten",
-         "@type":"xsd:dateTime"
+      "Senses":{
+         "@id":"lr:Senses",
+         "@type":"@id"
       },
-      "releases":{
-         "@id":"rerum_v1:releases",
-         "@context":{
-            "previous":{
-               "@id":"rerum_v1:releases.previous",
-               "@type":"@id"
-            },
-            "next":{
-               "@id":"rerum_v1:releases.next",
-               "@container":"@set"
-            },
-            "replaces":{
-               "@id":"rerum_v1:releases.replaces",
-               "@type":"@id"
-            }
-         }
+      "Practices":{
+         "@id":"lr:Practices",
+         "@type":"@id"
       },
-      "history":{
-         "@id":"rerum_v1:history",
-         "@context":{
-            "previous":{
-               "@id":"prov:wasRevisionOf",
-               "@type":"@id"
-            },
-            "next":{
-               "@id":"dcterms:isVersionOf",
-               "@container":"@set"
-            },
-            "prime":{
-               "@id":"rerum_v1:prime"
-            }
-         }
+      "Objects":{
+         "@id":"lr:Objects",
+         "@type":"@id"
       },
-      "APIversion":{
-         "@id":"rerum_v1:APIversion"
+      "RelatedSenses":{
+         "@id":"lr:RelatedSenses",
+         "@type":"@id"
+      },
+      "RelatedPractices":{
+         "@id":"lr:RelatedPractices",
+         "@type":"@id"
+      },
+      "RelatedObjects":{
+         "@id":"lr:RelatedObjects",
+         "@type":"@id"
+      },
+      "Clothing":{
+         "@id":"lr:Clothing",
+         "@type":"@id"
+      },
+      "Food":{
+         "@id":"lr:Food",
+         "@type":"@id"
+      },
+      "Natural":{
+         "@id":"lr:Natural",
+         "@type":"@id"
+      },
+      "Manufactured":{
+         "@id":"lr:Manufactured",
+         "@type":"@id"
+      },
+      "Found":{
+         "@id":"lr:Found",
+         "@type":"@id"
+      },
+      "Spoken":{
+         "@id":"lr:Spoken",
+         "@type":"@id"
+      },
+      
+      "SightMoment":{
+         "@id":"lr:SightMoment",
+         "@type":"@id"
+      },
+      "SoundMoment":{
+         "@id":"lr:SoundMoment",
+         "@type":"@id"
+      },
+      "FeelMoment":{
+         "@id":"lr:FeelMoment",
+         "@type":"@id"
+      },
+      "SmellMoment":{
+         "@id":"lr:SmellMoment",
+         "@type":"@id"
+      },
+      "TasteMoment":{
+         "@id":"lr:TasteMoment",
+         "@type":"@id"
+      },
+      
+      "Sight":{
+         "@id":"lr:Sight",
+         "@type":"@id"
+      },
+      "Sound":{
+         "@id":"lr:Sound",
+         "@type":"@id"
+      },
+      "Feel":{
+         "@id":"lr:Feel",
+         "@type":"@id"
+      },
+      "Smell":{
+         "@id":"lr:Smell",
+         "@type":"@id"
+      },
+      "Taste":{
+         "@id":"lr:Taste",
+         "@type":"@id"
+      },
+      
+      "SingAction":{
+         "@id":"lr:SingAction",
+         "@type":"@id"
+      },
+      "SitAction":{
+         "@id":"lr:SitAction",
+         "@type":"@id"
+      },
+      "KneelAction":{
+         "@id":"lr:KneelAction",
+         "@type":"@id"
+      },
+      "TravelAction":{
+         "@id":"lr:TravelAction",
+         "@type":"@id"
+      },
+      "DanceAction":{
+         "@id":"lr:DanceAction",
+         "@type":"@id"
+      },
+      "WorkAction":{
+         "@id":"lr:WorkAction",
+         "@type":"@id"
+      },
+      
+      "FormerUses":{
+         "@id":"lr:FormerUses",
+         "@type":"@id"
+      },
+      "FormerLocations":{
+         "@id":"lr:FormerLocations",
+         "@type":"@id"
       }
    }
 }
