@@ -4,25 +4,34 @@
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
       "skos":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
+      "schema":"http://schema.org/",
       "id":"@id",
       "type":"@type",
       "__rerum":{
          "@id":"rerum_v1:__rerum",
          "@type":"@id"
       },
-      "FieldNotes":{
-         "@id":"lr:FieldNotes",
-         "@type":"@id"
-      },
       "ExperienceEvent":{
          "@id":"lr:ExperienceEvent",
+         "@type":"@id"
+      },
+      "Event":{
+         "@id":"schema:Event",
+         "@type":"@id"
+      },
+      "Place":{
+         "@id":"schema:Place",
+         "@type":"@id"
+      },
+       "Person":{
+         "@id":"schema:Person",
          "@type":"@id"
       },
       "Sense":{
          "@id":"fast:1112562",
          "@type":"@id"
       },
-      "Practices":{
+      "Practice":{
          "@id":"fast:1149637",
          "@type":"@id"
       },
@@ -122,7 +131,7 @@
          "@type":"@id"
       },
       "Clothing":{
-         "@id":"lr:Clothing",
+         "@id":"fast:864680",
          "@type":"@id"
       },
       "Food":{
@@ -151,6 +160,10 @@
       },
       "FormerLocations":{
          "@id":"skos:FormerLocationshasArtefactRelatedLocation",
+         "@type":"@id"
+      },
+      "FieldNotes":{
+         "@id":"fast:2007231",
          "@type":"@id"
       }
    }

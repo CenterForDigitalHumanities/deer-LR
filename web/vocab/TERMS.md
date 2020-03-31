@@ -1,7 +1,4 @@
 
-## FieldNotes
-- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231/.
-
 ## ExperienceEvent
 - A particular Event recorded by a Person to describe an experience they had and how it connects to religion in the area.  Aggregates the following concepts:
      - Sense
@@ -118,4 +115,7 @@
 
 ## FormerLocations
 - Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
+
+## FieldNotes
+- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
 
