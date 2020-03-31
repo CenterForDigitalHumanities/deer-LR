@@ -15,7 +15,7 @@
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
 ## Place
-- A location, made knowable by some label (metaphysical, imaginary or not on planet Earth, ex. "Legion of Doom") and/or earthbound coordinates.  
+- A location, made knowable by some label (metaphysical, imaginary or not on planet Earth, ex. "Legion of Doom") and/or earthbound coordinates.  See http://schema.org/Person.
 
 ## Person
 - An imaginary or real human being.  See http://schema.org/Person
@@ -105,7 +105,7 @@
 - Garments worn by a Person that act to cover parts of the body.  See http://id.worldcat.org/fast/864680
 
 ## Food
-- Consumable material for human consumption.  See http://id.worldcat.org/fast/930458
+- Consumable material for human consumption.  See http://id.worldcat.org/fast/930458, http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Food
 
 ## Natural
 - Comes from the Universe without (known) interaction from outside agents.  See http://id.worldcat.org/fast/1034403
