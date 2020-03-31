@@ -23,7 +23,7 @@
          "@id":"schema:Place",
          "@type":"@id"
       },
-       "Person":{
+      "Person":{
          "@id":"schema:Person",
          "@type":"@id"
       },
