@@ -17,6 +17,9 @@
 ## Person
 - An imaginary or real human being.  See http://schema.org/Person
 
+## Researcher
+- All the qualities of a Person except information is limited to name only and the context is confined to partners in the Lived Religion project.
+
 ## Sense
 - One of the five common human senses: Sight, Sound, Smell, Touch, Taste.  See http://id.worldcat.org/fast/1112562
 

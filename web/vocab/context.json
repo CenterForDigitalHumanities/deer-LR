@@ -27,6 +27,10 @@
          "@id":"schema:Person",
          "@type":"@id"
       },
+      "Researcher":{
+         "@id":"lr:Researcher",
+         "@type":"@id"
+      },
       "Sense":{
          "@id":"fast:1112562",
          "@type":"@id"
