@@ -3,6 +3,7 @@
       "lr":"http://lived-religion.rerum.io/deer-lr/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
+      "skos":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
       "id":"@id",
       "type":"@type",
       "__rerum":{
@@ -13,59 +14,37 @@
          "@id":"lr:FieldNotes",
          "@type":"@id"
       },
-      "ExperienceUpload":{
-         "@id":"lr:ExperienceUpload",
+      "ExperienceEvent":{
+         "@id":"lr:ExperienceEvent",
          "@type":"@id"
       },
-      "Senses":{
-         "@id":"lr:Senses",
+      "Sense":{
+         "@id":"fast:1112562",
          "@type":"@id"
       },
       "Practices":{
-         "@id":"lr:Practices",
+         "@id":"fast:1149637",
          "@type":"@id"
       },
-      "Objects":{
-         "@id":"lr:Objects",
+      "Object":{
+         "@id":"skos:PhysicalResource",
          "@type":"@id"
       },
       "RelatedSenses":{
          "@id":"lr:RelatedSenses",
-         "@type":"@id"
+         "@type":"@id",
+         "@container":"@set"
       },
       "RelatedPractices":{
          "@id":"lr:RelatedPractices",
-         "@type":"@id"
+         "@type":"@id",
+         "@container":"@set"
       },
       "RelatedObjects":{
-         "@id":"lr:RelatedObjects",
-         "@type":"@id"
+         "@id":"skos:hasArtefactRelatedPhysicalResource",
+         "@type":"@id",
+         "@container":"@set"
       },
-      "Clothing":{
-         "@id":"lr:Clothing",
-         "@type":"@id"
-      },
-      "Food":{
-         "@id":"lr:Food",
-         "@type":"@id"
-      },
-      "Natural":{
-         "@id":"lr:Natural",
-         "@type":"@id"
-      },
-      "Manufactured":{
-         "@id":"lr:Manufactured",
-         "@type":"@id"
-      },
-      "Found":{
-         "@id":"lr:Found",
-         "@type":"@id"
-      },
-      "Spoken":{
-         "@id":"lr:Spoken",
-         "@type":"@id"
-      },
-      
       "SightMoment":{
          "@id":"lr:SightMoment",
          "@type":"@id"
@@ -86,59 +65,92 @@
          "@id":"lr:TasteMoment",
          "@type":"@id"
       },
-      
       "Sight":{
-         "@id":"lr:Sight",
+         "@id":"fast:1167852",
          "@type":"@id"
       },
       "Sound":{
-         "@id":"lr:Sound",
+         "@id":"fast:1127099",
          "@type":"@id"
       },
       "Feel":{
-         "@id":"lr:Feel",
+         "@id":"fast:1153089",
          "@type":"@id"
       },
       "Smell":{
-         "@id":"lr:Smell",
+         "@id":"fast:1121562",
          "@type":"@id"
       },
       "Taste":{
-         "@id":"lr:Taste",
+         "@id":"fast:1143475",
          "@type":"@id"
       },
-      
-      "SingAction":{
+      "Singing":{
          "@id":"lr:SingAction",
          "@type":"@id"
       },
-      "SitAction":{
-         "@id":"lr:SitAction",
+      "Sitting":{
+         "@id":"lr:Sitting",
          "@type":"@id"
       },
-      "KneelAction":{
-         "@id":"lr:KneelAction",
+      "Kneeling":{
+         "@id":"lr:Kneeling",
          "@type":"@id"
       },
-      "TravelAction":{
-         "@id":"lr:TravelAction",
+      "Standing":{
+         "@id":"lr:Standing",
          "@type":"@id"
       },
-      "DanceAction":{
-         "@id":"lr:DanceAction",
+      "Traveling":{
+         "@id":"fast:1155558",
          "@type":"@id"
       },
-      "WorkAction":{
-         "@id":"lr:WorkAction",
+      "Dancing":{
+         "@id":"fast:887402",
          "@type":"@id"
       },
-      
+      "Working":{
+         "@id":"lr:Working",
+         "@type":"@id"
+      },
+      "Cooking":{
+         "@id":"fast:1754966 ",
+         "@type":"@id"
+      },
+      "ClotheAction":{
+         "@id":"lr:ClotheAction",
+         "@type":"@id"
+      },
+      "Clothing":{
+         "@id":"lr:Clothing",
+         "@type":"@id"
+      },
+      "Food":{
+         "@id":"skos:Food",
+         "@type":"@id"
+      },
+      "Natural":{
+         "@id":"fast:1034403",
+         "@type":"@id"
+      },
+      "Manufactured":{
+         "@id":"fast:1007993",
+         "@type":"@id"
+      },
+      "Found":{
+         "@id":"lr:Found",
+         "@type":"@id"
+      },
+      "Spoken":{
+         "@id":"lr:Spoken",
+         "@type":"@id"
+      },
       "FormerUses":{
-         "@id":"lr:FormerUses",
+         "@id":"skos:hasArtefactRelatedPhysicalResource",
          "@type":"@id"
       },
       "FormerLocations":{
-         "@id":"lr:FormerLocations",
+         "@id":"skos:FormerLocationshasArtefactRelatedLocation",
          "@type":"@id"
       }
    }

@@ -21,13 +21,13 @@
 - An imaginary or real human being.  See http://schema.org/Person
 
 ## Sense
-- One of the five common human senses: Sight, Sound, Smell, Touch, Taste.  See http://id.worldcat.org/fast/1112562/
+- One of the five common human senses: Sight, Sound, Smell, Touch, Taste.  See http://id.worldcat.org/fast/1112562
 
 ## Practice
-- An action being performed by individual(s) based on religious guidance.  See http://id.worldcat.org/fast/1083431/, http://id.worldcat.org/fast/1181450/
+- An action being performed by individual(s) based on religious guidance.  See http://id.worldcat.org/fast/1149637
 
 ## Object
-- Observed physical matter with some religious relation. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
+- Observable physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
 
 ## RelatedSenses
 - Aggregates the various Senses under an ExperienceEvent.
@@ -37,12 +37,6 @@
 
 ## RelatedObjects
 - Aggregates the various Objects under an ExperienceEvent.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
-
-## FormerUses
-- Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
-
-## FormerLocations
-- Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
 
 ## SightMoment
 - A Sight that occurred during an ExperienceEvent.
@@ -74,32 +68,32 @@
 ## Taste
 - A Person's Sense of Taste, noting the person and related phenomenon causing the sense. See http://id.worldcat.org/fast/1143475
 
-## SingAction
+## Singing
 - The act of singing being performed by a Person or Persons.  See http://id.worldcat.org/fast/1119311
 
-## SitAction
-- The act of sitting being performed by a Person or Persons. See http://id.worldcat.org/fast/1119311
+## Sitting
+- The act of sitting being performed by a Person or Persons. See http://id.worldcat.org/fast/1073252
 
-## KneelAction
-- The act of kneeling being performed by a Person or Persons. See http://id.worldcat.org/fast/1119311
+## Kneeling
+- The act of kneeling being performed by a Person or Persons. See http://id.worldcat.org/fast/1073252
 
-## StandAction
-- The act of standing being performed by a Person or Persons. See http://id.worldcat.org/fast/1119311
+## Standing
+- The act of standing being performed by a Person or Persons. See http://id.worldcat.org/fast/1073252
 
-## TravelAction
+## Traveling
 - The act of traveling being performed by a Person or Persons.  See http://id.worldcat.org/fast/1155558
 
-## DanceAction
+## Dancing
 - The act of dancing being performed by a Person or Persons.  See http://id.worldcat.org/fast/887402
+
+## Working
+- The act of work to produce some predefined outcome being performed by a Person or Persons.
+
+## Cooking
+- The act of preparing Food. See http://id.worldcat.org/fast/1754966 
 
 ## ClotheAction
 - The act of placing an article of Clothing onto a Person or Object.  See http://id.worldcat.org/fast/864680
-
-## WorkAction
-- The act of work to produce some predefined outcome being performed by a Person or Persons.
-
-## CookAction
-- The act of preparing Food. See http://id.worldcat.org/fast/1754966 
 
 ## Clothing
 - Garments worn by a Person that act to cover parts of the body.  See http://id.worldcat.org/fast/864680
@@ -118,3 +112,10 @@
 
 ## Spoken
 - Words produced by the vocal cords of a Person. 
+
+## FormerUses
+- Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
+
+## FormerLocations
+- Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
+
