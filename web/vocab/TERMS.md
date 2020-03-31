@@ -1,99 +1,106 @@
 
 ## Field Notes
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231/.
 
 ## Experience Upload
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- A data capture scenario where a researcher visits a particular location.  Aggregates the following concepts under one Event node:
+     - Sense
+     - Practice
+     - Object
+     - Person
+     - Thing
+     - Researcher
+     - Place
 
 ## Senses
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- One of the five common human senses: Sight, Sound, Smell, Touch, Taste.
 
 ## Practices
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- An action being performed by individual(s) based on religious guidance.
 
 ## Objects
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Observed physical real world objects.
 
 ## RelatedSenses
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  roten knik akton dei. The Truth is out there.
+- Aggregates the various Senses under an Experience Upload.
 
 ## RelatedPractices
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Aggregates the various Practices under an Experience Upload.
 
 ## RelatedObjects
-- Lorem ipsum epsum salt has epsum lauren 11100101 lauridium.  Momentus exhibus roten knik akton dei. 
+- Aggregates the various Objects under an Experience Upload.
 
 ## FormerUses
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Functions some Place was used for in the past.  
 
 ## FormerLocations
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Places a particular Object has been in the past.
 
 ## SightMoment
-- Lorem ipsum epsum salt has googley eyes lorent lauridium.  Yeah you've got radium eyes.
+- An Event around a Sight Sense.
 
 ## SoundMoment
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- An Event around a Sound Sense.
 
 ## FeelMoment
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- An Event around a Feel Sense.
 
 ## SmellMoment
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- An Event around a Smell Sense.
 
 ## TasteMoment
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- An Event around a Taste Sense.
 
 ## Sight
-- Lorem ipsum epsum salt has until the sandman he comes.  Momentus exhibus dreams of dragon's fire and a baked apple pie. 
+- A Person's Sense of Sight.  
 
 ## Sound
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- A Person's Sense of Sound.  
 
 ## Feel
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- A Person's Sense of Feel.  
 
 ## Smell
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- A Person's Sense of Smell.  
 
 ## Taste
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- A Person's Sense of Taste.  
 
 ## SingAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- The act of singing being performed by a Person or Persons.
 
 ## SitAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Baby shark doo doo doo doo. 
+- The act of sitting being performed by a Person or Persons.
 
 ## KneelAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Wash your hands doo doo doo doo. 
+- The act of kneeling being performed by a Person or Persons.
 
 ## StandAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- The act of standing being performed by a Person or Persons.
 
 ## TravelAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- The act of traveling being performed by a Person or Persons.
 
 ## DanceAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- The act of dancing being performed by a Person or Persons.
 
 ## WorkAction
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- The act of working being performed by a Person or Persons.
 
 ## Clothing
-- Lorem ipsum my name's Chubacca.  I am a Wookie.  Momentus exhibus. I live on Endor.
+- Garments worn by a Person that act to cover parts of the body.  
 
 ## Food
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Consumable material for human consumption.
 
 ## Natural
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Comes from the Universe without (known) interaction from outside agents.  
 
 ## Manufactured
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Does not occur without some action from a creator agent.
 
 ## Found
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus exhibus roten knik akton dei. 
+- Ownership of an Object is because of coming across that Object as a matter of consequence.  
 
 ## Spoken
-- Lorem ipsum epsum salt has epsum lauren lorent lauridium.  Momentus use the force, m'kay. 
+- Words produced by the vocal cords of a Person. 

@@ -2,6 +2,7 @@
    "@context":{
       "lr":"http://lived-religion.rerum.io/deer-lr/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
+      "fast":"http://id.worldcat.org/fast/",
       "id":"@id",
       "type":"@type",
       "__rerum":{
