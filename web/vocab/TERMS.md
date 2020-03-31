@@ -12,7 +12,7 @@
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
 ## Place
-- A location, made knowable by some label (metaphysical, imaginary or not on planet Earth, ex. "Legion of Doom") and/or earthbound coordinates.  See http://schema.org/Person.
+- A location, made knowable by some label (metaphysical, imaginary or not on planet Earth, ex. "Legion of Doom") and/or earthbound coordinates.  See http://schema.org/Place.
 
 ## Person
 - An imaginary or real human being.  See http://schema.org/Person
