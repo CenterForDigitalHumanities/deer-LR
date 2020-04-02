@@ -39,19 +39,19 @@
 - An aggregator that encapsulates the Objects encountered by individuals at an Experience.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
 ## Sight
-- A Person's Sense of Sight, noting the person and related phenomenon causing the sense.  See http://id.worldcat.org/fast/1167852  
+- An occurrence describing the factors surrounding a Person's sense of sight.  See http://id.worldcat.org/fast/1167852  
 
 ## Sound
-- A Person's Sense of Sound, noting the person and related phenomenon causing the sense. See http://id.worldcat.org/fast/1127099
+- An occurrence describing the factors surrounding a Person's sense of sound. See http://id.worldcat.org/fast/1127099
 
 ## Feel
-- A Person's Sense of Feel, noting the person and related phenomenon causing the sense. See http://id.worldcat.org/fast/1153089
+- An occurrence describing the factors surrounding a Person's sense of feel. See http://id.worldcat.org/fast/1153089
 
 ## Smell
-- A Person's Sense of Smell, noting the person and related phenomenon causing the sense.  See http://id.worldcat.org/fast/1121562
+- An occurrence describing the factors surrounding a Person's sense of smell.  See http://id.worldcat.org/fast/1121562
 
 ## Taste
-- A Person's Sense of Taste, noting the person and related phenomenon causing the sense. See http://id.worldcat.org/fast/1143475
+-An occurrence describing the factors surrounding a Person's sense of taste. See http://id.worldcat.org/fast/1143475
 
 ## Singing
 - The act of singing being performed by a Person or Persons.  See http://id.worldcat.org/fast/1119311
