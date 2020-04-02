@@ -1,13 +1,4 @@
 
-## Experience
-- A particular Event recorded by a Person to describe an experience they had and how it connects to religion in the area.  Aggregates the following concepts:
-     - Sense
-     - Practice
-     - Object
-     - Person
-     - Researcher
-     - Place
-
 ## Event
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
@@ -27,7 +18,7 @@
 - An action being performed by individual(s) based on religious guidance.  See http://id.worldcat.org/fast/1149637
 
 ## Object
-- Observable physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
+- Observable discrete physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
 
 ## RelatedSenses
 - An aggregator that encapsulates the Senses encountered by individuals at an Experience. 
@@ -39,19 +30,19 @@
 - An aggregator that encapsulates the Objects encountered by individuals at an Experience.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
 ## Sight
-- An occurrence describing the factors surrounding a Person's sense of sight.  See http://id.worldcat.org/fast/1167852  
+- The factors surrounding a Person's sense of sight.  See http://id.worldcat.org/fast/1167852  
 
 ## Sound
-- An occurrence describing the factors surrounding a Person's sense of sound. See http://id.worldcat.org/fast/1127099
+- The factors surrounding a Person's sense of sound. See http://id.worldcat.org/fast/1127099
 
 ## Feel
-- An occurrence describing the factors surrounding a Person's sense of feel. See http://id.worldcat.org/fast/1153089
+- The factors surrounding a Person's sense of feel. See http://id.worldcat.org/fast/1153089
 
 ## Smell
-- An occurrence describing the factors surrounding a Person's sense of smell.  See http://id.worldcat.org/fast/1121562
+- The factors surrounding a Person's sense of smell.  See http://id.worldcat.org/fast/1121562
 
 ## Taste
-- An occurrence describing the factors surrounding a Person's sense of taste. See http://id.worldcat.org/fast/1143475
+- The factors surrounding a Person's sense of taste. See http://id.worldcat.org/fast/1143475
 
 ## Singing
 - The act of singing being performed by a Person or Persons.  See http://id.worldcat.org/fast/1119311

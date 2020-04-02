@@ -11,8 +11,8 @@
          "@id":"rerum_v1:__rerum",
          "@type":"@id"
       },
-      "Experience":{
-         "@id":"lr:Experience",
+      "Event":{
+         "@id":"schema:Event",
          "@type":"@id",
          "@context":{
             "RelatedSenses":{
@@ -30,11 +30,7 @@
                "@type":"@id",
                "@container":"@set"
             }
-         }
-      },
-      "Event":{
-         "@id":"schema:Event",
-         "@type":"@id"
+          }
       },
       "Place":{
          "@id":"schema:Place",
