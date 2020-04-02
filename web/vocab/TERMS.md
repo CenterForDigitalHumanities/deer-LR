@@ -9,7 +9,7 @@
 - An imaginary or real human being.  See http://schema.org/Person
 
 ## Researcher
-- A subclass of Person who partook in an Experience or has otherwise produced research data at some capacity.
+- A subclass of Person who partook in an Event or has otherwise produced research data at some capacity.
 
 ## Sense
 - A sensation produced by a biological sensory system.  See http://id.worldcat.org/fast/1112562
@@ -21,13 +21,13 @@
 - Observable discrete physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
 
 ## RelatedSenses
-- An aggregator that encapsulates the Senses encountered by individuals at an Experience. 
+- An aggregator that encapsulates the Senses encountered by individuals at an Event. 
 
 ## RelatedPractices
-- An aggregator that encapsulates the Practices being performed by individuals at an Experience.
+- An aggregator that encapsulates the Practices being performed by individuals at an Event.
 
 ## RelatedObjects
-- An aggregator that encapsulates the Objects encountered by individuals at an Experience.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
+- An aggregator that encapsulates the Objects encountered by individuals at an Event.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
 ## Sight
 - The factors surrounding a Person's sense of sight.  See http://id.worldcat.org/fast/1167852  
