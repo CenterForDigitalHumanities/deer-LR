@@ -93,7 +93,7 @@
 - Does not occur without some action from a creator agent.  See http://id.worldcat.org/fast/1007993
 
 ## Found
-- Ownership of an Object is because of coming across that Object as a matter of consequence.  
+- Was discovered by chance or unexpectedly.
 
 ## Spoken
 - Conveyance of thought, feeling, meaning or other information through articulate sounds.  
