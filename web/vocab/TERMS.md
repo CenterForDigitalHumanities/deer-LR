@@ -51,7 +51,7 @@
 - An occurrence describing the factors surrounding a Person's sense of smell.  See http://id.worldcat.org/fast/1121562
 
 ## Taste
--An occurrence describing the factors surrounding a Person's sense of taste. See http://id.worldcat.org/fast/1143475
+- An occurrence describing the factors surrounding a Person's sense of taste. See http://id.worldcat.org/fast/1143475
 
 ## Singing
 - The act of singing being performed by a Person or Persons.  See http://id.worldcat.org/fast/1119311
