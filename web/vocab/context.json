@@ -1,6 +1,6 @@
 {
    "@context":{
-      "lr":"https://github.com/CenterForDigitalHumanities/deer-lr/blob/master/TERMS.md#",
+      "lr":"https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
       "ebu":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
