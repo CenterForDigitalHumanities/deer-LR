@@ -11,8 +11,8 @@
          "@id":"rerum_v1:__rerum",
          "@type":"@id"
       },
-      "ExperienceEvent":{
-         "@id":"lr:ExperienceEvent",
+      "Experience":{
+         "@id":"lr:Experience",
          "@type":"@id",
          "@context":{
             "RelatedSenses":{
@@ -112,7 +112,7 @@
          "@id":"fast:1754966 ",
          "@type":"@id"
       },
-      "ClotheAction":{
+      "Clothe":{
          "@id":"lr:ClotheAction",
          "@type":"@id"
       },

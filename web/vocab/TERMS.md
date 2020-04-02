@@ -1,5 +1,5 @@
 
-## ExperienceEvent
+## Experience
 - A particular Event recorded by a Person to describe an experience they had and how it connects to religion in the area.  Aggregates the following concepts:
      - Sense
      - Practice
@@ -12,16 +12,16 @@
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
 ## Place
-- A location, made knowable by some label (metaphysical, imaginary or not on planet Earth, ex. "Legion of Doom") and/or earthbound coordinates.  See http://schema.org/Place.
+- A location, made knowable by some label (metaphysical, imaginary or not on planet Earth, ex. "The Gatsby Mansion") and/or earthbound coordinates.  See http://schema.org/Place.
 
 ## Person
 - An imaginary or real human being.  See http://schema.org/Person
 
 ## Researcher
-- All the qualities of a Person except information is limited to name only and the context is confined to partners in the Lived Religion project.
+- A subclass of Person who partook in an Experience or has otherwise produced research data at some capacity.
 
 ## Sense
-- One of the five common human senses: Sight, Sound, Smell, Touch, Taste.  See http://id.worldcat.org/fast/1112562
+- A sensation produced by a biological sensory system.  See http://id.worldcat.org/fast/1112562
 
 ## Practice
 - An action being performed by individual(s) based on religious guidance.  See http://id.worldcat.org/fast/1149637
@@ -30,13 +30,13 @@
 - Observable physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
 
 ## RelatedSenses
-- Aggregates the various Senses under an ExperienceEvent.
+- An aggregator that encapsulates the Senses encountered by individuals at an Experience. 
 
 ## RelatedPractices
-- Aggregates the various Practices under an ExperienceEvent.
+- An aggregator that encapsulates the Practices being performed by individuals at an Experience.
 
 ## RelatedObjects
-- Aggregates the various Objects under an ExperienceEvent.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
+- An aggregator that encapsulates the Objects encountered by individuals at an Experience.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
 ## Sight
 - A Person's Sense of Sight, noting the person and related phenomenon causing the sense.  See http://id.worldcat.org/fast/1167852  
@@ -77,7 +77,7 @@
 ## Cooking
 - The act of preparing Food. See http://id.worldcat.org/fast/1754966 
 
-## ClotheAction
+## Clothe
 - The act of placing an article of Clothing onto a Person or Object.  See http://id.worldcat.org/fast/864680
 
 ## Clothing
@@ -87,7 +87,7 @@
 - Consumable material for human consumption.  See http://id.worldcat.org/fast/930458, http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Food
 
 ## Natural
-- Comes from the Universe without (known) interaction from outside agents.  See http://id.worldcat.org/fast/1034403
+- Comes from the Universe without apparent synthetic design, processing, or manufacture.  See http://id.worldcat.org/fast/1034403
 
 ## Manufactured
 - Does not occur without some action from a creator agent.  See http://id.worldcat.org/fast/1007993
@@ -96,7 +96,7 @@
 - Ownership of an Object is because of coming across that Object as a matter of consequence.  
 
 ## Spoken
-- Words produced by the vocal cords of a Person. 
+- Conveyance of thought, feeling, meaning or other information through articulate sounds.  
 
 ## FormerUses
 - Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
