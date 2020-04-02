@@ -38,21 +38,6 @@
 ## RelatedObjects
 - Aggregates the various Objects under an ExperienceEvent.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
-## SightMoment
-- A Sight that occurred during an ExperienceEvent.
-
-## SoundMoment
-- A Sound that occurred during an ExperienceEvent.
-
-## FeelMoment
-- A Feel that occurred during an ExperienceEvent.
-
-## SmellMoment
-- A Smell that occurred during an ExperienceEvent.
-
-## TasteMoment
-- A Taste that occurred during an ExperienceEvent.
-
 ## Sight
 - A Person's Sense of Sight, noting the person and related phenomenon causing the sense.  See http://id.worldcat.org/fast/1167852  
 

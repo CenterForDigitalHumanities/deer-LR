@@ -13,7 +13,24 @@
       },
       "ExperienceEvent":{
          "@id":"lr:ExperienceEvent",
-         "@type":"@id"
+         "@type":"@id",
+         "@context":{
+            "RelatedSenses":{
+               "@id":"lr:RelatedSenses",
+               "@type":"@id",
+               "@container":"@set"
+            },
+            "RelatedPractices":{
+               "@id":"lr:RelatedPractices",
+               "@type":"@id",
+               "@container":"@set"
+            },
+            "RelatedObjects":{
+               "@id":"skos:hasArtefactRelatedPhysicalResource",
+               "@type":"@id",
+               "@container":"@set"
+            }
+         }
       },
       "Event":{
          "@id":"schema:Event",
@@ -43,41 +60,6 @@
          "@id":"skos:PhysicalResource",
          "@type":"@id"
       },
-      "RelatedSenses":{
-         "@id":"lr:RelatedSenses",
-         "@type":"@id",
-         "@container":"@set"
-      },
-      "RelatedPractices":{
-         "@id":"lr:RelatedPractices",
-         "@type":"@id",
-         "@container":"@set"
-      },
-      "RelatedObjects":{
-         "@id":"skos:hasArtefactRelatedPhysicalResource",
-         "@type":"@id",
-         "@container":"@set"
-      },
-      "SightMoment":{
-         "@id":"lr:SightMoment",
-         "@type":"@id"
-      },
-      "SoundMoment":{
-         "@id":"lr:SoundMoment",
-         "@type":"@id"
-      },
-      "FeelMoment":{
-         "@id":"lr:FeelMoment",
-         "@type":"@id"
-      },
-      "SmellMoment":{
-         "@id":"lr:SmellMoment",
-         "@type":"@id"
-      },
-      "TasteMoment":{
-         "@id":"lr:TasteMoment",
-         "@type":"@id"
-      },
       "Sight":{
          "@id":"fast:1167852",
          "@type":"@id"
@@ -99,7 +81,7 @@
          "@type":"@id"
       },
       "Singing":{
-         "@id":"lr:SingAction",
+         "@id":"lr:Singing",
          "@type":"@id"
       },
       "Sitting":{
