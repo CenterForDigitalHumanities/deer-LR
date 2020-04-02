@@ -3,7 +3,7 @@
       "lr":"https://github.com/CenterForDigitalHumanities/deer-lr/blob/master/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
-      "skos":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
+      "ebu":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
       "schema":"http://schema.org/",
       "id":"@id",
       "type":"@type",
@@ -26,7 +26,7 @@
                "@container":"@set"
             },
             "RelatedObjects":{
-               "@id":"skos:hasArtefactRelatedPhysicalResource",
+               "@id":"ebu:hasArtefactRelatedPhysicalResource",
                "@type":"@id",
                "@container":"@set"
             }
@@ -53,7 +53,7 @@
          "@type":"@id"
       },
       "Object":{
-         "@id":"skos:PhysicalResource",
+         "@id":"ebu:PhysicalResource",
          "@type":"@id"
       },
       "Sight":{
@@ -117,7 +117,7 @@
          "@type":"@id"
       },
       "Food":{
-         "@id":"skos:Food",
+         "@id":"ebu:Food",
          "@type":"@id"
       },
       "Natural":{
@@ -137,11 +137,11 @@
          "@type":"@id"
       },
       "FormerUses":{
-         "@id":"skos:hasArtefactRelatedPhysicalResource",
+         "@id":"ebu:hasArtefactRelatedPhysicalResource",
          "@type":"@id"
       },
       "FormerLocations":{
-         "@id":"skos:FormerLocationshasArtefactRelatedLocation",
+         "@id":"ebu:FormerLocationshasArtefactRelatedLocation",
          "@type":"@id"
       },
       "FieldNotes":{
