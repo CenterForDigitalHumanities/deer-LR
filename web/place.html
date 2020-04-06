@@ -25,7 +25,7 @@
         <h2 class="text-primary">Create a New Location</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="locationForm" deer-type="Place" deer-context="http://store.rerum.io/context.json">
+                <form id="locationForm" deer-type="Place" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                     <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
@@ -183,10 +183,10 @@
                     </select>
                     <h4>Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations" value="">
+                    <input type="hidden" deer-input-type="Set" deer-key="FormerLocations" value="">
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view>
                     <label>Former Use(s)</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerUses" value="">
+                    <input type="hidden" deer-input-type="Set" deer-key="FormerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                         <optgroup label="General Categories"> 
                             <option value="Place.Accommodation" >Accommodation</option>
