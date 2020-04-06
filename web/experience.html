@@ -73,31 +73,26 @@
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <!-- This is it's own schema.org/Comment object which is about the experience created by the experience creator-->
-                <!-- When rendering an experience, we will have to ask for this separately since it is not created as an Annotation targeting the Event -->
-                <form id="fieldNotes" class="fieldNotesInnards is-hidden" deer-type="Comment" deer-item-type="simple"> <!-- Comment conforms to what Field Notes are -->
-                    <input type="hidden" deer-key="creator"/> <!-- who wrote the notes -->
-                    <input type="hidden" deer-key="additionalType" value="LR:FieldNotes">
-                    <input class="expReference" type="hidden" deer-key="about"/> <!-- The experience the notes are about.  Experience itself does not track these like other annotations/artifacts -->
-                    <textarea id="fieldNotesFromExperience" type="text" deer-key="text" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset006741.html"> </textarea>
+               
+                <!-- Think of ths as field notes for the event that anyone can add to.  These are additional notes about the event, not user X's field notes. -->
+                <div id="fieldNotes" class="fieldNotesInnards is-hidden" > <!-- Comment conforms to what Field Notes are -->
+                    <textarea id="fieldNotesFromExperience" type="text" deer-key="FieldNotes"> </textarea>
                     <div class="row">
-                        <input class="button primary" type="submit" value="Save Notes" />.
-                        <!--<a class="button primary col" onclick="LR.utils.updateFieldNotes(event)"> Save Notes </a>-->
+                        <input class="button primary" type="submit" value="Save Notes" onclick="putTheseIntoFormInput()" />
                     </div>
-                </form>
+                </div>
             </div>
         </div>
         <div id="startExperience" class="card bd-primary">
             <div class="card_body">
-                <form id="theExperience" class="experience" deer-type="Event">
+                <form id="theExperience" class="experience" deer-type="Event" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" />
-                    <input type="hidden" deer-key="@context" value="http://www.schema.org/" />
-                    <input type="hidden" deer-key="additionalType" value="LR:ExperienceUpload"/>
-                    <!-- We are going to do field notes a little differently and not track them as annotations, but as independent objects to query for separately. -->
-                    <!--<input type="hidden" deer-key="comment" />-->
-                    <input id="senses" type="hidden" deer-key="LR:Senses" deer-input-type="Set" />
-                    <input id="practices" type="hidden" deer-key="LR:Practices" deer-input-type="Set" />
-                    <input id="objects"  type="hidden" deer-key="LR:RelatedObjects"  deer-input-type="Set"  />
+                    <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/>
+                    <input type="hidden" deer-key="FieldNotes" />
+                    <!-- TODO -->
+                    <input id="senses" type="hidden" deer-key="RelatedSenses" deer-input-type="Set" />
+                    <input id="practices" type="hidden" deer-key="RelatedPractices" deer-input-type="Set" />
+                    <input id="objects"  type="hidden" deer-key="RelatedObjects"  deer-input-type="Set"  />
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -112,7 +107,7 @@
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
                     <label>Tags separated by ',':</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">   
+                    <input disabled type="text" deer-key-x="Tags">   
                     <input type="submit" value="Continue" />
                 </form>
             </div>
@@ -139,28 +134,21 @@
             <h2 class="text-primary">Describe your encounter at <span class="theLocationName">{Place.name}</span> </h2>
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
-                <!--<a class="button bg-secondary is-small"  area="spaces" onclick="" title="Record information about the location at which this experience took place.">Space</a>-->
+                <a class="button primary" area="practices" onclick="LR.ui.toggleAreas(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
                 <a class="button primary" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Bodies</a>
+                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
             </div>
-            <!--The Space information was captured when the Location was created.  Show it and offer the user a chance to add additional information--> 
-            <!--
-            <div tog="spaces" class="kind hidden">
-            </div>
-            -->
             <div tog="objects" class="kind is-hidden">
                 <h2> Objects </h2>
                 <p> Below are some objects you can choose from.  You may also opt to record a new object. </p>
-                <input type="hidden" deer-input-type="Set" deer-key="LR:RelatedObjects"/>
                 <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
                 <h2 class="text-primary">Create a New Object</h2>
                 <div class="card bd-primary">
                     <div class="card_body">
-                        <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://schema.org">
-                            <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
+                        <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
+                            <input type="hidden" deer-key="creator" value="loading"> 
                             <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
-                            <!-- That was referenced as being at this experience, supposed to be for Place so not exactly kosher -->
-                            <input class="expReference" type="hidden" deer-key="containedIn">  <!--That was referenced as being at this experience or location, supposed to be for Place so not exactly kosher -->
+                            <input class="expReference" type="hidden" deer-key="RelatedExperience">  <!--That was referenced as being at this experience or location, supposed to be for Place so not exactly kosher -->
                             <label>Name:</label>
                             <input type="text" deer-key="name">
                             <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -202,33 +190,33 @@
                             <div class="grouped">
                                 <label>Further Options</label>
                                 <select oninput="setPrimaryType(this)">
-                                    <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
-                                    <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                                    <option value="LR:Natural" context=""">Natural</option>
-                                    <option value="LR:Manufactured" context="">Manufactured</option>
-                                    <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
-                                    <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Natural">Natural</option>
+                                    <option value="Manufactured">Manufactured</option>
+                                    <option value="Found">Found</option>
+                                    <option value="Spoken">Spoken</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
                             <h4>History of this Object</h4>
                             <label>Select Former Location(s):</label>
-                            <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations"/>
+                            <input type="hidden" deer-input-type="Set" deer-key="FormerLocations"/>
                             <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                             <label>Select Former Use(s):</label>
-                            <input type="hidden" deer-key="LR:FormerUses" deer-input-type="Set">
+                            <input type="hidden" deer-key="FormerUses" deer-input-type="Set">
                             <!-- Looking at these as "former types", so just reuse the type values -->
                             <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                                 <option value="SacredObject">Sacred Object</option>
                                 <option value="VisualArtwork">Artwork</option>
-                                <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                                <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Food">Food</option>
                                 <option value="CivicStructure">Building</option>
-                                <option value="LR:Natural">Natural</option>
-                                <option value="LR:Manufactured">Manufactured</option>
-                                <option value="LR:Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                                <option value="Natural">Natural</option>
+                                <option value="Manufactured">Manufactured</option>
+                                <option value="Found">Found</option>
                                 <option value="Manuscript">Written Text</option>
-                                <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                                <option value="Spoken">Spoken</option>
                                 <option value="Other">Other</option>
                             </select>
                             <h4>Descriptive Information</h4>
@@ -262,17 +250,18 @@
                 <div class="card bd-primary">
                     <div class="card_body">
                         <!-- I smelled this, I heard that, during this event (geo)... -->
-                        <form id="senseForm" deer-type="ConsumeAction" deer-item-type="simple">
+                        <!-- This needs to create a sense, then add that sense into RelatedSenses -->
+                        <form id="senseForm" deer-type="Sense" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                             <h4>What senses are prominent?  Add one at a time.</h4>
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
                              <!-- At this location AKA Geo -->
-                            <input class="expReference" type="hidden" deer-key="event" value="">
+                            <input class="expReference" type="hidden" deer-key="RelatedEvent">
                             <select deer-key="additionalType">
-                                <option value="LR:Sight">I see...</option>
-                                <option value="LR:Sound">I hear...</option>
-                                <option value="LR:Taste">I taste...</option>
-                                <option value="LR:Touch">I feel...</option>
-                                <option value="LR:Smell">I smell...</option>
+                                <option value="Sight">I see...</option>
+                                <option value="Sound">I hear...</option>
+                                <option value="Taste">I taste...</option>
+                                <option value="Touch">I feel...</option>
+                                <option value="Smell">I smell...</option>
                             </select>
                             <label>Was there a specific object at the experience connected with this sense?</label>
                             <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
@@ -283,58 +272,61 @@
                                 <input class="button primary col" type="submit">
                             </div>
                         </form>
-
-                        <h4>What practices are occurring? Add one at a time.</h4>
-                        <form id="practiceForm" deer-type="Action" deer-item-type="simple">
-                            <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
-                            <!-- At this event/location/geo -->
-                            <input class="expReference" type="hidden" deer-key="event"> 
-                            <select deer-key="additionalType">
-                                <option value="None">None Noted</option>
-                                <option value="EatAction">Eating</option>
-                                <option value="DrinkAction">Drinking</option>
-                                <option value="PlayAction">Playing</option>
-                                <option value="LR:ClotheAction">Clothing</option>
-                                <option value="LR:SingAction">Singing</option>
-                                <option value="MoveAction">Moving</option>
-                                <option value="LR:SitAction">Sitting</option>
-                                <option value="LR:StandAction">Standing</option>
-                                <option value="LR:KneelAction">Kneeling</option>
-                                <option value="LR:TravelAction">Traveling</option>
-                                <option value="LR:DanceAction">Dancing</option>
-                                <option value="CookAction">Cooking</option>
-                                <option value="LR:WorkAction">Working</option>
-                                <option value="ListenAction">Listening</option>
-                                <option value="WatchAction">Watching</option>
-                                <option value="WriteAction">Writing</option>
-                                <option value="TradeAction">Trading</option>
-                                <option value="GiveAction">Donating</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
-                            <textarea id="further_practice" type="text" deer-key="description"></textarea>
-                            <select deer-key="LR:ActionContext">
-                                <option value="Religious Ritual">Religious Ritual</option>
-                                <option value="Community Event">Community Event</option>
-                                <option value="Civic Ritual">Civic Ritual</option>
-                                <option value="Commercial">Commercial</option>
-                                <option value="Public">Public</option>
-                                <option value="Private">Private</option>
-                                <option value="Planned">Planned</option>
-                                <option value="Spontaneous">Spontaneous</option>
-                                <option value="Individual">Individual</option>
-                                <option value="Collective">Collective</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <label>Is there a particular object this practice is associated with?</label>
-                            <input type="hidden" deer-key="object" value=""> 
-                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                            <div class="row">
-                                <input class="button primary col" type="submit">
-                            </div>
-                        </form>        
                     </div>
                 </div>                    
+            </div>
+            <div tog="practices" class="kind is-hidden">
+                <h4>What practices are occurring? Add one at a time.</h4>
+                <!-- This needs to create a Practice, then add that Practice into RelatedPractices -->
+                <form id="practiceForm" deer-type="Practice" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
+                    <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
+                    <!-- TODO -->
+                    <input class="expReference" type="hidden" deer-key="RelatedEvent"> 
+                    <select deer-key="additionalType">
+                        <option value="None">None Noted</option>
+                        <option value="EatAction">Eating</option>
+                        <option value="DrinkAction">Drinking</option>
+                        <option value="PlayAction">Playing</option>
+                        <option value="ClotheAction">Clothing</option>
+                        <option value="SingAction">Singing</option>
+                        <option value="MoveAction">Moving</option>
+                        <option value="SitAction">Sitting</option>
+                        <option value="StandAction">Standing</option>
+                        <option value="KneelAction">Kneeling</option>
+                        <option value="TravelAction">Traveling</option>
+                        <option value="DanceAction">Dancing</option>
+                        <option value="CookAction">Cooking</option>
+                        <option value="WorkAction">Working</option>
+                        <option value="ListenAction">Listening</option>
+                        <option value="WatchAction">Watching</option>
+                        <option value="WriteAction">Writing</option>
+                        <option value="TradeAction">Trading</option>
+                        <option value="GiveAction">Donating</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
+                    <textarea id="further_practice" type="text" deer-key="description"></textarea>
+                    <!-- TODO -->
+                    <select deer-key="ActionContext">
+                        <option value="Religious Ritual">Religious Ritual</option>
+                        <option value="Community Event">Community Event</option>
+                        <option value="Civic Ritual">Civic Ritual</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                        <option value="Planned">Planned</option>
+                        <option value="Spontaneous">Spontaneous</option>
+                        <option value="Individual">Individual</option>
+                        <option value="Collective">Collective</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label>Is there a particular object this practice is associated with?</label>
+                    <input type="hidden" deer-key="object" value=""> 
+                    <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                    <div class="row">
+                        <input class="button primary col" type="submit">
+                    </div>
+                </form>      
             </div>
         </div>
     </div>
