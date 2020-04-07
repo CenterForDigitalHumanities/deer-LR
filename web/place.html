@@ -114,18 +114,18 @@
                             <header>Residence</header>
                             <img class="hide-xs" src="https://icongr.am/material/home.svg?size=64&color=##14854f" title="Residence" alt="Residence">
                         </div>
-                        <div data-rdf="Placed.TouristDestination" class="bd-primary text-center card col" title="Tourist Destination">
+                        <div data-rdf="TouristDestination" class="bd-primary text-center card col" title="Tourist Destination">
                             <header>Tourist Destination</header>
                             <img class="hide-xs" src="https://icongr.am/material/beach.svg?size=64&color=##14854f" title="Tourist Destination" alt="Tourist Destination">
                         </div>
                     </div>
                     <label>More Options</label>
                     <select oninput="setPrimaryType(this)">
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
+                        <option value="Imagined" >Imagined</option>
+                        <option value="School" >School</option>
+                        <option value="Neighborhood" >Neighborhood</option>
                         <option value="Cemetery" >Cemetery</option>
-                        <option value="CivicStructure.Hospital" >Hospital</option>
+                        <option value="Hospital" >Hospital</option>
                         <option value="Museum" >Museum</option>
                         <option value="Park" >Park</option>
                         <option value="Street" >Street</option>
@@ -154,8 +154,8 @@
                     <label title="If there are secondary functions for this location, note them here.">Additional Types (if any)</label>
                     Hold <kbd>CTRL</kbd> to make multiple selections.
                     <!-- We are already using additionalType... -->
-                    <input type="hidden" deer-input-type-x="Set" deer-key="SecondaryFunction" >
-                    <select multiple disabled oninput="LR.utils.handleMultiSelect(event, false)">
+                    <input type="hidden" deer-input-type="Set" deer-key="SecondaryFunction" >
+                    <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
                         <optgroup label="General Categories"> 
                             <option value="Accommodation">Accommodation</option>
                             <option value="AdministrativeArea">Administrative Area</option>
@@ -167,10 +167,10 @@
                             <option value="TouristDestination">Tourist Destination</option>
                         </optgroup>
                         <Optgroup label="Precise Types">
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
-                            <option value="Accommodation.House" >Home</option>
+                            <option value="Imagined" >Imagined</option>
+                            <option value="School" >School</option>
+                            <option value="Neighborhood" >Neighborhood</option>
+                            <option value="House" >Home</option>
                             <option value="Cemetery">Cemetery</option>
                             <option value="Hospital">Hospital</option>
                             <option value="Museum">Museum</option>
@@ -196,15 +196,15 @@
                             <option value="LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
                             <option value="LocalBusiness" >Local Business</option>
                             <option value="Residence" >Residence</option>
-                            <option value="Placed.TouristDestination" >Tourist Destination</option>
+                            <option value="TouristDestination" >Tourist Destination</option>
                         </optgroup>
                         <Optgroup label="Precise Types">
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
-                            <option value="Accommodation.House">Home</option>
+                            <option value="Imagined" >Imagined</option>
+                            <option value="School" >School</option>
+                            <option value="Neighborhood" >Neighborhood</option>
+                            <option value="Accommodation">Home</option>
                             <option value="Cemetery">Cemetery</option>
-                            <option value="CivicStructure.Hospital">Hospital</option>
+                            <option value="Hospital">Hospital</option>
                             <option value="Museum">Museum</option>
                             <option value="Park">Park</option>
                             <option value="Street">Street</option>
@@ -216,7 +216,7 @@
                     <label title="The materials this location is comprised of.">Material(s), if applicable:</label>
                     <input  type="text" deer-key="material">
                     <label>Typical Use </label>
-                    <select  deer-key="purpose">
+                    <select deer-key="purpose">
                         <option value="Religious">Religious</option>
                         <option value="Commercial">Commercial</option>
                         <option value="Educational">Educational</option>
