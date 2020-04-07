@@ -1,4 +1,5 @@
 
+#Arch Type
 ## Event
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
@@ -29,6 +30,28 @@
 ## RelatedObjects
 - An aggregator that encapsulates the Objects encountered by individuals at an Event.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
+## RelatedExperience
+- The id of the Experience this data node relates to.
+
+## ReligiousTradition
+- One of the world's religions.  Used to note religious context around certain data.  
+
+## FormerUses
+- Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
+
+## FormerLocations
+- Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
+
+## FieldNotes
+- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
+
+## SecondaryFunction
+- Alternative uses for a given Place.  Ex. The church is also a bingo hall on Wednesdays.  
+
+
+
+
+#Values
 ## Sight
 - The factors surrounding a Person's sense of sight.  See http://id.worldcat.org/fast/1167852  
 
@@ -88,13 +111,4 @@
 
 ## Spoken
 - Conveyance of thought, feeling, meaning or other information through articulate sounds.  
-
-## FormerUses
-- Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
-
-## FormerLocations
-- Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
-
-## FieldNotes
-- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
 
