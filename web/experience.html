@@ -74,9 +74,9 @@
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
                
-                <!-- Think of ths as field notes for the event that anyone can add to.  These are additional notes about the event, not user X's field notes. -->
+                <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
                 <div id="fieldNotes" class="fieldNotesInnards is-hidden" > <!-- Comment conforms to what Field Notes are -->
-                    <textarea id="fieldNotesFromExperience" type="text" deer-key="FieldNotes"> </textarea>
+                    <textarea id="fieldNotesFromExperience" type="text"> </textarea>
                     <div class="row">
                         <input class="button primary" type="submit" value="Save Notes" onclick="putTheseIntoFormInput()" />
                     </div>
@@ -87,12 +87,12 @@
             <div class="card_body">
                 <form id="theExperience" class="experience" deer-type="Event" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" />
-                    <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/>
-                    <input type="hidden" deer-key="FieldNotes" />
+                    <input type="hidden" deer-key="additionalType" value="https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#ExperienceUpload"/>
+                    <input type="hidden" deer-key="fieldNotes" />
                     <!-- TODO -->
-                    <input id="senses" type="hidden" deer-key="RelatedSenses" deer-input-type="Set" />
-                    <input id="practices" type="hidden" deer-key="RelatedPractices" deer-input-type="Set" />
-                    <input id="objects"  type="hidden" deer-key="RelatedObjects"  deer-input-type="Set"  />
+                    <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
+                    <input id="practices" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
+                    <input id="objects"  type="hidden" deer-key="relatedObjects"  deer-input-type="Set"  />
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -102,7 +102,7 @@
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
                     <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
-                    <input deer-input-type="Set" type="hidden" deer-key="contributor" value="Bryan H., Patrick C., Adam P." />
+                    <input deer-input-type="Set" type="hidden" deer-key="contributor" />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
@@ -250,12 +250,12 @@
                 <div class="card bd-primary">
                     <div class="card_body">
                         <!-- I smelled this, I heard that, during this event (geo)... -->
-                        <!-- This needs to create a sense, then add that sense into RelatedSenses -->
+                        <!-- This needs to create a sense, then add that sense into relatedSenses -->
                         <form id="senseForm" deer-type="Sense" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                             <h4>What senses are prominent?  Add one at a time.</h4>
                             <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
                              <!-- At this location AKA Geo -->
-                            <input class="expReference" type="hidden" deer-key="RelatedEvent">
+                            <input class="expReference" type="hidden" deer-key="event">
                             <select deer-key="name">
                                 <option value="Sight">I see...</option>
                                 <option value="Sound">I hear...</option>
@@ -277,11 +277,12 @@
             </div>
             <div tog="practices" class="kind is-hidden">
                 <h4>What practices are occurring? Add one at a time.</h4>
-                <!-- This needs to create a Practice, then add that Practice into RelatedPractices -->
+                <!-- This needs to create a Practice, then add that Practice into relatedSenses -->
                 <form id="practiceForm" deer-type="Practice" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
                     <!-- TODO -->
-                    <input class="expReference" type="hidden" deer-key="RelatedEvent"> 
+                    <input class="expReference" type="hidden" deer-key="event"> 
+                    <!-- TODO make sure context.json is set up to handle this -->
                     <select deer-key="additionalType">
                         <option value="None">None Noted</option>
                         <option value="EatAction">Eating</option>
@@ -306,8 +307,8 @@
                     </select>
                     <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
                     <textarea id="further_practice" type="text" deer-key="description"></textarea>
-                    <!-- TODO -->
-                    <select deer-key="ActionContext">
+                    <!-- TODO Make sure context.json is et up for this.-->
+                    <select deer-key="practiceContext">
                         <option value="Religious Ritual">Religious Ritual</option>
                         <option value="Community Event">Community Event</option>
                         <option value="Civic Ritual">Civic Ritual</option>
@@ -323,6 +324,8 @@
                     <label>Is there a particular object this practice is associated with?</label>
                     <input type="hidden" deer-key="object" value=""> 
                     <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                    <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
+                    <textarea id="further_practice" type="text" deer-key="description"></textarea>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -505,10 +508,10 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "theExperience":
-                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "LR:RelatedPractices", "LR:RelatedSenses", "LR:RelatedObjects"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "relatedSenses", "relatedSenses", "relatedObjects"], event.target)
                 break
                 case "objectForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations"], event.target)
                 break
                 
                 case "senseForm":

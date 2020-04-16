@@ -15,17 +15,17 @@
          "@id":"schema:Event",
          "@type":"@id",
          "@context":{
-            "RelatedSenses":{
-               "@id":"lr:RelatedSenses",
+            "relatedSenses":{
+               "@id":"lr:relatedSenses",
                "@type":"@id",
                "@container":"@set"
             },
-            "RelatedPractices":{
-               "@id":"lr:RelatedPractices",
+            "relatedPractices":{
+               "@id":"lr:relatedPractices",
                "@type":"@id",
                "@container":"@set"
             },
-            "RelatedObjects":{
+            "relatedObjects":{
                "@id":"ebu:hasArtefactRelatedPhysicalResource",
                "@type":"@id",
                "@container":"@set"
@@ -136,16 +136,20 @@
          "@id":"lr:Spoken",
          "@type":"@id"
       },
-      "FormerUses":{
+      "formerUses":{
          "@id":"ebu:hasArtefactRelatedPhysicalResource",
          "@type":"@id"
       },
-      "FormerLocations":{
+      "formerLocations":{
          "@id":"ebu:FormerLocationshasArtefactRelatedLocation",
          "@type":"@id"
       },
-      "FieldNotes":{
+      "fieldNotes":{
          "@id":"fast:2007231",
+         "@type":"@id"
+      },
+      "religiousTradition":{
+        "@id":"lr:religiousTradition",
          "@type":"@id"
       }
    }

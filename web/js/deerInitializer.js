@@ -224,6 +224,10 @@ DEER.TEMPLATES.list= function(obj, options={}) {
     }
     return tmpl
 }
+
+let LRprimitives = ["additionalType", "startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
+let DEERprimitives = DEER.PRIMITIVES
+DEER.PRIMITIVES = [...DEERprimitives, ...LRprimitives]
     
 //DEER.URLS = {
 //    BASE_ID: "http://store.rerum.io/v1",
