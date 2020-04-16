@@ -37,6 +37,6 @@
    "navPlace2":{
       "id":"https://www.example.org/id/23456",
       "features":[],
-      "type":"Image"
+      "type":"FeatureCollection"
    }
 }
