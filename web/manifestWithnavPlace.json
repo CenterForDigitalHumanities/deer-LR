@@ -36,26 +36,7 @@
    ],
    "navPlace2":{
       "id":"https://www.example.org/id/23456",
-      "type":"FeatureCollection",
-      "features":[
-         {
-            "id":"https://www.example.org/id/56789",
-            "type":"Feature",
-            "properties":{
-               "label":{
-                  "en":[
-                     "Location For Handwritten Letters Binder"
-                  ]
-               }
-            },
-            "geometry":{
-               "type":"Point",
-               "coordinates":[
-                  48.86,
-                  2.34
-               ]
-            }
-         }
-      ]
+      "type":"FeatureCollection"
+      
    }
 }
