@@ -35,8 +35,6 @@
 
    ],
    "navPlace2":{
-      "id":"https://www.example.org/id/23456",
-      "type":"FeatureCollection"
-      
+      "id":"https://www.example.org/id/23456"
    }
 }
