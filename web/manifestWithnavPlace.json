@@ -34,9 +34,48 @@
    "annotations":[
 
    ],
-   "navPlace2":{
+   "navPlace_ex1":[
+      {
+         "id":"https://www.example.org/id/12345",
+         "type":"Feature",
+         "properties":{
+            "label":{
+               "en":[
+                  "Location For Handwritten Letters Binder"
+               ]
+            }
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               48.86,
+               2.34
+            ]
+         }
+      }
+   ],
+   "navPlace_ex2":{
       "id":"https://www.example.org/id/23456",
-      "features":[],
-      "type":"FeatureCullection"
+      "type":"FeatureCullection",
+      "features":[
+         {
+            "id":"https://www.example.org/id/56789",
+            "type":"Feature",
+            "properties":{
+               "label":{
+                  "en":[
+                     "Location For Handwritten Letters Binder"
+                  ]
+               }
+            },
+            "geometry":{
+               "type":"Point",
+               "coordinates":[
+                  48.86,
+                  2.34
+               ]
+            }
+         }
+      ]
    }
 }
