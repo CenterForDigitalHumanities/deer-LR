@@ -34,7 +34,7 @@
    "annotations":[
 
    ],
-   "navPlace_ex1":[
+   "navPlace1":[
       {
          "id":"https://www.example.org/id/12345",
          "type":"Feature",
@@ -54,7 +54,7 @@
          }
       }
    ],
-   "navPlace_ex2":{
+   "navPlace2":{
       "id":"https://www.example.org/id/23456",
       "type":"FeatureCollection",
       "features":[
