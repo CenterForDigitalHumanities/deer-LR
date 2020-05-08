@@ -46,23 +46,29 @@
                     <script>
                         var data_key_elements = document.querySelectorAll("[data-rdf]")
                         Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
-                        function setPrimaryType(event) {
-                            let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                        function setPrimaryType(event, otherOptionFlag) {
+                            let val = null
+                            if(otherOptionFlag){
+                                val = event.target.value
+                            }
+                            else{
+                                val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                                Array.from(data_key_elements).forEach(el => {
+                                    el = el.closest("[data-rdf]")
+                                    if (el.getAttribute("data-rdf") === val) {
+                                        el.classList.add("bg-light")
+                                    } 
+                                    else {
+                                        el.classList.remove("bg-light")
+                                    }
+                                })
+                            }
                             additionalTypeInput.value = val
-                            Array.from(data_key_elements).forEach(el => {
-                                el = el.closest("[data-rdf]")
-                                if (el.getAttribute("data-rdf") === val) {
-                                    el.classList.add("bg-light")
-                                } 
-                                else {
-                                    el.classList.remove("bg-light")
-                                }
-                            })
                         }
                     </script>
                     <div class="grouped">
                         <label>Further Options</label>
-                        <select oninput="setPrimaryType(event)">
+                        <select class="otherPrimaryTypes" oninput="setPrimaryType(event, true)">
                             <option value="Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
                             <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
                             <option value="Natural" context=""">Natural</option>
@@ -196,11 +202,12 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "objectForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target) 
+                    LR.utils.preSelectMultiSelects(annotationData, ["FormerUses", "FormerLocations"], event.target) 
                 break
                 default:
                     
             }
+            LR.utils.preSelectType(annotationData, event.target)
         })
         
         /**

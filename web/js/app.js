@@ -398,3 +398,57 @@ LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
         
     })
 }
+
+/**
+ * 
+ * Type and AdditionalType information has a custom UI around it, so DEER cannot prefill those pieces.
+ * Here we have the object with the type  
+ * @param {Object} annotationData The expanded containing all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData
+ * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
+ * @return None
+ */
+LR.utils.preSelectType = function(object, form){
+    let type = object.hasOwnProperty("additionalType") ? object.additionalType : ""
+    type = type[0] // It is saving twice right now, so this handles the bug for DEMO purposes.  TODO FIXME
+    if(type){
+        var data_key_elements = form.querySelectorAll("[data-rdf]")
+        Array.from(data_key_elements).forEach(el => {
+            el = el.closest("[data-rdf]")
+            if (el.getAttribute("data-rdf") === type) {
+                el.classList.add("bg-light")
+            } 
+            else {
+                el.classList.remove("bg-light")
+            }
+        })
+        form.querySelector(".otherPrimaryTypes").value = type
+    }
+    else{
+        //There is no annotation data for this key.
+        console.warn("This object did not have a primary type!")
+        console.log(object)
+    }
+}
+
+/**
+ * 
+ * Type and AdditionalType information has a custom UI around it, so DEER cannot prefill those pieces.
+ * Here we have the object with the type  
+ * @param {Object} annotationData The expanded containing all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData
+ * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
+ * @return None
+ */
+LR.utils.populateCoords = function(object, form){
+    let geo = object.hasOwnProperty("geometry") ? object.geometry : {}
+    let coords = geo.hasOwnProperty("coordinates") ? geo.coordinates : []
+    if(coords.length){
+        
+    }
+    else{
+        //There is are no coordinates in this geometry object, or geometry was missing
+        console.warn("The coordinates for this object are not stored correctly.  Investigate around ")
+        console.log(object)
+    }
+}
