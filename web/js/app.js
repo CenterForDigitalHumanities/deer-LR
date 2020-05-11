@@ -5,7 +5,7 @@
  */
 
 const LR = {}
-LR.VERSION = "0.6.0"
+LR.VERSION = "0.7.0"
 LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 //LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 //Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
