@@ -229,15 +229,15 @@ let LRprimitives = ["additionalType", "startDate", "location", "event", "related
 let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LRprimitives]
     
-//DEER.URLS = {
-//    BASE_ID: "http://store.rerum.io/v1",
-//    CREATE: "create",
-//    UPDATE: "update",
-//    QUERY: "query",
-//    OVERWRITE: "overwrite",
-//    DELETE: "delete",
-//    SINCE: "http://store.rerum.io/v1/since"
-//}
+DEER.URLS = {
+    BASE_ID: "http://store.rerum.io/v1",
+    CREATE: "create",
+    UPDATE: "update",
+    QUERY: "query",
+    OVERWRITE: "overwrite",
+    DELETE: "delete",
+    SINCE: "http://store.rerum.io/v1/since"
+}
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
