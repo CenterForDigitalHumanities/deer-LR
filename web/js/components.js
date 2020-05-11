@@ -86,7 +86,7 @@ class LrLogin extends HTMLElement {
                 top: 0;
                 left: 0;
                 z-index: 9000;
-                background-color: rgba(7,42,12,.7);
+                background-color: rgba(7,42,12,1);
             }
             fieldset {
                 background: #FFF;
