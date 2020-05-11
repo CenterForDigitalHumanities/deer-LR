@@ -31,6 +31,7 @@ class LrNav extends HTMLElement {
                 <a href="objects.html">Objects</a>
                 <a href="people.html">People</a>
                 <a href="researchers.html">Researchers</a>
+                <a href="map.html">Map View</a>
                 `
                 if(user.roles.administrator){
                     this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
@@ -47,6 +48,7 @@ class LrNav extends HTMLElement {
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
             <a href="researchers.html">Researchers</a>
+            <a href="map.html">Map View</a>
         </div>
     </div>
     <div class="nav-right">

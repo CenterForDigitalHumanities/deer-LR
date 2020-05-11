@@ -57,7 +57,9 @@
                         leafLong.oninput = updateGeometry
 
                         function updateGeometry(event, clickedLat, clickedLong) {
-                            event.preventDefault()
+                            if(event){
+                                event.preventDefault()
+                            }
                             if (clickedLong > -180) {
                                 leafLat.value = parseInt(clickedLat * 1000000) / 1000000
                                 leafLong.value = parseInt(clickedLong * 1000000) / 1000000
@@ -318,6 +320,8 @@
             switch(whatRecordForm){
                 case "locationForm":
                     LR.utils.preSelectMultiSelects(annotationData, ["FormerUses", "FormerLocations", "SecondaryTypes"], event.target)
+                    LR.utils.populateCoordinates(annotationData, event.target)
+                    LR.utils.preSelectType(annotationData, event.target)
                 break
                 
                 default:

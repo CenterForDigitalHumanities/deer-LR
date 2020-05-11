@@ -440,11 +440,16 @@ LR.utils.preSelectType = function(object, form){
  * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
  * @return None
  */
-LR.utils.populateCoords = function(object, form){
+LR.utils.populateCoordinates = function(object, form){
     let geo = object.hasOwnProperty("geometry") ? object.geometry : {}
-    let coords = geo.hasOwnProperty("coordinates") ? geo.coordinates : []
+    let val = geo.hasOwnProperty("value") ? geo.value : {}
+    let coords = val.hasOwnProperty("coordinates") ? val.coordinates : []
     if(coords.length){
-        
+        let long = coords[0]
+        let lat = coords[1]
+        leafLat.value = lat
+        leafLong.value = long
+        updateGeometry(null, lat, long)
     }
     else{
         //There is are no coordinates in this geometry object, or geometry was missing
