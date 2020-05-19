@@ -159,6 +159,9 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
     fetch(LR.URLS.QUERY, {
         method: "POST",
         mode: "cors",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
         body: JSON.stringify(queryObj)
     })
     .then(response => response.json())
@@ -275,7 +278,7 @@ LR.utils.login = async function(loginWidget, data, submitEvent){
         mode: "cors",
         cache: "no-cache",
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
             username: data.get("user"),
