@@ -9,10 +9,10 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-config.js'
+import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-config.js'
 
 // Identify a UTILS package
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-utils.js'
+import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-utils.js'
 
 // Overwrite or add certain values to the configuration to customize.
 
@@ -229,23 +229,23 @@ let LRprimitives = ["additionalType", "startDate", "location", "event", "related
 let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LRprimitives]
     
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://store.rerum.io/v1/since"
-}
+//DEER.URLS = {
+//    BASE_ID: "http://store.rerum.io/v1",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    QUERY: "query",
+//    OVERWRITE: "overwrite",
+//    DELETE: "delete",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-render.js'
+import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-0.9/deer-record.js'
+import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-record.js'
 
 // fire up the element detection as needed
 /**

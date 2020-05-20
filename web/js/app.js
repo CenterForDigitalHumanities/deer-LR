@@ -6,20 +6,20 @@
 
 const LR = {}
 LR.VERSION = "0.7.0"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 //Make sure these behave like DEER.URLS, AKA when it is deployed to dev, use sandbox, not lived-religion-dev or the internal back end
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    SINCE: "http://devstore.rerum.io/v1/since"
-//}
+LR.URLS = {
+    LOGIN: "login",
+    LOGOUT: "logout",
+    BASE_ID: "http://devstore.rerum.io/v1",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since"
+}
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 
@@ -238,12 +238,17 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
 
 /**
  * Set the required fields for attribution to have a value of this user's @id.
+ * This should apply to all <input>s that result in "creator" Annotations (user of this application)
+ * It should also set all deer-creator attributes, for DEER.ATTRIBUTION
+ * Any HTMLElement that should show the username must also be populated.
  * @param {object} userInfo A JSON object representing the user, the standard Lived Religion user object from event handlers.
  */
 LR.utils.setUserAttributionFields = function(userInfo){
-    let attributionElemSelectors = ["[deer-key='creator']"]//Maybe should be a config or const?
-    attributionElemSelectors.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
-    //Also populate anything that is supposed to know the username
+    let attributionInputs = ["[deer-key='creator']"] //For annotations that assert a creator
+    let attributionFrameworkElems = ["[deer-creator]"] //For DEER framework elements that have deer-creator (DEER.ATTRIBUTION)
+    attributionInputs.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
+    document.querySelectorAll(attributionFrameworkElems).forEach(elem => elem.setAttribute("deer-creator",userInfo['@id']))
+    //Populate anything that is supposed to know the username
     document.querySelectorAll(".theUserName").forEach(elem => elem.innerHTML = userInfo.name)
 }
 
