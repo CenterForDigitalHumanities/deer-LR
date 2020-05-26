@@ -206,6 +206,7 @@ DEER.TEMPLATES.Event = function(obj, options = {}) {
  * This is to override the normal behavior for drawing collection types.  
  * We need the targetCollection annotation ID exposed for removal
  * We need all eleemtns that cause removal to be classed so we can hide/show them.  
+ * We need the most up to date label/name to appear.
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -215,7 +216,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
     if(options.list){
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
-            let name = UTILS.getLabel(val,(val.type || val['@type'] || index))
+            let name = `<deer-view deer-id="${val["@id"]}" deer-template="mostUpToDateListEntryLabel"></deer-view>`
             let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem"
             onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">×</a>`
             tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn}</li>`
@@ -223,6 +224,20 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         tmpl += `</ul>`
     }
     return tmpl
+}
+
+/**
+ * Override list item ehavior by ensuring the most up to date label is gathered for the list item.
+ * This is done using a separate template to envoke the functionality of expand() to gather the most up to date assertion. 
+ * @param {Object} obj some obj  containing some label annotating it.
+ */
+DEER.TEMPLATES.mostUpToDateListEntryLabel = function (obj, options = {}) {
+    let label = options.label || UTILS.getLabel(obj,(obj.type || obj['@type'] || ""))
+    try {
+        return label
+    } catch (err) {
+        return null
+    }
 }
 
 let LRprimitives = ["additionalType", "startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
