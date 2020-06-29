@@ -3,8 +3,6 @@ class LrFooter extends HTMLElement {
         this.innerHTML = `<small>&copy;2019 Walter J. Ong, S.J. Center for Digital Humanities</small>
         <img class="brand" src="https://www.slu.edu/marcom/tools-downloads/imgs/logo/left-aligned/slu_logoleftaligned_rgb.png">
         <img class="brand" src="https://blog.ongcdh.org/blog/wp-content/uploads/2018/05/logo-dark.png">
-        <img class="brand" src="https://www.hluce.org/static/images/logo-hluce.png">
-        <small> V. ${LR.VERSION}</small>
         `
         this.classList.add('nav', 'nav-center', 'text-primary', 'is-fixed', 'is-full-width', 'is-vertical-align')
         this.style.bottom = 0
