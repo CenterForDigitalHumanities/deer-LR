@@ -327,14 +327,31 @@
          * Set the input fields of forms that include the user id for attribution.
          * Ex. input[deer-key="creator"]
          */
+     
         addEventListener('lrUserKnown', event => {
-            if(event.detail.user !== null){
-                LR.utils.setUserAttributionFields(event.detail.user)
+            let user = event.detail.user
+            if(user !== null){
+                LR.utils.setUserAttributionFields(user)
+                if (user.roles.administrator) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const experienceID = urlParams.get('id');
+                    if (experienceID) {
+                        theExperience.setAttribute("deer-id", experienceID)
+//                        document.querySelector("h2.text-primary").innerHTML = "Update Person"
+//                        document.querySelector("input[type='submit']").value = "Update"
+                        let btn = document.createElement("a")
+                        btn.href = window.location.pathname
+                        btn.innerHTML = "Reset Page"
+                        theExperience.append(btn)
+                    }
+                }
             }
             else{
                 console.log("User identity reset; user is null. ")
                 document.location.href="logout.html"
             }
+            
+            // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
         })
         
         /**
