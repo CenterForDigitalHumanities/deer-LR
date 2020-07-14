@@ -67,7 +67,7 @@
     <lr-nav></lr-nav>
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
-        <h2 class="text-primary">Upload Data From An Experience</h2>
+        <h2 class="text-primary">Lived Religion Experience</h2>
         <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
             <div class="card_body">
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
@@ -75,7 +75,7 @@
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
                
                 <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
-                <div id="fieldNotes" class="fieldNotesInnards is-hidden" > <!-- Comment conforms to what Field Notes are -->
+                <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
                     <textarea id="fieldNotesFromExperience" type="text"> </textarea>
                     <div class="row">
                         <input class="button primary" type="submit" value="Save Notes" onclick="putTheseIntoFormInput()" />
@@ -118,7 +118,7 @@
             </div>
         </div>
         <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
-            <h2 class="text-primary">Describe your encounter at <span class="theLocationName">{Place.name}</span> </h2>
+            <h2 class="text-primary">Sensory Information</h2>
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
                 <a class="button primary" area="practices" onclick="LR.ui.toggleAreas(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>

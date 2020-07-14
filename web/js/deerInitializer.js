@@ -186,39 +186,8 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let relatedObjects = UTILS.getValue(experienceData.relatedObjects)
         let relatedSenses = UTILS.getValue(experienceData.relatedSenses)
         let relatedPractices = UTILS.getValue(experienceData.relatedPractices)
-        let fieldNotes = UTILS.getValues(experienceData.fieldNotes)
-        
-        //experienceData.contributors is probably a Set or List of URIs and we want their labels
-        let contr_people = []
-        contributors.items.forEach((val)=>{
-            let name = ""
-            if(typeof val === "object"){
-                //Unlikely, but the value should be wthe URI
-                let objURI = UTILS.getValue(val)
-                if(objURI.indexOf("http://") > -1 || objURI.indexOf("https://") > -1){
-                    //IT is a string and it is a URI value, as expected.
-                    name = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`
-                }
-                else{
-                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                    //TODO what should we do here?
-                    name = objURI
-                }
-            }
-            else{
-                if(val.indexOf("http://") > -1 || place.indexOf("https://") > -1){
-                    //It is a string and it is a URI value, as expected.
-                    name = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`
-                }
-                else{
-                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                    //TODO what should we do here?
-                    name = place
-                }
-            }
-            contr_people.push(name)
-        })
-        
+        let fieldNotes = UTILS.getValue(experienceData.fieldNotes)
+       
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = ""
         if(typeof place === "object"){
@@ -244,6 +213,36 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 placeLabelHTML = place
             }
         }
+        
+        //experienceData.contributors is probably a Set or List of URIs and we want their labels
+        let contr_people = []
+        contributors.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+                let itemURI = UTILS.getValue(val)
+                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                    //item.value is a string and it is a URI value, as expected.
+                    name = `<deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name = itemURI
+                }
+            }
+            else{
+                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                    //item is a string and it is a URI value, as expected.
+                    name = `<deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name = val
+                }
+            }
+            contr_people.push(name)
+        })
         
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = []
