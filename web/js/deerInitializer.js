@@ -188,66 +188,253 @@ DEER.TEMPLATES.ExperienceArtifacts = function(expObj, options = {}) {
     
 }
 
-DEER.TEMPLATES.Event = function(obj, options = {}) {
+DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
+        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2><dl>`
+        
+        let contributors = UTILS.getValue(experienceData.contributor)
+        let place = UTILS.getValue(experienceData.location) //Most likely a single URI for a Place
+        let relatedObjects = UTILS.getValue(experienceData.relatedObjects)
+        let relatedSenses = UTILS.getValue(experienceData.relatedSenses)
+        let relatedPractices = UTILS.getValue(experienceData.relatedPractices)
+        let fieldNotes = UTILS.getValues(experienceData.fieldNotes)
+        
+        //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let contr_people = []
-        let contributors = UTILS.getValue(obj.contributor)
-        //obj.contributors is probably a Set or List of URIs and we want their labels
         contributors.items.forEach((val)=>{
             let name = ""
             if(typeof val === "object"){
-               name = `<deer-view deer-id="${val["@id"]}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                //Unlikely, but the value should be wthe URI
+                let objURI = UTILS.getValue(val)
+                if(objURI.indexOf("http://") > -1 || objURI.indexOf("https://") > -1){
+                    //IT is a string and it is a URI value, as expected.
+                    name = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name = objURI
+                }
             }
             else{
-                //It is just a string, so probably the name that should be displayed
-                name = val
+                if(val.indexOf("http://") > -1 || place.indexOf("https://") > -1){
+                    //It is a string and it is a URI value, as expected.
+                    name = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name = place
+                }
             }
             contr_people.push(name)
         })
-        contr_people = UTILS.stringifyArray(contr_people, DEER.DELIMETERDEFAULT)
-        let researchersHTML = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
         
-        let place = obj.location //Most likely a single URI for a Place
+        //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = ""
-        //If it is a URI, then we want to display the most upd to date label
         if(typeof place === "object"){
-            placeLabelHTML = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`  
+            //Then the URI is the value
+            let placeURI = UTILS.getValue(place)
+            if(placeURI.indexOf("http://") > -1 || placeURI.indexOf("https://") > -1){
+                placeLabelHTML = `<deer-view deer-id="${placeURI}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+            }
+            else{
+                //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                //TODO what should we do here?
+                placeLabelHTML = placeURI
+            }
         }
         else{
-            // Hmm obj.location be a String or URI
+            // The URI is this string, probably
             if(place.indexOf("http://") > -1 || place.indexOf("https://") > -1){
                 //Gamble that it is a resolvable ID...
-                placeLabelHTML = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                placeLabelHTML = `<deer-view deer-id="${place}" deer-template="mostUpToDateLabelHelper"></deer-view>`
             }
             else{
                 //We know it is just a string of some kind, probably the label they want to display, so just use it.
                 placeLabelHTML = place
             }
         }
-        let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
-        let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
-        let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>`
         
-        //Good, now we want to populate relatedObjects, relatedPractices and relatedSenses, LR specific things.
-        let artifactsHTML = `
-            <h4>Objects at experience "<span class="theExperienceName"></span>"</h4>
+        //Gather relatedObjects, an array of URIs
+        let relatedObjectsByName = []
+        //experienceData.relatedObjects is probably an array of String URIs, we want their label
+        relatedObjects.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+                //See if the value is the URI we want
+                let itemURI = UTILS.getValue(val)
+                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                    name = `
+                    <li>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                    </li>
+                    `
+                }
+                else{
+                    //We know it is just a string of some kind.  Just use it.
+                    //TODO what should we do here?
+                    name = `
+                    <li>
+                        ${itemURI}
+                    </li>
+                    `
+                }
+            }
+            else{
+                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                    //We expect this is item entry is the URI we were looking for
+                    name = `
+                    <li>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                    </li>
+                    `
+                }
+                else{
+                    //We know it is just a string of some kind and not the URI, so we can show this string.  
+                    //TODO what should we do here?
+                    name = `
+                    <li>
+                        ${val}
+                    </li>
+                    `
+                }
+            }
+            relatedObjectsByName.push(name)
+        })
+        let objectsHTML = `
+            <h4>Objects at Experience "${UTILS.getLabel(experienceData)}"</h4>
             <p>Objects you add will appear here and can be removed, but not edited.</p>
-            <ul id="objectsInExperience"></ul>
-            <h4>Senses at experience "<span class="theExperienceName"></span>"</h4>
-            <p>Senses you add will appear here and can be removed, but not edited.</p>
-            <ul id="sensesInExperience"></ul>
-            <h4>Practices occurring at experience "<span class="theExperienceName"></span>"</h4>
-            <p>Practices you add will appear here and can be removed, but not edited.</p>
-            <ul id="practicesInExperience"></ul>
-            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "<span class="theExperienceName"></span>"</h4>
-            <ul id="fieldNotesInExperience">
-                <li>The field notes for the experience will appear here as you make changes to them.</li>
+            <ul id="objectsInExperience">
+                ${relatedObjectsByName}
             </ul>
         `
         
+        //Gather relatedPractices, an array of URIs
+        let relatedPracticesByName = []
+        //experienceData.relatedPractices is probably an array of String URIs, we want their label
+        relatedPractices.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+                //See if the value is the URI we want
+                let itemURI = UTILS.getValue(val)
+                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                    name = `
+                    <li>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                    </li>
+                    `
+                }
+                else{
+                    //We know it is just a string of some kind.  Just use it.
+                    //TODO what should we do here?
+                    name = `
+                    <li>
+                        ${itemURI}
+                    </li>
+                    `
+                }
+            }
+            else{
+                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                    //We expect this is item entry is the URI we were looking for
+                    name = `
+                    <li>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                    </li>
+                    `
+                }
+                else{
+                    //We know it is just a string of some kind and not the URI, so we can show this string.  
+                    //TODO what should we do here?
+                    name = `
+                    <li>
+                        ${val}
+                    </li>
+                    `
+                }
+            }
+            relatedPracticesByName.push(name)
+        })
+        let practicesHTML = `
+            <h4>Practices at Experience "${UTILS.getLabel(experienceData)}"</h4>
+            <p>Practices you add will appear here and can be removed, but not edited.</p>
+            <ul id="practicesInExperience">
+                ${relatedPracticesByName}
+            </ul>
+        `
         
-        tmpl += placeHTML + dateHTML + researchersHTML + descriptionHTML + artifactsHTML
+        //Gather relatedSenses, an array of URIs
+        let relatedSensesByName = []
+        //experienceData.relatedSenses is probably an array of String URIs, we want their label
+        relatedSenses.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+                //See if the value is the URI we want
+                let itemURI = UTILS.getValue(val)
+                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                    name = `
+                    <li>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                    </li>
+                    `
+                }
+                else{
+                    //We know it is just a string of some kind.  Just use it.
+                    //TODO what should we do here?
+                    name = `
+                    <li>
+                        ${itemURI}
+                    </li>
+                    `
+                }
+            }
+            else{
+                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                    //We expect this is item entry is the URI we were looking for
+                    name = `
+                    <li>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                    </li>
+                    `
+                }
+                else{
+                    //We know it is just a string of some kind and not the URI, so we can show this string.  
+                    //TODO what should we do here?
+                    name = `
+                    <li>
+                        ${val}
+                    </li>
+                    `
+                }
+            }
+            relatedSensesByName.push(name)
+        })
+        let sensesHTML = `
+            <h4>Senses at Experience "${UTILS.getLabel(experienceData)}"</h4>
+            <p>Senses you add will appear here and can be removed, but not edited.</p>
+            <ul id="sensesInExperience">
+                ${relatedSensesByName}
+            </ul>
+        `
+        let researchersHTML = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+        let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
+        let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(experienceData.startDate, [], "string")}</dd>`
+        let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(experienceData.description, [], "string")}</dd>`
+        let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
+        let fieldNotesHTML = `
+            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience ${UTILS.getLabel(experienceData)}</h4>
+            <ul id="fieldNotesInExperience">
+                <li>${fieldNotes}</li>
+            </ul>
+        `
+        tmpl += placeHTML + dateHTML + researchersHTML + descriptionHTML + artifactsHTML + fieldNotesHTML
         return tmpl
     } catch (err) {
         return null
