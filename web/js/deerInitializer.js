@@ -258,7 +258,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = []
-        //experienceData.relatedObjects is probably an array of String URIs, we want their label
+        //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
         relatedObjects.items.forEach((val)=>{
             let name = ""
             if(typeof val === "object"){
@@ -314,7 +314,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = []
-        //experienceData.relatedPractices is probably an array of String URIs, we want their label
+        //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
         relatedPractices.items.forEach((val)=>{
             let name = ""
             if(typeof val === "object"){
@@ -370,7 +370,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = []
-        //experienceData.relatedSenses is probably an array of String URIs, we want their label
+        //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
         relatedSenses.items.forEach((val)=>{
             let name = ""
             if(typeof val === "object"){
