@@ -178,24 +178,76 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
 }
 
 /**
- * TODO Really this is the "data submission" template.  As far as it goes, this is the only "Event" recorded so far.  
- * This is very basic and does not contain the information describing the Event.  It needs to be built out as we begin to #14
- * describe an experience.  
+ * The template for rendering Objects, Senses, Practices of an Experiencew Event.  
  * 
  * @param {type} obj
  * @param {type} options
  * @return {default.TEMPLATES.Event.tmpl, String}
  */
+DEER.TEMPLATES.ExperienceArtifacts = function(expObj, options = {}) {
+    
+}
+
 DEER.TEMPLATES.Event = function(obj, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(obj)}</h2><dl>`
-        let contr_people = UTILS.stringifyArray(UTILS.getArrayFromObj(obj.contributor, null), DEER.DELIMETERDEFAULT)
-        let researchers = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
-        let date = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
-        //FIXME we would really like to have the location label here
-        let place = `<dt>Location</dt><dd>${UTILS.getValue(obj.location, [], "string")}</dd>`
-        let description = `<dt>Description</dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>`
-        tmpl += place + date + researchers + description
+        let contr_people = []
+        let contributors = UTILS.getValue(obj.contributor)
+        //obj.contributors is probably a Set or List of URIs and we want their labels
+        contributors.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+               name = `<deer-view deer-id="${val["@id"]}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+            }
+            else{
+                //It is just a string, so probably the name that should be displayed
+                name = val
+            }
+            contr_people.push(name)
+        })
+        contr_people = UTILS.stringifyArray(contr_people, DEER.DELIMETERDEFAULT)
+        let researchersHTML = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+        
+        let place = obj.location //Most likely a single URI for a Place
+        let placeLabelHTML = ""
+        //If it is a URI, then we want to display the most upd to date label
+        if(typeof place === "object"){
+            placeLabelHTML = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`  
+        }
+        else{
+            // Hmm obj.location be a String or URI
+            if(place.indexOf("http://") > -1 || place.indexOf("https://") > -1){
+                //Gamble that it is a resolvable ID...
+                placeLabelHTML = `<deer-view deer-id="${UTILS.getValue(place)}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+            }
+            else{
+                //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                placeLabelHTML = place
+            }
+        }
+        let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
+        let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(obj.startDate, [], "string")}</dd>`
+        let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(obj.description, [], "string")}</dd>`
+        
+        //Good, now we want to populate relatedObjects, relatedPractices and relatedSenses, LR specific things.
+        let artifactsHTML = `
+            <h4>Objects at experience "<span class="theExperienceName"></span>"</h4>
+            <p>Objects you add will appear here and can be removed, but not edited.</p>
+            <ul id="objectsInExperience"></ul>
+            <h4>Senses at experience "<span class="theExperienceName"></span>"</h4>
+            <p>Senses you add will appear here and can be removed, but not edited.</p>
+            <ul id="sensesInExperience"></ul>
+            <h4>Practices occurring at experience "<span class="theExperienceName"></span>"</h4>
+            <p>Practices you add will appear here and can be removed, but not edited.</p>
+            <ul id="practicesInExperience"></ul>
+            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "<span class="theExperienceName"></span>"</h4>
+            <ul id="fieldNotesInExperience">
+                <li>The field notes for the experience will appear here as you make changes to them.</li>
+            </ul>
+        `
+        
+        
+        tmpl += placeHTML + dateHTML + researchersHTML + descriptionHTML + artifactsHTML
         return tmpl
     } catch (err) {
         return null
@@ -217,7 +269,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
             let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
-            let name = `<deer-view deer-id="${val["@id"]}" deer-template="mostUpToDateListEntryLabel">${currentKnownLabel}</deer-view>`
+            let name = `<deer-view deer-id="${val["@id"]}" deer-template="mostUpToDateLabelHelper">${currentKnownLabel}</deer-view>`
             let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem"
             onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">×</a>`
             tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn}</li>`
@@ -232,7 +284,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
  * This is done using a separate template to invoke the functionality of expand() to gather the most up to date assertion. 
  * @param {Object} obj some obj  containing some label annotating it.
  */
-DEER.TEMPLATES.mostUpToDateListEntryLabel = function (obj, options = {}) {
+DEER.TEMPLATES.mostUpToDateLabelHelper = function (obj, options = {}) {
     let label = options.label || UTILS.getLabel(obj,(obj.type || obj['@type'] || ""))
     try {
         return label

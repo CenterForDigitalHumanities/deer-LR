@@ -116,19 +116,7 @@
         <div id="experienceReview" class="card is-hidden">
             <div class="card_body">
                 <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
-                <h4>Objects at experience "<span class="theExperienceName"></span>"</h4>
-                <p>Objects you add will appear here and can be removed, but not edited.</p>
-                <ul id="objectsInExperience"></ul>
-                <h4>Senses at experience "<span class="theExperienceName"></span>"</h4>
-                <p>Senses you add will appear here and can be removed, but not edited.</p>
-                <ul id="sensesInExperience"></ul>
-                <h4>Practices occurring at experience "<span class="theExperienceName"></span>"</h4>
-                <p>Practices you add will appear here and can be removed, but not edited.</p>
-                <ul id="practicesInExperience"></ul>
-                <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "<span class="theExperienceName"></span>"</h4>
-                <ul id="fieldNotesInExperience">
-                    <li>The field notes for the experience will appear here as you make changes to them.</li>
-                </ul>
+                
             </div>
         </div>
         <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
@@ -325,8 +313,6 @@
                     <label>Is there a particular object this practice is associated with?</label>
                     <input type="hidden" deer-key="object" value=""> 
                     <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                    <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
-                    <textarea id="further_practice" type="text" deer-key="description"></textarea>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -376,9 +362,7 @@
                 break
                 case "objectForm":
                     document.querySelector("a[area='objects']").click()
-                    let obj_list = document.getElementById("objectsInExperience")
-                    let obj_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    obj_list.innerHTML += obj_li
+                    
                     let objs_tracked = document.getElementById("objects").value
                     let objs_delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(objs_tracked){
@@ -391,18 +375,20 @@
                      * Improvement idea here.  Maybe don't make each action fire a click() to trigger the update action.
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
-                    document.getElementById("objects").value = trackedObjs
+                    document.getElementById("objects").value = objs_tracked
                     document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
                     document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    alert("Object Added!") //TODO FEEDBACK
+                    //TODO only do this upon success of the update from adding this to the db collection, a result of an update to the experience..  
+                    let obj_list = document.getElementById("objectsInExperience")
+                    let obj_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    obj_list.innerHTML += obj_li
+                alert("Object Added!") //TODO FEEDBACK
                 break
                 case "senseForm": 
                     document.querySelector("a[area='bodies']").click()
-                    let sense_list = document.getElementById("sensesInExperience")
-                    let sense_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    sense_list.innerHTML += sense_li
+
                     let senses_tracked = document.getElementById("senses").value
                     let senses_delim = document.getElementById("senses").hasAttribute("deer-array-delimeter") ? document.getElementById("senses").getAttribute("deer-array-delimeter") : ","
                     if(senses_tracked){
@@ -420,12 +406,13 @@
                     document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    let sense_list = document.getElementById("sensesInExperience")
+                    let sense_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    sense_list.innerHTML += sense_li 
                     alert("Sense Recorded!");
                 case "practiceForm":
-                    document.querySelector("a[area='bodies']").click()
-                    let practice_list = document.getElementById("practicesInExperience")
-                    let practice_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    practice_list.innerHTML += practice_li
+                    document.querySelector("a[area='practices']").click()
+                    
                     let practices_tracked = document.getElementById("practices").value
                     let practices_delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
                     if(practices_tracked){
@@ -443,9 +430,13 @@
                     document.getElementById("theExperience").$isDirty = true
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
+                    let practice_list = document.getElementById("practicesInExperience")
+                    let practice_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
+                    practice_list.innerHTML += practice_li
                     alert("Practice Recorded")
                 break
                 case "fieldNotes":
+                    //TODO bring this to life.  
                     alert("Notes Saved!") //TODO FEEDBACK
                 break
                 default:
