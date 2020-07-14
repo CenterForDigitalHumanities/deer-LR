@@ -177,17 +177,6 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     }
 }
 
-/**
- * The template for rendering Objects, Senses, Practices of an Experiencew Event.  
- * 
- * @param {type} obj
- * @param {type} options
- * @return {default.TEMPLATES.Event.tmpl, String}
- */
-DEER.TEMPLATES.ExperienceArtifacts = function(expObj, options = {}) {
-    
-}
-
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2><dl>`
