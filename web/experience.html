@@ -341,12 +341,19 @@
             let user = event.detail.user
             if(user !== null){
                 LR.utils.setUserAttributionFields(user)
-                //TODO FIXME is user is an administrator OR THE CREATOR OF THE EXPERIENCE
-                if (user.roles.administrator) {
-                    const urlParams = new URLSearchParams(window.location.search)
-                    const experienceID = urlParams.get('id');
-                    if (experienceID) {
+                const urlParams = new URLSearchParams(window.location.search)
+                const experienceID = urlParams.get('id');
+                if (experienceID) {
+                    //FIXME if user is an administrator OR THE CREATOR OF THE EXPERIENCE
+                    //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
+                    if (user.roles.administrator) {
                         theExperience.setAttribute("deer-id", experienceID)
+                    }
+                    else if(false){
+                        // TODO Current user is the creator of this experience...
+                    }
+                    else{
+                        alert("Only administrators can review experiences at this time.  Soon, experience creators will be able to review as well.")
                     }
                 }
             }

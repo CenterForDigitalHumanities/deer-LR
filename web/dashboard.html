@@ -93,7 +93,7 @@
                     let viewBtn = `<a class="tag is-rounded is-small viewCollectionItem" href="experience.html?id=${b["@id"]}">&#x1F441</a>`
                     let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem"
                     onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
-                    return a += `<li> ${label} </li>`               
+                    return a += `<li> ${label}${viewBtn}${removeBtn} </li>`               
                 },``):`<p class="text-error">You have not submitted any experiences.</p>`
         }
         
