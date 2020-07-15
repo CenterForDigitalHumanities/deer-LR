@@ -85,7 +85,7 @@
                 })
             })
             .then(response => response.json())
-            .error(err => {return []})
+            .catch(err => {return []})
             previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>
                 {
                     let obj = (b.value) ? b.value : b
