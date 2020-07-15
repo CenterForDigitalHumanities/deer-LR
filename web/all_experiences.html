@@ -11,11 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <style>
-        #objects h2 {
-            display: none;
-        }
+
         .removeCollectionItem {
-            display: none;
+            display: inline-block;
         }
         
         .viewCollectionItem{
@@ -34,7 +32,7 @@
     <div class="container">
         <h1 class="text-primary"> All Lived Religion Experiences </h1>
         <div class="row">
-            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col" deer-link="experience.html?id=">You must be logged in as an administrator.</div>
+            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col is-hidden" deer-link="experience.html?id=">You must be logged in as an administrator.</div>
         </div>
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -55,6 +53,9 @@
             else if (!event.detail.user.roles.administrator) {
                 alert("You must be an administrator to use this!")
                 document.location.href="dashboard.html"
+            }
+            else{
+                experiences.classList.remove("is-hidden")
             }
         })
         
