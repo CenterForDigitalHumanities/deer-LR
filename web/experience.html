@@ -60,6 +60,14 @@
             max-height: 300px;
             font-size: 90%;
         }
+        
+        .removeCollectionItem {
+            display: none;
+        }
+        
+        .viewCollectionItem{
+            margin-left: .5rem
+        }
     </style>
 </head>
 
@@ -333,17 +341,12 @@
             let user = event.detail.user
             if(user !== null){
                 LR.utils.setUserAttributionFields(user)
+                //TODO FIXME is user is an administrator OR THE CREATOR OF THE EXPERIENCE
                 if (user.roles.administrator) {
-                    const urlParams = new URLSearchParams(window.location.search);
+                    const urlParams = new URLSearchParams(window.location.search)
                     const experienceID = urlParams.get('id');
                     if (experienceID) {
                         theExperience.setAttribute("deer-id", experienceID)
-//                        document.querySelector("h2.text-primary").innerHTML = "Update Person"
-//                        document.querySelector("input[type='submit']").value = "Update"
-                        let btn = document.createElement("a")
-                        btn.href = window.location.pathname
-                        btn.innerHTML = "Reset Page"
-                        theExperience.append(btn)
                     }
                 }
             }

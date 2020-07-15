@@ -445,9 +445,10 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         obj[options.list].forEach((val,index)=>{
             let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
             let name = `<deer-view deer-id="${val["@id"]}" deer-template="mostUpToDateLabelHelper">${currentKnownLabel}</deer-view>`
-            let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem"
-            onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">×</a>`
-            tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn}</li>`
+            let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry""
+            onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
+            let viewBtn = (val["@id"] && options.link) ? `<a class="tag is-rounded is-small viewCollectionItem" title="Go To Item View" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
+            tmpl+= (val["@id"] && options.link) ? `<li ${DEER.ID}="${val["@id"]}"><a href="${options.link}${val["@id"]}">${name}</a>${viewBtn}${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>`
         })
         tmpl += `</ul>`
     }

@@ -206,6 +206,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.
+                alert("There was an error removing an item from the collection")
                 console.error("There was an error removing an item from the collection")
                 console.log(itemElem)
             }
