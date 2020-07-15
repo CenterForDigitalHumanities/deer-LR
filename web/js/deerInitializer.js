@@ -215,35 +215,34 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         }
         
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
-        let contr_people = []
+        let contributorsByName
         contributors.items.forEach((val)=>{
             let name = ""
             if(typeof val === "object"){
                 let itemURI = UTILS.getValue(val)
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     //item.value is a string and it is a URI value, as expected.
-                    name = `<deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                    name = `<li><deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view></li>`
                 }
                 else{
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = itemURI
+                    name =  `<li> ${itemURI} </li>`
                 }
             }
             else{
                 if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
                     //item is a string and it is a URI value, as expected.
-                    name = `<deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>`
+                    name = `<li><deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view></li>`
                 }
                 else{
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = val
+                    name = `<li> ${val} </li>`
                 }
             }
-            contr_people.push(name)
+            contributorsByName += name
         })
-        
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = []
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
@@ -411,13 +410,14 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 ${relatedSensesByName}
             </ul>
         `
-        let researchersHTML = `<dt>Researchers Involved</dt><dd>${contr_people}</dd>`
+        
+        let researchersHTML = `<dt>Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
         let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(experienceData.startDate, [], "string")}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(experienceData.description, [], "string")}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
         let fieldNotesHTML = `
-            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience ${UTILS.getLabel(experienceData)}</h4>
+            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "${UTILS.getLabel(experienceData)}"</h4>
             <ul id="fieldNotesInExperience">
                 <li>${fieldNotes}</li>
             </ul>

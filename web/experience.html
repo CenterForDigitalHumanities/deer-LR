@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div id="startExperience" class="card bd-primary">
+        <div id="startExperience" class="card bd-primary" tog="startExperience">
             <div class="card_body">
                 <form id="theExperience" class="experience" deer-type="Event" deer-creator deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" />
@@ -114,6 +114,7 @@
         </div>
         <div id="experienceReview" class="card is-hidden">
             <div class="card_body">
+                <a class="button primary" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a>
                 <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
