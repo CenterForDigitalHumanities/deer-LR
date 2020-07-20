@@ -179,7 +179,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
 
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2><dl>`
+        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
         
         let contributors = UTILS.getValue(experienceData.contributor)
         let place = UTILS.getValue(experienceData.location) //Most likely a single URI for a Place
@@ -215,7 +215,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         }
         
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
-        let contributorsByName
+        let contributorsByName = ``
         contributors.items.forEach((val)=>{
             let name = ""
             if(typeof val === "object"){
@@ -244,7 +244,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             contributorsByName += name
         })
         //Gather relatedObjects, an array of URIs
-        let relatedObjectsByName = []
+        let relatedObjectsByName = ``
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
         relatedObjects.items.forEach((val)=>{
             let name = ""
@@ -289,7 +289,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     `
                 }
             }
-            relatedObjectsByName.push(name)
+            relatedObjectsByName += name
         })
         let objectsHTML = `
             <h4>Objects at Experience "${UTILS.getLabel(experienceData)}"</h4>
@@ -300,7 +300,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         `
         
         //Gather relatedPractices, an array of URIs
-        let relatedPracticesByName = []
+        let relatedPracticesByName = ``
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
         relatedPractices.items.forEach((val)=>{
             let name = ""
@@ -345,7 +345,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     `
                 }
             }
-            relatedPracticesByName.push(name)
+            relatedPracticesByName += name
         })
         let practicesHTML = `
             <h4>Practices at Experience "${UTILS.getLabel(experienceData)}"</h4>
@@ -356,7 +356,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         `
         
         //Gather relatedSenses, an array of URIs
-        let relatedSensesByName = []
+        let relatedSensesByName = ``
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
         relatedSenses.items.forEach((val)=>{
             let name = ""
@@ -401,7 +401,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     `
                 }
             }
-            relatedSensesByName.push(name)
+            relatedSensesByName += name
         })
         let sensesHTML = `
             <h4>Senses at Experience "${UTILS.getLabel(experienceData)}"</h4>

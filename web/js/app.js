@@ -107,6 +107,30 @@ LR.ui.toggleAreas = function(event){
     }
 }
 
+/**
+ * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.ui.toggleAreaHideOthers = function(event){
+    let area = event.target.getAttribute("area");
+    let elems = document.querySelectorAll("div[tog='"+area+"']")
+    let all = document.querySelectorAll("div[tog]")
+    for(let elem of all){
+        if (elem.getAttribute("tog") && elem.getAttribute("tog") === area){
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+        }
+        else{
+            elem.classList.add("is-hidden")
+        }
+    }
+}
+
 LR.ui.toggleFieldNotes = function(event){
     let floater = document.getElementById("fieldNotesFloater");
     if(floater.getAttribute("expanded") === "true"){

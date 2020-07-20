@@ -122,7 +122,6 @@
         </div>
         <div id="experienceReview" class="card is-hidden">
             <div class="card_body">
-                <a class="button primary" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a>
                 <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
@@ -130,9 +129,9 @@
             <h2 class="text-primary">Sensory Information</h2>
             <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
             <div class="row">
-                <a class="button primary" area="practices" onclick="LR.ui.toggleAreas(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
-                <a class="button primary" area="objects" onclick="LR.ui.toggleAreas(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreas(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
+                <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
+                <a class="button primary" area="objects" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
+                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
             </div>
             <div tog="objects" class="kind is-hidden">
                 <h2> Objects </h2>
