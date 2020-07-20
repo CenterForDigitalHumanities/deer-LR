@@ -73,7 +73,7 @@ public class TinyDelete extends HttpServlet {
                 moveOn = true;
             }
             else{
-                sb.append("You must be a Lived Religion administrator to delete at this time.");
+                sb.append("You must be a Lived Religion administrator to delete items at this time.");
                 codeOverwrite = HttpServletResponse.SC_UNAUTHORIZED;
             }
         }

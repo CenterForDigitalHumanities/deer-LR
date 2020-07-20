@@ -71,6 +71,7 @@
         }, false) 
         
         async function getUserEntries(user) {
+            
             let historyWildcard = {"$exists":true, "$size":0}
             let experiences = await fetch(LR.URLS.QUERY, {
                 method: "POST",
@@ -90,9 +91,15 @@
                 {
                     let obj = (b.value) ? b.value : b
                     let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
-                    let viewBtn = `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="experience.html?id=${b["@id"]}">&#x1F441</a>`
-                    let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-                    onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
+                    let viewBtn, removeBtn
+                    /**
+                     * FIXME: Only admins can edit and remove experiences. TODO:  We will bring control to experience creators soon.
+                     */
+                    if(user.roles.administrator){
+                        viewBtn = `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="experience.html?id=${b["@id"]}">&#x1F441</a>`
+                        removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
+                        onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
+                    }
                     return a += `<li> ${label}${viewBtn}${removeBtn} </li>`               
                 },``):`<p class="text-error">You have not submitted any experiences.</p>`
         }

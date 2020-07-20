@@ -13,7 +13,7 @@
     <style>
 
         .removeCollectionItem {
-            display: inline-block;
+            display: none;
         }
         
         .viewCollectionItem{
@@ -50,13 +50,14 @@
                     //FIXME if user is an administrator OR THE CREATOR OF THE EXPERIENCE
                     //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
                     if (user.roles.administrator) {
-                        theExperience.setAttribute("deer-id", experienceID)
+                        
                     }
                     else if(false){
                         // TODO Current user is the creator of this experience...
                     }
                     else{
-                        alert("Only administrators can review experiences at this time.  Soon, experience creators will be able to review as well.")
+                        alert("Only administrators can edit or review experiences at this time.  Soon, experience creators will be able to review as well.")
+                        document.location.href="dashboard.html"
                     }
                 }
             }
@@ -75,7 +76,18 @@
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "experiences") {
-                
+                let user = localStorage.getItem("lr-user")
+                if (user !== null) {
+                    try {
+                        user = JSON.parse(user)
+                        if (user.roles.administrator) {
+                            for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
+                        }
+                    } catch (err) {
+                        console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
+                        document.location.href="logout.html"
+                    }
+                }
             }
         }, false)
         
