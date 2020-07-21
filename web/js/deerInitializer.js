@@ -456,12 +456,12 @@ DEER.TEMPLATES.list= function(obj, options={}) {
 }
 
 /**
- * Override list item behavior by ensuring the most up to date label is gathered for the list item.
- * This is done using a separate template to invoke the functionality of expand() to gather the most up to date assertion. 
+ * Ensure the most up to date label is gathered.  Often used when rendering collection items.
+ * Using a template ensures that expand(obj) has happened, so we have all up to date annotations in obj.
  * @param {Object} obj some obj  containing some label annotating it.
  */
 DEER.TEMPLATES.mostUpToDateLabelHelper = function (obj, options = {}) {
-    let label = options.label || UTILS.getLabel(obj,(obj.type || obj['@type'] || ""))
+    let label = options.label ? options.label : UTILS.getLabel(obj,(obj.type || obj['@type'] || ""))
     try {
         return label
     } catch (err) {
@@ -469,9 +469,24 @@ DEER.TEMPLATES.mostUpToDateLabelHelper = function (obj, options = {}) {
     }
 }
 
-let LRprimitives = ["additionalType", "startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
+/**
+ * Ensure the most up to date additionalType annotation is gathered.  Often used when rendering collection items.
+ * Using a template ensures that expand(obj) has happened, so we have all up to date annotations in obj.
+ * @param {Object} obj some obj  containing some label annotating it.
+ */
+DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
+    let at = options.additionalType ? options.additionalType : obj.hasOwnProperty("additionalType") ?  obj.additionalType : ""
+    try {
+        return at
+    } catch (err) {
+        return null
+    }
+}
+
+let LR_primitives = ["additionalType"]
+//let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
 let DEERprimitives = DEER.PRIMITIVES
-DEER.PRIMITIVES = [...DEERprimitives, ...LRprimitives]
+DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 //Comment this out for dev-01 deploys
 //DEER.URLS = {

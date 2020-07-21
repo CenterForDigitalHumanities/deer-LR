@@ -127,7 +127,7 @@
         </div>
         <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
             <h2 class="text-primary">Sensory Information</h2>
-            <label>Add information about the space, objects and the activities that happened during this experience.  Select a category to get started.</label>
+            <label>Add information about the space, objects and activities.  Select a category to get started.</label>
             <div class="row">
                 <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
                 <a class="button primary" area="objects" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
@@ -437,7 +437,9 @@
                     alert("Sense Recorded!");
                 case "practiceForm":
                     document.querySelector("a[area='practices']").click()
-                    
+                    if(event.detail.hasOwnProperty("additionalType")){
+                        newObjName = event.detail.additionalType
+                    }
                     let practices_tracked = document.getElementById("practices").value
                     let practices_delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
                     if(practices_tracked){
