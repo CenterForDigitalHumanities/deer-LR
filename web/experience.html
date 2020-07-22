@@ -172,6 +172,7 @@
                                 function setPrimaryType(event) {
                                     let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
                                     additionalTypeInput.value = val
+                                    additionalTypeInput.dispatchEvent("input")
                                     Array.from(data_key_elements).forEach(el => {
                                         el = el.closest("[data-rdf]")
                                         if (el.getAttribute("data-rdf") === val) {
@@ -401,14 +402,10 @@
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
                     document.getElementById("objects").value = objs_tracked
-                    document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
-                    document.getElementById("theExperience").$isDirty = true
+                    document.getElementById("objects").dispatchEvent("input")
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    //TODO only do this upon success of the update from adding this to the db collection, a result of an update to the experience..  
-                    let obj_list = document.getElementById("objectsInExperience")
-                    let obj_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    obj_list.innerHTML += obj_li
+                    //TODO only do this upon success of the update from adding this to the db collection, a result of an update to the experience.  
                     alert("Object Added!") //TODO FEEDBACK
                 break
                 case "senseForm": 
@@ -427,13 +424,9 @@
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
                     document.getElementById("senses").value = senses_tracked
-                    document.getElementById("senses").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
-                    document.getElementById("theExperience").$isDirty = true
+                    document.getElementById("senses").dispatchEvent("input")
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    let sense_list = document.getElementById("sensesInExperience")
-                    let sense_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    sense_list.innerHTML += sense_li 
                     alert("Sense Recorded!");
                 case "practiceForm":
                     document.querySelector("a[area='practices']").click()
@@ -453,13 +446,10 @@
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
                     document.getElementById("practices").value = practices_tracked
-                    document.getElementById("practices").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
-                    document.getElementById("theExperience").$isDirty = true
+                    document.getElementById("practices").dispatchEvent("input")
+                    
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    let practice_list = document.getElementById("practicesInExperience")
-                    let practice_li = `<li>${newObjName}<a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${newObjID}', '${expID}')">Remove</a></li>`
-                    practice_list.innerHTML += practice_li
                     alert("Practice Recorded")
                 break
                 case "fieldNotes":

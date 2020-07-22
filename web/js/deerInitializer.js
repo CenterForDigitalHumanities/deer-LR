@@ -9,10 +9,10 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-config.js'
+import { default as DEER } from '../deer-local/deer-config.js'
 
 // Identify a UTILS package
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-utils.js'
+import { default as UTILS } from '../deer-local/deer-utils.js'
 
 // Overwrite or add certain values to the configuration to customize.
 
@@ -254,7 +254,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -274,7 +274,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -310,7 +310,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -330,7 +330,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -366,7 +366,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -386,7 +386,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -475,7 +475,7 @@ DEER.TEMPLATES.mostUpToDateLabelHelper = function (obj, options = {}) {
  * @param {Object} obj some obj  containing some label annotating it.
  */
 DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
-    let at = options.additionalType ? options.additionalType : obj.hasOwnProperty("additionalType") ?  obj.additionalType : ""
+    let at = options.hasOwnProperty("additionalType") ?  UTILS.getValue(options.additionalType) : obj.hasOwnProperty("additionalType") ?  UTILS.getValue(obj.additionalType) : ""
     try {
         return at
     } catch (err) {
@@ -501,11 +501,11 @@ DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-render.js'
+import { default as renderer, initializeDeerViews } from '../deer-local/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-record.js'
+import { default as record, initializeDeerForms } from '../deer-local/deer-record.js'
 
 // fire up the element detection as needed
 /**
