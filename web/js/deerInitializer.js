@@ -285,7 +285,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -305,7 +305,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -341,7 +341,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -361,7 +361,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -417,7 +417,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `

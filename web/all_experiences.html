@@ -81,6 +81,7 @@
                     try {
                         user = JSON.parse(user)
                         if (user.roles.administrator) {
+                            experiences.classList.remove("is-hidden")
                             for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
                         }
                     } catch (err) {

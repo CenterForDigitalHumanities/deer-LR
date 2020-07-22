@@ -233,9 +233,8 @@
                         <option value="GiveAction">Donating</option>
                         <option value="Other">Other</option>
                     </select>
-                    <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
-                    <textarea id="further_practice" type="text" deer-key="description"></textarea>
                     <!-- TODO Make sure context.json is et up for this.-->
+                    <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
                     <select deer-key="practiceContext">
                         <option value="Religious Ritual">Religious Ritual</option>
                         <option value="Community Event">Community Event</option>
@@ -249,6 +248,8 @@
                         <option value="Collective">Collective</option>
                         <option value="Other">Other</option>
                     </select>
+                    <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
+                    <textarea id="further_practice" type="text" deer-key="description"></textarea>
                     <label>Is there a particular object this practice is associated with?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
                     <input type="hidden" deer-key="object" value=""> 
                     <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
@@ -402,9 +403,6 @@
                     break
                 case "practiceForm":
                     document.querySelector("a[area='practices']").click()
-                    if(event.detail.hasOwnProperty("additionalType")){
-                        newObjName = event.detail.additionalType
-                    }
                     let practices_tracked = document.getElementById("practices").value
                     let practices_delim = document.getElementById("practices").hasAttribute("deer-array-delimeter") ? document.getElementById("practices").getAttribute("deer-array-delimeter") : ","
                     if(practices_tracked){
