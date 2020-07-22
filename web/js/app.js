@@ -176,6 +176,10 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
     }, 2150);
 }
 
+LR.ui.showPopover = function(which, event){
+    console.error("Sorry, these popovers are not ready yet :(")
+}
+
 /**
  * Remove an item from one of the Lived Religion application collections.
  * @param {String} itemID : The ID of the annotation connecting the item to the collection.
