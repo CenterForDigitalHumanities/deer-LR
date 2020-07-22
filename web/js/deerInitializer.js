@@ -184,7 +184,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let contributors = UTILS.getValue(experienceData.contributor)
         let people = UTILS.getValue(experienceData.attendee)
         let place = UTILS.getValue(experienceData.location) //Most likely a single URI for a Place
-        let relatedObjects = UTILS.getValue(experienceData.relatedObjects)
+        let relatedObjects = UTILS.getValue(experienceData.object)
         let relatedSenses = UTILS.getValue(experienceData.relatedSenses)
         let relatedPractices = UTILS.getValue(experienceData.relatedPractices)
         let fieldNotes = UTILS.getValue(experienceData.fieldNotes)

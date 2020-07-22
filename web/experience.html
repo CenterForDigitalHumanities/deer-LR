@@ -117,7 +117,7 @@
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiencesTest"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
-                    <input id="objects"  type="hidden" deer-key="relatedObjects"  deer-input-type="Set"  />
+                    
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="label" />
                     <label>Select which location this data entry is concerned with.</label>
@@ -134,6 +134,10 @@
                     <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also <a pop="person"> create a new person (coming soon) </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
                     <deer-view id="people" deer-collection="LivedReligionPeopleTest" deer-template="personMulti"></deer-view>
+                    
+                    <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also <a pop="object"> create a new object (coming soon) </a> </label>
+                    <input deer-input-type="Set" type="hidden" deer-key="object" />
+                    <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="personMulti"></deer-view>
                     
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
@@ -155,22 +159,15 @@
                 <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
                 <a class="button primary" area="objects" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
                 <a class="button primary" area="bodies" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
+                <a class="button primary" area="people" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record specific people encontered or noticed at the experience.">People</a>
             </div>
             <div tog="objects" class="kind is-hidden">
                 <h2> Objects </h2>
-                <p> Below are some objects you can choose from.  You may also opt to <a pop="object"> create a new object (coming soon) </a> </p>
-                <div class="card bd-primary">
-                    <div class="card_body">
-                        <form id="objectForm" deer-type="Thing" deer-creator deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
-                            <input type="hidden" deer-key="object" value="">
-                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
-                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                            <div class="row">
-                                <input class="button primary col" type="submit">
-                            </div>
-                        </form>
-                    </div>
-                </div>                  
+                Objects are added at initial creation.  Would you like it as one of these options instead?     
+            </div>
+            <div tog="people" class="kind is-hidden">
+                <h2> People </h2>
+                People are added at initial creation.  Would you like it as one of these options instead?
             </div>
             <div tog="bodies" class="kind is-hidden">
                 <h2>Bodies</h2>
@@ -301,7 +298,7 @@
         for (let elem of document.querySelectorAll('a[pop]')){
             elem.addEventListener("click", event => {
                 let whichPopover = elem.hasAttribute("pop") ? elem.getAttribute("pop") : ""
-                LR.utils.showPopover(whichPopover, event)
+                LR.ui.showPopover(whichPopover, event)
             })
         }
         /**
@@ -320,6 +317,10 @@
                     //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
                     if (user.roles.administrator) {
                         theExperience.setAttribute("deer-id", experienceID)
+                        document.getElementById("startExperience").classList.add("is-hidden")
+                        document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                        document.getElementById("experienceReview").classList.remove("is-hidden")
+                        document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     }
                     else if(false){
                         // TODO Current user is the creator of this experience...
@@ -360,7 +361,6 @@
                 break
                 case "objectForm":
                     document.querySelector("a[area='objects']").click()
-                    
                     let objs_tracked = document.getElementById("objects").value
                     let objs_delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
                     if(objs_tracked){
@@ -487,7 +487,7 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "theExperience":
-                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "relatedSenses", "relatedSenses", "relatedObjects"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "attendee"], event.target)
                 break
                 case "objectForm":
                     LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations"], event.target)
