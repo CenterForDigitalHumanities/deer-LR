@@ -182,6 +182,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
         
         let contributors = UTILS.getValue(experienceData.contributor)
+        let people = UTILS.getValue(experienceData.attendee)
         let place = UTILS.getValue(experienceData.location) //Most likely a single URI for a Place
         let relatedObjects = UTILS.getValue(experienceData.relatedObjects)
         let relatedSenses = UTILS.getValue(experienceData.relatedSenses)
@@ -242,6 +243,36 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 }
             }
             contributorsByName += name
+        })
+        
+        //experienceData.contributors is probably a Set or List of URIs and we want their labels
+        let peopleByName = ``
+        people.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+                let itemURI = UTILS.getValue(val)
+                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                    //item.value is a string and it is a URI value, as expected.
+                    name = `<li><deer-view deer-id="${itemURI}" deer-template="mostUpToDateLabelHelper"></deer-view></li>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name =  `<li> ${itemURI} </li>`
+                }
+            }
+            else{
+                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                    //item is a string and it is a URI value, as expected.
+                    name = `<li><deer-view deer-id="${val}" deer-template="mostUpToDateLabelHelper"></deer-view></li>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name = `<li> ${val} </li>`
+                }
+            }
+            peopleByName += name
         })
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = ``
@@ -411,7 +442,8 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             </ul>
         `
         
-        let researchersHTML = `<dt>Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
+        let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
+        let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
         let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(experienceData.startDate, [], "string")}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(experienceData.description, [], "string")}</dd>`
@@ -422,7 +454,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 <li>${fieldNotes}</li>
             </ul>
         `
-        tmpl += placeHTML + dateHTML + researchersHTML + descriptionHTML + artifactsHTML + fieldNotesHTML
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML + fieldNotesHTML
         return tmpl
     } catch (err) {
         return null

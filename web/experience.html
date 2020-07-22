@@ -131,9 +131,8 @@
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
                     
-                    
                     <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also <a pop="person"> create a new person (coming soon) </a> </label>
-                    <input deer-input-type="Set" type="hidden" deer-todo="people" />
+                    <input deer-input-type="Set" type="hidden" deer-key="attendee" />
                     <deer-view id="people" deer-collection="LivedReligionPeopleTest" deer-template="personMulti"></deer-view>
                     
                     <label>Provide a description of what prompted you to do this</label>
@@ -193,8 +192,8 @@
                             <input type="hidden" deer-key="object" value="">
                             <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             
-                            <label>Was there a specific person at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
-                            <input type="hidden" deer-todo="person" value="">
+                            <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
+                            <input type="hidden" deer-input-type="Set" deer-todo="attendee" value="">
                             <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="personMulti"></div>
                             
                             <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
@@ -254,8 +253,8 @@
                     <input type="hidden" deer-key="object" value=""> 
                     <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                     
-                    <label>Was there a specific person at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
-                    <input type="hidden" deer-todo="person" value="">
+                    <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
+                    <input deer-input-type="Set" type="hidden" deer-todo="attendee" value="">
                     <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="personMulti"></div>
                     <div class="row">
                         <input class="button primary col" type="submit">
