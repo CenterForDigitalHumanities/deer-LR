@@ -68,6 +68,24 @@
         .viewCollectionItem{
             margin-left: .5rem
         }
+        .backdrop{
+            z-index: 2;
+            
+        }
+        div[popover]{
+            display:none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            /* bring your own prefixes */
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+        
+        a[pop]{
+            cursor:pointer;
+        }
+        
     </style>
 </head>
 
@@ -81,7 +99,6 @@
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-               
                 <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
                 <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
                     <textarea id="fieldNotesFromExperience" type="text"> </textarea>
@@ -109,9 +126,16 @@
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
-                    <label> Select the researchers involved. Hold <kbd>CTRL</kbd> to make multiple selections. </label>
+                    
+                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.  If you are an admin, you can <a pop="researcher"> create a new researcher (coming soon) </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
+                    
+                    
+                    <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also <a pop="person"> create a new person (coming soon) </a> </label>
+                    <input deer-input-type="Set" type="hidden" deer-todo="people" />
+                    <deer-view id="people" deer-collection="LivedReligionPeopeTest" deer-template="personMulti"></deer-view>
+                    
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
                     <label>Tags separated by ',':</label>
@@ -135,122 +159,28 @@
             </div>
             <div tog="objects" class="kind is-hidden">
                 <h2> Objects </h2>
-                <p> Below are some objects you can choose from.  You may also opt to record a new object. </p>
-                <div id="objectsCollection" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=" deer-template="objectMulti">No objects.</div>
-                <h2 class="text-primary">Create a New Object</h2>
+                <p> Below are some objects you can choose from.  You may also opt to <a pop="object"> create a new object (coming soon) </a> </p>
                 <div class="card bd-primary">
                     <div class="card_body">
-                        <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
-                            <input type="hidden" deer-key="creator" value="loading"> 
-                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
-                            <input class="expReference" type="hidden" deer-key="RelatedExperience">  <!--That was referenced as being at this experience or location, supposed to be for Place so not exactly kosher -->
-                            <label>Name:</label>
-                            <input type="text" deer-key="name">
-                            <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
-                            <label>Type:</label>
-                            <div class="row">
-                                <div data-rdf="SacredObject" class="bd-primary text-center card col" title="Sacred Object">
-                                    <header>Sacred Object</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/star-four-points-outline.svg?size=64&color=##14854f" title="Sacred Object" alt="Sacred Object">
-                                </div>
-                                <div data-rdf="VisualArtwork" class="bd-primary text-center card col" title="Artwork">
-                                    <header>Artwork</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/account-box-outline.svg?size=64&color=##14854f" title="Artwork" alt="Artwork">
-                                </div>
-                                <div data-rdf="Manuscript" class="bd-primary text-center card col" title="Written Text">
-                                    <header>Written Text</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/book-open.svg?size=64&color=##14854f" title="Written Text" alt="Written Text">
-                                </div>
-                                <div data-rdf="CivicStructure" class="bd-primary text-center card col" title="Building">
-                                    <header>Building</header>
-                                    <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Building" alt="Building">
-                                </div>
-                            </div>
-                            <script>
-                                var data_key_elements = document.querySelectorAll("[data-rdf]")
-                                Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
-                                function setPrimaryType(event) {
-                                    let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
-                                    additionalTypeInput.value = val
-                                    additionalTypeInput.dispatchEvent(inputEvent)
-                                    Array.from(data_key_elements).forEach(el => {
-                                        el = el.closest("[data-rdf]")
-                                        if (el.getAttribute("data-rdf") === val) {
-                                            el.classList.add("bg-light")
-                                        } else {
-                                            el.classList.remove("bg-light")
-                                        }
-                                    })
-                                }
-                            </script>
-                            <div class="grouped">
-                                <label>Further Options</label>
-                                <select oninput="setPrimaryType(this)">
-                                    <option value="Clothing">Clothing</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Natural">Natural</option>
-                                    <option value="Manufactured">Manufactured</option>
-                                    <option value="Found">Found</option>
-                                    <option value="Spoken">Spoken</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <h4>History of this Object</h4>
-                            <label>Select Former Location(s):</label>
-                            <input type="hidden" deer-input-type="Set" deer-key="FormerLocations"/>
-                            <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
-                            <label>Select Former Use(s):</label>
-                            <input type="hidden" deer-key="FormerUses" deer-input-type="Set">
-                            <!-- Looking at these as "former types", so just reuse the type values -->
-                            <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
-                                <option value="SacredObject">Sacred Object</option>
-                                <option value="VisualArtwork">Artwork</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Food">Food</option>
-                                <option value="CivicStructure">Building</option>
-                                <option value="Natural">Natural</option>
-                                <option value="Manufactured">Manufactured</option>
-                                <option value="Found">Found</option>
-                                <option value="Manuscript">Written Text</option>
-                                <option value="Spoken">Spoken</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <h4>Descriptive Information</h4>
-                            <label>Material(s) this object is made of:</label>
-                            <!-- This should probably be a Set -->
-                            <textarea deer-key="material"> </textarea>
-                            <label>Typical Use: </label>
-                            <select deer-key="purpose" >
-                                <option value="Religious">Religious</option>
-                                <option value="Commercial">Commercial</option>
-                                <option value="Educational">Educational</option>
-                                <option value="Civic">Civic</option>
-                                <option value="Other Public">Other Public</option>
-                            </select>
-                            <!-- TODO -->
-                            <!--<h3> Upload Media </h3>-->
-                            <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Abstract About Object</label>
-                            <textarea id="further_object" type="text" deer-key="description"></textarea>
-                            <label>Tags separated by ',':</label>
-                            <input disabled type="text" deer-key-x="LR:Tags">  
+                        <form id="objectForm" deer-type="Thing" deer-creator deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
+                            <input type="hidden" deer-key="object" value="">
+                            <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
+                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
                             <div class="row">
                                 <input class="button primary col" type="submit">
                             </div>
                         </form>
-                    </div>   
-                </div>
+                    </div>
+                </div>                  
             </div>
             <div tog="bodies" class="kind is-hidden">
                 <h2>Bodies</h2>
                 <p> More intimate information about what you are feeling and perceiving. </p>
                 <div class="card bd-primary">
                     <div class="card_body">
-                        <!-- I smelled this, I heard that, during this event (geo)... -->
-                        <!-- This needs to create a sense, then add that sense into relatedSenses -->
                         <form id="senseForm" deer-type="Sense" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                             <h4>What senses are prominent?  Add one at a time.</h4>
-                            <input type="hidden" deer-key="creator" value="loading"> <!-- Sense I had -->
-                             <!-- At this location AKA Geo -->
+                            <input type="hidden" deer-key="creator" value="loading">
                             <input class="expReference" type="hidden" deer-key="event">
                             <select deer-key="name">
                                 <option value="Sight">I see...</option>
@@ -259,10 +189,15 @@
                                 <option value="Feel">I feel...</option>
                                 <option value="Smell">I smell...</option>
                             </select>
-                            <label>Was there a specific object or being at the experience connected with this sense?</label>
-                            <input type="hidden" deer-key="object" value=""> <!-- I heard {object} -->
+                            <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
+                            <input type="hidden" deer-key="object" value="">
                             <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
-                            <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Abstract About Sense</label>
+                            
+                            <label>Was there a specific person at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
+                            <input type="hidden" deer-todo="person" value="">
+                            <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="personMulti"></div>
+                            
+                            <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                             <textarea id="further_sense" type="text" deer-key="description"></textarea>
                             <div class="row">
                                 <input class="button primary col" type="submit">
@@ -273,13 +208,11 @@
             </div>
             <div tog="practices" class="kind is-hidden">
                 <h4>What practices are occurring? Add one at a time.</h4>
-                <!-- This needs to create a Practice, then add that Practice into relatedSenses -->
                 <form id="practiceForm" deer-type="Practice" deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
-                    <input type="hidden" deer-key="creator" value="loading"> <!-- Practice that I noticed -->
-                    <!-- TODO -->
+                    <input type="hidden" deer-key="creator" value="loading"> 
                     <input class="expReference" type="hidden" deer-key="event"> 
-                    <!-- TODO make sure context.json is set up to handle this -->
-                    <select deer-key="additionalType">
+                    <input type="hidden" deer-key="name"/>
+                    <select deer-key="additionalType" onchange="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].text">
                         <option value="None">None Noted</option>
                         <option value="EatAction">Eating</option>
                         <option value="DrinkAction">Drinking</option>
@@ -301,7 +234,7 @@
                         <option value="GiveAction">Donating</option>
                         <option value="Other">Other</option>
                     </select>
-                    <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Abstract About Practice</label>
+                    <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea id="further_practice" type="text" deer-key="description"></textarea>
                     <!-- TODO Make sure context.json is et up for this.-->
                     <select deer-key="practiceContext">
@@ -317,15 +250,38 @@
                         <option value="Collective">Collective</option>
                         <option value="Other">Other</option>
                     </select>
-                    <label>Is there a particular object this practice is associated with?</label>
+                    <label>Is there a particular object this practice is associated with?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
                     <input type="hidden" deer-key="object" value=""> 
                     <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="objectsAsDropdown"></div>
+                    
+                    <label>Was there a specific person at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
+                    <input type="hidden" deer-todo="person" value="">
+                    <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="personMulti"></div>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
                 </form>      
             </div>
         </div>
+        
+        <div class="card bd-primary" popover="object">
+            <div class="card_body">
+                <h2 class="text-primary">Create a New Object</h2>
+            </div>   
+        </div>
+        
+        <div class="card bd-primary" popover="researcher">
+            <div class="card_body">
+                <h2 class="text-primary">Create a New Researcher</h2>
+            </div>   
+        </div>
+        
+        <div class="card bd-primary" popover="person">
+            <div class="card_body">
+                <h2 class="text-primary">Create a New Person</h2>
+            </div>   
+        </div>
+        
     </div>
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
@@ -336,6 +292,18 @@
             bubbles: false,
             cancelable: true
         })
+        /**
+         * These are the buttons that trigger simple collection item addition popovers.
+         * After an item is added to a collection, how will we know to redraw that collection view?
+         * 
+         * @type {NodeList}
+         */
+        for (let elem of document.querySelectorAll('a[pop]')){
+            elem.addEventListener("click", event => {
+                let whichPopover = elem.hasAttribute("pop") ? elem.getAttribute("pop") : ""
+                LR.utils.showPopover(whichPopover, event)
+            })
+        }
         /**
          * Set the input fields of forms that include the user id for attribution.
          * Ex. input[deer-key="creator"]
@@ -431,7 +399,8 @@
                     document.getElementById("senses").dispatchEvent(inputEvent)
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    alert("Sense Recorded!");
+                    alert("Sense Recorded!")
+                    break
                 case "practiceForm":
                     document.querySelector("a[area='practices']").click()
                     if(event.detail.hasOwnProperty("additionalType")){

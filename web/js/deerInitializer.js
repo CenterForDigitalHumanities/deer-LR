@@ -17,10 +17,10 @@ import { default as UTILS } from '../deer-local/deer-utils.js'
 // Overwrite or add certain values to the configuration to customize.
 
 //Add one of my own templates
-DEER.TEMPLATES.sense = function(obj, options = {}) {
+DEER.TEMPLATES.Sense = function(obj, options = {}) {
     try {
         //if I use key that doesn't exist, I get a blank, which is better than a breaking error 
-        let kind = `<h3>${UTILS.getValue(obj.kind)}</h3>`
+        let label = `<h3>${UTILS.getLabel(obj)}</h3>`
         let location = `<dd>Location:${UTILS.getValue(obj.location)}</dd>`
         let religiousTradition = `<dd>Religion:${UTILS.getValue(obj.religious_tradition)}</dd>`
         let gender = `<dd>Gender:${UTILS.getValue(obj.demographic.gender)}</dd>`
@@ -30,7 +30,7 @@ DEER.TEMPLATES.sense = function(obj, options = {}) {
 
         let senseTemplate = `<div>`
 
-        senseTemplate += `<div>${kind}</div>`
+        senseTemplate += `<div>${label}</div>`
         senseTemplate += `<div>${location}</div>`
         senseTemplate += `<div>${religiousTradition}</div>`
         senseTemplate += `<div>${gender}</div>`
@@ -144,7 +144,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
-            <optgroup label="Researchers"> `
+            <optgroup label="Choose Below"> `
         for (let person of allPeopleInCollection) {
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
         }
@@ -366,7 +366,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToDateAdditionalTypeHelper"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="mostUpToLabelHelper"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
@@ -478,6 +478,44 @@ DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
     let at = options.hasOwnProperty("additionalType") ?  UTILS.getValue(options.additionalType) : obj.hasOwnProperty("additionalType") ?  UTILS.getValue(obj.additionalType) : ""
     try {
         return at
+    } catch (err) {
+        return null
+    }
+}
+
+/**
+ * What a practiced is named is based off of its AdditionalType.  This is a template for the dropdowns and functionality to apply a "name"
+ * based off of the AdditionalType selection
+ * @param {Object} obj some obj  containing some label annotating it.
+ */
+DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
+    try {
+         //TODO NONE or NEW Object should be a choice
+        let tmpl = `<select class="additionalTypeDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].text">`
+        tmpl += `
+            <option value="None">None Noted</option>
+            <option value="EatAction">Eating</option>
+            <option value="DrinkAction">Drinking</option>
+            <option value="PlayAction">Playing</option>
+            <option value="ClotheAction">Clothing</option>
+            <option value="SingAction">Singing</option>
+            <option value="MoveAction">Moving</option>
+            <option value="SitAction">Sitting</option>
+            <option value="StandAction">Standing</option>
+            <option value="KneelAction">Kneeling</option>
+            <option value="TravelAction">Traveling</option>
+            <option value="DanceAction">Dancing</option>
+            <option value="CookAction">Cooking</option>
+            <option value="WorkAction">Working</option>
+            <option value="ListenAction">Listening</option>
+            <option value="WatchAction">Watching</option>
+            <option value="WriteAction">Writing</option>
+            <option value="TradeAction">Trading</option>
+            <option value="GiveAction">Donating</option>
+            <option value="Other">Other</option>
+        `
+        tmpl += "</select>"
+        return tmpl
     } catch (err) {
         return null
     }
