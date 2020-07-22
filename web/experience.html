@@ -172,7 +172,7 @@
                                 function setPrimaryType(event) {
                                     let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
                                     additionalTypeInput.value = val
-                                    additionalTypeInput.dispatchEvent("input")
+                                    additionalTypeInput.dispatchEvent(inputEvent)
                                     Array.from(data_key_elements).forEach(el => {
                                         el = el.closest("[data-rdf]")
                                         if (el.getAttribute("data-rdf") === val) {
@@ -332,6 +332,10 @@
     
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
+        let inputEvent = new Event('input', {
+            bubbles: false,
+            cancelable: true
+        })
         /**
          * Set the input fields of forms that include the user id for attribution.
          * Ex. input[deer-key="creator"]
@@ -402,7 +406,7 @@
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
                     document.getElementById("objects").value = objs_tracked
-                    document.getElementById("objects").dispatchEvent("input")
+                    document.getElementById("objects").dispatchEvent(inputEvent)
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     //TODO only do this upon success of the update from adding this to the db collection, a result of an update to the experience.  
@@ -424,7 +428,7 @@
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
                     document.getElementById("senses").value = senses_tracked
-                    document.getElementById("senses").dispatchEvent("input")
+                    document.getElementById("senses").dispatchEvent(inputEvent)
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     alert("Sense Recorded!");
@@ -446,7 +450,7 @@
                      * Instead, queue up locally and offer [Commit These Objects To Experience] to limit server interaction.
                      */
                     document.getElementById("practices").value = practices_tracked
-                    document.getElementById("practices").dispatchEvent("input")
+                    document.getElementById("practices").dispatchEvent(inputEvent)
                     
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
