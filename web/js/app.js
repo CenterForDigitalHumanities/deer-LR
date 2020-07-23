@@ -107,6 +107,30 @@ LR.ui.toggleAreas = function(event){
     }
 }
 
+/**
+ * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.ui.toggleAreaHideOthers = function(event){
+    let area = event.target.getAttribute("area");
+    let elems = document.querySelectorAll("div[tog='"+area+"']")
+    let all = document.querySelectorAll("div[tog]")
+    for(let elem of all){
+        if (elem.getAttribute("tog") && elem.getAttribute("tog") === area){
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+        }
+        else{
+            elem.classList.add("is-hidden")
+        }
+    }
+}
+
 LR.ui.toggleFieldNotes = function(event){
     let floater = document.getElementById("fieldNotesFloater");
     if(floater.getAttribute("expanded") === "true"){
@@ -150,6 +174,10 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
         feedbackAreaHTML.style.width="0px"
         LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
     }, 2150);
+}
+
+LR.ui.showPopover = function(which, event){
+    console.error("Sorry, these popovers are not ready yet :(")
 }
 
 /**
@@ -206,6 +234,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.
+                alert("There was an error removing an item from the collection")
                 console.error("There was an error removing an item from the collection")
                 console.log(itemElem)
             }
@@ -397,26 +426,42 @@ LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
         if(annotationData.hasOwnProperty(key)){
             let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
             let input = form.querySelector("input[deer-key='"+key+"']")
-            let sel = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
-            if(sel.tagName !== "SELECT"){
+            let area = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
+            let selectElemExists = true
+            let sel
+            if(area.tagName === "DEER-VIEW"){
                 //Then it is a <deer-view> template and we need to get the child to have the <select>
-                sel = sel.firstElementChild
+                sel = area.firstElementChild
             }
-            data_arr.forEach(val => {
-                let option = sel.querySelector("option[value='"+val+"']")
-                if(option){
-                    option.selected = true
-                }
-                else{
-                    //The <option> is not available in the <select> HTML.
-                }  
-            })
+            else if(area.tagName === "SELECT"){
+                sel = area
+            }
+            else{
+                //We did not expect this and it is an error.  Perhaps the <select> does not exist at all.
+                // Rememeber: the <input> with deer key tracking the select must come immediately before the select. 
+                console.warn("There is no select related to "+key+" to pre-select.")
+            }
+            if(sel && sel.tagName === "SELECT"){
+                data_arr.forEach(val => {
+                    let option = sel.querySelector("option[value='"+val+"']")
+                    if(option){
+                        option.selected = true
+                    }
+                    else{
+                        //The <option> is not available in the <select> HTML.
+                    }  
+                })
+            }
+            else{
+                //This is disconcerning.  The deer-view either didn't load or the DOM didn't draw it fast enough...
+                console.warn("Could not pre-select multi selects.  The deer-view either didn't load or the DOM didn't draw it fast enough!"
+                        +"  A multi select may not be preselected.")
+            }
         }
         else{
             //There is no annotation data for this key.
             console.warn("LR App tried to find '"+key+"' in this form data and could not.  A multi select may not be preselected.")
         }
-        
     })
 }
 
@@ -477,4 +522,32 @@ LR.utils.populateCoordinates = function(object, form){
         console.warn("The coordinates for this object are not stored correctly.  Investigate around ")
         console.log(object)
     }
+}
+
+/**
+ * Helper to populate the widget tracking field notes with the value gathered by expand() functionality.
+ * @param {type} experienceLabel
+ * @param {type} fieldNotesFromData
+ * @return {undefined}
+ */
+LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
+    if(fieldNotesFromData !== undefined){
+        let notes_str = (typeof fieldNotesFromData === "object" && fieldNotesFromData.hasOwnProperty("value")) ? fieldNotesFromData.value : fieldNotesFromData
+        document.getElementById("fieldNotesEntry").value = notes_str
+    }
+}
+
+LR.utils.saveFieldNotesInExperience = function(event){
+    let notesSoFar = document.getElementById("experienceFieldNotes").value
+    let newNotes = document.getElementById("fieldNotesEntry").value
+    if(newNotes !== notesSoFar){
+        document.getElementById("experienceFieldNotes").value = newNotes
+        let inputEvent = new Event('input', {
+            bubbles: false,
+            cancelable: true
+        })
+        document.getElementById("experienceFieldNotes").dispatchEvent(inputEvent)
+    }
+     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Experience form has a new value for field notes, trigger the update.            
 }
