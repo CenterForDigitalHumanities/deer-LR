@@ -285,6 +285,11 @@
     
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
+        //For when we need to fire input events programmatically.
+        let inputEvent = new Event('input', {
+            bubbles: false,
+            cancelable: true
+        })
         /**
          * These are the buttons that trigger simple collection item addition popovers.
          * After an item is added to a collection, how will we know to redraw that collection view?
