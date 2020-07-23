@@ -146,6 +146,8 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Choose Below"> `
         for (let person of allPeopleInCollection) {
+            //FIXME option will strip HTML and just keep innerhtml.
+            //let name = `<deer-view deer-id="${person["@id"]}" deer-template="mostUpToDateLabelHelper">${UTILS.getLabel(person)}</deer-view>`
             tmpl += `<option deer-id="${person['@id']}" value="${person['@id']}">${UTILS.getLabel(person)}</option>`
         }
         tmpl += `</optgroup></select>`
