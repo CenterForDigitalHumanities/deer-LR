@@ -101,9 +101,9 @@
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
                 <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
                 <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
-                    <textarea id="fieldNotesFromExperience" type="text"> </textarea>
+                    <textarea id="fieldNotesEntry" type="text"> </textarea>
                     <div class="row">
-                        <input class="button primary" type="submit" value="Save Notes" onclick="putTheseIntoFormInput()" />
+                        <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotesInExperience(event)" />
                     </div>
                 </div>
             </div>
@@ -113,7 +113,7 @@
                 <form id="theExperience" class="experience" deer-type="Event" deer-creator deer-context="http://lived-religion-dev/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/> <!-- https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#ExperienceUpload -->
-                    <input type="hidden" deer-key="fieldNotes" />
+                    <input id="experienceFieldNotes" type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiencesTest"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
@@ -285,10 +285,6 @@
     
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
-        let inputEvent = new Event('input', {
-            bubbles: false,
-            cancelable: true
-        })
         /**
          * These are the buttons that trigger simple collection item addition popovers.
          * After an item is added to a collection, how will we know to redraw that collection view?
@@ -422,10 +418,6 @@
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
                     alert("Practice Recorded")
                 break
-                case "fieldNotes":
-                    //TODO bring this to life.  
-                    alert("Notes Saved!") //TODO FEEDBACK
-                break
                 default:
                     
             }
@@ -437,9 +429,6 @@
             switch(what){
                 case "theExperience":
                     //We may not offer feedback or anything here.  This happened because the experience was updated from an obj-space-body item addition/removal, which has its own feedback
-                break
-                case "fieldNotes":
-                    //TODO We need to offer some kind of feedback here.  
                 break
                 default:
                     
@@ -488,6 +477,7 @@
             switch(whatRecordForm){
                 case "theExperience":
                     LR.utils.preSelectMultiSelects(annotationData, ["contributor", "attendee"], event.target)
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                 break
                 case "objectForm":
                     LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations"], event.target)

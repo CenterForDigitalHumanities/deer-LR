@@ -448,13 +448,14 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(experienceData.startDate, [], "string")}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(experienceData.description, [], "string")}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
-        let fieldNotesHTML = `
-            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "${UTILS.getLabel(experienceData)}"</h4>
-            <ul id="fieldNotesInExperience">
-                <li>${fieldNotes}</li>
-            </ul>
-        `
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML + fieldNotesHTML
+        //Field notes are being tracked in a field notes wdiget.  See LR.utils.prePopulateFieldNotes()
+//        let fieldNotesHTML = `
+//            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "${UTILS.getLabel(experienceData)}"</h4>
+//            <ul id="fieldNotesInExperience">
+//                <li>${fieldNotes}</li>
+//            </ul>
+//        `   
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
         return tmpl
     } catch (err) {
         return null
