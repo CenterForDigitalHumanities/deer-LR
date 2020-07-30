@@ -9,10 +9,10 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-config.js'
+import { default as DEER } from '../deer-local/deer-config.js'
 
 // Identify a UTILS package
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-utils.js'
+import { default as UTILS } from '../deer-local/deer-utils.js'
 
 // Overwrite or add certain values to the configuration to customize.
 
@@ -79,6 +79,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
         //TODO NONE or NEW Location should be a choice
         let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        tmpl += `<option disabled selected value> Not Supplied </option>`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
             tmpl += `<option deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
@@ -100,6 +101,7 @@ DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
     try {
          //TODO NONE or NEW Object should be a choice
         let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        tmpl += `<option disabled selected value> Not Supplied </option>`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         for (let o of allObjectsInCollection) {
             tmpl += `<option deer-id="${o['@id']}" value="${o['@id']}">${UTILS.getLabel(o)}</option>`
@@ -528,6 +530,7 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
          //TODO NONE or NEW Object should be a choice
         let tmpl = `<select class="additionalTypeDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].text">`
         tmpl += `
+            <option disabled selected value> Required </option>
             <option value="None">None Noted</option>
             <option value="EatAction">Eating</option>
             <option value="DrinkAction">Drinking</option>
@@ -574,11 +577,11 @@ DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-render.js'
+import { default as renderer, initializeDeerViews } from '../deer-local/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.10/deer-record.js'
+import { default as record, initializeDeerForms } from '../deer-local/deer-record.js'
 
 // fire up the element detection as needed
 /**

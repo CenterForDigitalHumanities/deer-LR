@@ -179,6 +179,7 @@
                             <input type="hidden" deer-key="creator" value="loading">
                             <input class="expReference" type="hidden" deer-key="event">
                             <select deer-key="name">
+                                <option disabled selected value> Required </option>
                                 <option value="Sight">I see...</option>
                                 <option value="Sound">I hear...</option>
                                 <option value="Taste">I taste...</option>
@@ -209,6 +210,7 @@
                     <input class="expReference" type="hidden" deer-key="event"> 
                     <input type="hidden" deer-key="name"/>
                     <select deer-key="additionalType" onchange="this.previousElementSibling.value=this.options[this.selectedIndex].text">
+                        <option disabled selected value> Required </option>
                         <option value="None">None Noted</option>
                         <option value="EatAction">Eating</option>
                         <option value="DrinkAction">Drinking</option>
@@ -233,6 +235,7 @@
                     <!-- TODO Make sure context.json is et up for this.-->
                     <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
                     <select deer-key="practiceContext">
+                        <option disabled selected value> Not Supplied </option>
                         <option value="Religious Ritual">Religious Ritual</option>
                         <option value="Community Event">Community Event</option>
                         <option value="Civic Ritual">Civic Ritual</option>
