@@ -98,9 +98,9 @@
                             <header>Accommodation</header>
                             <img class="hide-xs" src="https://icongr.am/material/home-modern.svg?size=64&color=##14854f" alt="Accommodation">
                         </div>
-                        <div data-rdf="AdministrativeArea" class="bd-primary text-center card col" title="Administrative Area">
-                            <header>Administrative Area</header>
-                            <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Administrative Area" alt="Administrative Area">
+                        <div data-rdf="PlaceOfWorship" class="bd-primary text-center card col" title="Place Of Worship">
+                            <header>Place Of Worship</header>
+                            <img class="hide-xs" src="https://icongr.am/material/weather-sunny.svg?size=64&color=##14854f" title="Place Of Worship" alt="Place Of Worship">
                         </div>
                         <div data-rdf="CivicStructure" class="bd-primary text-center card col" title="Civic Structure">
                             <header>Civic Structure</header>
@@ -131,18 +131,88 @@
                     </div>
                     <label>More Options</label>
                     <select oninput="setPrimaryType(this)">
-                        <option disabled selected value> Other Types </option>
-                        <option value="Imagined" >Imagined</option>
-                        <option value="School" >School</option>
-                        <option value="Neighborhood" >Neighborhood</option>
-                        <option value="Cemetery" >Cemetery</option>
-                        <option value="Hospital" >Hospital</option>
-                        <option value="Museum" >Museum</option>
-                        <option value="Park" >Park</option>
-                        <option value="Street" >Street</option>
-                        <option value="Zoo" >Zoo</option>
-                        <option value="Gym" >Gym</option>
-                        <option value="OtherBuilding" >Other Building</option>
+                        <option disabled selected value> Specific Types By Group </option>
+                        <optgroup label="Accomodations">
+                            <option value="Apartment">Apartment</option>
+                            <option value="House">House</option>
+                            <option value="Room">Room</option>
+                            <option value="Suite">Suite</option>
+                            <option value="Campground">Campground</option>
+                        </optgroup>
+                        
+                        <optgroup label="Landforms">
+                            <option value="Canal">Canal</option>
+                            <option value="Lake">Lake</option>
+                            <option value="Mountain">Mountain</option>
+                            <option value="Volcano">Volcano</option>
+                            <option value="Ocean">Ocean</option>
+                            <option value="Pond">Pond</option>
+                            <option value="Reservoir">Reservoir</option>
+                            <option value="River">River</option>
+                            <option value="Waterfall">Waterfall</option>
+                        </optgroup>
+                        
+                        <optgroup label="Civic Structures">
+                            <option value="Airport">Airport</option>
+                            <option value="Aquarium">Aquarium</option>
+                            <option value="Beach">Beach</option>
+                            <option value="Bridge">Bridge</option>
+                            <option value="BusStation">Bus Station</option>
+                            <option value="BusStop">Bus Stop</option>
+                            <option value="Cemetery">Cemetery</option>
+                            <option value="Crematorium">Crematorium</option>
+                            <option value="EducationalOrganization">School</option>
+                            <option value="EventVenue">Event Venue</option>
+                            <option value="FireStation">Fire Station</option>
+                            <option value="CourtHouse">Court House</option>
+                            <option value="Embassy">Embassy</option>
+                            <option value="CityHall">City Hall</option>
+                            <option value="Hospital">Hospital</option>
+                            <option value="MovieTheater">Movie Theater</option>
+                            <option value="Museum">Museum</option>
+                            <option value="MusicVenue">Music Venue</option>
+                            <option value="Playground">Playground</option>
+                            <option value="PoliceStation">Police Station</option>
+                            <option value="StadiumOrArena">Stadium/Arena</option>
+                            <option value="TrainStation">Train Station</option>
+                            <option value="Zoo">Zoo</option>
+                        </optgroup>
+                        
+                        <optgroup label="Places of Worship">
+                            <option value="BuddhistTemple">Buddhist Temple</option>
+                            <option value="HinduTemple">Hindu Temple</option>
+                            <option value="Church">Church</option>
+                            <option value="Mosque">Mosque</option>
+                            <option value="Synagogue">Synagogue</option>
+                        </optgroup>
+                        
+                        <optgroup label="Business">
+                            <option value="AnimalShelter">Animal Shelter</option>
+                            <option value="ChildCare">Child Care</option>
+                            <option value="Dentist">Dentist</option>
+                            <option value="DryCleaningOrLaundry">Launderer</option>
+                            <option value="EmergencyService">Emergency Service</option>
+                            <option value="Bakery">Bakery</option>
+                            <option value="BarOrPub">Bar/Pub</option>
+                            <option value="Brewery">Brewery</option>
+                            <option value="AmusementPark">Amusement Park</option>
+                            <option value="ArtGallery">Art gallery</option>
+                            <option value="ComedyClub">Comedy Club</option>
+                            <option value="InternetCafe">Internet Cafe</option>
+                            <option value="FastFood">Fast Food</option>
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Motel">Motel</option>
+                            <option value="Hostel">Hostel</option>
+                            <option value="Resort">Resort</option>
+                            <option value="MedicalOffice">Medical Office</option>
+                            <option value="ExerciseGym">Gym</option>
+                            <option value="Store">Store</option>
+                            <option value="RadioStation">Radio Station</option>
+                            <option value="TelevisionStation">T.V. Station</option>
+                            <option value="TouristInformationCenter">Tourist Center</option>
+                        </optgroup>
+
                     </select>
 
                     <script>
@@ -177,7 +247,7 @@
                             <option value="Residence">Residence</option>
                             <option value="TouristDestination">Tourist Destination</option>
                         </optgroup>
-                        <Optgroup label="Precise Types">
+                        <optgroup label="Precise Types">
                             <option value="Imagined" >Imagined</option>
                             <option value="School" >School</option>
                             <option value="Neighborhood" >Neighborhood</option>
@@ -209,7 +279,7 @@
                             <option value="Residence" >Residence</option>
                             <option value="TouristDestination" >Tourist Destination</option>
                         </optgroup>
-                        <Optgroup label="Precise Types">
+                        <optgroup label="Precise Types">
                             <option value="Imagined" >Imagined</option>
                             <option value="School" >School</option>
                             <option value="Neighborhood" >Neighborhood</option>

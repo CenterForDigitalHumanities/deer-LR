@@ -185,13 +185,15 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
         
-        let contributors = UTILS.getValue(experienceData.contributor)
-        let people = UTILS.getValue(experienceData.attendee)
-        let place = UTILS.getValue(experienceData.location) //Most likely a single URI for a Place
-        let relatedObjects = UTILS.getValue(experienceData.object)
-        let relatedSenses = UTILS.getValue(experienceData.relatedSenses)
-        let relatedPractices = UTILS.getValue(experienceData.relatedPractices)
-        let fieldNotes = UTILS.getValue(experienceData.fieldNotes)
+        let contributors = UTILS.getValue(experienceData.contributor) ? UTILS.getValue(experienceData.contributor) : ""
+        let people = UTILS.getValue(experienceData.attendee) ? UTILS.getValue(experienceData.attendee) : ""
+        let place = UTILS.getValue(experienceData.location) ? UTILS.getValue(experienceData.location) : ""
+        let relatedObjects = UTILS.getValue(experienceData.object) ? UTILS.getValue(experienceData.object) : ""
+        let relatedSenses = UTILS.getValue(experienceData.relatedSenses) ? UTILS.getValue(experienceData.relatedSenses) : ""
+        let relatedPractices = UTILS.getValue(experienceData.relatedPractices) ? UTILS.getValue(experienceData.relatedPractices) : ""
+        let fieldNotes = UTILS.getValue(experienceData.fieldNotes) ? UTILS.getValue(experienceData.fieldNotes) : ""
+        let date = UTILS.getValue(experienceData.startDate) ? UTILS.getValue(experienceData.startDate) : ""
+        let description = UTILS.getValue(experienceData.description) ? UTILS.getValue(experienceData.description) : ""
        
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = ""
@@ -444,21 +446,14 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             <ul id="sensesInExperience">
                 ${relatedSensesByName}
             </ul>
-        `
-        
+        `     
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
-        let dateHTML = `<dt>Associated Date</dt><dd>${UTILS.getValue(experienceData.startDate, [], "string")}</dd>`
-        let descriptionHTML = `<dt>Description</dt><dd>${UTILS.getValue(experienceData.description, [], "string")}</dd>`
+        let dateHTML = `<dt>Associated Date</dt><dd>${date}</dd>`
+        let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
-        //Field notes are being tracked in a field notes wdiget.  See LR.utils.prePopulateFieldNotes()
-//        let fieldNotesHTML = `
-//            <h4><a onclick="LR.ui.toggleFieldNotes()">Field Notes</a> from experience "${UTILS.getLabel(experienceData)}"</h4>
-//            <ul id="fieldNotesInExperience">
-//                <li>${fieldNotes}</li>
-//            </ul>
-//        `   
+
         tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
         return tmpl
     } catch (err) {
@@ -527,7 +522,6 @@ DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
  */
 DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
     try {
-         //TODO NONE or NEW Object should be a choice
         let tmpl = `<select class="additionalTypeDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].text">`
         tmpl += `
             <option disabled selected value> Required </option>
