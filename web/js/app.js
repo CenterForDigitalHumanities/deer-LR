@@ -133,6 +133,11 @@ LR.ui.toggleAreaHideOthers = function(event){
     }
 }
 
+/**
+ * 
+ * @param {type} event
+ * @return {undefined}
+ */
 LR.ui.toggleFieldNotes = function(event){
     let floater = document.getElementById("fieldNotesFloater");
     if(floater.getAttribute("expanded") === "true"){
@@ -150,6 +155,17 @@ LR.ui.toggleFieldNotes = function(event){
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
     }
     
+}
+
+LR.ui.toggleProvidedArea = function(areaToToggle){
+    if(areaToToggle){
+        if(areaToToggle.classList.contains("is-hidden")){
+            areaToToggle.classList.remove("is-hidden")
+        }
+        else{
+            areaToToggle.classList.add("is-hidden")
+        }
+    }
 }
 
 /*
