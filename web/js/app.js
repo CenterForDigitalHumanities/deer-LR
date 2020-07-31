@@ -9,6 +9,8 @@ LR.VERSION = "0.7.0"
 //LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
+LR.CONTEXT = "http://lived-religion-dev/deer-lr/vocab/context.json"
+
 ///For dev-01
 LR.URLS = {
     LOGIN: "login",
@@ -180,72 +182,7 @@ LR.ui.showPopover = function(which, event){
     console.error("Sorry, these popovers are not ready yet :(")
 }
 
-/**
- * Remove an item from one of the Lived Religion application collections.
- * @param {String} itemID : The ID of the annotation connecting the item to the collection.
- * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
- */
-LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collectionName) {
-    let historyWildcard = { "$exists": true, "$size": 0 }
-    let name = event.target.previousElementSibling.text
-    let queryObj = {
-        $or: [{
-            "targetCollection": collectionName
-        }, {
-            "body.targetCollection": collectionName
-        }],
-        "__rerum.history.next": historyWildcard,
-        "__rerum.generatedBy": LR.APPAGENT,
-        "target": itemID
-    }
-    fetch(LR.URLS.QUERY, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(queryObj)
-    })
-    .then(response => response.json())
-    .then(pointers => {
-        //Remember, there may be multiple annotations that place this item in the collection.  Get rid of all of them.
-        let deleteList = []
-        pointers.map(ta => {
-            deleteList.push(
-                fetch(LR.URLS.DELETE, {
-                    method: "DELETE",
-                    mode: "cors",
-                    body: ta["@id"] || ta.id
-                })
-            )
-        })
-        return Promise.all(deleteList)
-    }).then(deletedList => {
-        //Can't seem to fall into the Promise.all().catch() on 4XX, and perhaps other, errors...
-        let resultList = deletedList.filter(resp => { return resp.ok })
-        if (deletedList.length === 0) {
-            console.error("Could not find the annotation placing this item into the collection.  Could note remove this item.  Check your APPAGENT and annotation creator, they do not line up.")
-            console.log(itemElem)
-        } else {
-            if (deletedList.length === resultList.length) {
-                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
-                itemElem.remove()
-                    // TODO: redraw() added to deer elements https://github.com/CenterForDigitalHumanities/deer/issues/34
-            } else {
-                //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
-                //This should suffice for now.
-                alert("There was an error removing an item from the collection")
-                console.error("There was an error removing an item from the collection")
-                console.log(itemElem)
-            }
-        }
-    }).catch(err => {
-        //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
-        //This should suffice for now.
-        console.error("There was an error gathering information to remove an item from the collection")
-        console.log(itemElem)
-    })
-},
+
 
 /**
  * Broadcast a message about some event
@@ -287,10 +224,10 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
  * @param {object} userInfo A JSON object representing the user, the standard Lived Religion user object from event handlers.
  */
 LR.utils.setUserAttributionFields = function(userInfo){
-    let attributionInputs = ["[deer-key='creator']"] //For annotations that assert a creator
-    let attributionFrameworkElems = ["[deer-creator]"] //For DEER framework elements that have deer-creator (DEER.ATTRIBUTION)
-    attributionInputs.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
-    document.querySelectorAll(attributionFrameworkElems).forEach(elem => elem.setAttribute("deer-creator",userInfo['@id']))
+//    let attributionInputs = ["[deer-key='creator']"] //For annotations that assert a creator
+//    let attributionFrameworkElems = ["[deer-creator]"] //For DEER framework elements that have deer-creator (DEER.ATTRIBUTION)
+//    attributionInputs.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
+//    document.querySelectorAll(attributionFrameworkElems).forEach(elem => elem.setAttribute("deer-creator",userInfo['@id']))
     //Populate anything that is supposed to know the username
     document.querySelectorAll(".theUserName").forEach(elem => elem.innerHTML = userInfo.name)
 }
@@ -405,10 +342,16 @@ LR.utils.logout = function(){
  */
 LR.utils.handleMultiSelect = function(event, fromTemplate){
     let sel = event.target
+    let selectedTagsArea = sel.nextElementSibling
+    selectedTagsArea.innerHTML = ""
     let arr = Array.from(sel.selectedOptions).map(option=>option.value)
     let input = (fromTemplate) ? sel.parentElement.previousElementSibling : sel.previousElementSibling
     let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
     let str_arr = arr.join(delim)
+    arr.forEach(selection => {
+       let tag = `<span class="tag is-small">${selection}</span>` 
+       selectedTagsArea.innerHTML += tag
+    })
     input.value=str_arr
     input.setAttribute("value", str_arr)
 }
@@ -537,6 +480,11 @@ LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
     }
 }
 
+/**
+ * A helper function that saves the field notes from the field notes widget as a fieldNotes annotation on the experiences.  
+ * @param {type} event
+ * @return {undefined}
+ */
 LR.utils.saveFieldNotesInExperience = function(event){
     let notesSoFar = document.getElementById("experienceFieldNotes").value
     let newNotes = document.getElementById("fieldNotesEntry").value
@@ -550,4 +498,156 @@ LR.utils.saveFieldNotesInExperience = function(event){
     }
      //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Experience form has a new value for field notes, trigger the update.            
+}
+
+/**
+ * Whenever a drop-down or multi-select is built from a collection, those views have to option to quickly add a new entity by label.
+ * We need to take that label and make an entity for the collection by creating the new entity, then supplying the targetCollection annotation for it. 
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea){
+    if(collectionName){
+        let labelText = event.target.previousElementSibling.value
+        let user = localStorage.getItem("lr-user")
+        let userID
+        if (user !== null) {
+            try {
+                user = JSON.parse(user)
+                userID = user["@id"] ? user["@id"] : null
+            } catch (err) {
+                console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
+                document.location.href="logout.html"
+                return false
+            }
+        }
+        if(labelText){
+            let entity = {
+                "@context" : LR.CONTEXT,
+                "type" : "Person",
+                "name" : labelText
+            }
+            fetch(LR.URLS.CREATE, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(entity)
+            })
+            .then(response => response.json())
+            .then(newEntity => {
+                let collectionAnno = {
+                    "@context" : LR.CONTEXT,
+                    "body": {targetCollection: collectionName},
+                    "target": newEntity["@id"],
+                    "creator": localStorage,
+                    "type": "Annotation"
+                }
+                fetch(LR.URLS.CREATE, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(collectionAnno)
+                })
+                .then(response => response.json())
+                .then(newAnno => {
+                    let tag = `<span class="tag is-small">${entity.name}</span>` 
+                    selectedTagsArea.innerHTML += tag
+                })
+                .catch(err =>{
+                    console.error("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
+                })
+            })
+            .catch(err =>{
+                console.error("There was a problem trying to add the entity to the collection.  Please check the network panel.")
+            })
+        }
+        else{
+            console.warn("You must supply something as a label to add an entity to the collection.")
+        }
+    }
+    else{
+        console.warn("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
+        console.log(event.target)
+    }
+}
+
+/**
+ * Remove an item from one of the Lived Religion application collections.
+ * @param {String} itemID : The ID of the annotation connecting the item to the collection.
+ * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
+ */
+LR.utils.quickSaveCollectionEntry = async function(event, collectionName) {
+    
+}
+
+/**
+ * Remove an item from one of the Lived Religion application collections.
+ * @param {String} itemID : The ID of the annotation connecting the item to the collection.
+ * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
+ */
+LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collectionName) {
+    let historyWildcard = { "$exists": true, "$size": 0 }
+    //We want to get rid of the view and remove buttons from this text.  Could probably do this more elegantly, but works for now.
+    let name = itemElem.innerText.substring(0, itemElem.innerText.length - 3)
+    let queryObj = {
+        $or: [{
+            "targetCollection": collectionName
+        }, {
+            "body.targetCollection": collectionName
+        }],
+        "__rerum.history.next": historyWildcard,
+        "__rerum.generatedBy": LR.APPAGENT,
+        "target": itemID
+    }
+    fetch(LR.URLS.QUERY, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(queryObj)
+    })
+    .then(response => response.json())
+    .then(pointers => {
+        //Remember, there may be multiple annotations that place this item in the collection.  Get rid of all of them.
+        let deleteList = []
+        pointers.map(ta => {
+            deleteList.push(
+                fetch(LR.URLS.DELETE, {
+                    method: "DELETE",
+                    mode: "cors",
+                    body: ta["@id"] || ta.id
+                })
+            )
+        })
+        return Promise.all(deleteList)
+    }).then(deletedList => {
+        //Can't seem to fall into the Promise.all().catch() on 4XX, and perhaps other, errors...
+        let resultList = deletedList.filter(resp => { return resp.ok })
+        if (deletedList.length === 0) {
+            console.error("Could not find the annotation placing this item into the collection.  Could note remove this item.  Check your APPAGENT and annotation creator, they do not line up.")
+            console.log(itemElem)
+        } else {
+            if (deletedList.length === resultList.length) {
+                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
+                itemElem.remove()
+                    // TODO: redraw() added to deer elements https://github.com/CenterForDigitalHumanities/deer/issues/34
+            } else {
+                //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
+                //This should suffice for now.
+                alert("There was an error removing an item from the collection")
+                console.error("There was an error removing an item from the collection")
+                console.log(itemElem)
+            }
+        }
+    }).catch(err => {
+        //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
+        //This should suffice for now.
+        console.error("There was an error gathering information to remove an item from the collection")
+        console.log(itemElem)
+    })
 }
