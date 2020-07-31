@@ -157,13 +157,16 @@ LR.ui.toggleFieldNotes = function(event){
     
 }
 
-LR.ui.toggleProvidedArea = function(areaToToggle){
+LR.ui.toggleEntityAddition = function(event, areaToToggle){
     if(areaToToggle){
         if(areaToToggle.classList.contains("is-hidden")){
             areaToToggle.classList.remove("is-hidden")
+            areaToToggle.querySelector("input").value = ""
+            event.target.innerHTML = "&#8722;"
         }
         else{
             areaToToggle.classList.add("is-hidden")
+            event.target.innerHTML = "&#x2b;"
         }
     }
 }
@@ -360,11 +363,12 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
     let sel = event.target
     let selectedTagsArea = sel.nextElementSibling
     selectedTagsArea.innerHTML = ""
-    let arr = Array.from(sel.selectedOptions).map(option=>option.value)
+    let arr_id = Array.from(sel.selectedOptions).map(option=>option.value)
+    let arr_names = Array.from(sel.selectedOptions).map(option=>option.text)
     let input = (fromTemplate) ? sel.parentElement.previousElementSibling : sel.previousElementSibling
     let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-    let str_arr = arr.join(delim)
-    arr.forEach(selection => {
+    let str_arr = arr_id.join(delim)
+    arr_names.forEach(selection => {
        let tag = `<span class="tag is-small">${selection}</span>` 
        selectedTagsArea.innerHTML += tag
     })
@@ -572,20 +576,27 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 .then(newAnno => {
                     let tag = `<span class="tag is-small">${entity.name}</span>` 
                     selectedTagsArea.innerHTML += tag
+                    let input = event.target.closest("input[type='hidden']")
+                    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+                    input.value += (delim+entity.name)
                 })
                 .catch(err =>{
+                    alert("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
                     console.error("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
                 })
             })
             .catch(err =>{
+                alert("There was a problem trying to add the entity to the collection.  Please check the network panel.")
                 console.error("There was a problem trying to add the entity to the collection.  Please check the network panel.")
             })
         }
         else{
+            alert("You must supply something as a label to add an entity to the collection.");
             console.warn("You must supply something as a label to add an entity to the collection.")
         }
     }
     else{
+        alert("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
         console.warn("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
         console.log(event.target)
     }

@@ -127,15 +127,15 @@
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
                     
-                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.  If you are an admin, you can <a pop="researcher"> create a new researcher (coming soon) </a> </label>
+                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.  If you are an admin, you can create a new researcher with the &#x2b; below.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
                     
-                    <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also <a pop="person"> create a new person (coming soon) </a> </label>
+                    <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
                     <deer-view id="people" deer-collection="LivedReligionPeopleTest" deer-template="personMulti"></deer-view>
                     
-                    <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also <a pop="object"> create a new object (coming soon) </a> </label>
+                    <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
                     <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="personMulti"></deer-view>
                     
