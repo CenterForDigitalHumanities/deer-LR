@@ -39,6 +39,22 @@
 
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
+        
+        addEventListener('lrUserKnown', event => {
+            let user = event.detail.user
+            if(user !== null){
+                if (user.roles.administrator) {
+                }
+                else{
+                    alert("You must be logged in as an administrator to use this!")
+                    document.location.href="dashboard.html"
+                }
+            }
+            else{
+                console.log("User identity reset; user is null. ")
+                document.location.href="logout.html"
+            }
+        })
         /**
          * Determine what to do with the items in the Lived Religion Locations collection based on a users roles
          * @param {type} event
