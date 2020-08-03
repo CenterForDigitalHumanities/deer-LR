@@ -16,6 +16,12 @@
             height: 30rem;
             border: 4px solid black;
         }
+        .removeCollectionItem {
+            display: none;
+        }
+        .viewCollectionItem {
+            margin-left: .5rem;
+        }
     </style>
 </head>
 
@@ -344,6 +350,7 @@
                         btn.innerHTML = "Reset Page"
                         locationForm.append(btn)
                     }
+                    for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                 }
             }
             else{
