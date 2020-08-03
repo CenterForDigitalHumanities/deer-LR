@@ -9,7 +9,7 @@ LR.VERSION = "0.7.0"
 //LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
-LR.CONTEXT = "http://lived-religion-dev/deer-lr/vocab/context.json"
+LR.CONTEXT = "http://lived-religion-dev.rerum.io/deer-lr/vocab/context.json"
 
 ///For dev-01
 LR.URLS = {
