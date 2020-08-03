@@ -300,6 +300,25 @@
             let user = event.detail.user
             if(user !== null){
                 LR.utils.setUserAttributionFields(user)
+                const urlParams = new URLSearchParams(window.location.search);
+                const expURI = urlParams.get('id');
+                if (expURI) {
+                    //FIXME if user is an administrator OR THE CREATOR OF THE EXPERIENCE
+                    //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
+                    if (user.roles.administrator) {
+                        theExperience.setAttribute("deer-id", experienceID)
+                        document.getElementById("startExperience").classList.add("is-hidden")
+                        document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                        document.getElementById("experienceReview").classList.remove("is-hidden")
+                        document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+                    }
+                    else if(false){
+                        // TODO Current user is the creator of this experience...
+                    }
+                    else{
+                        alert("Only administrators can review experiences at this time.  Soon, experience creators will be able to review as well.")
+                    }
+                }
             }
             else{
                 console.log("User identity reset; user is null. ")
