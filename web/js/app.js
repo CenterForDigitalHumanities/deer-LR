@@ -243,10 +243,10 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
  * @param {object} userInfo A JSON object representing the user, the standard Lived Religion user object from event handlers.
  */
 LR.utils.setUserAttributionFields = function(userInfo){
-//    let attributionInputs = ["[deer-key='creator']"] //For annotations that assert a creator
-//    let attributionFrameworkElems = ["[deer-creator]"] //For DEER framework elements that have deer-creator (DEER.ATTRIBUTION)
-//    attributionInputs.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
-//    document.querySelectorAll(attributionFrameworkElems).forEach(elem => elem.setAttribute("deer-creator",userInfo['@id']))
+    let attributionInputs = ["[deer-key='creator']"] //For annotations that assert a creator
+    let attributionFrameworkElems = ["[deer-creator]"] //For DEER framework elements that have deer-creator (DEER.ATTRIBUTION)
+    attributionInputs.forEach(selector => document.querySelectorAll(selector).forEach(elem => elem.value = userInfo['@id']))
+    document.querySelectorAll(attributionFrameworkElems).forEach(elem => elem.setAttribute("deer-creator",userInfo['@id']))
     //Populate anything that is supposed to know the username
     document.querySelectorAll(".theUserName").forEach(elem => elem.innerHTML = userInfo.name)
 }

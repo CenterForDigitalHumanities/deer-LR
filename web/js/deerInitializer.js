@@ -86,7 +86,6 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
         </div>`
         let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let quickAddTmpl = `<div class="quickAddEntity"></div>`
         let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
         for (let place of allPlacesInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
@@ -114,7 +113,6 @@ DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.previousElementSibling)">Add</a>
         </div>`
         let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
-        let quickAddTmpl = ``
         tmpl += `<option disabled selected value> Not Supplied </option>`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         for (let o of allObjectsInCollection) {
@@ -175,7 +173,6 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
         let selected = `<div class="row selectedEntities"></div>`
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        let selected = `<div class="row selectedEntities"></div>`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Choose Below"> `
         for (let person of allPeopleInCollection) {
@@ -208,7 +205,6 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
         let selected = `<div class="row selectedEntities"></div>`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
-        let quickAddTmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Objects"> `
         for (let obj of allObjectsInCollection) {
@@ -512,7 +508,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
  */    
 DEER.TEMPLATES.list= function(obj, options={}) {
     let tmpl = ``
-    let quickAddTmpl = ``
     if(options.list){
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
@@ -524,7 +519,6 @@ DEER.TEMPLATES.list= function(obj, options={}) {
             tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>`
         })
         tmpl += `</ul>`
-        tmpl += quickAddTmpl
     }
     return tmpl
 }
