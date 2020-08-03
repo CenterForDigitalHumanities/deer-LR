@@ -1,5 +1,7 @@
 {
    "@context":{
+      "@version" : 1.1,
+      "geojson": "https://purl.org/geojson/vocab#",
       "lr":"https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
@@ -9,6 +11,14 @@
       "type":"@type",
       "__rerum":{
          "@id":"rerum_v1:__rerum",
+         "@type":"@id"
+      },
+      "ExperienceUpload":{
+         "@id":"lr:ExperienceUpload",
+         "@type":"@id"
+      },
+      "InterviewUpload":{
+         "@id":"lr:InterviewUpload",
          "@type":"@id"
       },
       "Event":{
@@ -149,7 +159,7 @@
          "@type":"@id"
       },
       "religiousTradition":{
-        "@id":"lr:religiousTradition",
+         "@id":"lr:religiousTradition",
          "@type":"@id"
       }
    }

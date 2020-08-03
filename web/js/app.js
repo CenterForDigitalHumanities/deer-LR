@@ -527,6 +527,8 @@ LR.utils.saveFieldNotesInExperience = function(event){
  * @return {undefined}
  */
 LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea){
+    console.error("This functionality is not yet available.  Coming soon!")
+    return false
     if(collectionName){
         let labelText = event.target.previousElementSibling.value
         let user = localStorage.getItem("lr-user")
@@ -600,15 +602,6 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
         console.warn("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
         console.log(event.target)
     }
-}
-
-/**
- * Remove an item from one of the Lived Religion application collections.
- * @param {String} itemID : The ID of the annotation connecting the item to the collection.
- * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
- */
-LR.utils.quickSaveCollectionEntry = async function(event, collectionName) {
-    
 }
 
 /**

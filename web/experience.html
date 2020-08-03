@@ -17,8 +17,7 @@
         #experienceReview p{
             font-size:10pt;
         }
-        
-      
+            
         #fieldNotesFloater{
             position: fixed;
             left: 0;
@@ -232,7 +231,6 @@
                         <option value="GiveAction">Donating</option>
                         <option value="Other">Other</option>
                     </select>
-                    <!-- TODO Make sure context.json is et up for this.-->
                     <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
                     <select deer-key="practiceContext">
                         <option disabled selected value> Not Supplied </option>
@@ -381,7 +379,6 @@
                     document.getElementById("objects").dispatchEvent(inputEvent)
                     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
                     document.getElementById("theExperience").querySelector("input[type='submit']").click() //Update experience form with new object array
-                    //TODO only do this upon success of the update from adding this to the db collection, a result of an update to the experience.  
                     alert("Object Added!") //TODO FEEDBACK
                 break
                 case "senseForm": 
