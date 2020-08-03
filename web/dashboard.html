@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <style>
         .removeCollectionItem {
-            display: inline-block;
+            display: none;
         }
         
         .viewCollectionItem{
@@ -38,9 +38,10 @@
         <div>
             <!-- A kind of SPACE, OBJECT or BODY created by this user, ordered by most recent, clipped to a certain number perhaps -->
             <h3> My Previous Entries </h3>
-            <ul id="previousEntries">
+            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col is-hidden" deer-link="experience.html?id=">You must be logged in to use this.</div>
+<!--            <ul id="previousEntries">
                 <p class="text-error">You must be logged in to use this dashboard.</p>
-            </ul>
+            </ul>-->
         </div>
         
     </div>
@@ -52,7 +53,7 @@
     <script>
         addEventListener('lrUserKnown', event => {
             if (event.detail.user !== null) {
-                getUserEntries(event.detail.user)
+                //getUserEntries(event.detail.user)
                 let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>
                     <a class="button primary" href="person.html"> &#xFF0B; Person </a>
                     <a class="button primary" href="object.html"> &#xFF0B; Object </a>
@@ -69,6 +70,18 @@
                 document.location.href="logout.html"
             }
         }, false) 
+        
+        /**
+         * Determine what to do when a collection item is deleted
+         * @param {type} event
+         * @returns {undefined}
+         */
+        addEventListener('lrCollectionItemDeleted', event => {
+            let selector = '[deer-collection=' + event.detail.collection + ']'
+            let lists = Array.from(document.querySelectorAll(selector))
+             //TODO redraw lists
+            LR.ui.globalFeedbackBlip(event, `Experience '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
+        })
         
         async function getUserEntries(user) {
             
