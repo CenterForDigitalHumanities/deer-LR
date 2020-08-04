@@ -10,6 +10,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        .removeCollectionItem {
+            display: none;
+        }
+        .viewCollectionItem {
+            margin-left: .5rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,8 +26,8 @@
         <h2 class="text-primary">Create a New Object</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="objectForm" class="hidden" deer-type="Thing" deer-context="http://store.rerum.io/context.json">
-                    <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
+                <form id="objectForm" class="hidden" deer-type="Thing" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion-dev.rerum.io/deer-lr/vocab/context.json">
+                    <input type="hidden" deer-key="creator" value="loading">  <!-- Object I am entering -->
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest"> <!-- into this collection -->
                     <label>Name:</label>
                     <input type="text" deer-key="name">
@@ -46,27 +54,34 @@
                     <script>
                         var data_key_elements = document.querySelectorAll("[data-rdf]")
                         Array.from(data_key_elements).forEach(el => el.onclick = setPrimaryType)
-                        function setPrimaryType(event) {
-                            let val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                        function setPrimaryType(event, otherOptionFlag) {
+                            let val = null
+                            if(otherOptionFlag){
+                                val = event.target.value
+                            }
+                            else{
+                                val = event.target ? event.target.closest("[data-rdf]").getAttribute("data-rdf") : event.value
+                                Array.from(data_key_elements).forEach(el => {
+                                    el = el.closest("[data-rdf]")
+                                    if (el.getAttribute("data-rdf") === val) {
+                                        el.classList.add("bg-light")
+                                    } 
+                                    else {
+                                        el.classList.remove("bg-light")
+                                    }
+                                })
+                            }
                             additionalTypeInput.value = val
-                            Array.from(data_key_elements).forEach(el => {
-                                el = el.closest("[data-rdf]")
-                                if (el.getAttribute("data-rdf") === val) {
-                                    el.classList.add("bg-light")
-                                } 
-                                else {
-                                    el.classList.remove("bg-light")
-                                }
-                            })
                         }
                     </script>
                     <div class="grouped">
                         <label>Further Options</label>
-                        <select oninput="setPrimaryType(event)">
-                            <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
-                            <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                            <option value="LR:Natural" context=""">Natural</option>
-                            <option value="LR:Manufactured" context="">Manufactured</option>
+                        <select class="otherPrimaryTypes" oninput="setPrimaryType(event, true)">
+                            <option disabled selected value> Other Types </option>
+                            <option value="Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing</option>
+                            <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
+                            <option value="Natural" context=""">Natural</option>
+                            <option value="Manufactured" context="">Manufactured</option>
                             <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
                             <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                             <option value="Other">Other</option>
@@ -74,22 +89,22 @@
                     </div>
                     <h4>History of this Object</h4>
                     <label>Select Former Location(s):</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations"/>
+                    <input type="hidden" deer-input-type="Set" deer-key="FormerLocations"/>
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view> 
                     <label>Select Former Use(s):</label>
-                    <input type="hidden" deer-key="LR:FormerUses" deer-input-type="Set" context="">
+                    <input type="hidden" deer-key="FormerUses" deer-input-type="Set" context="">
                     <!-- Looking at these as "former types", so just reuse the type values -->
                     <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
                         <option value="SacredObject">Sacred Object</option>
                         <option value="VisualArtwork">Artwork</option>
-                        <option value="LR:Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                        <option value="LR:Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
+                        <option value="Clothing" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
+                        <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Food</option>
                         <option value="CivicStructure">Building</option>
-                        <option value="LR:Natural" context="">Natural</option>
-                        <option value="LR:Manufactured" context="">Manufactured</option>
-                        <option value="LR:Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
+                        <option value="Natural" context="">Natural</option>
+                        <option value="Manufactured" context="">Manufactured</option>
+                        <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
                         <option value="Manuscript">Written Text</option>
-                        <option value="LR:Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                        <option value="Spoken" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
                         <option value="Other">Other</option>
                     </select>
                     <h4>Descriptive Information</h4>
@@ -98,6 +113,7 @@
                     <textarea deer-key="material"> </textarea>
                     <label>Typical Use: </label>
                     <select deer-key="purpose" >
+                        <option disabled selected value> Not Supplied </option>
                         <option value="Religious">Religious</option>
                         <option value="Commercial">Commercial</option>
                         <option value="Educational">Educational</option>
@@ -106,7 +122,7 @@
                     </select>
                     <!-- TODO -->
                     <!--<h3> Upload Media </h3>-->
-                    <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Abstract About Object</label>
+                    <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea id="further_object" type="text" deer-key="description"></textarea>
                     <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="LR:Tags">  
@@ -141,6 +157,7 @@
                         btn.innerHTML = "Reset Page"
                         objectForm.append(btn)
                     }
+                    for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                 } 
             }
             else{
@@ -196,11 +213,13 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "objectForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations"], event.target) 
+                    LR.utils.preSelectMultiSelects(annotationData, ["FormerUses", "FormerLocations"], event.target) 
+                    LR.utils.preSelectType(annotationData, event.target)
                 break
                 default:
                     
             }
+            
         })
         
         /**

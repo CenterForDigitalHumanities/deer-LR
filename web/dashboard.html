@@ -9,6 +9,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        .removeCollectionItem {
+            display: none;
+        }
+        .viewCollectionItem{
+            margin-left: .5rem
+        }
+    </style>
 </head>
 
 <body>
@@ -26,11 +34,12 @@
         </div>
         <div>
             <!-- A kind of SPACE, OBJECT or BODY created by this user, ordered by most recent, clipped to a certain number perhaps -->
-            <h3> Previous Entries </h3>
+            <h3> My Previous Entries </h3>
             <ul id="previousEntries">
                 <p class="text-error">You must be logged in to use this dashboard.</p>
             </ul>
         </div>
+        
     </div>
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
@@ -39,6 +48,7 @@
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         addEventListener('lrUserKnown', event => {
+            //TODO if we are allowing object manipulation on this page, we may need to check roles to activate certain things.
             if (event.detail.user !== null) {
                 getUserEntries(event.detail.user)
                 let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>
@@ -58,7 +68,20 @@
             }
         }, false) 
         
+        /**
+         * Determine what to do when a collection item is deleted
+         * @param {type} event
+         * @returns {undefined}
+         */
+        addEventListener('lrCollectionItemDeleted', event => {
+            let selector = '[deer-collection=' + event.detail.collection + ']'
+            let lists = Array.from(document.querySelectorAll(selector))
+             //TODO redraw lists
+            LR.ui.globalFeedbackBlip(event, `Experience '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
+        })
+        
         async function getUserEntries(user) {
+            
             let historyWildcard = {"$exists":true, "$size":0}
             let experiences = await fetch(LR.URLS.QUERY, {
                 method: "POST",
@@ -72,29 +95,24 @@
                     "__rerum.history.next" : historyWildcard
                 })
             })
-            experiences = await experiences.json()
+            .then(response => response.json())
+            .catch(err => {return []})
             previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>
                 {
                     let obj = (b.value) ? b.value : b
                     let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
-                    return a += `<li> ${label} <a class="tag is-small text-primary bd-primary" href="experience.html?id=${b['@id']}">view</a></li>`               
-                },``):`<p class="text-error">There are no recent experiences for this user.</p>`
-            
-            /**
-             * TODO this is the logic we need, but how are we going to do it?
-             */
-            /*
-            previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>
-                UTILS.expand({ "@id": b["@id"] })
-                    .then((function(obj) {
-                        let date = (UTILS.getValue(obj.startDate)) ? UTILS.getValue(obj.startDate) : "Unknown Date"
-                        let location = (UTILS.getValue(obj.location)) ? UTILS.getValue(obj.location) : "Unknown Location"
-                        let label = (UTILS.getLabel(obj)) ? UTILS.getLabel(obj) :  date + " at " + location
-                        a += `<li> ${label} <a class="tag is-small text-primary bd-primary" href="experience.html?id=${b['@id']}">view</a></li>`
-                    }))
-                , ``) 
-                :`<p class="text-error">There are no recent experiences for this user.</p>`
-            */
+                    let viewBtn = ``
+                    let removeBtn = ``
+                    /**
+                     * FIXME: Only admins can edit and remove experiences. TODO:  We will bring control to experience creators soon.
+                     */
+                    if(user.roles.administrator){
+                        viewBtn = `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="experience.html?id=${b["@id"]}">&#x1F441</a>`
+                        removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
+                        onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
+                    }
+                    return a += `<li> ${label}${viewBtn}${removeBtn} </li>`               
+                },``):`<p class="text-error">You have not submitted any experiences.</p>`
         }
         
         /**

@@ -10,6 +10,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <style>
+        .removeCollectionItem {
+            display: none;
+        }
+        .viewCollectionItem {
+            margin-left: .5rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,9 +27,9 @@
         <h2 class="text-primary">Create a New Person</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="personForm" class="hidden" deer-type="Person" deer-context="http://store.rerum.io/context.json">
+                <form id="personForm" class="hidden" deer-type="Person" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion-dev.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionPeople">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionPeopleTest">
                     <h4>Contact Details</h4>
                     <div class="grouped">
                         <label>Name</label>
@@ -38,12 +46,13 @@
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
                     <h4 title="This information is more personal and sensitive information and is not required.">Additional Details</h4>
-                    <label title="Provide a short decription of this person with otherwise unprovided or disambiguating details.">Abstract</label>
+                    <label title="Provide a short decription of this person with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea  title="Provide a short decription of this person with otherwise unprovided or disambiguating details."deer-key="description"></textarea>
                     <div class="row">
                         <div class="traditionWrapper col">
                             <label>Religious Tradition</label>
-                            <select deer-key="religious_tradition">
+                            <select deer-key="religiousTradition">
+                                <option disabled selected value> Not Supplied </option>
                                 <optgroup label="Christian">
                                     <option value="Evangelical Protestant">Evangelical Protestant</option>
                                     <option value="Mainline Protestant">Mainline Protestant</option>
@@ -82,6 +91,7 @@
                         <div class="col">
                             <label>Race/Ethnicity</label>
                             <select deer-key="ethnicity">
+                                <option disabled selected value> Not Supplied </option>
                                 <option value="African American/Black/African">African American/Black/African</option>
                                 <option value="Bosniak">Bosniak</option>
                                 <option value="Caribbean">Caribbean</option>
@@ -99,6 +109,7 @@
                         <div class="col">
                             <label>Gender & Sexuality</label>
                             <select deer-key="gender">
+                                <option disabled selected value> Not Supplied </option>
                                 <option value="Female-presenting">Female-presenting</option>
                                 <option value="Male-presenting">Male-presenting</option>
                                 <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
@@ -113,6 +124,7 @@
                         <div class="col">
                             <label>Education</label>
                             <select deer-key="education">
+                                <option disabled selected value> Not Supplied </option>
                                 <option value="Some high school">Some high school</option>
                                 <option value="High school graduate">High school graduate</option>
                                 <option value="Some college">Some college</option>
@@ -154,6 +166,7 @@
                         btn.innerHTML = "Reset Page"
                         personForm.append(btn)
                     }
+                    for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                 }
             }
             else{

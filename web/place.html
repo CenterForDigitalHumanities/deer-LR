@@ -13,7 +13,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
     <style>
         #leafletPreview {
-            height: 20rem;
+            height: 30rem;
+            border: 4px solid black;
+        }
+        .removeCollectionItem {
+            display: none;
+        }
+        .viewCollectionItem {
+            margin-left: .5rem;
         }
     </style>
 </head>
@@ -25,7 +32,7 @@
         <h2 class="text-primary">Create a New Location</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="locationForm" deer-type="Place" deer-context="http://store.rerum.io/context.json">
+                <form id="locationForm" deer-type="Place" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion-dev.rerum.io/deer-lr/vocab/context.json">
                     <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
@@ -43,21 +50,30 @@
                     </div>
 
                     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
-                    <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
+                    <!--<script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>-->
 
                     <script>
                         var previewMap = L.map('leafletPreview').setView([38.628009, -90.201101], 16)
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//                            maxZoom: 19,
+//                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//                        }).addTo(previewMap);
+                        
+                        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ', {
+                            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                             maxZoom: 19,
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            id: 'mapbox.satellite', //mapbox.streets
+                            accessToken: 'pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ'
                         }).addTo(previewMap);
-                        var osmb = new OSMBuildings(previewMap).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json')
+                        //var osmb = new OSMBuildings(previewMap).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json')
 
                         leafLat.oninput = updateGeometry
                         leafLong.oninput = updateGeometry
 
                         function updateGeometry(event, clickedLat, clickedLong) {
-                            event.preventDefault()
+                            if(event){
+                                event.preventDefault()
+                            }
                             if (clickedLong > -180) {
                                 leafLat.value = parseInt(clickedLat * 1000000) / 1000000
                                 leafLong.value = parseInt(clickedLong * 1000000) / 1000000
@@ -80,58 +96,129 @@
                     <textarea type="text" deer-key="address"></textarea>
                     
                     <h4>Descriptive Properties </h4>
-                    <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Abstract</label>
+                    <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
                     <label title="The primary function of this location should determine its type.">Primary Specification</label>
                     <div class="row">
-                        <div data-rdf="Place.Accommodation" class="bd-primary text-center card col" title="Accommodation">
+                        <div data-rdf="Accommodation" class="bd-primary text-center card col" title="Accommodation">
                             <header>Accommodation</header>
-                            <img class="hide-xs" src="https://icongr.am/material/hotel.svg?size=64&color=##14854f" alt="Accommodation">
+                            <img class="hide-xs" src="https://icongr.am/material/home-modern.svg?size=64&color=##14854f" alt="Accommodation">
                         </div>
-                        <div data-rdf="Place.AdministrativeArea" class="bd-primary text-center card col" title="Administrative Area">
-                            <header>Administrative Area</header>
-                            <img class="hide-xs" src="https://icongr.am/material/office-building.svg?size=64&color=##14854f" title="Administrative Area" alt="Administrative Area">
+                        <div data-rdf="PlaceOfWorship" class="bd-primary text-center card col" title="Place Of Worship">
+                            <header>Place Of Worship</header>
+                            <img class="hide-xs" src="https://icongr.am/material/weather-sunny.svg?size=64&color=##14854f" title="Place Of Worship" alt="Place Of Worship">
                         </div>
-                        <div data-rdf="Place.CivicStructure" class="bd-primary text-center card col" title="Civic Structure">
+                        <div data-rdf="CivicStructure" class="bd-primary text-center card col" title="Civic Structure">
                             <header>Civic Structure</header>
                             <img class="hide-xs" src="https://icongr.am/material/bank.svg?size=64&color=##14854f" title="Civic Structure" alt="Civic Structure">
                         </div>
-                        <div data-rdf="Place.Landform" class="bd-primary text-center card col" title="Landform">
+                        <div data-rdf="Landform" class="bd-primary text-center card col" title="Landform">
                             <header>Landform</header>
                             <img class="hide-xs" src="https://icongr.am/material/earth.svg?size=64&color=##14854f" title="Landform" alt="Landform">
                         </div>
                     </div>
                     <div class="row">
-                        <div data-rdf="Place.LandmarksOrHistoricalBuildings" class="bd-primary text-center card col" title="Landmarks or Historical Buildings">
+                        <div data-rdf="LandmarksOrHistoricalBuildings" class="bd-primary text-center card col" title="Landmarks or Historical Buildings">
                             <header>Landmarks or Historical Buildings</header>
                             <img class="hide-xs" src="https://icongr.am/material/bridge.svg?size=64&color=##14854f" title="Landmarks or Historical Buildings" alt="Landmarks or Historical Buildings">
                         </div>
-                        <div data-rdf="Place.LocalBusiness" class="bd-primary text-center card col" title="Local Business">
+                        <div data-rdf="LocalBusiness" class="bd-primary text-center card col" title="Local Business">
                             <header>Local Business</header>
                             <img class="hide-xs" src="https://icongr.am/material/shopping.svg?size=64&color=##14854f" title="Local Business" alt="Local Business">
                         </div>
-                        <div data-rdf="Place.Residence" class="bd-primary text-center card col" title="Residence">
+                        <div data-rdf="Residence" class="bd-primary text-center card col" title="Residence">
                             <header>Residence</header>
                             <img class="hide-xs" src="https://icongr.am/material/home.svg?size=64&color=##14854f" title="Residence" alt="Residence">
                         </div>
-                        <div data-rdf="Placed.TouristDestination" class="bd-primary text-center card col" title="Tourist Destination">
+                        <div data-rdf="TouristDestination" class="bd-primary text-center card col" title="Tourist Destination">
                             <header>Tourist Destination</header>
                             <img class="hide-xs" src="https://icongr.am/material/beach.svg?size=64&color=##14854f" title="Tourist Destination" alt="Tourist Destination">
                         </div>
                     </div>
                     <label>More Options</label>
                     <select oninput="setPrimaryType(this)">
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                        <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
-                        <option value="Cemetery" >Cemetery</option>
-                        <option value="Place.CivicStructure.Hospital" >Hospital</option>
-                        <option value="Museum" >Museum</option>
-                        <option value="Park" >Park</option>
-                        <option value="Street" >Street</option>
-                        <option value="Zoo" >Zoo</option>
-                        <option value="Gym" >Gym</option>
-                        <option value="OtherBuilding" >Other Building</option>
+                        <option disabled selected value> Specific Types By Group </option>
+                        <optgroup label="Accomodations">
+                            <option value="Apartment">Apartment</option>
+                            <option value="House">House</option>
+                            <option value="Room">Room</option>
+                            <option value="Suite">Suite</option>
+                            <option value="Campground">Campground</option>
+                        </optgroup>
+                        
+                        <optgroup label="Landforms">
+                            <option value="Canal">Canal</option>
+                            <option value="Lake">Lake</option>
+                            <option value="Mountain">Mountain</option>
+                            <option value="Volcano">Volcano</option>
+                            <option value="Ocean">Ocean</option>
+                            <option value="Pond">Pond</option>
+                            <option value="Reservoir">Reservoir</option>
+                            <option value="River">River</option>
+                            <option value="Waterfall">Waterfall</option>
+                        </optgroup>
+                        
+                        <optgroup label="Civic Structures">
+                            <option value="Airport">Airport</option>
+                            <option value="Aquarium">Aquarium</option>
+                            <option value="Beach">Beach</option>
+                            <option value="Bridge">Bridge</option>
+                            <option value="BusStation">Bus Station</option>
+                            <option value="BusStop">Bus Stop</option>
+                            <option value="Cemetery">Cemetery</option>
+                            <option value="Crematorium">Crematorium</option>
+                            <option value="EducationalOrganization">School</option>
+                            <option value="EventVenue">Event Venue</option>
+                            <option value="FireStation">Fire Station</option>
+                            <option value="CourtHouse">Court House</option>
+                            <option value="Embassy">Embassy</option>
+                            <option value="CityHall">City Hall</option>
+                            <option value="Hospital">Hospital</option>
+                            <option value="MovieTheater">Movie Theater</option>
+                            <option value="Museum">Museum</option>
+                            <option value="MusicVenue">Music Venue</option>
+                            <option value="Playground">Playground</option>
+                            <option value="PoliceStation">Police Station</option>
+                            <option value="StadiumOrArena">Stadium/Arena</option>
+                            <option value="TrainStation">Train Station</option>
+                            <option value="Zoo">Zoo</option>
+                        </optgroup>
+                        
+                        <optgroup label="Places of Worship">
+                            <option value="BuddhistTemple">Buddhist Temple</option>
+                            <option value="HinduTemple">Hindu Temple</option>
+                            <option value="Church">Church</option>
+                            <option value="Mosque">Mosque</option>
+                            <option value="Synagogue">Synagogue</option>
+                        </optgroup>
+                        
+                        <optgroup label="Business">
+                            <option value="AnimalShelter">Animal Shelter</option>
+                            <option value="ChildCare">Child Care</option>
+                            <option value="Dentist">Dentist</option>
+                            <option value="DryCleaningOrLaundry">Launderer</option>
+                            <option value="EmergencyService">Emergency Service</option>
+                            <option value="Bakery">Bakery</option>
+                            <option value="BarOrPub">Bar/Pub</option>
+                            <option value="Brewery">Brewery</option>
+                            <option value="AmusementPark">Amusement Park</option>
+                            <option value="ArtGallery">Art gallery</option>
+                            <option value="ComedyClub">Comedy Club</option>
+                            <option value="InternetCafe">Internet Cafe</option>
+                            <option value="FastFood">Fast Food</option>
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Motel">Motel</option>
+                            <option value="Hostel">Hostel</option>
+                            <option value="Resort">Resort</option>
+                            <option value="MedicalOffice">Medical Office</option>
+                            <option value="ExerciseGym">Gym</option>
+                            <option value="Store">Store</option>
+                            <option value="RadioStation">Radio Station</option>
+                            <option value="TelevisionStation">T.V. Station</option>
+                            <option value="TouristInformationCenter">Tourist Center</option>
+                        </optgroup>
+
                     </select>
 
                     <script>
@@ -154,69 +241,70 @@
                     <label title="If there are secondary functions for this location, note them here.">Additional Types (if any)</label>
                     Hold <kbd>CTRL</kbd> to make multiple selections.
                     <!-- We are already using additionalType... -->
-                    <input type="hidden" deer-input-type-x="Set" deer-key-x="LR:SecondaryTypes" >
-                    <select multiple disabled oninput="LR.utils.handleMultiSelect(event, false)">
+                    <input type="hidden" deer-input-type="Set" deer-key="SecondaryFunction" >
+                    <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
                         <optgroup label="General Categories"> 
-                            <option value="Place.Accommodation" >Accommodation</option>
-                            <option value="Place.AdministrativeArea" >Administrative Area</option>
-                            <option value="Place.CivicStructure" >Civic Structure</option>
-                            <option value="Place.Landform" >Landform</option>
-                            <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
-                            <option value="Place.LocalBusiness" >Local Business</option>
-                            <option value="Place.Residence" >Residence</option>
-                            <option value="Placed.TouristDestination" >Tourist Destination</option>
+                            <option value="Accommodation">Accommodation</option>
+                            <option value="AdministrativeArea">Administrative Area</option>
+                            <option value="CivicStructure">Civic Structure</option>
+                            <option value="Landform">Landform</option>
+                            <option value="LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                            <option value="LocalBusiness">Local Business</option>
+                            <option value="Residence">Residence</option>
+                            <option value="TouristDestination">Tourist Destination</option>
                         </optgroup>
-                        <Optgroup label="Precise Types">
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
-                            <option value="Place.Accommodation.House" >Home</option>
-                            <option value="Cemetery" >Cemetery</option>
-                            <option value="Place.CivicStructure.Hospital" >Hospital</option>
-                            <option value="Museum" >Museum</option>
-                            <option value="Park" >Park</option>
-                            <option value="Street" >Street</option>
-                            <option value="Zoo" >Zoo</option>
-                            <option value="Gym" >Gym</option>
+                        <optgroup label="Precise Types">
+                            <option value="Imagined" >Imagined</option>
+                            <option value="School" >School</option>
+                            <option value="Neighborhood" >Neighborhood</option>
+                            <option value="House" >Home</option>
+                            <option value="Cemetery">Cemetery</option>
+                            <option value="Hospital">Hospital</option>
+                            <option value="Museum">Museum</option>
+                            <option value="Park">Park</option>
+                            <option value="Street">Street</option>
+                            <option value="Zoo">Zoo</option>
+                            <option value="Gym">Gym</option>
                         </Optgroup>
                         <option value="OtherBuilding" >Other Building</option>
                     </select>
                     <h4>Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerLocations" value="">
+                    <input type="hidden" deer-input-type="Set" deer-key="FormerLocations" value="">
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view>
                     <label>Former Use(s)</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="LR:FormerUses" value="">
+                    <input type="hidden" deer-input-type="Set" deer-key="FormerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                         <optgroup label="General Categories"> 
-                            <option value="Place.Accommodation" >Accommodation</option>
-                            <option value="Place.AdministrativeArea" >Administrative Area</option>
-                            <option value="Place.CivicStructure" >Civic Structure</option>
-                            <option value="Place.Landform" >Landform</option>
-                            <option value="Place.LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
-                            <option value="Place.LocalBusiness" >Local Business</option>
-                            <option value="Place.Residence" >Residence</option>
-                            <option value="Placed.TouristDestination" >Tourist Destination</option>
+                            <option value="Accommodation" >Accommodation</option>
+                            <option value="AdministrativeArea" >Administrative Area</option>
+                            <option value="CivicStructure" >Civic Structure</option>
+                            <option value="Landform" >Landform</option>
+                            <option value="LandmarksOrHistoricalBuildings" >Landmarks or Historical Buildings</option>
+                            <option value="LocalBusiness" >Local Business</option>
+                            <option value="Residence" >Residence</option>
+                            <option value="TouristDestination" >Tourist Destination</option>
                         </optgroup>
-                        <Optgroup label="Precise Types">
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset009298" >Imagined</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset015946" >School</option>
-                            <option value="http://id.loc.gov/vocabulary/ethnographicTerms/afset012412" >Neighborhood</option>
-                            <option value="Place.Accommodation.House" >Home</option>
-                            <option value="Cemetery" >Cemetery</option>
-                            <option value="Place.CivicStructure.Hospital" >Hospital</option>
-                            <option value="Museum" >Museum</option>
-                            <option value="Park" >Park</option>
-                            <option value="Street" >Street</option>
-                            <option value="Zoo" >Zoo</option>
-                            <option value="Gym" >Gym</option>
+                        <optgroup label="Precise Types">
+                            <option value="Imagined" >Imagined</option>
+                            <option value="School" >School</option>
+                            <option value="Neighborhood" >Neighborhood</option>
+                            <option value="Accommodation">Home</option>
+                            <option value="Cemetery">Cemetery</option>
+                            <option value="Hospital">Hospital</option>
+                            <option value="Museum">Museum</option>
+                            <option value="Park">Park</option>
+                            <option value="Street">Street</option>
+                            <option value="Zoo">Zoo</option>
+                            <option value="Gym">Gym</option>
                         </Optgroup>
                         <option value="OtherBuilding" >Other Building</option>
                     </select>
                     <label title="The materials this location is comprised of.">Material(s), if applicable:</label>
                     <input  type="text" deer-key="material">
                     <label>Typical Use </label>
-                    <select  deer-key="purpose">
+                    <select deer-key="purpose">
+                        <option disabled selected value> Not Supplied </option>
                         <option value="Religious">Religious</option>
                         <option value="Commercial">Commercial</option>
                         <option value="Educational">Educational</option>
@@ -262,6 +350,7 @@
                         btn.innerHTML = "Reset Page"
                         locationForm.append(btn)
                     }
+                    for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                 }
             }
             else{
@@ -317,7 +406,9 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "locationForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["LR:FormerUses", "LR:FormerLocations", "LR:SecondaryTypes"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["FormerUses", "FormerLocations", "SecondaryTypes"], event.target)
+                    LR.utils.populateCoordinates(annotationData, event.target)
+                    LR.utils.preSelectType(annotationData, event.target)
                 break
                 
                 default:

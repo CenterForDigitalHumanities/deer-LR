@@ -3,8 +3,6 @@ class LrFooter extends HTMLElement {
         this.innerHTML = `<small>&copy;2019 Walter J. Ong, S.J. Center for Digital Humanities</small>
         <img class="brand" src="https://www.slu.edu/marcom/tools-downloads/imgs/logo/left-aligned/slu_logoleftaligned_rgb.png">
         <img class="brand" src="https://blog.ongcdh.org/blog/wp-content/uploads/2018/05/logo-dark.png">
-        <img class="brand" src="https://www.hluce.org/static/images/logo-hluce.png">
-        <small> V. ${LR.VERSION}</small>
         `
         this.classList.add('nav', 'nav-center', 'text-primary', 'is-fixed', 'is-full-width', 'is-vertical-align')
         this.style.bottom = 0
@@ -31,6 +29,7 @@ class LrNav extends HTMLElement {
                 <a href="objects.html">Objects</a>
                 <a href="people.html">People</a>
                 <a href="researchers.html">Researchers</a>
+                <a href="map.html">Map View</a>
                 `
                 if(user.roles.administrator){
                     this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
@@ -47,6 +46,7 @@ class LrNav extends HTMLElement {
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
             <a href="researchers.html">Researchers</a>
+            <a href="map.html">Map View</a>
         </div>
     </div>
     <div class="nav-right">
@@ -84,7 +84,7 @@ class LrLogin extends HTMLElement {
                 top: 0;
                 left: 0;
                 z-index: 9000;
-                background-color: rgba(7,42,12,.7);
+                background-color: rgba(7,42,12,1);
             }
             fieldset {
                 background: #FFF;

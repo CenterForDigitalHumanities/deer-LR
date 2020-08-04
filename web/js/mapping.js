@@ -9,23 +9,25 @@ MAPPER = {}
 
 MAPPER.mymap={}
 
-//MAPPER.URLS = {
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite"
-//}
-
+//For dev-01
 MAPPER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete"
+    BASE_ID: "http://devstore.rerum.io/v1",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite"
 }
+
+//For prd-01
+//MAPPER.URLS = {
+//    BASE_ID: "http://store.rerum.io/v1",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    QUERY: "query",
+//    OVERWRITE: "overwrite",
+//    DELETE: "delete"
+//}
 
 MAPPER.init =  async function(){
     let latlong = [38.6360699, -90.2348349] //default starting coords

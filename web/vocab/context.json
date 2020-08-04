@@ -1,5 +1,7 @@
 {
    "@context":{
+      "@version" : 1.1,
+      "geojson": "https://purl.org/geojson/vocab#",
       "lr":"https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
@@ -11,21 +13,29 @@
          "@id":"rerum_v1:__rerum",
          "@type":"@id"
       },
+      "ExperienceUpload":{
+         "@id":"lr:ExperienceUpload",
+         "@type":"@id"
+      },
+      "InterviewUpload":{
+         "@id":"lr:InterviewUpload",
+         "@type":"@id"
+      },
       "Event":{
          "@id":"schema:Event",
          "@type":"@id",
          "@context":{
-            "RelatedSenses":{
-               "@id":"lr:RelatedSenses",
+            "relatedSenses":{
+               "@id":"lr:relatedSenses",
                "@type":"@id",
                "@container":"@set"
             },
-            "RelatedPractices":{
-               "@id":"lr:RelatedPractices",
+            "relatedPractices":{
+               "@id":"lr:relatedPractices",
                "@type":"@id",
                "@container":"@set"
             },
-            "RelatedObjects":{
+            "relatedObjects":{
                "@id":"ebu:hasArtefactRelatedPhysicalResource",
                "@type":"@id",
                "@container":"@set"
@@ -136,16 +146,20 @@
          "@id":"lr:Spoken",
          "@type":"@id"
       },
-      "FormerUses":{
+      "formerUses":{
          "@id":"ebu:hasArtefactRelatedPhysicalResource",
          "@type":"@id"
       },
-      "FormerLocations":{
+      "formerLocations":{
          "@id":"ebu:FormerLocationshasArtefactRelatedLocation",
          "@type":"@id"
       },
-      "FieldNotes":{
+      "fieldNotes":{
          "@id":"fast:2007231",
+         "@type":"@id"
+      },
+      "religiousTradition":{
+         "@id":"lr:religiousTradition",
          "@type":"@id"
       }
    }

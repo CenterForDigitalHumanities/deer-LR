@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
@@ -5,14 +6,11 @@
 <html>
 
 <head>
-    <title>Religion in Place Locations</title>
+    <title>Lived Religion User Experiences</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
     <style>
-        #objects h2 {
-            display: none;
-        }
         .removeCollectionItem {
             display: none;
         }
@@ -23,11 +21,14 @@
 </head>
 
 <body>
+    <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
+    <!-- Yes.  If admin, entries can be edited -->
+
     <lr-nav></lr-nav>
     <div class="container">
-        <h1 class="text-primary"> Locations </h1>
+        <h1 class="text-primary"> All Lived Religion Experiences </h1>
         <div class="row">
-            <div id="locations" deer-collection="LivedReligionLocationsTest" class="deer-view col" deer-link="place.html?id="></div>
+            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col is-hidden" deer-link="experience.html?id=">You must be logged in as an administrator.</div>
         </div>
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -35,19 +36,45 @@
 
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
+        
+        addEventListener('lrUserKnown', event => {
+            let user = event.detail.user
+            if(user !== null){
+                //FIXME if user is an administrator OR THE CREATOR OF THE EXPERIENCE
+                //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
+                if (user.roles.administrator) {
+                    experiences.classList.remove("is-hidden")
+                }
+                else if(false){
+                    // TODO Current user is the creator of this experience...
+                }
+                else{
+                    alert("Only administrators can use this page at this time.")
+                    document.location.href="dashboard.html"
+                }
+            }
+            else{
+                console.log("User identity reset; user is null. ")
+                document.location.href="logout.html"
+            }
+            
+            // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
+        })
+        
         /**
-         * Determine what to do with the items in the Lived Religion Locations collection based on a users roles
+         * Handler for when experiences view finishes loading
          * @param {type} event
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if (event.target.getAttribute("id") === "locations") {
+            if (event.target.getAttribute("id") === "experiences") {
                 let user = localStorage.getItem("lr-user")
                 if (user !== null) {
                     try {
                         user = JSON.parse(user)
                         if (user.roles.administrator) {
-                            for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
+                            experiences.classList.remove("is-hidden")
+                            for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
                         }
                     } catch (err) {
                         console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
@@ -66,7 +93,7 @@
             let selector = '[deer-collection=' + event.detail.collection + ']'
             let lists = Array.from(document.querySelectorAll(selector))
              //TODO redraw lists
-            LR.ui.globalFeedbackBlip(event, `Location '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
+            LR.ui.globalFeedbackBlip(event, `Experience '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
         })
         
         /**
@@ -101,6 +128,7 @@
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
     <script src="./js/components.js" type="text/javascript"></script>
+
 </body>
 
 </html>

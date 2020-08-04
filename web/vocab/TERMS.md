@@ -1,4 +1,5 @@
 
+#Arch Type
 ## Event
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
@@ -20,15 +21,40 @@
 ## Object
 - Observable discrete physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
 
-## RelatedSenses
+
+
+# Keys Used
+
+## relatedSenses
 - An aggregator that encapsulates the Senses encountered by individuals at an Event. 
 
-## RelatedPractices
+## relatedPractices
 - An aggregator that encapsulates the Practices being performed by individuals at an Event.
 
-## RelatedObjects
+## relatedObjects
 - An aggregator that encapsulates the Objects encountered by individuals at an Event.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
+## religiousTradition
+- One of the world's religions.  Used to note religious context around certain data.  
+
+## formerUses
+- Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
+
+## formerLocations
+- Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
+
+## fieldNotes
+- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
+
+## secondaryFunction
+- Alternative uses for a given Place.  Ex. The church is also a bingo hall on Wednesdays.  
+
+## practiceContext
+- A reason behind a Practice taking place.  Ex. "Ritual" or "Just For Fun".
+
+
+
+# Defined Expected Values and/or Additional Types
 ## Sight
 - The factors surrounding a Person's sense of sight.  See http://id.worldcat.org/fast/1167852  
 
@@ -89,12 +115,110 @@
 ## Spoken
 - Conveyance of thought, feeling, meaning or other information through articulate sounds.  
 
-## FormerUses
-- Functions some Place or Object was used for in the past which may change what Type it was throughout time.  http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedPhysicalResource
 
-## FormerLocations
-- Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
 
-## FieldNotes
-- Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
+
+!?!?!?!! Which of these values is outside of schema and needs help for context through Lived Religion?
+
+## ReligiousRitual
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## CommunityEvent
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## CivicRitual
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Commercial
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Public
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Private
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Planned
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Spontaneous
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Individual
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Collective
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Accommodation
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## AdministrativeArea
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## CivicStructure
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Landform
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## LandmarksOrHistoricalBuildings
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Local Business
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Residence
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Tourist Destination
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Imagined
+- http://id.loc.gov/vocabulary/ethnographicTerms/afset009298
+
+## School
+- http://id.loc.gov/vocabulary/ethnographicTerms/afset015946
+
+## Neighborhood
+- http://id.loc.gov/vocabulary/ethnographicTerms/afset012412
+
+## House
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Cemetery
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Hospital
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Museum
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Park
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Street
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Zoo
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Gym
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Religious
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Commercial
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Educational
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Civic
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## Other Public
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
