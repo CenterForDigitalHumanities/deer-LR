@@ -39,7 +39,7 @@ class LrNav extends HTMLElement {
     }
     connectedCallback() {
         this.innerHTML = `<div class="nav-left">
-        <a class="brand" href="index.html"><img src="http://religioninplace.org/blog/wp-content/uploads/2019/04/LRDA-Logo.jpg"></a>
+        <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
         <div class="tabs">
             <a href="places.html">Locations</a>
             <a href="stories.html">Stories</a>
