@@ -189,7 +189,7 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
         globalFeedback.classList.remove("show")
         globalFeedback.classList.remove("bg-error")
         // remove this to prevent reloading once behavior is cleared.
-        LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
+        // LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
     }, 3000)
 }
 
@@ -224,8 +224,8 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
         //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
         //FIXME this should really only happen if the form submit seen above is successful
-        event.target.parentNode.remove() //TODO feedback
-        alert("Object Removed")//TODO feedback
+        event.target.parentNode.remove()
+        LR.ui.globalFeedbackBlip(event,"Dropped from list",true)
     }
 }
 
