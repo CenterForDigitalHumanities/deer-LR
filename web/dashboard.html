@@ -58,6 +58,7 @@
                 if (event.detail.user.roles.administrator) {
                     buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
                     document.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+                    document.querySelector('.tabs').innerHTML += `<a href="all_experiences.html">Experiences</a>`
                 }
                 buttons+=`<a class="button secondary" href=""> &#xFF0B; Experience </a>`
                 document.querySelector('.entries').innerHTML = buttons

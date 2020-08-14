@@ -25,7 +25,6 @@ class LrNav extends HTMLElement {
             if(user !== null){
                 this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
                 <a href="places.html">Locations</a>
-                <a href="stories.html">Stories</a> 
                 <a href="objects.html">Objects</a>
                 <a href="people.html">People</a>
                 <a href="researchers.html">Researchers</a>
@@ -33,6 +32,7 @@ class LrNav extends HTMLElement {
                 `
                 if(user.roles.administrator){
                     this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+                    this.querySelector('.tabs').innerHTML += `<a href="all_experiences.html">Experiences</a>`
                 }
             }
         })
@@ -42,7 +42,6 @@ class LrNav extends HTMLElement {
         <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
         <div class="tabs">
             <a href="places.html">Locations</a>
-            <a href="stories.html">Stories</a>
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
             <a href="researchers.html">Researchers</a>
