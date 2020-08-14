@@ -178,7 +178,7 @@ LR.ui.toggleEntityAddition = function(event, areaToToggle){
  
  */
 LR.ui.globalFeedbackBlip = function(event, message, success){
-    globalFeedback.innerHTML = message
+    globalFeedback.innerText = message
     globalFeedback.classList.add("show")
     if(success){
         globalFeedback.classList.add("bg-success")
@@ -196,8 +196,6 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
 LR.ui.showPopover = function(which, event){
     console.error("Sorry, these popovers are not ready yet :(")
 }
-
-
 
 /**
  * Broadcast a message about some event
