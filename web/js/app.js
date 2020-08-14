@@ -647,9 +647,9 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             console.log(itemElem)
         } else {
             if (deletedList.length === resultList.length) {
-                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
                 itemElem.remove()
-                    // TODO: redraw() added to deer elements https://github.com/CenterForDigitalHumanities/deer/issues/34
+                LR.ui.globalFeedbackBlip(event, `'${itemElem.innerText}' Removed!`, false)
+                //LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.

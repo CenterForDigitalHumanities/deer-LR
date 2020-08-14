@@ -57,19 +57,7 @@
                 }
             }
         }, false)
-        
-        /**
-         * Determine what to do when a collection item is deleted
-         * @param {type} event
-         * @returns {undefined}
-         */
-        addEventListener('lrCollectionItemDeleted', event => {
-            let selector = '[deer-collection=' + event.detail.collection + ']'
-            let lists = Array.from(document.querySelectorAll(selector))
-             //TODO redraw lists
-            LR.ui.globalFeedbackBlip(event, `Person '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
-        })
-        
+               
         /**
          * A hack to force redraw by refreshing the page.
          */
