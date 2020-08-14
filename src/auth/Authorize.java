@@ -18,7 +18,7 @@ import net.sf.json.JSONObject;
 
 public class Authorize {
 
-    private String users_file = "users.txt";
+    private String users_file = "users.json";
     private JSONObject userData;
     
     public Authorize() throws IOException, FileNotFoundException {
