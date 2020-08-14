@@ -78,21 +78,17 @@
         
         addEventListener('deer-created', event => {
             LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true)
-            // messy for now, since it catches them all, but avoids reload
-            LR.utils.broadcastEvent(event,"deer-view",document,{set:document.querySelectorAll("deer-view, .deer-view")})
         })
         
         addEventListener('deer-updated', event => {
             LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Information Updated!`, true)
-            // messy for now, since it catches them all, but avoids reload
-            LR.utils.broadcastEvent(event,"deer-view",document,{set:document.querySelectorAll("deer-view, .deer-view")})
         })
         
         /**
          * A hack to force redraw by refreshing the page.
          */
         addEventListener('globalFeedbackFinished', event => {
-           document.location.reload()
+            history.back()
         })
         
                 /**

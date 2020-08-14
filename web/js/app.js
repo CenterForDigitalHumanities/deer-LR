@@ -188,8 +188,8 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
     setTimeout(function(){ 
         globalFeedback.classList.remove("show")
         globalFeedback.classList.remove("bg-error")
-        // remove this to prevent reloading once behavior is cleared.
-        // LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
+        // backup to page before the form
+        LR.utils.broadcastEvent(event, "globalFeedbackFinished", globalFeedback, { message: message })
     }, 3000)
 }
 
