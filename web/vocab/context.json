@@ -1,17 +1,35 @@
 {
    "@context":{
-      "@version" : 1.1,
-      "geojson": "https://purl.org/geojson/vocab#",
+      "@version":1.1,
       "lr":"https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#",
       "rerum_v1":"https://github.com/CenterForDigitalHumanities/rerum_server/blob/master/API.md#",
       "fast":"http://id.worldcat.org/fast/",
       "ebu":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
       "schema":"http://schema.org/",
+      "oa":"http://www.w3.org/ns/oa#",
       "id":"@id",
       "type":"@type",
       "__rerum":{
          "@id":"rerum_v1:__rerum",
          "@type":"@id"
+      },
+      "AnnotationCollection":{
+         "@id":"as:OrderedCollection",
+         "@context":[
+            "http://www.w3.org/ns/anno.jsonld"
+         ]
+      },
+      "AnnotationPage":{
+         "@id":"as:OrderedCollectionPage",
+         "@context":[
+            "http://www.w3.org/ns/anno.jsonld"
+         ]
+      },
+      "Annotation":{
+         "@id":"oa:Annotation",
+         "@context":[
+            "http://www.w3.org/ns/anno.jsonld"
+         ]
       },
       "ExperienceUpload":{
          "@id":"lr:ExperienceUpload",
@@ -40,7 +58,7 @@
                "@type":"@id",
                "@container":"@set"
             }
-          }
+         }
       },
       "Place":{
          "@id":"schema:Place",
