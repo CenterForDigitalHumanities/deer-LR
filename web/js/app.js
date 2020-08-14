@@ -178,23 +178,19 @@ LR.ui.toggleEntityAddition = function(event, areaToToggle){
  
  */
 LR.ui.globalFeedbackBlip = function(event, message, success){
-    let feedbackMessageHTML = document.getElementById("globalFeedbackMessage")
-    let feedbackAreaHTML = document.getElementById("globalFeedbackArea")
-    feedbackMessageHTML.innerHTML = message
-    feedbackAreaHTML.style.width="102%"
-    feedbackAreaHTML.style.right="0"
+    globalFeedback.innerHTML = message
+    globalFeedback.classList.add("show")
     if(success){
-        feedbackAreaHTML.style.backgroundColor = "14854f"
-    }
-    else{
-        feedbackAreaHTML.style.backgroundColor = "red"
+        globalFeedback.classList.add("bg-success")
+    } else {
+        globalFeedback.classList.add("bg-error")
     }
     setTimeout(function(){ 
-        //Give animation a couple seconds
-        feedbackAreaHTML.style.right="-30px"
-        feedbackAreaHTML.style.width="0px"
+        globalFeedback.classList.remove("show")
+        globalFeedback.classList.remove("bg-error")
+        // remove this to prevent reloading once behavior is cleared.
         LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
-    }, 2150);
+    }, 3000)
 }
 
 LR.ui.showPopover = function(which, event){
