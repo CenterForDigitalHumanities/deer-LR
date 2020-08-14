@@ -189,7 +189,7 @@
          * A hack to force redraw by refreshing the page.
          */
         addEventListener('globalFeedbackFinished', event => {
-            history.back()
+            window.location = document.referrer
         })
         
         /**
