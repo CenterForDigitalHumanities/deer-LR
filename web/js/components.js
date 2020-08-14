@@ -32,6 +32,7 @@ class LrNav extends HTMLElement {
                 `
                 if(user.roles.administrator){
                     this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
+                    this.querySelector('.tabs').innerHTML += `<a href="all_experiences.html">Experiences</a>`
                 }
             }
         })
