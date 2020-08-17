@@ -177,12 +177,8 @@
             // TODO: if on a page and loging in and out or changing the URL, it may keep adding reset buttons
         })
 
-        addEventListener('deer-created', event => {
-            LR.ui.globalFeedbackBlip(event, `Person '${event.detail.name}' Added!`, true)
-        })
-        
         addEventListener('deer-updated', event => {
-            LR.ui.globalFeedbackBlip(event, `Person '${event.detail.name}' Information Updated!`, true)
+            LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
         })
         
         /**

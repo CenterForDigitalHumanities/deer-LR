@@ -225,7 +225,7 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
         //FIXME this should really only happen if the form submit seen above is successful
         event.target.parentNode.remove()
-        LR.ui.globalFeedbackBlip(event,"Dropped from list",true)
+        LR.ui.globalFeedbackBlip(event,`'${event.detail.name||"Item"}' dropped from list`,true)
     }
 }
 
@@ -648,7 +648,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         } else {
             if (deletedList.length === resultList.length) {
                 itemElem.remove()
-                LR.ui.globalFeedbackBlip(event, `'${itemElem.innerText}' Removed!`, false)
+                LR.ui.globalFeedbackBlip(event, `'${itemElem.innerText||"Item"}' removed!`, false)
                 //LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.

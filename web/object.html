@@ -188,12 +188,8 @@
             }
         })
 
-        addEventListener('deer-created', event => {
-            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Added!`, true)
-        })
-
         addEventListener('deer-updated', event => {
-            LR.ui.globalFeedbackBlip(event, `Object '${event.detail.name}' Information Updated!`, true)
+            LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
         })
 
         /**
