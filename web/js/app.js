@@ -524,8 +524,6 @@ LR.utils.saveFieldNotesInExperience = function(event){
  * @param {string} type The @type of the entity going into the collection
  */
 LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea, type){
-    //console.error("This functionality is not yet available.  Coming soon!")
-    //return false
     if(collectionName){
         let labelText = event.target.previousElementSibling.value
         let user = localStorage.getItem("lr-user")
