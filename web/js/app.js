@@ -517,8 +517,11 @@ LR.utils.saveFieldNotesInExperience = function(event){
 /**
  * Whenever a drop-down or multi-select is built from a collection, those views have to option to quickly add a new entity by label.
  * We need to take that label and make an entity for the collection by creating the new entity, then supplying the targetCollection annotation for it. 
- * @param {type} event
- * @return {undefined}
+ * Pagination must also occur, since reload() is not an option.  
+ * @param {type} event Event from clicking the 'Add' button
+ * @param {string} collectionName  Name of the collection this item is being added into
+ * @param {HTMLElement}  selectedTagsArea The area that the tag UI goes for showing selected items
+ * @param {string} type The @type of the entity going into the collection
  */
 LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea, type){
     //console.error("This functionality is not yet available.  Coming soon!")
@@ -583,9 +586,10 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                     op.setAttribute("deer-template", "label")
                     op.setAttribute("deer-id", newEntity.new_obj_state["@id"])
                     op.selected = true
+                    //op.click() does not work, so we have to produce the result programatically
                     let input = event.target.closest("deer-view").previousElementSibling
                     if(selectedTagsArea === null){
-                        //Then this is a dropdown, not a multi select, and there are no tags.  Deselect any selected option, then add this selected one in.
+                        //A dropdown, not a multi select, and there are no tags.  Deselect any selected option, then add this selected one in.
                         let dropdown = event.target.closest("deer-view").querySelector("select")
                         op.setAttribute("oninput", "this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value")
                         for ( let i = 0; i < dropdown.options.length; i++ ) {
@@ -595,6 +599,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                            }
                         }
                         dropdown.appendChild(op)
+                        //Write to deer-key input, as if that option had been clicked
                         input.value = newEntity.new_obj_state["@id"]
                     }
                     else{
@@ -605,7 +610,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                         let tag = `<span class="tag is-small">${labelText}</span>` 
                         multiSelect.querySelector("optgroup").appendChild(op)
                         selectedTagsArea.innerHTML += tag
-                        //op.click() does not work, so we have to produce the result programatically
+                        //Write to deer-key input, as if that option had been clicked
                         if(input.value){
                             //There is already a string here, so we presume entries have already beed added.  Append, with delimiter.
                             input.value += (delim+newEntity.new_obj_state["@id"])
@@ -615,6 +620,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                             input.value = (newEntity.new_obj_state["@id"])
                         }
                     }
+                    //Give feedback
                     LR.ui.globalFeedbackBlip(event, `Added '${labelText}' successfully!`, true)
                     //Now toggle hide this quick add area.
                     event.target.parentElement.previousElementSibling.click()
@@ -637,7 +643,6 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
     else{
         alert("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
         console.warn("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
-        console.log(event.target)
     }
 }
 

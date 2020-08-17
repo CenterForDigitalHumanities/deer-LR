@@ -190,7 +190,8 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
 /**
  * Create a select area that is populated by some set or list of Researchers.
  * These are different from a regular Person and are behind administrator privelages.  
- * NO QUICK ADD TEMPLATE FOR THIS.  There is an admin interface for adding Researchers. 
+ * NO QUICK ADD TEMPLATE FOR THIS.  There is only an admin interface for adding Researchers. 
+ * TODO allow admins to have a quick add interface for researchers?
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
