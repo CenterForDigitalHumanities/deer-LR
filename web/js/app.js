@@ -544,7 +544,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 "type" : type,
                 "creator" : userID
             }
-            if(type === "person"){
+            if(type === "Person"){
                 entity.name = labelText
             }
             else{
