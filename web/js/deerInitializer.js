@@ -140,7 +140,7 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
             <input class="bg-grey text-white" type="text" />
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Place')">Add</a>
         </div>`
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allLocationsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
@@ -170,7 +170,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
             <input class="bg-grey text-white" type="text" />
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Person')">Add</a>
         </div>`
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
@@ -198,7 +198,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
 DEER.TEMPLATES.researcherMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
@@ -229,7 +229,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
             <input class="bg-grey text-white" type="text" />
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Thing')">Add</a>
         </div>`
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
