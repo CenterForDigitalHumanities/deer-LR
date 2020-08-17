@@ -526,7 +526,7 @@ LR.utils.saveFieldNotesInExperience = function(event){
  * @param {type} event
  * @return {undefined}
  */
-LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea){
+LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea, type){
     console.error("This functionality is not yet available.  Coming soon!")
     return false
     if(collectionName){
@@ -546,7 +546,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
         if(labelText){
             let entity = {
                 "@context" : LR.CONTEXT,
-                "type" : "Person",
+                "type" : type,
                 "name" : labelText
             }
             fetch(LR.URLS.CREATE, {
@@ -563,7 +563,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                     "@context" : LR.CONTEXT,
                     "body": {targetCollection: collectionName},
                     "target": newEntity["@id"],
-                    "creator": localStorage,
+                    "creator": userID,
                     "type": "Annotation"
                 }
                 fetch(LR.URLS.CREATE, {
@@ -576,11 +576,15 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 })
                 .then(response => response.json())
                 .then(newAnno => {
+                    let multiSelect = event.target.closest("deer-view").querySelector("select[multiple]")
+                    let newOption = `<option class="deer-view" deer-template="label" deer-id="${entity["@id"]}" value="${entity["@id"]}"${entity.name}</option>`
                     let tag = `<span class="tag is-small">${entity.name}</span>` 
-                    selectedTagsArea.innerHTML += tag
-                    let input = event.target.closest("input[type='hidden']")
-                    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-                    input.value += (delim+entity.name)
+                    multiSelect.querySelector("optgroup").innerHTML += newOption
+                    //selectedTagsArea.innerHTML += tag
+                    newOption.click()
+//                    let input = event.target.closest("input[type='hidden']")
+//                    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+//                    input.value += (delim+entity.name)
                 })
                 .catch(err =>{
                     alert("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
