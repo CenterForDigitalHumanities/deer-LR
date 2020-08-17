@@ -606,9 +606,18 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                         multiSelect.querySelector("optgroup").appendChild(op)
                         selectedTagsArea.innerHTML += tag
                         //op.click() does not work, so we have to produce the result programatically
-                        input.value += (delim+newEntity.new_obj_state["@id"])
+                        if(input.value){
+                            //There is already a string here, so we presume entries have already beed added.  Append, with delimiter.
+                            input.value += (delim+newEntity.new_obj_state["@id"])
+                        }
+                        else{
+                            //Blank or null.  This is the first value.  No delimeter.  
+                            input.value = (newEntity.new_obj_state["@id"])
+                        }
                     }
-                    LR.ui.globalFeedbackBlip(event, `Saving '${labelText}' successful!`, true)
+                    LR.ui.globalFeedbackBlip(event, `Added '${labelText}' successfully!`, true)
+                    //Now toggle hide this quick add area.
+                    event.target.parentElement.previousElementSibling.click()
                 })
                 .catch(err =>{
                     alert("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
