@@ -8,7 +8,7 @@
     <title>Religion In Place People</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <link rel="stylesheet" href="css/lr.css">
     <style>
         #people h2 {
             display: none;
@@ -26,6 +26,8 @@
     <lr-nav></lr-nav>
     <div class="container">
         <h1 class="text-primary"> People </h1>
+        <a class="button primary" href="person.html"> &#xFF0B; Person </a>
+
         <div class="row">
             <div id="people" class="deer-view col" deer-collection="LivedReligionPeopleTest" deer-list="itemListElement" deer-link="person.html?id="></div>
             <div deer-listening="people" class="deer-view col" deer-template="person"></div>
@@ -57,19 +59,7 @@
                 }
             }
         }, false)
-        
-        /**
-         * Determine what to do when a collection item is deleted
-         * @param {type} event
-         * @returns {undefined}
-         */
-        addEventListener('lrCollectionItemDeleted', event => {
-            let selector = '[deer-collection=' + event.detail.collection + ']'
-            let lists = Array.from(document.querySelectorAll(selector))
-             //TODO redraw lists
-            LR.ui.globalFeedbackBlip(event, `Person '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
-        })
-        
+               
         /**
          * A hack to force redraw by refreshing the page.
          */
