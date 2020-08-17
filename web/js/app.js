@@ -527,8 +527,8 @@ LR.utils.saveFieldNotesInExperience = function(event){
  * @return {undefined}
  */
 LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea, type){
-    console.error("This functionality is not yet available.  Coming soon!")
-    return false
+    //console.error("This functionality is not yet available.  Coming soon!")
+    //return false
     if(collectionName){
         let labelText = event.target.previousElementSibling.value
         let user = localStorage.getItem("lr-user")
@@ -547,7 +547,13 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
             let entity = {
                 "@context" : LR.CONTEXT,
                 "type" : type,
-                "name" : labelText
+                "creator" : userID
+            }
+            if(type === "person"){
+                entity.name = labelText
+            }
+            else{
+                entity.label = labelText
             }
             fetch(LR.URLS.CREATE, {
                 method: "POST",
@@ -562,7 +568,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 let collectionAnno = {
                     "@context" : LR.CONTEXT,
                     "body": {targetCollection: collectionName},
-                    "target": newEntity["@id"],
+                    "target": newEntity.new_obj_state["@id"],
                     "creator": userID,
                     "type": "Annotation"
                 }
@@ -576,15 +582,38 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 })
                 .then(response => response.json())
                 .then(newAnno => {
-                    let multiSelect = event.target.closest("deer-view").querySelector("select[multiple]")
-                    let newOption = `<option class="deer-view" deer-template="label" deer-id="${entity["@id"]}" value="${entity["@id"]}"${entity.name}</option>`
-                    let tag = `<span class="tag is-small">${entity.name}</span>` 
-                    multiSelect.querySelector("optgroup").innerHTML += newOption
-                    //selectedTagsArea.innerHTML += tag
-                    newOption.click()
-//                    let input = event.target.closest("input[type='hidden']")
-//                    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-//                    input.value += (delim+entity.name)
+                    let op = document.createElement('option')
+                    op.value = newEntity.new_obj_state["@id"]
+                    op.text = labelText
+                    op.classList.add("deer-view")
+                    op.setAttribute("deer-template", "label")
+                    op.setAttribute("deer-id", newEntity.new_obj_state["@id"])
+                    op.selected = true
+                    let input = event.target.closest("deer-view").previousElementSibling
+                    if(selectedTagsArea === null){
+                        //Then this is a dropdown, not a multi select, and there are no tags.  Deselect any selected option, then add this selected one in.
+                        let dropdown = event.target.closest("deer-view").querySelector("select")
+                        op.setAttribute("oninput", "this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value")
+                        for ( let i = 0; i < dropdown.options.length; i++ ) {
+                           if (dropdown.options[i].selected ) {
+                                dropdown.options[i].selected = false
+                                break
+                           }
+                        }
+                        dropdown.appendChild(op)
+                        input.value = newEntity.new_obj_state["@id"]
+                    }
+                    else{
+                        // A multi select
+                        let multiSelect = event.target.closest("deer-view").querySelector("select[multiple]")
+                        op.setAttribute("oninput", "LR.utils.handleMultiSelect(event,true)")
+                        let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+                        let tag = `<span class="tag is-small">${entity.label}</span>` 
+                        multiSelect.querySelector("optgroup").appendChild(op)
+                        selectedTagsArea.innerHTML += tag
+                        //op.click() does not work, so we have to produce the result programatically
+                        input.value += (delim+newEntity.new_obj_state["@id"])
+                    }
                 })
                 .catch(err =>{
                     alert("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
