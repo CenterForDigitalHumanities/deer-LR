@@ -615,7 +615,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                         }
                         else{
                             //Blank or null.  This is the first value.  No delimeter.  
-                            input.value = (newEntity.new_obj_state["@id"])
+                            input.value = newEntity.new_obj_state["@id"]
                         }
                     }
                     //Give feedback
