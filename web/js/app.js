@@ -602,12 +602,13 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                         let multiSelect = event.target.closest("deer-view").querySelector("select[multiple]")
                         op.setAttribute("oninput", "LR.utils.handleMultiSelect(event,true)")
                         let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-                        let tag = `<span class="tag is-small">${entity.label}</span>` 
+                        let tag = `<span class="tag is-small">${labelText}</span>` 
                         multiSelect.querySelector("optgroup").appendChild(op)
                         selectedTagsArea.innerHTML += tag
                         //op.click() does not work, so we have to produce the result programatically
                         input.value += (delim+newEntity.new_obj_state["@id"])
                     }
+                    LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
                 })
                 .catch(err =>{
                     alert("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
