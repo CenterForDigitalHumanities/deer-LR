@@ -9,7 +9,7 @@
     <title>Religion In Place Researcher</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+    <link rel="stylesheet" href="css/lr.css">
     <style>
         .removeCollectionItem {
             display: none;
@@ -76,31 +76,15 @@
             }
         })
         
-        /**
-         * Determine what to do when a collection item is deleted
-         * @param {type} event
-         * @returns {undefined}
-         */
-        addEventListener('lrCollectionItemDeleted', event => {
-            let selector = '[deer-collection=' + event.detail.collection + ']'
-            let lists = Array.from(document.querySelectorAll(selector))
-             //TODO redraw lists
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Removed!`, true) //false and make it red, cuz remove??
-        })
-        
-        addEventListener('deer-created', event => {
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Added!`, true)
-        })
-        
         addEventListener('deer-updated', event => {
-            LR.ui.globalFeedbackBlip(event, `Researcher '${event.detail.name}' Information Updated!`, true)
+            LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
         })
         
         /**
          * A hack to force redraw by refreshing the page.
          */
         addEventListener('globalFeedbackFinished', event => {
-           document.location.reload()
+            window.location = document.referrer
         })
         
                 /**

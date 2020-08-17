@@ -178,30 +178,24 @@ LR.ui.toggleEntityAddition = function(event, areaToToggle){
  
  */
 LR.ui.globalFeedbackBlip = function(event, message, success){
-    let feedbackMessageHTML = document.getElementById("globalFeedbackMessage")
-    let feedbackAreaHTML = document.getElementById("globalFeedbackArea")
-    feedbackMessageHTML.innerHTML = message
-    feedbackAreaHTML.style.width="102%"
-    feedbackAreaHTML.style.right="0"
+    globalFeedback.innerText = message
+    globalFeedback.classList.add("show")
     if(success){
-        feedbackAreaHTML.style.backgroundColor = "14854f"
-    }
-    else{
-        feedbackAreaHTML.style.backgroundColor = "red"
+        globalFeedback.classList.add("bg-success")
+    } else {
+        globalFeedback.classList.add("bg-error")
     }
     setTimeout(function(){ 
-        //Give animation a couple seconds
-        feedbackAreaHTML.style.right="-30px"
-        feedbackAreaHTML.style.width="0px"
-        LR.utils.broadcastEvent(event, "globalFeedbackFinished", feedbackMessageHTML, { message: message })
-    }, 2150);
+        globalFeedback.classList.remove("show")
+        globalFeedback.classList.remove("bg-error")
+        // backup to page before the form
+        LR.utils.broadcastEvent(event, "globalFeedbackFinished", globalFeedback, { message: message })
+    }, 3000)
 }
 
 LR.ui.showPopover = function(which, event){
     console.error("Sorry, these popovers are not ready yet :(")
 }
-
-
 
 /**
  * Broadcast a message about some event
@@ -230,8 +224,8 @@ LR.utils.disassociateObject = function(event, objectID, experienceID){
         //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
         //FIXME this should really only happen if the form submit seen above is successful
-        event.target.parentNode.remove() //TODO feedback
-        alert("Object Removed")//TODO feedback
+        event.target.parentNode.remove()
+        LR.ui.globalFeedbackBlip(event,`'${event.detail.name||"Item"}' dropped from list`,true)
     }
 }
 
@@ -653,9 +647,9 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
             console.log(itemElem)
         } else {
             if (deletedList.length === resultList.length) {
-                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
                 itemElem.remove()
-                    // TODO: redraw() added to deer elements https://github.com/CenterForDigitalHumanities/deer/issues/34
+                LR.ui.globalFeedbackBlip(event, `'${itemElem.firstElementChild.innerText||"Item"}' removed!`, false)
+                //LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.
