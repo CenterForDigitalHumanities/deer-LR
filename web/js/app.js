@@ -648,7 +648,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         } else {
             if (deletedList.length === resultList.length) {
                 itemElem.remove()
-                LR.ui.globalFeedbackBlip(event, `'${itemElem.innerText||"Item"}' removed!`, false)
+                LR.ui.globalFeedbackBlip(event, `'${itemElem.firstElementChild.innerText||"Item"}' removed!`, false)
                 //LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
