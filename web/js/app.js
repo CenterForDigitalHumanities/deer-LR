@@ -663,5 +663,59 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         //This should suffice for now.
         console.error("There was an error gathering information to remove an item from the collection")
         console.log(itemElem)
-    })
+    })  
+}
+
+/**
+ * 
+ * @param {Object} user The user object that contains the agent id for the user in session
+ * @param {Object} item A Linked Dat
+ * @return {Boolean}
+ */
+LR.utils.isCreator = async function(user, item){
+    let user = localStorage.getItem("lr-user")
+    let userID
+    let creator
+    let creatorID
+    if (user !== null) {
+        try {
+            user = JSON.parse(user)
+            userID = user["@id"] ? user["@id"] : null
+        } catch (err) {
+            console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
+            document.location.href="logout.html"
+            return false
+        }
+    }   
+    if(typeof item === "string"){
+        //It is probably just a URL.  We need to fetch the object and perhaps expand it
+        item = await fetch(item).then(response => response.json()).catch(err => {
+            console.error(err)
+            return {}
+        })
+    }
+    // Now item is an object and we expect it to have creator on it in some fashion.
+    if(item.creator){
+        creator = item.creator
+    }
+    else if(item.body.creator){
+        creator = item.body.creator
+    }
+    else{
+        return false
+    }
+    
+    //Now creator is iether an object with an id in it to compare with, or is already the URL string.
+    if(typeof creator === "object"){
+        creatorID = creator["@id"] ? creator["@id"] : creator.id ? creator.id : ""
+    }
+    else if(typeof creator === "string"){
+        creatorID = creator
+    }
+    else{
+        return false
+    }
+    
+    return userID === creatorID
+    
 }
