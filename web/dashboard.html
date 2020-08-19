@@ -24,21 +24,12 @@
     <!-- Yes.  If admin, entries can be edited -->
     <lr-nav></lr-nav>
     <div id="dashboard" class="container">
-        <h1 id="userDashboard" class="text-primary"> Dashboard </h1>
-        <div class="row entries">
-            <!-- New Entry button in here -->
-            <a class="button primary" href="place.html"> &#xFF0B; Location </a>
-            <a class="button primary" href="person.html"> &#xFF0B; Person </a>
-            <a class="button primary" href="object.html"> &#xFF0B; Object </a>
-            <a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
-        </div>
-        <div>
-            <!-- A kind of SPACE, OBJECT or BODY created by this user, ordered by most recent, clipped to a certain number perhaps -->
-            <h3> My Previous Entries </h3>
+        <h1 id="userDashboard" class="text-primary"> My Experiences </h1>
+
             <ul id="previousEntries">
                 <p class="text-error">You must be logged in to use this dashboard.</p>
             </ul>
-        </div>
+            <a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
         
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -92,18 +83,16 @@
                 {
                     let obj = (b.value) ? b.value : b
                     let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
-                    let viewBtn = ``
                     let removeBtn = ``
                     /**
                      * FIXME: Only admins can edit and remove experiences. TODO:  We will bring control to experience creators soon.
                      */
                     if(user.roles.administrator){
-                        viewBtn = `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="experience.html?id=${b["@id"]}">&#x1F441</a>`
                         removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
                         onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
                     }
-                    return a += `<li> ${label}${viewBtn}${removeBtn} </li>`               
-                },``):`<p class="text-error">You have not submitted any experiences.</p>`
+                    return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}${viewBtn}</a> ${removeBtn}</li>`               
+                },``):`<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>`
         }
         
         /**

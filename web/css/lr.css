@@ -1,5 +1,9 @@
 @import "https://unpkg.com/chota@latest";
 
+.tabs {
+  white-space: nowrap;
+}
+
 /* Feedback */
 
 #globalFeedback {
