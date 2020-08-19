@@ -677,16 +677,17 @@ LR.utils.isCreator = async function(user, item){
     let userID
     let creator
     let creatorID
-    if (user !== null) {
-        try {
-            user = JSON.parse(user)
-            userID = user["@id"] ? user["@id"] : null
-        } catch (err) {
-            console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-            document.location.href="logout.html"
-            return false
-        }
-    }   
+
+    try {
+        user = JSON.parse(user)
+        userID = user["@id"] ? user["@id"] : user.id ? user.id : null
+    } 
+    catch (err) {
+        console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
+        document.location.href="logout.html"
+        return false
+    }
+    
     if(typeof item === "string"){
         //It is probably just a URL.  We need to fetch the object and perhaps expand it
         item = await fetch(item).then(response => response.json()).catch(err => {
@@ -698,16 +699,16 @@ LR.utils.isCreator = async function(user, item){
     if(item.creator){
         creator = item.creator
     }
-    else if(item.body.creator){
+    else if(item.body && item.body.creator){
         creator = item.body.creator
     }
     else{
         return false
     }
     
-    //Now creator is iether an object with an id in it to compare with, or is already the URL string.
+    //Now creator is either an object with an id in it to compare with, or is already the URL string.
     if(typeof creator === "object"){
-        creatorID = creator["@id"] ? creator["@id"] : creator.id ? creator.id : ""
+        creatorID = creator["@id"] ? creator["@id"] : creator.id ? creator.id : null
     }
     else if(typeof creator === "string"){
         creatorID = creator
@@ -715,7 +716,5 @@ LR.utils.isCreator = async function(user, item){
     else{
         return false
     }
-    
-    return userID === creatorID
-    
+    return ((userID && creatorID) && userID === creatorID)
 }
