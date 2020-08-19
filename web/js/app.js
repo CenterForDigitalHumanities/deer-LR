@@ -667,27 +667,15 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
 }
 
 /**
+ * Check if the user from session is the creator of some given Linked Data node or URI.
  * 
- * @param {Object} user The user object that contains the agent id for the user in session
- * @param {Object} item A Linked Dat
+ * @param {string} user The agent ID of the user in session
+ * @param {object || string} item A Linked Data node or URI
  * @return {Boolean}
  */
-LR.utils.isCreator = async function(user, item){
-    let user = localStorage.getItem("lr-user")
-    let userID
+LR.utils.isCreator = async function(agentID, item){
     let creator
     let creatorID
-
-    try {
-        user = JSON.parse(user)
-        userID = user["@id"] ? user["@id"] : user.id ? user.id : null
-    } 
-    catch (err) {
-        console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-        document.location.href="logout.html"
-        return false
-    }
-    
     if(typeof item === "string"){
         //It is probably just a URL.  We need to fetch the object and perhaps expand it
         item = await fetch(item).then(response => response.json()).catch(err => {
@@ -695,6 +683,7 @@ LR.utils.isCreator = async function(user, item){
             return {}
         })
     }
+    
     // Now item is an object and we expect it to have creator on it in some fashion.
     if(item.creator){
         creator = item.creator
@@ -716,5 +705,6 @@ LR.utils.isCreator = async function(user, item){
     else{
         return false
     }
-    return ((userID && creatorID) && userID === creatorID)
+    
+    return ((agentID && creatorID) && agentID === creatorID)
 }

@@ -296,7 +296,7 @@
          * Ex. input[deer-key="creator"]
          */
      
-        addEventListener('lrUserKnown', event => {
+        addEventListener('lrUserKnown', async function(event){
             let user = event.detail.user
             if(user !== null){
                 LR.utils.setUserAttributionFields(user)
@@ -305,7 +305,8 @@
                 if (expURI) {
                     //FIXME if user is an administrator OR THE CREATOR OF THE EXPERIENCE
                     //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
-                    if (user.roles.administrator) {
+                    let creatorCheck = await LR.utils.isCreator(user["@id"], expURI)
+                    if (user.roles.administrator || creatorCheck) {
                         theExperience.setAttribute("deer-id", experienceID)
                         document.getElementById("startExperience").classList.add("is-hidden")
                         document.getElementById("experienceArtifacts").classList.remove("is-hidden")
