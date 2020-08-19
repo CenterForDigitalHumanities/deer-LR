@@ -29,7 +29,7 @@
             <ul id="previousEntries">
                 <p class="text-error">You must be logged in to use this dashboard.</p>
             </ul>
-            <a class="button primary" href="experience.html"> &#xFF0B; Experience </a>
+            <a class="button primary is-full-width" href="experience.html"> Record a New Experience </a>
         
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -42,17 +42,10 @@
             //TODO if we are allowing object manipulation on this page, we may need to check roles to activate certain things.
             if (event.detail.user !== null) {
                 getUserEntries(event.detail.user)
-                let buttons = `<a class="button primary" href="place.html"> &#xFF0B; Location </a>
-                    <a class="button primary" href="person.html"> &#xFF0B; Person </a>
-                    <a class="button primary" href="object.html"> &#xFF0B; Object </a>
-                    `
                 if (event.detail.user.roles.administrator) {
-                    buttons += `<a class="button primary" href="researcher.html"> &#xFF0B; Researcher </a>`
                     document.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
                     document.querySelector('.tabs').innerHTML += `<a href="all_experiences.html">Experiences</a>`
                 }
-                buttons+=`<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>`
-                document.querySelector('.entries').innerHTML = buttons
             }
             else{
                 console.log("User identity reset; user is null. ")
@@ -85,14 +78,14 @@
                     let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
                     let removeBtn = ``
                     /**
-                     * FIXME: Only admins can edit and remove experiences. TODO:  We will bring control to experience creators soon.
+                     * FIXME: Only admins can remove experiences. TODO:  We will bring control to experience creators soon.
                      */
                     if(user.roles.administrator){
                         removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
                         onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
                     }
                     return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}${viewBtn}</a> ${removeBtn}</li>`               
-                },``):`<a class="button primary" href="experience.html"> &#xFF0B; Experience </a>`
+                },``):`<p class="text-error">No experiences found for this user</p>`
         }
         
         /**
