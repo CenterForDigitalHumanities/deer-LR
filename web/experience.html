@@ -116,7 +116,7 @@
                     
                     <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.  If you are an admin, you can create a new researcher with the &#x2b; below.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
-                    <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="personMulti"></deer-view>
+                    <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="researcherMulti"></deer-view>
                     
                     <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
@@ -124,7 +124,7 @@
                     
                     <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
-                    <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="personMulti"></deer-view>
+                    <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="objectMulti"></deer-view>
                     
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
@@ -306,7 +306,7 @@
                     //FIXME if user is an administrator OR THE CREATOR OF THE EXPERIENCE
                     //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
                     if (user.roles.administrator) {
-                        theExperience.setAttribute("deer-id", experienceID)
+                        theExperience.setAttribute("deer-id", expURI)
                         document.getElementById("startExperience").classList.add("is-hidden")
                         document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                         document.getElementById("experienceReview").classList.remove("is-hidden")
