@@ -4,6 +4,11 @@
   white-space: nowrap;
 }
 
+textarea {
+  resize: vertical;
+  max-height: 20rem;
+}
+
 /* Feedback */
 
 #globalFeedback {
