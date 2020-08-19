@@ -307,7 +307,7 @@
                     //How can I check if the logged in user is the creator of this experience (I have experience @id and user id).  
                     let creatorCheck = await LR.utils.isCreator(user["@id"], expURI)
                     if (user.roles.administrator || creatorCheck) {
-                        theExperience.setAttribute("deer-id", experienceID)
+                        theExperience.setAttribute("deer-id", expURI)
                         document.getElementById("startExperience").classList.add("is-hidden")
                         document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                         document.getElementById("experienceReview").classList.remove("is-hidden")
