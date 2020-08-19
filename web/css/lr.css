@@ -1,5 +1,14 @@
 @import "https://unpkg.com/chota@latest";
 
+.tabs {
+  white-space: nowrap;
+}
+
+textarea {
+  resize: vertical;
+  max-height: 20rem;
+}
+
 /* Feedback */
 
 #globalFeedback {
