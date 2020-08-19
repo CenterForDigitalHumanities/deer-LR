@@ -312,7 +312,9 @@
                         document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     }
                     else{
-                        const creatorCheck = new Promise(LR.utils.isCreator(user["@id"], expURI))
+                        new Promise( resolve => {
+                            resolve(LR.utils.isCreator(user["@id"], expURI))
+                        })
                         .then(permitted => {
                             if(permitted){
                                 theExperience.setAttribute("deer-id", expURI)
