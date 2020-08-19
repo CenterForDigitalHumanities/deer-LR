@@ -84,7 +84,7 @@
                         removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
                         onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
                     }
-                    return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}${viewBtn}</a> ${removeBtn}</li>`               
+                    return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
                 },``):`<p class="text-error">No experiences found for this user</p>`
         }
         
