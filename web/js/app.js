@@ -715,42 +715,30 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
 /**
  * Check if the user from session is the creator of some given Linked Data node or URI.
  * 
+ * Note that we control the parameter for item.  In cases where possible, we should preferences passing
+ * the object so that we don't need to perform the fetch.
+ * 
  * @param {string} user The agent ID of the user in session
- * @param {object || string} item A Linked Data node or URI
+ * @param {object || string} item A Linked Data node or URI.  Lived Religion has the option to use either.
  * @return {Boolean}
  */
 LR.utils.isCreator = async function(agentID, item){
-    let creator
     let creatorID
     if(typeof item === "string"){
-        //It is probably just a URL.  We need to fetch the object and perhaps expand it
+        //It is probably just a URI.  We need to fetch the object and perhaps expand it
         item = await fetch(item).then(response => response.json()).catch(err => {
             console.error(err)
             return {}
         })
     }
-    
-    // Now item is an object and we expect it to have creator on it in some fashion.
+    // Now item is an object and we expect it to have creator on it.
     if(item.creator){
-        creator = item.creator
-    }
-    else if(item.body && item.body.creator){
-        creator = item.body.creator
+        // This is a string URI, because this app uses the URI as the value for creator.
+        creatorID = item.creator
     }
     else{
+        //This is bad data that does not note the creator correctly.  Fail the check.
         return false
     }
-    
-    //Now creator is either an object with an id in it to compare with, or is already the URL string.
-    if(typeof creator === "object"){
-        creatorID = creator["@id"] ? creator["@id"] : creator.id ? creator.id : null
-    }
-    else if(typeof creator === "string"){
-        creatorID = creator
-    }
-    else{
-        return false
-    }
-    
     return ((agentID && creatorID) && agentID === creatorID)
 }
