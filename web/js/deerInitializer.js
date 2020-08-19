@@ -82,7 +82,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
         <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
             <span class="">Label:</span>
             <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.previousElementSibling)">Add</a>
+            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Place')">Add</a>
         </div>`
         let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
@@ -110,7 +110,7 @@ DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
         <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
             <span class="">Label:</span>
             <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.previousElementSibling)">Add</a>
+            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Thing')">Add</a>
         </div>`
         let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
@@ -138,9 +138,9 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
         <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
             <span class="">Label:</span>
             <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.previousElementSibling)">Add</a>
+            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Place')">Add</a>
         </div>`
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allLocationsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
@@ -168,9 +168,9 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
         <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
             <span class="">Name:</span>
             <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.previousElementSibling)">Add</a>
+            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Person')">Add</a>
         </div>`
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
@@ -181,6 +181,34 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${person['@id']}" value="${person['@id']}">${name}</option>`
         }
         tmpl += `</optgroup></select>${selected}${quickAddTmpl}`
+        return tmpl
+    } catch (err) {
+        return null
+    }
+}
+
+/**
+ * Create a select area that is populated by some set or list of Researchers.
+ * These are different from a regular Person and are behind administrator privelages.  
+ * NO QUICK ADD TEMPLATE FOR THIS.  There is only an admin interface for adding Researchers. 
+ * TODO allow admins to have a quick add interface for researchers?
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
+DEER.TEMPLATES.researcherMulti = function(obj, options = {}) {
+    try {
+        let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
+        let selected = `<div class="selectedEntities"></div>`
+        let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
+        let tmpl = ``
+        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
+            <optgroup label="Choose Below"> `
+        for (let person of allPeopleInCollection) {
+            let name = UTILS.getLabel(person)
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${person['@id']}" value="${person['@id']}">${name}</option>`
+        }
+        tmpl += `</optgroup></select>${selected}`
         return tmpl
     } catch (err) {
         return null
@@ -200,9 +228,9 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
         <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
             <span class="">Label:</span>
             <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.previousElementSibling)">Add</a>
+            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Thing')">Add</a>
         </div>`
-        let selected = `<div class="row selectedEntities"></div>`
+        let selected = `<div class="selectedEntities"></div>`
         let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">

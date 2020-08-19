@@ -517,12 +517,13 @@ LR.utils.saveFieldNotesInExperience = function(event){
 /**
  * Whenever a drop-down or multi-select is built from a collection, those views have to option to quickly add a new entity by label.
  * We need to take that label and make an entity for the collection by creating the new entity, then supplying the targetCollection annotation for it. 
- * @param {type} event
- * @return {undefined}
+ * Pagination must also occur, since reload() is not an option.  
+ * @param {type} event Event from clicking the 'Add' button
+ * @param {string} collectionName  Name of the collection this item is being added into
+ * @param {HTMLElement}  selectedTagsArea The area that the tag UI goes for showing selected items
+ * @param {string} type The @type of the entity going into the collection
  */
-LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea){
-    console.error("This functionality is not yet available.  Coming soon!")
-    return false
+LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea, type){
     if(collectionName){
         let labelText = event.target.previousElementSibling.value
         let user = localStorage.getItem("lr-user")
@@ -540,8 +541,14 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
         if(labelText){
             let entity = {
                 "@context" : LR.CONTEXT,
-                "type" : "Person",
-                "name" : labelText
+                "type" : type,
+                "creator" : userID
+            }
+            if(type === "Person"){
+                entity.name = labelText
+            }
+            else{
+                entity.label = labelText
             }
             fetch(LR.URLS.CREATE, {
                 method: "POST",
@@ -556,8 +563,8 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 let collectionAnno = {
                     "@context" : LR.CONTEXT,
                     "body": {targetCollection: collectionName},
-                    "target": newEntity["@id"],
-                    "creator": localStorage,
+                    "target": newEntity.new_obj_state["@id"],
+                    "creator": userID,
                     "type": "Annotation"
                 }
                 fetch(LR.URLS.CREATE, {
@@ -570,11 +577,51 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                 })
                 .then(response => response.json())
                 .then(newAnno => {
-                    let tag = `<span class="tag is-small">${entity.name}</span>` 
-                    selectedTagsArea.innerHTML += tag
-                    let input = event.target.closest("input[type='hidden']")
-                    let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-                    input.value += (delim+entity.name)
+                    let op = document.createElement('option')
+                    op.value = newEntity.new_obj_state["@id"]
+                    op.text = labelText
+                    op.classList.add("deer-view")
+                    op.setAttribute("deer-template", "label")
+                    op.setAttribute("deer-id", newEntity.new_obj_state["@id"])
+                    op.selected = true
+                    //op.click() does not work, so we have to produce the result programatically
+                    let input = event.target.closest("deer-view").previousElementSibling
+                    if(selectedTagsArea === null){
+                        //A dropdown, not a multi select, and there are no tags.  Deselect any selected option, then add this selected one in.
+                        let dropdown = event.target.closest("deer-view").querySelector("select")
+                        op.setAttribute("oninput", "this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value")
+                        for ( let i = 0; i < dropdown.options.length; i++ ) {
+                           if (dropdown.options[i].selected ) {
+                                dropdown.options[i].selected = false
+                                break
+                           }
+                        }
+                        dropdown.appendChild(op)
+                        //Write to deer-key input, as if that option had been clicked
+                        input.value = newEntity.new_obj_state["@id"]
+                    }
+                    else{
+                        // A multi select
+                        let multiSelect = event.target.closest("deer-view").querySelector("select[multiple]")
+                        op.setAttribute("oninput", "LR.utils.handleMultiSelect(event,true)")
+                        let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+                        let tag = `<span class="tag is-small">${labelText}</span>` 
+                        multiSelect.querySelector("optgroup").appendChild(op)
+                        selectedTagsArea.innerHTML += tag
+                        //Write to deer-key input, as if that option had been clicked
+                        if(input.value){
+                            //There is already a string here, so we presume entries have already beed added.  Append, with delimiter.
+                            input.value += (delim+newEntity.new_obj_state["@id"])
+                        }
+                        else{
+                            //Blank or null.  This is the first value.  No delimeter.  
+                            input.value = newEntity.new_obj_state["@id"]
+                        }
+                    }
+                    //Give feedback
+                    LR.ui.globalFeedbackBlip(event, `Added '${labelText}' successfully!`, true)
+                    //Now toggle hide this quick add area.
+                    event.target.parentElement.previousElementSibling.click()
                 })
                 .catch(err =>{
                     alert("There was a problem trying to create the Annotation that puts the entity into the collection.  Please check the network panel.")
@@ -594,7 +641,6 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
     else{
         alert("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
         console.warn("The name of the collection to add to was not provided.  Check the button below and see if it knows the collection name or not.")
-        console.log(event.target)
     }
 }
 
