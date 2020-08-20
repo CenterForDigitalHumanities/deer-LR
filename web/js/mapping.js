@@ -4,19 +4,9 @@
  * and open the template in the editor.
  */
 
-MAPPER = {}
+MAPINTERACTION = {}
 
-//For dev-01
-MAPPER.URLS = {
-    BASE_ID: "http://devstore.rerum.io/v1",
-    DELETE: "http://tinydev.rerum.io/app/delete",
-    CREATE: "http://tinydev.rerum.io/app/create",
-    UPDATE: "http://tinydev.rerum.io/app/update",
-    QUERY: "http://tinydev.rerum.io/app/query",
-    OVERWRITE: "http://tinydev.rerum.io/app/overwrite"
-}
-
-MAPPER.goToCoords = function(event){
+MAPINTERACTION.goToCoords = function(event){
     if(!MAPPER.mymap){
         //This should have been set by mapInitializer.js
         MAPPER.mymap = L.map('leafletInstanceContainer')
@@ -28,7 +18,7 @@ MAPPER.goToCoords = function(event){
     }
 }
 
-MAPPER.filterMarkers = async function(event){
+MAPINTERACTION.filterMarkers = async function(event){
     if(!MAPPER.mymap){
         //This should have been set by mapInitializer.js
         MAPPER.mymap = L.map('leafletInstanceContainer')
