@@ -16,7 +16,6 @@ MAP.mymap = {}
 
 MAP.init =  async function(){
     let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
-    console.log(entitiesInCollection)
     let latlong = [38.6360699, -90.2348349] //default starting coords
     document.getElementById("leafLat").oninput = MAP.updateGeometry
     document.getElementById("leafLong").oninput = MAP.updateGeometry
@@ -123,7 +122,6 @@ MAP.pointEachFeature = function (feature, layer) {
 addEventListener("deer-loaded", event => {
    if (event.target.getAttribute("id") === "locations") {
       let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
-      console.log(entitiesInCollection)
       MAP.init(entitiesInCollection)
    }
 }, false)
