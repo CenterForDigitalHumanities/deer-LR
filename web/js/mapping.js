@@ -7,24 +7,24 @@
 MAPINTERACTION = {}
 
 MAPINTERACTION.goToCoords = function(event){
-    if(!MAPPER.mymap){
+    if(!MAPINTERACTION.mymap){
         //This should have been set by mapInitializer.js
-        MAPPER.mymap = L.map('leafletInstanceContainer')
+        MAPINTERACTION.mymap = L.map('leafletInstanceContainer')
     }
     if(leafLat.value && leafLong.value){
         let coords = [leafLat.value, leafLong.value]
-        MAPPER.mymap.flyTo(coords,8)
+        MAPINTERACTION.mymap.flyTo(coords,8)
         document.getElementById("currentCoords").innerHTML = "["+coords.toString()+"]"
     }
 }
 
 MAPINTERACTION.filterMarkers = async function(event){
-    if(!MAPPER.mymap){
+    if(!MAPINTERACTION.mymap){
         //This should have been set by mapInitializer.js
-        MAPPER.mymap = L.map('leafletInstanceContainer')
+        MAPINTERACTION.mymap = L.map('leafletInstanceContainer')
     }
     let app = event.target.getAttribute("app")
-    MAPPER.mymap.eachLayer(function(layer) {
+    MAPINTERACTION.mymap.eachLayer(function(layer) {
         let skipCheck = false
         if ( layer.hasMyPoints ) {
             if(layer.feature.properties && layer.feature.properties.madeByApp && layer.feature.properties.madeByApp === app){
