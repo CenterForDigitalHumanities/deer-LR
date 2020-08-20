@@ -6,8 +6,6 @@
 
 MAPPER = {}
 
-MAPPER.mymap = {}
-
 //For dev-01
 MAPPER.URLS = {
     BASE_ID: "http://devstore.rerum.io/v1",
@@ -19,7 +17,10 @@ MAPPER.URLS = {
 }
 
 MAPPER.goToCoords = function(event){
-    MAPPER.mymap = L.map('leafletInstanceContainer')
+    if(!MAPPER.mymap){
+        //This should have been set by mapInitializer.js
+        MAPPER.mymap = L.map('leafletInstanceContainer')
+    }
     if(leafLat.value && leafLong.value){
         let coords = [leafLat.value, leafLong.value]
         MAPPER.mymap.flyTo(coords,8)
@@ -28,7 +29,10 @@ MAPPER.goToCoords = function(event){
 }
 
 MAPPER.filterMarkers = async function(event){
-    MAPPER.mymap = L.map('leafletInstanceContainer')
+    if(!MAPPER.mymap){
+        //This should have been set by mapInitializer.js
+        MAPPER.mymap = L.map('leafletInstanceContainer')
+    }
     let app = event.target.getAttribute("app")
     MAPPER.mymap.eachLayer(function(layer) {
         let skipCheck = false

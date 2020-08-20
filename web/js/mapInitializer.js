@@ -86,6 +86,11 @@ MAP.initializeMap = async function(coords, geoMarkers){
     }).addTo(MAP.mymap)
     leafletInstanceContainer.style.backgroundImage = "none"
     loadingMessage.classList.add("is-hidden")
+    
+    //We cannot initalize another map, and there is no Leaflet getter for a map.  We need to expose this map to mapping.js.  mapping.js uses MAPPER
+    //Since this is called AFTER MAPPER and MAP have both been initialized thanks to the deer-loaded listener, we can do this.
+    //@FIXME is this the right way to do this?
+    MAPPER.mymap = MAP.mymap
 }
 
 MAP.pointEachFeature = function (feature, layer) {
