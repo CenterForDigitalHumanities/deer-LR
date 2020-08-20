@@ -71,7 +71,7 @@
                         if (user.roles.administrator) {
                             for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
                         }
-                    } catch (err) {
+                    catch (err) {
                         console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
                         document.location.href="logout.html"
                     }
