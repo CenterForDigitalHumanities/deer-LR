@@ -27,12 +27,13 @@ class LrNav extends HTMLElement {
                 <a href="places.html">Locations</a>
                 <a href="objects.html">Objects</a>
                 <a href="people.html">People</a>
-                <a href="researchers.html">Researchers</a>
                 <a href="map.html">Map View</a>
                 `
                 if(user.roles.administrator){
-                    this.querySelector('.tabs').innerHTML += `<a href="users.html">Users</a>`
-                    this.querySelector('.tabs').innerHTML += `<a href="all_experiences.html">Experiences</a>`
+                    let adminTabs = `<a href="users.html">Users</a>
+                    <a href="researchers.html">Researchers</a>
+                    <a href="all_experiences.html">Experiences</a>`
+                    this.querySelector('.tabs').innerHTML += adminTabs
                 }
             }
         })
@@ -44,7 +45,6 @@ class LrNav extends HTMLElement {
             <a href="places.html">Locations</a>
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
-            <a href="researchers.html">Researchers</a>
             <a href="map.html">Map View</a>
         </div>
     </div>
