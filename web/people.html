@@ -45,15 +45,7 @@
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "people") {
-                let user = localStorage.getItem("lr-user")
-                if(user !== null){
-                    LR.utils.setUserAttributionFields(user)
-                    LR.ui.setInterfaceBasedOnRole("people", user, null)
-                }
-                else{
-                    console.log("User identity reset; user is null. ")
-                    document.location.href="logout.html"
-                }
+               LR.utils.drawInterface(event, "people")
             }
         }, false)
                

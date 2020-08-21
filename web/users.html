@@ -132,18 +132,9 @@
     <!-- Add ins -->
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
-        /**
-         * Only draw the users if the user that is currently logged in has the administrator role.
-         */
+
         addEventListener('lrUserKnown', event => {
-            if (event.detail.user !== null) {
-                LR.ui.setInterfaceBasedOnRole("userManagement", user, LR.utils.getEntityIdFromURL())
-            }
-            else{
-                console.log("User identity reset; user is null")
-                alert("There was an error identifying you.  Please log in again.");
-                document.location.href="logout.html"
-            }
+            LR.utils.drawInterface(event, "userManagement")
         })
         
         /**

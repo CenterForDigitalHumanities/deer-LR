@@ -904,3 +904,15 @@ LR.utils.getEntityIdFromURL = function(){
     return urlParams.get('id') ? urlParams.get('id') : null
 }
 
+LR.utils.drawInterface = function (event, interface){
+    let user = event.detail.user
+    if (user !== null) {
+        LR.utils.setUserAttributionFields(user)
+        LR.ui.setInterfaceBasedOnRole(interface, user, LR.utils.getEntityIdFromURL())
+    }
+    else {
+        console.log("User identity reset; user is null. ")
+        document.location.href = "logout.html"
+    }
+}
+

@@ -336,15 +336,7 @@
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         addEventListener('lrUserKnown', event => {
-            let user = event.detail.user
-            if(user !== null){
-                LR.utils.setUserAttributionFields(user)
-                LR.ui.setInterfaceBasedOnRole("place", user, LR.utils.getEntityIdFromURL())
-            }
-            else{
-                console.log("User identity reset; user is null. ")
-                document.location.href="logout.html"
-            }
+            LR.utils.drawInterface(event, "place")
         })
         
         addEventListener('deer-updated', event => {
