@@ -555,7 +555,7 @@ DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
     let key = options.key || "@id"
     let prop = obj[key] || "[ undefined ]"
     let label = options.label || UTILS.getLabel(obj, prop)
-    let isDescribed = Object.keys(obj).filter(i=>["description","geometry","email","fieldNotes"].includes(i)).length > 0
+    let isDescribed = Object.keys(obj).some(i=>["description","geometry","email","fieldNotes"].includes(i))
     try {
         return isDescribed ? `${label}` : `<span class="needs-more" title="This entry may require more details">${label}</span>`
     } catch (err) {
