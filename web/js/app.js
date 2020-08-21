@@ -91,7 +91,185 @@ LR.err.handleHTTPError = function(response) {
 }
     /** END Error handlers */
 
+/**
+ * Each interface has something triggered by user roles.  Implement contributor vs. admin
+ * UI/UX here.  
+ * @param {string} interface The name of the interface to draw
+ * @param {object} user The user from localStorage or an event, parsed into JSON already
+ * @param {string || null} entityID If ?id= was on the page, then there is an entity to load.
+ * @return {undefined}
+ */
+LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
+    switch(interface){
+        case "experience":
+            if (entityID) {
+                if(user.roles.administrator){
+                    theExperience.setAttribute("deer-id", entityID)
+                    document.getElementById("startExperience").classList.add("is-hidden")
+                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceReview").classList.remove("is-hidden")
+                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+                }
+                else{
+                    //Determine if the current user is the creator of this entity.  If so, they can view it.
+                    new Promise( resolve => {
+                        resolve(LR.utils.isCreator(user["@id"], entityID))
+                    })
+                    .then(permitted => {
+                        if(permitted){
+                            theExperience.setAttribute("deer-id", entityID)
+                            document.getElementById("startExperience").classList.add("is-hidden")
+                            document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                            document.getElementById("experienceReview").classList.remove("is-hidden")
+                            document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+                        }
+                        else{
+                            alert("Only an administrator can review this experience.  If this is your experience, contact an administrator.")
+                            document.location.href = "dashboard.html"
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err)
+                        alert("There was an error checking permissions for this experience.  Try again.")
+                        document.location.href = "dashboard.html"
+                    }) 
+                }
+            }
+        break
+        
+        case "object":
+        case "person":
+        case "place":
+            let entity_form = document.querySelector("form[deer-type]")
+            if (entityID) {
+                if (user.roles.administrator) {
+                    entity_form.setAttribute("deer-id", entityID)
+                    document.querySelector("h2.text-primary").innerHTML = "Update Object"
+                    document.querySelector("input[type='submit']").value = "Update"
+                    let btn = document.createElement("a")
+                    btn.href = window.location.pathname
+                    btn.innerHTML = "Reset Page"
+                    entity_form.append(btn)
+                }
+                else{
+                    alert("Only administrators can review and edit entity details at this time.")
+                    document.location.href="dashboard.html"
+                }
+            }
 
+        break
+        
+        case "researcher":
+            if (user.roles.administrator) {
+                if (entityID) {
+                    researcherForm.setAttribute("deer-id", entityID)
+                    document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
+                    document.querySelector("input[type='submit']").value = "Update"
+                    let btn = document.createElement("a")
+                    btn.href = window.location.pathname
+                    btn.innerHTML = "Reset Page"
+                    researcherForm.append(btn)
+                }
+            }
+            else{
+                alert("You must be logged in as an administrator to use this!")
+                document.location.href="dashboard.html"
+            }
+        break
+        
+        case "objects":
+        case "people":
+        case "places":
+            if (user.roles.administrator) {
+                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
+            }
+                
+        break
+        
+        case "researchers":
+            if (user.roles.administrator) {
+                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
+            }
+            else{
+                alert("You must be logged in as an administrator to use this!")
+                document.location.href="dashboard.html"
+            }
+        break
+        
+        case "userManagement":
+            if (user.roles.administrator) {
+                UM.interaction.drawUserManagement()
+            }
+            else{
+                alert("You must be logged in as an administrator to use this!")
+                document.location.href="dashboard.html"
+            }
+             
+        break
+        
+        case "experienceManagement":
+            if (user.roles.administrator) {
+                experiences.classList.remove("is-hidden")
+            }
+            else{
+                alert("You must be logged in as an administrator to use this!")
+                document.location.href="dashboard.html"
+            }
+        break
+        
+        case "dashboard":
+            LR.ui.getUserEntries(user)
+            if (user.roles.administrator) {
+                let adminTabs = `<a href="users.html">Users</a>
+                <a href="researchers.html">Researchers</a>
+                <a href="all_experiences.html">Experiences</a>`
+                document.querySelector('.tabs').innerHTML += adminTabs
+            }
+        break
+        
+        default:
+            alert("This interface is not yet supported")
+            document.location.href = "dashboard.html"
+        
+    }
+}
+
+/**
+ * Get the experiences for this specific user to draw on the dashboard.
+ * 
+ * @param {JSONObject} user The user from localStorage
+ * @return {undefined}
+ */
+LR.ui.getUserEntries = async function(user) {
+    let historyWildcard = {"$exists":true, "$size":0}
+    let experiences = await fetch(LR.URLS.QUERY, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "@type": "Event",
+            "creator": user['@id'],
+            "__rerum.generatedBy": LR.APPAGENT,
+            "__rerum.history.next" : historyWildcard
+        })
+    })
+    .then(response => response.json())
+    .catch(err => {return []})
+    previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>{
+        let obj = (b.value) ? b.value : b
+        let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
+        let removeBtn = ``
+        /**
+         * FIXME: Only admins can remove experiences. TODO:  We will bring control to experience creators soon.
+         */
+        if(user.roles.administrator){
+            removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
+            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
+        }
+        return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
+    },``):`<p class="text-error">No experiences found for this user</p>`
+}
 
 /**
  * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
@@ -197,6 +375,44 @@ LR.ui.globalFeedbackBlip = function(event, message, success){
 
 LR.ui.showPopover = function(which, event){
     console.error("Sorry, these popovers are not ready yet :(")
+}
+
+
+/**
+ * A helper function to get the entity ID from the URLs with ?id= parameter.
+ * @return {string || null}
+ */
+LR.utils.getEntityIdFromURL = function(){
+    const urlParams = new URLSearchParams(window.location.search)
+    return urlParams.get('id') ? urlParams.get('id') : null
+}
+
+/**
+ * An abstract method to handle which interface to trigger.  Each interface needs to know the user and which interface.
+ * Either local storage or the event that triggered this will know the user.  If not, then don't pretend to.
+ * @param {object} event LRUserKnown or deer-loaded event
+ * @param {string} interface The name of the interface to load. 
+ * @return {undefined}
+ */
+LR.utils.drawInterface = function (event, interface){
+    let user = localStorage.getItem("lr-user") ? localStorage.getItem("lr-user") : (event.detail && event.detail.user) ? event.detail.user : null
+    if(typeof user === "string"){
+        try{
+            user = JSON.parse(user)
+        }
+        catch(err){
+            console.error(err)
+            user = null
+        }
+    }
+    if (user !== null) {
+        LR.utils.setUserAttributionFields(user)
+        LR.ui.setInterfaceBasedOnRole(interface, user, LR.utils.getEntityIdFromURL())
+    }
+    else {
+        console.log("User identity reset; user is null. ")
+        document.location.href = "logout.html"
+    }
 }
 
 /**
@@ -315,8 +531,6 @@ LR.utils.login = async function(loginWidget, data, submitEvent){
         return null
     }
 }
-
-
 
 /**
  * Remove a user from Session storage on the back end and localStorage on the front end. 
@@ -743,185 +957,5 @@ LR.utils.isCreator = async function(agentID, item){
         return false
     }
     return ((agentID && creatorID) && agentID === creatorID)
-}
-
-LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
-    switch(interface){
-        case "experience":
-            if (entityID) {
-                if(user.roles.administrator){
-                    theExperience.setAttribute("deer-id", expURI)
-                    document.getElementById("startExperience").classList.add("is-hidden")
-                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
-                    document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
-                }
-                else{
-                    new Promise( resolve => {
-                        resolve(LR.utils.isCreator(user["@id"], expURI))
-                    })
-                    .then(permitted => {
-                        if(permitted){
-                            theExperience.setAttribute("deer-id", expURI)
-                            document.getElementById("startExperience").classList.add("is-hidden")
-                            document.getElementById("experienceArtifacts").classList.remove("is-hidden")
-                            document.getElementById("experienceReview").classList.remove("is-hidden")
-                            document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
-                        }
-                        else{
-                            alert("Only an administrator can review this experience.  If this is your experience, contact an administrator.")
-                            document.location.href = "dashboard.html"
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err)
-                        alert("There was an error checking permissions for this experience.  Try again.")
-                        document.location.href = "dashboard.html"
-                    }) 
-                }
-            }
-        break
-        
-        case "object":
-        case "person":
-        case "place":
-            let entity_form = document.querySelector("form[deer-type]")
-            if (user.roles.administrator) {
-                if (entityID) {
-                    entity_form.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Object"
-                    document.querySelector("input[type='submit']").value = "Update"
-                    let btn = document.createElement("a")
-                    btn.href = window.location.pathname
-                    btn.innerHTML = "Reset Page"
-                    entity_form.append(btn)
-                }
-            }
-        break
-        
-        case "researcher":
-            if (user.roles.administrator) {
-                if (entityID) {
-                    researcherForm.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
-                    document.querySelector("input[type='submit']").value = "Update"
-                    let btn = document.createElement("a")
-                    btn.href = window.location.pathname
-                    btn.innerHTML = "Reset Page"
-                    researcherForm.append(btn)
-                }
-            }
-            else{
-                alert("You must be logged in as an administrator to use this!")
-                document.location.href="dashboard.html"
-            }
-        break
-        
-        case "objects":
-        case "people":
-        case "places":
-            if (user.roles.administrator) {
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
-            }
-                
-        break
-        
-        case "researchers":
-            if (user.roles.administrator) {
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
-            }
-            else{
-                alert("You must be logged in as an administrator to use this!")
-                document.location.href="dashboard.html"
-            }
-        break
-        
-        case "userManagement":
-             UM.interaction.drawUserManagement()
-        break
-        
-        case "experienceManagement":
-            if (user.roles.administrator) {
-                experiences.classList.remove("is-hidden")
-            }
-            else{
-                alert("You must be logged in as an administrator to use this!")
-                document.location.href="dashboard.html"
-            }
-        break
-        
-        case "dashboard":
-            LR.ui.getUserEntries(user)
-            if (user.roles.administrator) {
-                let adminTabs = `<a href="users.html">Users</a>
-                <a href="researchers.html">Researchers</a>
-                <a href="all_experiences.html">Experiences</a>`
-                document.querySelector('.tabs').innerHTML += adminTabs
-            }
-        break
-        
-        default:
-            alert("This interface is not yet supported")
-            document.location.href = "dashboard.html"
-        
-    }
-}
-
-LR.ui.getUserEntries = async function(user) {
-    let historyWildcard = {"$exists":true, "$size":0}
-    let experiences = await fetch(LR.URLS.QUERY, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "@type": "Event",
-            "creator": user['@id'],
-            "__rerum.generatedBy": LR.APPAGENT,
-            "__rerum.history.next" : historyWildcard
-        })
-    })
-    .then(response => response.json())
-    .catch(err => {return []})
-    previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>{
-        let obj = (b.value) ? b.value : b
-        let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
-        let removeBtn = ``
-        /**
-         * FIXME: Only admins can remove experiences. TODO:  We will bring control to experience creators soon.
-         */
-        if(user.roles.administrator){
-            removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
-        }
-        return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
-    },``):`<p class="text-error">No experiences found for this user</p>`
-}
-
-
-LR.utils.getEntityIdFromURL = function(){
-    const urlParams = new URLSearchParams(window.location.search)
-    return urlParams.get('id') ? urlParams.get('id') : null
-}
-
-LR.utils.drawInterface = function (event, interface){
-    let user = localStorage.getItem("lr-user") ? localStorage.getItem("lr-user") : (event.detail && event.detail.user) ? event.detail.user : null
-    if(typeof user === "string"){
-        try{
-            user = JSON.parse(user)
-        }
-        catch(err){
-            console.error(err)
-            user = null
-        }
-    }
-    if (user !== null) {
-        LR.utils.setUserAttributionFields(user)
-        LR.ui.setInterfaceBasedOnRole(interface, user, LR.utils.getEntityIdFromURL())
-    }
-    else {
-        console.log("User identity reset; user is null. ")
-        document.location.href = "logout.html"
-    }
 }
 

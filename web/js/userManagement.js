@@ -81,8 +81,8 @@ UM.interaction.drawUserManagement = async function(){
         })
         .catch(err => document.getElementById("users").innerHTML = err)
     } catch (err) {
+        //There was an error, most likely with the user in session storage on the server.  Make the admin login again to refresh the session.
         console.error(err)
-        alert("There was an error.  Please login and try again.")
         document.location.href="logout.html"
     }
 }
