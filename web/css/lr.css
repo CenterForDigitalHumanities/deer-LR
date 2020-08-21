@@ -13,7 +13,7 @@ textarea {
   display: inline-block;
 }
 
-.needs-more:not(#researchers .needs-more)::before {
+.needs-more::before {
   content: "⚠ ";
   color: red;
   display: inline-block;
