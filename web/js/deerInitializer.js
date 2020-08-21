@@ -45,30 +45,6 @@ DEER.TEMPLATES.Sense = function(obj, options = {}) {
     return null
 }
 
-//Overwrite the internal person template with a more robust one
-DEER.TEMPLATES.person = function(obj, options = {}) {
-        try {
-            let tmpl = `<h2>${UTILS.getLabel(obj)}</h2>`
-            let depiction = UTILS.getValue(obj.depiction) || "https://via.placeholder.com/200?text=No+photo+available"
-            let dob = ["Date of birth", UTILS.getValue(obj.birthDate) || "unrecorded"]
-            let email = ["Email", UTILS.getValue(obj.email) || "unrecorded"]
-            let phone = ["Telephone Number", UTILS.getValue(obj.telephone) || "unrecorded"]
-            let religion = ["Religion", UTILS.getValue(obj["religious_tradition"]) || "unrecorded"]
-            let gender = ["Gender", UTILS.getValue(obj.gender) || "unrecorded"]
-            let edu = ["Education", UTILS.getValue(obj.education) || "unrecorded"]
-            let nationality = ["Nationality", UTILS.getValue(obj.nationality) || "unrecorded"]
-            let description = ["Description", UTILS.getValue(obj.description) || "unrecorded"]
-            tmpl += `<img src=${depiction} alt='portrait' class="pull-right">
-            <dl>
-            ${[dob,email,phone,religion,gender,edu,nationality,description].reduce((a,b)=>a+=`<dt>${b[0]}<dt>
-            <dd>${b[1]}</dd>
-            </dl>`,``)}`
-        return tmpl
-    } catch (err) {
-        return null
-    }
-}
-
 /**
  * Create a select dropdown containing Places.  
  * @param {type} obj
@@ -86,7 +62,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
         </div>`
         let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allPlacesInCollection = UTILS.getValue(obj.itemListElement)
+        let allPlacesInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         for (let place of allPlacesInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
         }
@@ -114,7 +90,7 @@ DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
         </div>`
         let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
+        let allObjectsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         for (let o of allObjectsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${o['@id']}" value="${o['@id']}">${UTILS.getLabel(o)}</option>`
         }
@@ -141,7 +117,7 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Place')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allLocationsInCollection = UTILS.getValue(obj.itemListElement)
+        let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Locations"> `
@@ -171,7 +147,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Person')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
+        let allPeopleInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Choose Below"> `
@@ -200,7 +176,7 @@ DEER.TEMPLATES.researcherMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let selected = `<div class="selectedEntities"></div>`
-        let allPeopleInCollection = UTILS.getValue(obj.itemListElement)
+        let allPeopleInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Choose Below"> `
@@ -231,7 +207,7 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
             <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Thing')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allObjectsInCollection = UTILS.getValue(obj.itemListElement)
+        let allObjectsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = ``
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Objects"> `
@@ -248,16 +224,15 @@ DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
-        
-        let contributors = UTILS.getValue(experienceData.contributor) ? UTILS.getValue(experienceData.contributor) : ""
-        let people = UTILS.getValue(experienceData.attendee) ? UTILS.getValue(experienceData.attendee) : ""
-        let place = UTILS.getValue(experienceData.location) ? UTILS.getValue(experienceData.location) : ""
-        let relatedObjects = UTILS.getValue(experienceData.object) ? UTILS.getValue(experienceData.object) : ""
-        let relatedSenses = UTILS.getValue(experienceData.relatedSenses) ? UTILS.getValue(experienceData.relatedSenses) : ""
-        let relatedPractices = UTILS.getValue(experienceData.relatedPractices) ? UTILS.getValue(experienceData.relatedPractices) : ""
-        let fieldNotes = UTILS.getValue(experienceData.fieldNotes) ? UTILS.getValue(experienceData.fieldNotes) : ""
-        let date = UTILS.getValue(experienceData.startDate) ? UTILS.getValue(experienceData.startDate) : ""
-        let description = UTILS.getValue(experienceData.description) ? UTILS.getValue(experienceData.description) : ""
+        let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
+        let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
+        let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
+        let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : {"items":[]}
+        let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : {"items":[]}
+        let place = experienceData.location ? UTILS.getValue(experienceData.location) : ""
+        let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
+        let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
+        let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
        
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = ""
@@ -558,7 +533,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
  * @param {Object} obj some obj  containing some label annotating it.
  */
 DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
-    let at = options.hasOwnProperty("additionalType") ?  UTILS.getValue(options.additionalType) : obj.hasOwnProperty("additionalType") ?  UTILS.getValue(obj.additionalType) : ""
+    let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
     try {
         return at
     } catch (err) {

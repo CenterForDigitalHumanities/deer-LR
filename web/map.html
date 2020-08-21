@@ -15,26 +15,6 @@ and open the template in the editor.
         <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
         <script src="js/mapping.js"></script>  
         <style>
-           #leafletInstanceContainer { 
-               height: 50em;
-               background-image: url(images/earth.gif);
-               background-repeat: no-repeat;
-               background-attachment: local;
-               background-position: center -19em;
-               background-size: 85em;
-               border: 1px solid black;
-           }
-           #loadingMessage{
-               text-align: center;
-               background-color: white;
-               animation-name: color;
-               animation-duration: 2s;
-               animation-iteration-count: infinite;
-           }
-           #currentCoords{
-               font-weight: bold;
-           }
-           
            .color1{
                background-color: #336699;
            }
@@ -85,12 +65,7 @@ and open the template in the editor.
             #howTo{
                 margin-top: 2em;
                 font-size: 10pt;
-            }
-            
-            #goToCoords{
-                color: black;
-                border: 1px solid black;
-            }
+            }          
             
             input[app]{
                 margin: 2px 0px 5px 0px;
@@ -119,7 +94,7 @@ and open the template in the editor.
                 <a onclick="MAPINTERACTION.mymap.flyTo([38.6360699, -90.2348349],2)">[Shift] + [Z]</a> will zoom out for a holistic view.  
                 Clicking any dot on the map will show applicable information about the target when the URI is resolvable.
             </p>
-            <div id="leafletInstanceContainer"><div id="loadingMessage" style="text-align: center;">Gathering Coordinates from the Lived Religion Corpus...</div></div>
+            <div id="leafletInstanceContainer"><div id="loadingMessage" style="text-align: center;">Gathering Lived Religion Resource Coordinates...</div></div>
         
             <!--
             <div class="col">
