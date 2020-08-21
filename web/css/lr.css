@@ -9,6 +9,16 @@ textarea {
   max-height: 20rem;
 }
 
+.needs-more {
+  display: inline-block;
+}
+
+.needs-more::before {
+  content: "⚠ ";
+  color: red;
+  display: inline-block;
+}
+
 /* Feedback */
 
 #globalFeedback {
