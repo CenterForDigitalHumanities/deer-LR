@@ -292,7 +292,9 @@
             })
         }
         
-
+        /**
+        * Catch user detection and trigger draw() for interfaces.
+        */
         addEventListener('lrUserKnown', event => {
             LR.utils.drawInterface(event, "experience")
         })

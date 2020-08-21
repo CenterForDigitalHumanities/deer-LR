@@ -38,7 +38,9 @@
     <!-- Add ins -->
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
-        
+        /**
+        * Catch user detection and trigger draw() for interfaces.
+        */
         addEventListener('lrUserKnown', event => {
             LR.utils.drawInterface(event, "dashboard")
         }, false) 
