@@ -91,7 +91,7 @@ and open the template in the editor.
         <div class="container">
             <p id='howTo'> 
                 View the map below for rendered coordinate information.  Pan and zoom are supported. Supplying direct coordinates is available below the map.
-                <a onclick="MAPPER.mymap.flyTo([38.6360699, -90.2348349],2)">[Shift] + [Z]</a> will zoom out for a holistic view.  
+                <a onclick="MAPINTERACTION.mymap.flyTo([38.6360699, -90.2348349],2)">[Shift] + [Z]</a> will zoom out for a holistic view.  
                 Clicking any dot on the map will show applicable information about the target when the URI is resolvable.
             </p>
             <div id="leafletInstanceContainer"><div id="loadingMessage" style="text-align: center;">Gathering Lived Religion Resource Coordinates...</div></div>
@@ -99,12 +99,12 @@ and open the template in the editor.
             <!--
             <div class="col">
                 <div class="row">
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color1" value="Demo" app="MapDemo" onclick="MAPPER.filterMarkers(event)"/>
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color2" value="Lived Religion" app="Lived_Religion" onclick="MAPPER.filterMarkers(event)" />
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color3" value="T-PEN"  app="T-PEN" onclick="MAPPER.filterMarkers(event)" />
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color4" value="Mirador" app="Mirador" onclick="MAPPER.filterMarkers(event)" />
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color5" value="IIIF App" app="IIIF_Coordinates_Annotator" onclick="MAPPER.filterMarkers(event)" />
-                    <input title="Toggle annotations that target IIIF resources." type="button" class="tag is-small color6" value="IIIFy" app="isIIIF" onclick="MAPPER.filterMarkers(event)" />
+                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color1" value="Demo" app="MapDemo" onclick="MAPINTERACTION.filterMarkers(event)"/>
+                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color2" value="Lived Religion" app="Lived_Religion" onclick="MAPINTERACTION.filterMarkers(event)" />
+                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color3" value="T-PEN"  app="T-PEN" onclick="MAPINTERACTION.filterMarkers(event)" />
+                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color4" value="Mirador" app="Mirador" onclick="MAPINTERACTION.filterMarkers(event)" />
+                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color5" value="IIIF App" app="IIIF_Coordinates_Annotator" onclick="MAPINTERACTION.filterMarkers(event)" />
+                    <input title="Toggle annotations that target IIIF resources." type="button" class="tag is-small color6" value="IIIFy" app="isIIIF" onclick="MAPINTERACTION.filterMarkers(event)" />
                 </div>
             </div>
             -->
@@ -118,8 +118,8 @@ and open the template in the editor.
                     </div>
                 </div>
                 <footer>
-                    <input id='goToCoords' value="Go To Coordinates" type="button" class="tag is-small" onclick="MAPPER.goToCoords(event)"/>
-                    <!--<input value="Refresh Markers" type="button" class="tag is-small" onclick="MAPPER.refreshMarkers(event)"/>--> 
+                    <input id='goToCoords' value="Go To Coordinates" type="button" class="tag is-small" onclick="MAPINTERACTION.goToCoords(event)"/>
+                    <!--<input value="Refresh Markers" type="button" class="tag is-small" onclick="MAPINTERACTION.refreshMarkers(event)"/>--> 
                 </footer>
             </div>
         </div>
@@ -149,7 +149,7 @@ and open the template in the editor.
                 switch (key) {
                   case 90: 
                       //Shift + Z will do the zoom out behavior
-                      MAPPER.mymap.flyTo([38.6360699, -90.2348349],2)
+                      MAPINTERACTION.mymap.flyTo([38.6360699, -90.2348349],2)
                     break
                   default:
                 }
