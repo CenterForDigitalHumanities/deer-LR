@@ -257,9 +257,6 @@ LR.ui.getUserEntries = async function(user) {
         let obj = (b.value) ? b.value : b
         let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
         let removeBtn = ``
-        /**
-         * FIXME: Only admins can remove experiences. TODO:  We will bring control to experience creators soon.
-         */
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
             onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
