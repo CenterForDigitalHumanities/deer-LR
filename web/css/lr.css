@@ -20,13 +20,40 @@ textarea {
     z-index: 9; 
     left: 50%;
     bottom: 30px;
-  }
+}
   
-  #globalFeedback.show {
+#globalFeedback.show {
     visibility: visible; 
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  }
+}
+
+#leafletInstanceContainer{
+    height: 50em;
+    background-image: url(images/earth.gif);
+    background-repeat: no-repeat;
+    background-attachment: local;
+    background-position: center -19em;
+    background-size: 85em;
+    border: 1px solid black;
+}
+
+#loadingMessage{
+    text-align: center;
+    background-color: white;
+    animation-name: color;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+#currentCoords{
+    font-weight: bold;
+}
+
+ #goToCoords{
+    color: black;
+    border: 1px solid black;
+}
   
   /* Animations to fade in and out */
   @-webkit-keyframes fadein {
