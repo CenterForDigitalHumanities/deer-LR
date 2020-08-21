@@ -53,23 +53,7 @@
             let user = event.detail.user
             if(user !== null){
                 LR.utils.setUserAttributionFields(user)
-                if (user.roles.administrator) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const researcherId = urlParams.get('id');
-                    if (researcherId) {
-                        researcherForm.setAttribute("deer-id", researcherId)
-                        document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
-                        document.querySelector("input[type='submit']").value = "Update"
-                        let btn = document.createElement("a")
-                        btn.href = window.location.pathname
-                        btn.innerHTML = "Reset Page"
-                        researcherForm.append(btn)
-                    }
-                }
-                else{
-                    alert("You must be logged in as an administrator to use this!")
-                    document.location.href="dashboard.html"
-                }
+                LR.ui.setInterfaceBasedOnRole("researcher", user, LR.utils.getEntityIdFromURL())
             }
             else{
                 console.log("User identity reset; user is null. ")

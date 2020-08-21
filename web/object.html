@@ -167,20 +167,7 @@
             let user = event.detail.user
             if (user !== null) {
                 LR.utils.setUserAttributionFields(user)
-                if (user.roles.administrator) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const researcherId = urlParams.get('id');
-                    if (researcherId) {
-                        objectForm.setAttribute("deer-id", researcherId)
-                        document.querySelector("h2.text-primary").innerHTML = "Update Object"
-                        document.querySelector("input[type='submit']").value = "Update"
-                        let btn = document.createElement("a")
-                        btn.href = window.location.pathname
-                        btn.innerHTML = "Reset Page"
-                        objectForm.append(btn)
-                    }
-                   // for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
-                }
+                LR.ui.setInterfaceBasedOnRole("object", user, LR.utils.getEntityIdFromURL())
             }
             else {
                 console.log("User identity reset; user is null. ")

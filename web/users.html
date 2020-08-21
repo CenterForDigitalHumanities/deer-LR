@@ -137,7 +137,7 @@
          */
         addEventListener('lrUserKnown', event => {
             if (event.detail.user !== null) {
-                UM.interaction.drawUserManagement()
+                LR.ui.setInterfaceBasedOnRole("userManagement", user, LR.utils.getEntityIdFromURL())
             }
             else{
                 console.log("User identity reset; user is null")

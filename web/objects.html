@@ -47,16 +47,13 @@
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "objects") {
                 let user = localStorage.getItem("lr-user")
-                if (user !== null) {
-                    try {
-                        user = JSON.parse(user)
-                        if (user.roles.administrator) {
-                            for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
-                        }
-                    } catch (err) {
-                        console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-                        document.location.href="logout.html"
-                    }
+                if(user !== null){
+                    LR.utils.setUserAttributionFields(user)
+                    LR.ui.setInterfaceBasedOnRole("objects", user, null)
+                }
+                else{
+                    console.log("User identity reset; user is null. ")
+                    document.location.href="logout.html"
                 }
             }
         }, false)

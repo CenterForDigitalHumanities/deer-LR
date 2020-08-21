@@ -62,41 +62,28 @@ UM.interaction.getAllUsers = async function(){
  * Ensure the logged in user is an administrator.
  */
 UM.interaction.drawUserManagement = async function(){
-    let loggedInUser = localStorage.getItem("lr-user")
     let managementTemplate = ``
-    if (loggedInUser !== null) {
-        try {
-            loggedInUser = JSON.parse(loggedInUser)
-            if (loggedInUser.roles.administrator) {
-                await this.getAllUsers()
-                .then(users => {
-                    for (let user in users){
-                        //Here the top level keys are the name we want
-                        let role = (users[user].roles.administrator) ? "admin" : "contributor"
-                        let buttons = `
-                            <a role="${role}" class="button default" onclick="UM.ui.showRolesEditor('${user}', event)"> Change Roles </a>
-                            <a class="button primary" onclick="UM.ui.showSecEditor('${user}')">Change Password</a>
-                            <a class="button secondary" onclick="UM.ui.showNameEditor('${user}')">Change Name</a>
-                            <a class="button error" onclick="UM.ui.confirmRemove('${user}')">Remove</a>
-                        `
-                        managementTemplate += `<li class="${role}" username="${user}"> ${user} &nbsp;&nbsp; ${buttons} </li>`
-                    }
-                    document.getElementById("users").innerHTML = managementTemplate
-                })
-                .catch(err => document.getElementById("users").innerHTML = err)
+    try {
+        await this.getAllUsers()
+        .then(users => {
+            for (let user in users){
+                //Here the top level keys are the name we want
+                let role = (users[user].roles.administrator) ? "admin" : "contributor"
+                let buttons = `
+                    <a role="${role}" class="button default" onclick="UM.ui.showRolesEditor('${user}', event)"> Change Roles </a>
+                    <a class="button primary" onclick="UM.ui.showSecEditor('${user}')">Change Password</a>
+                    <a class="button secondary" onclick="UM.ui.showNameEditor('${user}')">Change Name</a>
+                    <a class="button error" onclick="UM.ui.confirmRemove('${user}')">Remove</a>
+                `
+                managementTemplate += `<li class="${role}" username="${user}"> ${user} &nbsp;&nbsp; ${buttons} </li>`
             }
-            else{
-                alert("You must be logged in as an administrator to use this!")
-                document.location.href="dashboard.html"
-            }
-        } catch (err) {
-            console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-            alert("There was an error identifying you.  Please log in again.")
-            document.location.href="logout.html"
-        }
-    }
-    else{
-        alert("You must be a logged in as an administrator to use this page!")
+            document.getElementById("users").innerHTML = managementTemplate
+        })
+        .catch(err => document.getElementById("users").innerHTML = err)
+    } catch (err) {
+        console.error(err)
+        alert("There was an error.  Please login and try again.")
+        document.location.href="logout.html"
     }
 }
 

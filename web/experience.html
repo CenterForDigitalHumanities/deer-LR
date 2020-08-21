@@ -293,47 +293,14 @@
         }
         /**
          * Set the input fields of forms that include the user id for attribution.
+         * Trigger admin or contributor functionality based on user.
          * Ex. input[deer-key="creator"]
          */
-     
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
             if(user !== null){
                 LR.utils.setUserAttributionFields(user)
-                const urlParams = new URLSearchParams(window.location.search)
-                const expURI = urlParams.get('id')
-                if (expURI) {
-                    if(user.roles.administrator){
-                        theExperience.setAttribute("deer-id", expURI)
-                        document.getElementById("startExperience").classList.add("is-hidden")
-                        document.getElementById("experienceArtifacts").classList.remove("is-hidden")
-                        document.getElementById("experienceReview").classList.remove("is-hidden")
-                        document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
-                    }
-                    else{
-                        new Promise( resolve => {
-                            resolve(LR.utils.isCreator(user["@id"], expURI))
-                        })
-                        .then(permitted => {
-                            if(permitted){
-                                theExperience.setAttribute("deer-id", expURI)
-                                document.getElementById("startExperience").classList.add("is-hidden")
-                                document.getElementById("experienceArtifacts").classList.remove("is-hidden")
-                                document.getElementById("experienceReview").classList.remove("is-hidden")
-                                document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
-                            }
-                            else{
-                                alert("Only an administrator can review this experience.  If this is your experience, contact an administrator.")
-                                document.location.href = "dashboard.html"
-                            }
-                        })
-                        .catch(err => {
-                            alert("There was an error checking permissions for this experience.")
-                            console.error(err)
-                            return false
-                        }) 
-                    }
-                }
+                LR.ui.setInterfaceBasedOnRole("experience", user, LR.utils.getEntityIdFromURL())
             }
             else{
                 console.log("User identity reset; user is null. ")
