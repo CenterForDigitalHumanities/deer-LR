@@ -112,6 +112,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 }
                 else{
                     //Determine if the current user is the creator of this entity.  If so, they can view it.
+                    //Note that if we need to do this elsewhere, this should become a helper function.
                     new Promise( resolve => {
                         resolve(LR.utils.isCreator(user["@id"], entityID))
                     })
@@ -156,7 +157,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                     document.location.href="dashboard.html"
                 }
             }
-
         break
         
         case "researcher":
@@ -182,8 +182,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "places":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
-            }
-                
+            }         
         break
         
         case "researchers":
@@ -203,8 +202,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
             else{
                 alert("You must be logged in as an administrator to use this!")
                 document.location.href="dashboard.html"
-            }
-             
+            }    
         break
         
         case "experienceManagement":
@@ -230,7 +228,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         default:
             alert("This interface is not yet supported")
             document.location.href = "dashboard.html"
-        
     }
 }
 
@@ -626,7 +623,7 @@ LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
                 })
             }
             else{
-                //This is disconcerning.  The deer-view either didn't load or the DOM didn't draw it fast enough...
+                //This is disconcerting.  The deer-view either didn't load or the DOM didn't draw it fast enough...
                 console.warn("Could not pre-select multi selects.  The deer-view either didn't load or the DOM didn't draw it fast enough!"
                         +"  A multi select may not be preselected.")
             }
@@ -958,4 +955,3 @@ LR.utils.isCreator = async function(agentID, item){
     }
     return ((agentID && creatorID) && agentID === creatorID)
 }
-
