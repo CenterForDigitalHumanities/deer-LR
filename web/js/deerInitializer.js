@@ -540,15 +540,27 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         tmpl += `<ul>`
         obj[options.list].forEach((val,index)=>{
             let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
-            let name = `<deer-view deer-id="${val["@id"]}" deer-template="label">${currentKnownLabel}</deer-view>`
+            let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
             let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
             onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
             let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-            tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>`
+            tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
         })
         tmpl += `</ul>`
     }
     return tmpl
+}
+
+DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
+    let key = options.key || "@id"
+    let prop = obj[key] || "[ undefined ]"
+    let label = options.label || UTILS.getLabel(obj, prop)
+    let isDescribed = Object.keys(obj).filter(i=>["description","geometry","email","fieldNotes"].includes(i)).length > 0
+    try {
+        return isDescribed ? `${label}` : `<span class="needs-more" title="This entry may require more details">${label}</span>`
+    } catch (err) {
+        return null
+    }
 }
 
 
