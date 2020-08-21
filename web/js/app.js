@@ -826,7 +826,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 
         break
         
-        case "researchera":
+        case "researchers":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
             }
@@ -905,7 +905,16 @@ LR.utils.getEntityIdFromURL = function(){
 }
 
 LR.utils.drawInterface = function (event, interface){
-    let user = event.detail.user
+    let user = localStorage.getItem("lr-user") ? localStorage.getItem("lr-user") : (event.detail && event.detail.user) ? event.detail.user : null
+    if(typeof user === "string"){
+        try{
+            user = JSON.parse(user)
+        }
+        catch(err){
+            console.error(err)
+            user = null
+        }
+    }
     if (user !== null) {
         LR.utils.setUserAttributionFields(user)
         LR.ui.setInterfaceBasedOnRole(interface, user, LR.utils.getEntityIdFromURL())
