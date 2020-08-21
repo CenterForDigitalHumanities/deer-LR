@@ -30,7 +30,7 @@ textarea {
 
 #leafletInstanceContainer{
     height: 50em;
-    background-image: url(images/earth.gif);
+    background-image: url(../images/earth.gif);
     background-repeat: no-repeat;
     background-attachment: local;
     background-position: center -19em;
