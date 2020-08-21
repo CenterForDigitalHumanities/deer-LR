@@ -38,57 +38,12 @@
     <!-- Add ins -->
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
+        /**
+        * Catch user detection and trigger draw() for interfaces.
+        */
         addEventListener('lrUserKnown', event => {
-            //TODO if we are allowing object manipulation on this page, we may need to check roles to activate certain things.
-            if (event.detail.user !== null) {
-                getUserEntries(event.detail.user)
-                if (event.detail.user.roles.administrator) {
-                    let adminTabs = `<a href="users.html">Users</a>
-                    <a href="researchers.html">Researchers</a>
-                    <a href="all_experiences.html">Experiences</a>`
-                    document.querySelector('.tabs').innerHTML += adminTabs
-                }
-            }
-            else{
-                console.log("User identity reset; user is null. ")
-                document.location.href="logout.html"
-            }
+            LR.utils.drawInterface(event, "dashboard")
         }, false) 
-        
-
-        
-        async function getUserEntries(user) {
-            
-            let historyWildcard = {"$exists":true, "$size":0}
-            let experiences = await fetch(LR.URLS.QUERY, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "@type": "Event",
-                    "creator": user['@id'],
-                    "__rerum.generatedBy": LR.APPAGENT,
-                    "__rerum.history.next" : historyWildcard
-                })
-            })
-            .then(response => response.json())
-            .catch(err => {return []})
-            previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>
-                {
-                    let obj = (b.value) ? b.value : b
-                    let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
-                    let removeBtn = ``
-                    /**
-                     * FIXME: Only admins can remove experiences. TODO:  We will bring control to experience creators soon.
-                     */
-                    if(user.roles.administrator){
-                        removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-                        onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
-                    }
-                    return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
-                },``):`<p class="text-error">No experiences found for this user</p>`
-        }
         
         /**
          * Handle Login and Logout across tabs
