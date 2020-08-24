@@ -128,6 +128,17 @@
                     
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
+
+                    <div class="card bg-light">
+                        <header class="text-primary">Linked Media</header>
+                        <p class="text-primary"><small>Optionally link to media from this event. 
+                            Media specific to an object or person should not be added here.</small></p>
+                        <label>Photograph or depiction </label>
+                        <input type="url" deer-key="image" >
+                        <label>Recording or performance </label>
+                        <input type="url" deer-key="associatedMedia" >
+                    </div>
+
                     <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="Tags">   
                     <input type="submit" value="Continue" />

@@ -313,6 +313,9 @@
                         <option value="Other Public">Other Public</option>
                     </select>
                     <!--<h3> Upload Media </h3>-->
+                    <label>Link a photograph or depiction </label>
+                    <input type="url" deer-key="photo" id="depiction" >
+                    <p id="depictionPreview" class="text-center"></p>
                     <label>Tags separated by ','</label>
                     <input disabled type="text" deer-key-x="LR:Tags">
                     <div class="row">
@@ -404,6 +407,21 @@
         local_socket.on('logoutFinished', function(obj) {
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
             document.location.href="dashboard.html"
+        })
+
+        depiction.addEventListener("input",event=>{
+            let url = event.target.value
+            if(url) {
+                try {
+                    fetch(url).then(res=>{
+                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
+                    })
+                } catch(err){
+                    depictionPreview.innerHTML = ``
+                }
+            } else {
+                depictionPreview.innerHTML = ``
+            }
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
