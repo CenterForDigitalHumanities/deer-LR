@@ -335,12 +335,14 @@ LR.ui.toggleEntityAddition = function(event, areaToToggle){
     if(areaToToggle){
         if(areaToToggle.classList.contains("is-hidden")){
             areaToToggle.classList.remove("is-hidden")
+            document.querySelector(".pageShade").classList.remove("is-hidden")
             areaToToggle.querySelector("input").value = ""
-            event.target.innerHTML = "&#8722;"
+            //event.target.innerHTML = "&#8722;"
         }
         else{
             areaToToggle.classList.add("is-hidden")
-            event.target.innerHTML = "&#x2b;"
+            document.querySelector(".pageShade").classList.add("is-hidden")
+            //event.target.innerHTML = "&#x2b;"
         }
     }
 }
