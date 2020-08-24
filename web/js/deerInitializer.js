@@ -54,7 +54,7 @@ DEER.TEMPLATES.Sense = function(obj, options = {}) {
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="container quickAddEntity bg-light is-hidden">
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
@@ -83,7 +83,7 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="container quickAddEntity bg-light is-hidden">
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
@@ -112,7 +112,7 @@ DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="container quickAddEntity bg-light is-hidden">
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
@@ -143,7 +143,7 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
 DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="container quickAddEntity bg-light is-hidden">
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
@@ -204,7 +204,7 @@ DEER.TEMPLATES.researcherMulti = function(obj, options = {}) {
 DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="container quickAddEntity bg-light is-hidden">
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
