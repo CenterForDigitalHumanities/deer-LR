@@ -84,13 +84,13 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
             <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', true, '${type}')">Add</a>
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Place')">Add</a>
         </div>`
         let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allItemsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
-        for (let item of allItemsInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
+        let allPlacesInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        for (let place of allPlacesInCollection) {
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -98,6 +98,8 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         return null
     }
 }
+
+
 
 /**
  * Represent a collection as a <select multiple> HTML multi-select.  
@@ -138,15 +140,15 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
             <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Place')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allItemsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
-            <optgroup label="${type}s"> `
-        for (let item of allItemsInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
+            <optgroup label="Locations"> `
+        for (let loc of allLocationsInCollection) {
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
         }
         tmpl += `</optgroup></select>${selected}`
         return tmpl
@@ -155,13 +157,6 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
     }
 }
 
-/**
- * The template for rendering an ExperienceUpload on experience.html.
- * There is a fair bit of custom coding around DEER here.  
- * @param {type} experienceData
- * @param {type} options
- * @return {tmpl}
- */
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
