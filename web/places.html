@@ -36,14 +36,7 @@
             if (event.target.getAttribute("id") === "locations") {
                 LR.utils.drawInterface(event, "places")
             }
-        }, false)
-              
-        /**
-         * A hack to force redraw by refreshing the page.
-         */
-        addEventListener('globalFeedbackFinished', event => {
-           document.location.reload()
-        })
+        }, false)             
         
         /**
          * Handle Login and Logout across tabs

@@ -267,7 +267,7 @@
                     <h4>Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
                     <input type="hidden" deer-input-type="Set" deer-key="FormerLocations" value="">
-                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="locationsMulti"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     <label>Former Use(s)</label>
                     <input type="hidden" deer-input-type="Set" deer-key="FormerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
@@ -350,17 +350,7 @@
          */
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
-        })
-        
-        /**
-         * Detects that HTML has finished drawing in the DOM and can be interacted with.
-         * This most often occures when drawing a deer-view on page load or from redraws.
-         * @see deer-render.js RENDER.element
-         */
-        addEventListener('deer-view-rendered', event => {
-            let whatElem = event.target
-            let whatData = event.detail
-        })
+        })       
         
         /**
          * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.

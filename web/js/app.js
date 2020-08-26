@@ -62,26 +62,26 @@ LR.err.unhandled = function(error) {
 
 LR.err.handleHTTPError = function(response) {
     if (!response.ok) {
-        let status = response.status;
+        let status = response.status
         switch (status) {
             case 400:
                 console.log("Bad Request")
-                break;
+                break
             case 401:
                 console.log("Request was unauthorized")
-                break;
+                break
             case 403:
                 console.log("Forbidden to make request")
-                break;
+                break
             case 404:
                 console.log("Not found")
-                break;
+                break
             case 500:
                 console.log("Internal server error")
-                break;
+                break
             case 503:
                 console.log("Server down time")
-                break;
+                break
             default:
                 console.log("unahndled HTTP ERROR")
         }
@@ -181,13 +181,13 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "people":
         case "places":
             if (user.roles.administrator) {
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
+                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
             }         
         break
         
         case "researchers":
             if (user.roles.administrator) {
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block';
+                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
             }
             else{
                 alert("You must be logged in as an administrator to use this!")
@@ -208,6 +208,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "experienceManagement":
             if (user.roles.administrator) {
                 experiences.classList.remove("is-hidden")
+                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
             }
             else{
                 alert("You must be logged in as an administrator to use this!")
@@ -271,7 +272,7 @@ LR.ui.getUserEntries = async function(user) {
  * @return {undefined}
  */
 LR.ui.toggleAreas = function(event){
-    let area = event.target.getAttribute("area");
+    let area = event.target.getAttribute("area")
     let elems = document.querySelectorAll("div[tog='"+area+"']")
     for(let elem of elems){
         if(elem.classList.contains("is-hidden")){
@@ -289,7 +290,7 @@ LR.ui.toggleAreas = function(event){
  * @return {undefined}
  */
 LR.ui.toggleAreaHideOthers = function(event){
-    let area = event.target.getAttribute("area");
+    let area = event.target.getAttribute("area")
     let elems = document.querySelectorAll("div[tog='"+area+"']")
     let all = document.querySelectorAll("div[tog]")
     for(let elem of all){
@@ -313,19 +314,19 @@ LR.ui.toggleAreaHideOthers = function(event){
  * @return {undefined}
  */
 LR.ui.toggleFieldNotes = function(event){
-    let floater = document.getElementById("fieldNotesFloater");
+    let floater = document.getElementById("fieldNotesFloater")
     if(floater.getAttribute("expanded") === "true"){
         floater.setAttribute("expanded", "false")
         floater.style.width = "40px"
         floater.style.height = "40px"
-        floater.style["box-shadow"] = "none";
+        floater.style["box-shadow"] = "none"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.add("is-hidden"))
     }
     else{
         floater.setAttribute("expanded", "true")
         floater.style.width = "550px"
         floater.style.height = "400px"
-        floater.style["box-shadow"] = "1px 1px 18px black";
+        floater.style["box-shadow"] = "1px 1px 18px black"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
     }
     
@@ -735,7 +736,7 @@ LR.utils.saveFieldNotesInExperience = function(event){
  * @param {HTMLElement}  selectedTagsArea The area that the tag UI goes for showing selected items
  * @param {string} type The @type of the entity going into the collection
  */
-LR.utils.quicklyAddToCollection = async function(event, collectionName, selectedTagsArea, type){
+LR.utils.quicklyAddToCollection = async function(event, collectionName, multiOrDropdown, type){
     if(collectionName){
         let labelText = event.target.previousElementSibling.value
         let user = localStorage.getItem("lr-user")
@@ -798,7 +799,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
                     op.selected = true
                     //op.click() does not work, so we have to produce the result programatically
                     let input = event.target.closest("deer-view").previousElementSibling
-                    if(selectedTagsArea === null){
+                    if(multiOrDropdown){
                         //A dropdown, not a multi select, and there are no tags.  Deselect any selected option, then add this selected one in.
                         let dropdown = event.target.closest("deer-view").querySelector("select")
                         op.setAttribute("oninput", "this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value")
@@ -846,7 +847,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, selected
             })
         }
         else{
-            alert("You must supply something as a label to add an entity to the collection.");
+            alert("You must supply something as a label to add an entity to the collection.")
             console.warn("You must supply something as a label to add an entity to the collection.")
         }
     }
@@ -954,3 +955,10 @@ LR.utils.isCreator = async function(agentID, item){
     }
     return ((agentID && creatorID) && agentID === creatorID)
 }
+
+/**
+ * A hack to force redraw by refreshing the page.
+ */
+addEventListener('globalFeedbackFinished', event => {
+   document.location.reload()
+})
