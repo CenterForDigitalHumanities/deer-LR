@@ -955,10 +955,3 @@ LR.utils.isCreator = async function(agentID, item){
     }
     return ((agentID && creatorID) && agentID === creatorID)
 }
-
-/**
- * A hack to force redraw by refreshing the page.
- */
-addEventListener('globalFeedbackFinished', event => {
-   document.location.reload()
-})
