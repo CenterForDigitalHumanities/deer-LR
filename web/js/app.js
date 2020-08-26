@@ -763,6 +763,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, multiOrD
                     else{
                         // A multi select
                         let multiSelect = event.target.closest("deer-view").querySelector("select[multiple]")
+                        let selectedTagsArea = event.target.parentElement.nextElementSibling.nextElementSibling
                         op.setAttribute("oninput", "LR.utils.handleMultiSelect(event,true)")
                         let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
                         let tag = `<span class="tag is-small">${labelText}</span>` 
