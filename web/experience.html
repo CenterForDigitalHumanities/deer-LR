@@ -114,7 +114,7 @@
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
                     
-                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.  If you are an admin, you can create a new researcher with the &#x2b; below.</label>
+                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="researcherMulti"></deer-view>
                     
@@ -260,26 +260,8 @@
                 </form>      
             </div>
         </div>
-        
-        <div class="card bd-primary" popover="object">
-            <div class="card_body">
-                <h2 class="text-primary">Create a New Object</h2>
-            </div>   
-        </div>
-        
-        <div class="card bd-primary" popover="researcher">
-            <div class="card_body">
-                <h2 class="text-primary">Create a New Researcher</h2>
-            </div>   
-        </div>
-        
-        <div class="card bd-primary" popover="person">
-            <div class="card_body">
-                <h2 class="text-primary">Create a New Person</h2>
-            </div>   
-        </div>
-        
     </div>
+    <div class="pageShade is-hidden"></div>
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
     

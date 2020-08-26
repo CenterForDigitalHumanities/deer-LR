@@ -64,6 +64,40 @@ textarea {
     color: black;
     border: 1px solid black;
 }
+
+.quickAddEntity{
+    position: fixed;
+    top: 20%;
+    max-width: 30em;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 2;
+}
+
+.quick{
+    position: relative;
+    display: block;
+    top: 4px;
+}
+
+.quickAddEntity input{
+    margin: 12px 0px;
+}
+
+.pageShade{
+    z-index: 1;
+    background-color: rgba(0, 0, 0, .8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+a.tag{
+    cursor: pointer;
+}
   
   /* Animations to fade in and out */
   @-webkit-keyframes fadein {

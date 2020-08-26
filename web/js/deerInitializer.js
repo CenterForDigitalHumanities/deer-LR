@@ -54,19 +54,20 @@ DEER.TEMPLATES.Sense = function(obj, options = {}) {
 DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
-            <span class="">Label:</span>
-            <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Place')">Add</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        <div class="card quickAddEntity bg-light is-hidden">
+            <label>Supply a name or label for this entity</label>
+            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
+            <input class="" type="text" />
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Place')">Add</a>
         </div>`
-        let tmpl = `<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
         let allPlacesInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         for (let place of allPlacesInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
         }
-        tmpl += `</select>${quickAddTmpl}`
+        tmpl += `</select>`
         return tmpl
     } catch (err) {
         return null
@@ -82,19 +83,20 @@ DEER.TEMPLATES.locationsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
-            <span class="">Label:</span>
-            <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Thing')">Add</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        <div class="card quickAddEntity bg-light is-hidden">
+            <label>Supply a name or label for this entity</label>
+            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
+            <input class="" type="text" />
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Thing')">Add</a>
         </div>`
-        let tmpl = `<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
+        let tmpl = `${quickAddTmpl}<select class="objDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
         let allObjectsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         for (let o of allObjectsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${o['@id']}" value="${o['@id']}">${UTILS.getLabel(o)}</option>`
         }
-        tmpl += `</select>${quickAddTmpl}`
+        tmpl += `</select>`
         return tmpl
     } catch (err) {
         return null
@@ -110,21 +112,22 @@ DEER.TEMPLATES.objectsAsDropdown = function(obj, options = {}) {
 DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
-            <span class="">Label:</span>
-            <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Place')">Add</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        <div class="card quickAddEntity bg-light is-hidden">
+            <label>Supply a name or label for this entity</label>
+            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
+            <input class="" type="text" />
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Place')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
         let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
-        let tmpl = ``
+        let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Locations"> `
         for (let loc of allLocationsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
         }
-        tmpl += `</optgroup></select>${selected}${quickAddTmpl}`
+        tmpl += `</optgroup></select>${selected}`
         return tmpl
     } catch (err) {
         return null
@@ -140,15 +143,16 @@ DEER.TEMPLATES.locationsMulti = function(obj, options = {}) {
 DEER.TEMPLATES.personMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
-            <span class="">Name:</span>
-            <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Person')">Add</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        <div class="card quickAddEntity bg-light is-hidden">
+            <label>Supply a name or label for this entity</label>
+            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
+            <input class="" type="text" />
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Person')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
         let allPeopleInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
-        let tmpl = ``
+        let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Choose Below"> `
         for (let person of allPeopleInCollection) {
@@ -156,7 +160,7 @@ DEER.TEMPLATES.personMulti = function(obj, options = {}) {
             let name = UTILS.getLabel(person)
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${person['@id']}" value="${person['@id']}">${name}</option>`
         }
-        tmpl += `</optgroup></select>${selected}${quickAddTmpl}`
+        tmpl += `</optgroup></select>${selected}`
         return tmpl
     } catch (err) {
         return null
@@ -200,21 +204,22 @@ DEER.TEMPLATES.researcherMulti = function(obj, options = {}) {
 DEER.TEMPLATES.objectMulti = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let quickAddTmpl = `<a title="Click here to add a new entity by name." class="tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div title="Quickly create a new entity for this collection by supplying a name or label." class="row quickAddEntity bg-light is-hidden">
-            <span class="">Label:</span>
-            <input class="bg-grey text-white" type="text" />
-            <a class="tag bg-primary text-white is-small" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', this.closest('deer-view').querySelector('.selectedEntities'), 'Thing')">Add</a>
+        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
+        <div class="card quickAddEntity bg-light is-hidden">
+            <label>Supply a name or label for this entity</label>
+            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
+            <input class="" type="text" />
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', null, 'Thing')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
         let allObjectsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
-        let tmpl = ``
+        let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event, true)">
             <optgroup label="Objects"> `
         for (let obj of allObjectsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${obj['@id']}" value="${obj['@id']}">${UTILS.getLabel(obj)}</option>`
         }
-        tmpl += `</optgroup></select>${selected}${quickAddTmpl}`
+        tmpl += `</optgroup></select>${selected}`
         return tmpl
     } catch (err) {
         return null
