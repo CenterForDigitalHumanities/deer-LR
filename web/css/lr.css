@@ -95,6 +95,14 @@ textarea {
     width: 100%;
 }
 
+.removeCollectionItem {
+    display: none;
+}
+
+.viewCollectionItem{
+    margin-left: .5rem
+}
+
 a.tag{
     cursor: pointer;
 }
