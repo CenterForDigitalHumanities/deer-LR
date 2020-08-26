@@ -38,58 +38,13 @@ LR.URLS = {
 //}
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
-
 if (typeof(Storage) !== "undefined") {
     LR.localInfo = window.localStorage
 } else {
-    LR.err.generic_error("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
+    alert("Please update your browser or use a different browser, this one is not supported. Sorry for the inconvenience.")
 }
-LR.err = {}
 LR.ui = {}
 LR.utils = {}
-
-/** Various LR error handlers */
-LR.err.generic_error = function(msg) {
-    alert(msg)
-}
-
-LR.err.unhandled = function(error) {
-    console.log("There was an unhandled error when using fetch")
-    console.log(error)
-    throw Error(error)
-    return error
-}
-
-LR.err.handleHTTPError = function(response) {
-    if (!response.ok) {
-        let status = response.status
-        switch (status) {
-            case 400:
-                console.log("Bad Request")
-                break
-            case 401:
-                console.log("Request was unauthorized")
-                break
-            case 403:
-                console.log("Forbidden to make request")
-                break
-            case 404:
-                console.log("Not found")
-                break
-            case 500:
-                console.log("Internal server error")
-                break
-            case 503:
-                console.log("Server down time")
-                break
-            default:
-                console.log("unahndled HTTP ERROR")
-        }
-        throw Error("HTTP Error: " + response.statusText)
-    }
-    return response
-}
-    /** END Error handlers */
 
 /**
  * Each interface has something triggered by user roles.  Implement contributor vs. admin
@@ -137,7 +92,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 }
             }
         break
-        
         case "object":
         case "person":
         case "place":
@@ -158,7 +112,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 }
             }
         break
-        
         case "researcher":
             if (user.roles.administrator) {
                 if (entityID) {
@@ -176,7 +129,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }
         break
-        
         case "objects":
         case "people":
         case "places":
@@ -184,7 +136,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
             }         
         break
-        
         case "researchers":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
@@ -194,7 +145,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }
         break
-        
         case "userManagement":
             if (user.roles.administrator) {
                 UM.interaction.drawUserManagement()
@@ -204,7 +154,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }    
         break
-        
         case "experienceManagement":
             if (user.roles.administrator) {
                 experiences.classList.remove("is-hidden")
@@ -215,7 +164,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }
         break
-        
         case "dashboard":
             LR.ui.getUserEntries(user)
             if (user.roles.administrator) {
@@ -225,7 +173,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.querySelector('.tabs').innerHTML += adminTabs
             }
         break
-        
         default:
             alert("This interface is not yet supported")
             document.location.href = "dashboard.html"

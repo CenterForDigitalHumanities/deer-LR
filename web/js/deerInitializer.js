@@ -45,6 +45,13 @@ DEER.TEMPLATES.Sense = function(obj, options = {}) {
     return null
 }
 
+/**
+ * Represent a collection as a <select> HTML dropdown.  
+ * Include the ability to quickly add an item to the collection, which will then be selected.
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
 DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
@@ -92,6 +99,13 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     }
 }
 
+/**
+ * Represent a collection as a <select multiple> HTML multi-select.  
+ * Include the ability to quickly add an item to the collection, which will then be selected.
+ * @param {type} obj
+ * @param {type} options
+ * @return {tmpl}
+ */
 DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
@@ -141,6 +155,13 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
     }
 }
 
+/**
+ * The template for rendering an ExperienceUpload on experience.html.
+ * There is a fair bit of custom coding around DEER here.  
+ * @param {type} experienceData
+ * @param {type} options
+ * @return {tmpl}
+ */
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
