@@ -43,7 +43,13 @@
       },
       "InterviewUpload":{
          "@id":"lr:InterviewUpload",
-         "@type":"@id"
+         "@type":"@id",
+         "@context":{
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            }
+         }
       },
       "Event":{
          "@id":"schema:Event",
@@ -66,7 +72,7 @@
             },
             "associatedMedia":{
                "@id":"schema:associatedMedia",
-                "@type":"@id"    
+               "@type":"@id"
             }
          }
       },
