@@ -33,7 +33,13 @@
       },
       "ExperienceUpload":{
          "@id":"lr:ExperienceUpload",
-         "@type":"@id"
+         "@type":"@id",
+         "@context":{
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            }
+         }
       },
       "InterviewUpload":{
          "@id":"lr:InterviewUpload",
@@ -57,12 +63,22 @@
                "@id":"ebu:hasArtefactRelatedPhysicalResource",
                "@type":"@id",
                "@container":"@set"
+            },
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+                "@type":"@id"    
             }
          }
       },
       "Place":{
          "@id":"schema:Place",
-         "@type":"@id"
+         "@type":"@id",
+         "@context":{
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            }
+         }
       },
       "Person":{
          "@id":"schema:Person",
@@ -82,7 +98,13 @@
       },
       "Object":{
          "@id":"ebu:PhysicalResource",
-         "@type":"@id"
+         "@type":"@id",
+         "@context":{
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            }
+         }
       },
       "Sight":{
          "@id":"fast:1167852",
