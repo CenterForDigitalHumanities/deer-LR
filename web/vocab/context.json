@@ -10,10 +10,6 @@
       "loc":"http://id.loc.gov/vocabulary/ethnographicTerms/",
       "id":"@id",
       "type":"@type",
-      "__rerum":{
-         "@id":"rerum_v1:__rerum",
-         "@type":"@id"
-      },
       "AnnotationCollection":{
          "@id":"as:OrderedCollection",
          "@context":[
@@ -31,15 +27,6 @@
          "@context":[
             "http://www.w3.org/ns/anno.jsonld"
          ]
-      },
-      "ExperienceUpload":{
-         "@id":"lr:ExperienceUpload",
-         "@context":{
-            "associatedMedia":{
-               "@id":"schema:associatedMedia",
-               "@type":"@id"
-            }
-         }
       },
       "InterviewUpload":{
          "@id":"lr:InterviewUpload",
@@ -71,6 +58,13 @@
             "associatedMedia":{
                "@id":"schema:associatedMedia",
                "@type":"@id"
+            },
+            "additionalType":{
+               "@id":"schema:additionalType",
+               "@type":"@vocab",
+               "@context":{
+                  "ExperienceUpload":"lr:ExperienceUpload"
+               }
             }
          }
       },
@@ -203,12 +197,10 @@
       },
       "formerUses":{
          "@id":"ebu:hasArtefactRelatedPhysicalResource",
-         "@type":"lr:practiceContext",
          "@container":"@set"
       },
       "formerLocations":{
          "@id":"ebu:FormerLocationshasArtefactRelatedLocation",
-         "@type":"schema:Place",
          "@container":"@set"
       },
       "fieldNotes":"fast:2007231",
