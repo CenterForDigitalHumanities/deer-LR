@@ -192,7 +192,7 @@
          "@container":"@set"
       },
       "formerLocations":{
-         "@id":"ebu:FormerLocationshasArtefactRelatedLocation",
+         "@id":"ebu:hasArtefactRelatedLocation",
          "@container":"@set"
       },
       "fieldNotes":"fast:2007231",
