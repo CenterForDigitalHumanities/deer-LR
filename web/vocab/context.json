@@ -28,15 +28,6 @@
             "http://www.w3.org/ns/anno.jsonld"
          ]
       },
-      "InterviewUpload":{
-         "@id":"lr:InterviewUpload",
-         "@context":{
-            "associatedMedia":{
-               "@id":"schema:associatedMedia",
-               "@type":"@id"
-            }
-         }
-      },
       "Event":{
          "@id":"schema:Event",
          "@context":{
@@ -63,7 +54,8 @@
                "@id":"schema:additionalType",
                "@type":"@vocab",
                "@context":{
-                  "ExperienceUpload":"lr:ExperienceUpload"
+                  "ExperienceUpload":"lr:ExperienceUpload",
+                  "InterviewUpload":"lr:InterviewUpload"
                }
             }
          }
