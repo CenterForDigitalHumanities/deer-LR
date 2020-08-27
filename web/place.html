@@ -237,7 +237,7 @@
                     <label title="If there are secondary functions for this location, note them here.">Additional Types (if any)</label>
                     Hold <kbd>CTRL</kbd> to make multiple selections.
                     <!-- We are already using additionalType... -->
-                    <input type="hidden" deer-input-type="Set" deer-key="SecondaryFunction" >
+                    <input type="hidden" deer-input-type="Set" deer-key="secondaryFunction" >
                     <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
                         <optgroup label="General Categories"> 
                             <option value="Accommodation">Accommodation</option>
@@ -266,10 +266,10 @@
                     </select>
                     <h4>Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="FormerLocations" value="">
+                    <input type="hidden" deer-input-type="Set" deer-key="formerLocations" value="">
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     <label>Former Use(s)</label>
-                    <input type="hidden" deer-input-type="Set" deer-key="FormerUses" value="">
+                    <input type="hidden" deer-input-type="Set" deer-key="formerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                         <optgroup label="General Categories"> 
                             <option value="Accommodation" >Accommodation</option>
@@ -355,7 +355,7 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "locationForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["FormerUses", "FormerLocations", "SecondaryTypes"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
                     LR.utils.populateCoordinates(annotationData, event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                 break
