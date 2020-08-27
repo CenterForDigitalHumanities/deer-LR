@@ -154,7 +154,7 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
         let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
-            <optgroup label="${type}s"> `
+            <optgroup label="Choose Below"> `
         for (let loc of allLocationsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
         }
