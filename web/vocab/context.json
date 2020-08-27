@@ -104,10 +104,7 @@
          }
       },
       "Person":"schema:Person",
-      "Researcher":{
-         "@id":"lr:Researcher",
-         "@type":"schema:Person"
-      },
+      "Researcher":"lr:Researcher",
       "Object":{
          "@id":"ebu:PhysicalResource",
          "@context":{
