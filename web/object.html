@@ -79,18 +79,12 @@
                         <label>Further Options</label>
                         <select class="otherPrimaryTypes" oninput="setPrimaryType(event, true)">
                             <option disabled selected value> Other Types </option>
-                            <option value="Clothing"
-                                context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">Clothing
-                            </option>
-                            <option value="Food"
-                                context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Food</option>
-                            <option value="Natural" context=""">Natural</option>
-                            <option value=" Manufactured" context="">Manufactured</option>
-                            <option value="Found"
-                                context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">Found</option>
-                            <option value="Spoken"
-                                context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken
-                            </option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Food">Food</option>
+                            <option value="Natural">Natural</option>
+                            <option value="Manufactured">Manufactured</option>
+                            <option value="Found" >Found</option>
+                            <option value="Spoken">Spoken</option>
                             <option value="Other">Other</option>
                         </select>
                     </div>
@@ -99,23 +93,19 @@
                     <input type="hidden" deer-input-type="Set" deer-key="FormerLocations" />
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     <label>Select Former Use(s):</label>
-                    <input type="hidden" deer-key="FormerUses" deer-input-type="Set" context="">
+                    <input type="hidden" deer-key="FormerUses" deer-input-type="Set">
                     <!-- Looking at these as "former types", so just reuse the type values -->
                     <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
                         <option value="SacredObject">Sacred Object</option>
                         <option value="VisualArtwork">Artwork</option>
-                        <option value="Clothing"
-                            context="http://id.loc.gov/vocabulary/ethnographicTerms/afset007265.html">Clothing</option>
-                        <option value="Food" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset003521.html">
-                            Food</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Food">Food</option>
                         <option value="CivicStructure">Building</option>
-                        <option value="Natural" context="">Natural</option>
-                        <option value="Manufactured" context="">Manufactured</option>
-                        <option value="Found" context="http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html">
-                            Found</option>
+                        <option value="Natural">Natural</option>
+                        <option value="Manufactured">Manufactured</option>
+                        <option value="Found">Found</option>
                         <option value="Manuscript">Written Text</option>
-                        <option value="Spoken"
-                            context="http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html">Spoken</option>
+                        <option value="Spoken">Spoken</option>
                         <option value="Other">Other</option>
                     </select>
                     <h4>Descriptive Information</h4>
@@ -125,11 +115,11 @@
                     <label>Typical Use: </label>
                     <select deer-key="purpose">
                         <option disabled selected value> Not Supplied </option>
-                        <option value="Religious">Religious</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Educational">Educational</option>
-                        <option value="Civic">Civic</option>
-                        <option value="Other Public">Other Public</option>
+                        <option value="religious">Religious</option>
+                        <option value="commerical">Commercial</option>
+                        <option value="educational">Educational</option>
+                        <option value="civic">Civic</option>
+                        <option value="otherPublic">Other Public</option>
                     </select>
                     <!-- TODO -->
                     <!--<h3> Upload Media </h3>-->

@@ -7,12 +7,9 @@
       "ebu":"http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#",
       "schema":"http://schema.org/",
       "oa":"http://www.w3.org/ns/oa#",
+      "loc":"http://id.loc.gov/vocabulary/ethnographicTerms/",
       "id":"@id",
       "type":"@type",
-      "__rerum":{
-         "@id":"rerum_v1:__rerum",
-         "@type":"@id"
-      },
       "AnnotationCollection":{
          "@id":"as:OrderedCollection",
          "@context":[
@@ -31,17 +28,8 @@
             "http://www.w3.org/ns/anno.jsonld"
          ]
       },
-      "ExperienceUpload":{
-         "@id":"lr:ExperienceUpload",
-         "@type":"@id"
-      },
-      "InterviewUpload":{
-         "@id":"lr:InterviewUpload",
-         "@type":"@id"
-      },
       "Event":{
          "@id":"schema:Event",
-         "@type":"@id",
          "@context":{
             "relatedSenses":{
                "@id":"lr:relatedSenses",
@@ -57,128 +45,157 @@
                "@id":"ebu:hasArtefactRelatedPhysicalResource",
                "@type":"@id",
                "@container":"@set"
+            },
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            },
+            "additionalType":{
+               "@id":"schema:additionalType",
+               "@type":"@vocab",
+               "@context":{
+                  "ExperienceUpload":"lr:ExperienceUpload",
+                  "InterviewUpload":"lr:InterviewUpload"
+               }
             }
          }
       },
       "Place":{
          "@id":"schema:Place",
-         "@type":"@id"
+         "@context":{
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            },
+            "purpose":{
+               "@id":"lr:purpose",
+               "@type":"@vocab",
+               "@context":{
+                  "religious":"lr:religious",
+                  "commercial":"lr:commerical",
+                  "educational":"lr:educational",
+                  "civic":"lr:civic",
+                  "otherPublic":"lr:otherPublic"
+               }
+            },
+            "additionalType":{
+               "@id":"schema:additionalType",
+               "@type":"@vocab",
+               "@context":{
+                  "Imagined":"loc:afset009298",
+                  "Neighborhood":"loc:afset012412",
+                  "Other":"Place"
+               }
+            }
+         }
       },
-      "Person":{
-         "@id":"schema:Person",
-         "@type":"@id"
-      },
-      "Researcher":{
-         "@id":"lr:Researcher",
-         "@type":"@id"
+      "Person":"schema:Person",
+      "Researcher":"lr:Researcher",
+      "Object":{
+         "@id":"ebu:PhysicalResource",
+         "@context":{
+            "associatedMedia":{
+               "@id":"schema:associatedMedia",
+               "@type":"@id"
+            },
+            "additionalType":{
+               "@id":"schema:additionalType",
+               "@type":"@vocab",
+               "@context":{
+                  "Spoken":"loc:afset020912",
+                  "Clothing":"fast:864680",
+                  "Food":"loc:afset020912",
+                  "Natural":"fast:1034403",
+                  "Manufactured":"fast:1007993",
+                  "Found":"loc:Found",
+                  "Other":"Object"
+               }
+            },
+            "purpose":{
+               "@id":"lr:purpose",
+               "@type":"@vocab",
+               "@context":{
+                  "religious":"lr:religious",
+                  "commercial":"lr:commerical",
+                  "educational":"lr:educational",
+                  "civic":"lr:civic",
+                  "otherPublic":"lr:otherPublic"
+               }
+            }
+         }
       },
       "Sense":{
          "@id":"fast:1112562",
-         "@type":"@id"
+         "@context":{
+            "additionalType":{
+               "@id":"schema:additionalType",
+               "@type":"@vocab",
+               "@context":{
+                  "Sight":"fast:1167852",
+                  "Sound":"fast:1127099",
+                  "Feel":"fast:1153089",
+                  "Smell":"fast:1121562",
+                  "Taste":"fast:1143475",
+                  "Other":"Sense"
+               }
+            }
+         }
       },
       "Practice":{
          "@id":"fast:1149637",
-         "@type":"@id"
-      },
-      "Object":{
-         "@id":"ebu:PhysicalResource",
-         "@type":"@id"
-      },
-      "Sight":{
-         "@id":"fast:1167852",
-         "@type":"@id"
-      },
-      "Sound":{
-         "@id":"fast:1127099",
-         "@type":"@id"
-      },
-      "Feel":{
-         "@id":"fast:1153089",
-         "@type":"@id"
-      },
-      "Smell":{
-         "@id":"fast:1121562",
-         "@type":"@id"
-      },
-      "Taste":{
-         "@id":"fast:1143475",
-         "@type":"@id"
-      },
-      "Singing":{
-         "@id":"lr:Singing",
-         "@type":"@id"
-      },
-      "Sitting":{
-         "@id":"lr:Sitting",
-         "@type":"@id"
-      },
-      "Kneeling":{
-         "@id":"lr:Kneeling",
-         "@type":"@id"
-      },
-      "Standing":{
-         "@id":"lr:Standing",
-         "@type":"@id"
-      },
-      "Traveling":{
-         "@id":"fast:1155558",
-         "@type":"@id"
-      },
-      "Dancing":{
-         "@id":"fast:887402",
-         "@type":"@id"
-      },
-      "Working":{
-         "@id":"lr:Working",
-         "@type":"@id"
-      },
-      "Cooking":{
-         "@id":"fast:1754966 ",
-         "@type":"@id"
-      },
-      "Clothe":{
-         "@id":"lr:ClotheAction",
-         "@type":"@id"
-      },
-      "Clothing":{
-         "@id":"fast:864680",
-         "@type":"@id"
-      },
-      "Food":{
-         "@id":"ebu:Food",
-         "@type":"@id"
-      },
-      "Natural":{
-         "@id":"fast:1034403",
-         "@type":"@id"
-      },
-      "Manufactured":{
-         "@id":"fast:1007993",
-         "@type":"@id"
-      },
-      "Found":{
-         "@id":"lr:Found",
-         "@type":"@id"
-      },
-      "Spoken":{
-         "@id":"lr:Spoken",
-         "@type":"@id"
+         "@context":{
+            "additionalType":{
+               "@id":"schema:additionalType",
+               "@type":"@vocab",
+               "@context":{
+                  "SingAction":"lr:SingAction",
+                  "SitAction":"lr:SitAction",
+                  "KneelAction":"lr:KneelAction",
+                  "StandAction":"lr:StandAction",
+                  "TravelAction":"fast:1155558",
+                  "DanceAction":"fast:887402",
+                  "WorkAction":"lr:Working",
+                  "ClotheAction":"lr:ClotheAction",
+                  "EatAction":"schema:EatAction",
+                  "DrinkAction":"schema:DrinkAction",
+                  "CookAction":"schema:CookAction",
+                  "PlayAction":"schema:PlayAction",
+                  "WriteAction":"schema:WriteAction",
+                  "WatchAction":"schema:WatchAction",
+                  "TradeAction":"schema:TradeAction",
+                  "GiveAction":"schema:GiveAction",
+                  "Action":"schema:Action",
+                  "Other":"Action"
+               }
+            },
+            "practiceContext":{
+               "@id":"lr:practiceContext",
+               "@type":"@vocab",
+               "@context":{
+                  "religiousRitual":"lr:religiousRitual",
+                  "communityEvent":"lr:communityEvent",
+                  "civicRitual":"lr:civicRitual",
+                  "commercial":"lr:commerical",
+                  "public":"lr:public",
+                  "private":"lr:private",
+                  "planned":"lr:planned",
+                  "spontaneous":"lr:spontaneous",
+                  "individual":"lr:individual",
+                  "collective":"lr:collective",
+                  "other":""
+               }
+            }
+         }
       },
       "formerUses":{
          "@id":"ebu:hasArtefactRelatedPhysicalResource",
-         "@type":"@id"
+         "@container":"@set"
       },
       "formerLocations":{
          "@id":"ebu:FormerLocationshasArtefactRelatedLocation",
-         "@type":"@id"
+         "@container":"@set"
       },
-      "fieldNotes":{
-         "@id":"fast:2007231",
-         "@type":"@id"
-      },
-      "religiousTradition":{
-         "@id":"lr:religiousTradition",
-         "@type":"@id"
-      }
+      "fieldNotes":"fast:2007231",
+      "religiousTradition":"lr:religiousTradition"
    }
 }

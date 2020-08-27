@@ -19,30 +19,26 @@ import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/d
 //Add one of my own templates
 DEER.TEMPLATES.Sense = function(obj, options = {}) {
     try {
-        //if I use key that doesn't exist, I get a blank, which is better than a breaking error 
         let label = `<h3>${UTILS.getLabel(obj)}</h3>`
         let location = `<dd>Location:${UTILS.getValue(obj.location)}</dd>`
         let religiousTradition = `<dd>Religion:${UTILS.getValue(obj.religious_tradition)}</dd>`
         let gender = `<dd>Gender:${UTILS.getValue(obj.demographic.gender)}</dd>`
         let age = `<dd>Age:${UTILS.getValue(obj.demographic.age)}</dd>`
         let use = `<dd>Use:${UTILS.getValue(obj.typical_use)}</dd>`
-            //If I use a obj.xyz that doesn't exist a breaking error occurs...
-
         let senseTemplate = `<div>`
-
         senseTemplate += `<div>${label}</div>`
         senseTemplate += `<div>${location}</div>`
         senseTemplate += `<div>${religiousTradition}</div>`
         senseTemplate += `<div>${gender}</div>`
         senseTemplate += `<div>${age}</div>`
         senseTemplate += `<div>${use}</div>`
-
         senseTemplate += `</div>`
         return senseTemplate
     } catch (err) {
+        console.log("Could not build Sense template.")
+        console.error(err)
         return null
     }
-    return null
 }
 
 /**
@@ -75,9 +71,14 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
                     type = "Person"
                 break
                 default :
-                    console.error("This is an unknown collection: "+whichCollection)
+                    console.error("This is an unknown collection: "+whichCollection+".")
                     return null
             }
+        }
+        else{
+            console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
+            console.log(obj)
+            return null
         }
         let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="card quickAddEntity bg-light is-hidden">
@@ -95,6 +96,8 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         tmpl += `</select>`
         return tmpl
     } catch (err) {
+        console.log("Could not build collection dropdown template.")
+        console.error(err)
         return null
     }
 }
@@ -131,9 +134,14 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
                     type = "Person"
                 break
                 default :
-                    console.error("This is an unknown collection: "+whichCollection)
+                    console.error("This is an unknown collection: "+whichCollection+".")
                     return null
             }
+        }
+        else{
+            console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
+            console.log(obj)
+            return null
         }
         let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
         <div class="card quickAddEntity bg-light is-hidden">
@@ -153,6 +161,8 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
         tmpl += `</optgroup></select>${selected}`
         return tmpl
     } catch (err) {
+        console.log("Could not build collection multi select template.")
+        console.error(err)
         return null
     }
 }
@@ -432,6 +442,8 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
         return tmpl
     } catch (err) {
+        console.log("Could not build Event or ExperienceUpload template.")
+        console.error(err)
         return null
     }
 }
@@ -446,30 +458,43 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
  * @return {tmpl}
  */    
 DEER.TEMPLATES.list= function(obj, options={}) {
-    let tmpl = ``
-    if(options.list){
-        tmpl += `<ul>`
-        obj[options.list].forEach((val,index)=>{
-            let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
-            let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
-            let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
-            let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-            tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
-        })
-        tmpl += `</ul>`
+    try{
+        let tmpl = ``
+        if(options.list){
+            tmpl += `<ul>`
+            obj[options.list].forEach((val,index)=>{
+                let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
+                let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
+                let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
+                onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
+                let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
+                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
+            })
+            tmpl += `</ul>`
+        }
+        else{
+            console.log("There are no items in this list to draw.")
+            console.log(obj)
+        }
+        return tmpl
+    } catch (err) {
+        console.log("Could not build list template.")
+        console.error(err)
+        return null
     }
-    return tmpl
+
 }
 
 DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
-    let key = options.key || "@id"
-    let prop = obj[key] || "[ undefined ]"
-    let label = options.label || UTILS.getLabel(obj, prop)
-    let isDescribed = obj["@type"]==="Researcher" || Object.keys(obj).some(i=>["description","geometry","email","fieldNotes"].includes(i))
-    try {
+    try{
+        let key = options.key || "@id"
+        let prop = obj[key] || "[ undefined ]"
+        let label = options.label || UTILS.getLabel(obj, prop)
+        let isDescribed = obj["@type"]==="Researcher" || Object.keys(obj).some(i=>["description","geometry","email","fieldNotes"].includes(i))
         return isDescribed ? `${label}` : `<span class="needs-more" title="This entry may require more details">${label}</span>`
     } catch (err) {
+        console.log("Could not build complete label template.")
+        console.error(err)
         return null
     }
 }
@@ -481,10 +506,12 @@ DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
  * @param {Object} obj some obj  containing some label annotating it.
  */
 DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
-    let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
     try {
+        let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
         return at
     } catch (err) {
+        console.log("Could not build most up to date additional type template.")
+        console.error(err)
         return null
     }
 }
@@ -523,6 +550,8 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
         tmpl += "</select>"
         return tmpl
     } catch (err) {
+        console.log("Could not build practice name helper template.")
+        console.error(err)
         return null
     }
 }
