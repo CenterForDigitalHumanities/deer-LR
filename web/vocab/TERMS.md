@@ -1,5 +1,5 @@
 
-#Arch Type
+#Arch Types
 ## Event
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
@@ -22,9 +22,7 @@
 - Observable discrete physical matter. See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#PhysicalResource
 
 
-
 # Keys Used
-
 ## relatedSenses
 - An aggregator that encapsulates the Senses encountered by individuals at an Event. 
 
@@ -52,6 +50,9 @@
 ## practiceContext
 - A reason behind a Practice taking place.  Ex. "Ritual" or "Just For Fun".
 
+## purpose
+- The purpose for which an Object or Place exists, if any.
+
 
 
 # Defined Expected Values and/or Additional Types
@@ -70,38 +71,56 @@
 ## Taste
 - The factors surrounding a Person's sense of taste. See http://id.worldcat.org/fast/1143475
 
-## Singing
+## SingAction
 - The act of singing being performed by a Person or Persons.  See http://id.worldcat.org/fast/1119311
 
-## Sitting
+## SitAction
 - The act of sitting being performed by a Person or Persons. See http://id.worldcat.org/fast/1073252
 
-## Kneeling
+## KneelAction
 - The act of kneeling being performed by a Person or Persons. See http://id.worldcat.org/fast/1073252
 
-## Standing
+## StandAction
 - The act of standing being performed by a Person or Persons. See http://id.worldcat.org/fast/1073252
 
-## Traveling
-- The act of traveling being performed by a Person or Persons.  See http://id.worldcat.org/fast/1155558
-
-## Dancing
+## DanceAction
 - The act of dancing being performed by a Person or Persons.  See http://id.worldcat.org/fast/887402
 
-## Working
+## WorkAction
 - The act of work to produce some predefined outcome being performed by a Person or Persons.
 
-## Cooking
-- The act of preparing Food. See http://id.worldcat.org/fast/1754966 
-
-## Clothe
+## ClotheAction
 - The act of placing an article of Clothing onto a Person or Object.  See http://id.worldcat.org/fast/864680
+
+## CookAction
+- See https://schema.org/CookAction
+
+## PlayAction
+- See https://schema.org/PlayAction
+
+## WriteAction 
+- See https://schema.org/WriteAction
+
+## WatchAction
+- See https://schema.org/WatchAction
+
+## TradeAction
+- See https://schema.org/TradeAction
+
+## GiveAction
+- See https://schema.org/GiveAction
+
+## TravelAction
+- See https://schema.org/TravelAction
+
+## Action
+- See https://schema.org/Action
 
 ## Clothing
 - Garments worn by a Person that act to cover parts of the body.  See http://id.worldcat.org/fast/864680
 
 ## Food
-- Consumable material for human consumption.  See http://id.worldcat.org/fast/930458, http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Food
+- Consumable material for human consumption.  See http://id.worldcat.org/fast/930458
 
 ## Natural
 - Comes from the Universe without apparent synthetic design, processing, or manufacture.  See http://id.worldcat.org/fast/1034403
@@ -110,115 +129,112 @@
 - Does not occur without some action from a creator agent.  See http://id.worldcat.org/fast/1007993
 
 ## Found
-- Was discovered by chance or unexpectedly.
+- Was discovered by chance or unexpectedly.  See http://id.loc.gov/vocabulary/ethnographicTerms/afset020912.html
 
 ## Spoken
-- Conveyance of thought, feeling, meaning or other information through articulate sounds.  
-
-
-
-
-!?!?!?!! Which of these values is outside of schema and needs help for context through Lived Religion?
-
-## ReligiousRitual
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## CommunityEvent
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## CivicRitual
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Commercial
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Public
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Private
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Planned
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Spontaneous
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Individual
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Collective
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Accommodation
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## AdministrativeArea
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## CivicStructure
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Landform
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## LandmarksOrHistoricalBuildings
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Local Business
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Residence
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-## Tourist Destination
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- Conveyance of thought, feeling, meaning or other information through articulate sounds.  See http://id.loc.gov/vocabulary/ethnographicTerms/afset017218.html
 
 ## Imagined
-- http://id.loc.gov/vocabulary/ethnographicTerms/afset009298
-
-## School
-- http://id.loc.gov/vocabulary/ethnographicTerms/afset015946
+- See http://id.loc.gov/vocabulary/ethnographicTerms/afset009298.html
 
 ## Neighborhood
-- http://id.loc.gov/vocabulary/ethnographicTerms/afset012412
+- See http://id.loc.gov/vocabulary/ethnographicTerms/afset012412.html
+
+## School
+- See http://schema.org/School
+
+## Accommodation
+- see https://schema.org/Accomodation
+
+## AdministrativeArea
+- see https://schema.org/AdministrativeArea
+
+## CivicStructure
+- see https://schema.org/CivicStructure
+
+## Landform
+- see https://schema.org/Landform
+
+## LandmarksOrHistoricalBuildings
+- see https://schema.org/LandmarksOrHistoricalBuildings
+
+## LocalBusiness
+- see https://schema.org/LocalBusiness
+
+## Residence
+- see https://schema.org/Residence
+
+## TouristDestination
+- see https://schema.org/TouristDestination
 
 ## House
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- see https://schema.org/House
 
 ## Cemetery
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- see https://schema.org/Cemetery
 
 ## Hospital
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- see https://schema.org/Hospital
 
 ## Museum
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- see https://schema.org/Museum
 
 ## Park
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- see https://schema.org/Park
 
 ## Street
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 ## Zoo
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- see https://schema.org/Zoo
 
 ## Gym
+- see https://schema.org/Gym
+
+
+## Vocabulary has not be finalized for the following terms.  Check https://schema.org/TERM to see if one already exists.
+## religiousRitual
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-## Religious
+## communityEvent
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-## Commercial
+## civicRitual
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-## Educational
+## commercial
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-## Civic
+## public
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-## Other Public
+## private
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## planned
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## spontaneous
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## individual
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## collective
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## religious
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## commercial
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## educational
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## civic
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+## otherPublic
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
