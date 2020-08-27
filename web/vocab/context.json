@@ -90,7 +90,10 @@
          }
       },
       "Person":"schema:Person",
-      "Researcher":"lr:Researcher",
+      "Researcher":{
+         "@id":"lr:Researcher",
+         "@vocab" : "http://schema.org/"
+      },
       "Object":{
          "@id":"ebu:PhysicalResource",
          "@context":{
