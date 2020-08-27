@@ -14,33 +14,6 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 // Identify a UTILS package
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 
-// Overwrite or add certain values to the configuration to customize.
-
-//Add one of my own templates
-DEER.TEMPLATES.Sense = function(obj, options = {}) {
-    try {
-        let label = `<h3>${UTILS.getLabel(obj)}</h3>`
-        let location = `<dd>Location:${UTILS.getValue(obj.location)}</dd>`
-        let religiousTradition = `<dd>Religion:${UTILS.getValue(obj.religious_tradition)}</dd>`
-        let gender = `<dd>Gender:${UTILS.getValue(obj.demographic.gender)}</dd>`
-        let age = `<dd>Age:${UTILS.getValue(obj.demographic.age)}</dd>`
-        let use = `<dd>Use:${UTILS.getValue(obj.typical_use)}</dd>`
-        let senseTemplate = `<div>`
-        senseTemplate += `<div>${label}</div>`
-        senseTemplate += `<div>${location}</div>`
-        senseTemplate += `<div>${religiousTradition}</div>`
-        senseTemplate += `<div>${gender}</div>`
-        senseTemplate += `<div>${age}</div>`
-        senseTemplate += `<div>${use}</div>`
-        senseTemplate += `</div>`
-        return senseTemplate
-    } catch (err) {
-        console.log("Could not build Sense template.")
-        console.error(err)
-        return null
-    }
-}
-
 /**
  * Represent a collection as a <select> HTML dropdown.  
  * Include the ability to quickly add an item to the collection, which will then be selected.
