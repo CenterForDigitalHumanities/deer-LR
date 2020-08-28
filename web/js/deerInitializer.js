@@ -58,7 +58,7 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
             <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', true, 'Place')">Add</a>
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', true, '${type}')">Add</a>
         </div>`
         let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
@@ -121,7 +121,7 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
             <label>Supply a name or label for this entity</label>
             <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
             <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, 'Place')">Add</a>
+            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
         let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
