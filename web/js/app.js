@@ -702,8 +702,14 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, multiOrD
             let entity = {
                 "@context" : LR.CONTEXT,
                 "type" : type,
-                "name" : labelText,
                 "creator" : userID
+            }
+            if(type === "Event"){ 
+                // or maybe additionType === ExperienceUpload, depends on how many Event upload types we end up with.
+                entity.label = labelText
+            }
+            else{
+                entity.name = labelText
             }
             fetch(LR.URLS.CREATE, {
                 method: "POST",
