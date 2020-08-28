@@ -157,7 +157,7 @@
                   "StandAction":"lr:StandAction",
                   "TravelAction":"fast:1155558",
                   "DanceAction":"fast:887402",
-                  "WorkAction":"lr:Working",
+                  "WorkAction":"lr:WorkAction",
                   "ClotheAction":"lr:ClotheAction",
                   "EatAction":"schema:EatAction",
                   "DrinkAction":"schema:DrinkAction",
