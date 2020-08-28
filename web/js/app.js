@@ -702,13 +702,8 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, multiOrD
             let entity = {
                 "@context" : LR.CONTEXT,
                 "type" : type,
+                "name" : labelText,
                 "creator" : userID
-            }
-            if(type === "Person" || type === "Researcher"){
-                entity.name = labelText
-            }
-            else{
-                entity.label = labelText
             }
             fetch(LR.URLS.CREATE, {
                 method: "POST",
