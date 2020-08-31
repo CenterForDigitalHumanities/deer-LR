@@ -10,7 +10,7 @@ UM.URLS = {
     SETSECRET: "setUserSecret",
     ADDUSER : "addUser",
     REMOVEUSER : "removeUser",
-    CREATE : "http://tinydev.rerum.io/app/create"
+    CREATE : "http://tiny.rerum.io/app/create"
 }
 
 /**
@@ -104,7 +104,7 @@ UM.interaction.addUser = async function(){
     else{
         let agentObj = {
             "@type" : "Agent",
-            "@context" : "http://devstore.rerum.io/v1/contex.json",
+            "@context" : "http://store.rerum.io/v1/contex.json",
             "mbox" : email,
             "label" : username,
             "name" : name

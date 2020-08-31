@@ -9,6 +9,17 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
+    
+    //Comment this out for dev-01 deploys
+DEER.URLS = {
+    BASE_ID: "http://store.rerum.io/v1",
+    CREATE: "create",
+    UPDATE: "update",
+    QUERY: "query",
+    OVERWRITE: "overwrite",
+    DELETE: "delete",
+    SINCE: "http://store.rerum.io/v1/since"
+}
 
 let MAP = {}
 
@@ -30,10 +41,11 @@ MAP.init =  async function(){
             console.error(err)
             return {}
         })
-    })
+    })     
     Promise.all(expandedEntities).then(LR_geos => {
-         MAP.initializeMap(latlong, LR_geos)
-    }) 
+        return LR_geos.filter(geo => {return (geo.hasOwnProperty("geometry") && Object.keys(geo.geometry).length > 0)})        
+    })
+    .then(filtered_geos => {MAP.initializeMap(latlong, filtered_geos)})
     .catch(err => {
         console.error(err)
         alert("Could not gather coordinate data.  Refresh to Try Again.")
