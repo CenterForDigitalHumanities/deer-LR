@@ -1,5 +1,6 @@
 
-#Arch Types
+# Arch Types
+
 ## Event
 - A place and time at which some action was observed or is known to have happened.  See http://schema.org/Event
 
