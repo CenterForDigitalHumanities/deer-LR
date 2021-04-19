@@ -11,11 +11,10 @@
     <link rel="stylesheet" href="css/lr.css">
     <style>
         #experienceReview{
-            background-image: url(https://i.pinimg.com/originals/a7/8f/55/a78f557….gif);
-            background-position: center; 
-            background-repeat: no-repeat; 
-            background-size: cover; 
-            background-size: 70%; 
+            background-image: url(./images/building-blocks.gif);
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 35em;
         }
         #experienceReview h4{
             margin: 0px;
@@ -147,6 +146,7 @@
             </div>
         </div>
         <div id="experienceReview" class="card is-hidden">
+            <p id="expLoadMessage"> Please wait while we bring the pieces together... </p>
             <div class="card_body">
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
@@ -383,6 +383,10 @@
                 case "practiceForm":
                     //A practice form was submitted and DEER handled all the annotations and reloaded it.  Remove all the DEER attributes so that when we save it a new item is created.
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
+                break
+                case "experienceContent":
+                    experienceReview.style.backgroundImage = "none"
+                    expLoadMessage.style.display = "none"
                 break
                 default:
                     

@@ -28,19 +28,19 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         if(whichCollection){
             let check = whichCollection.replace("Test", "")
             switch(check){
-                case "LivedReligionLocationsTest":
+                case "LivedReligionLocations":
                     type = "Place"
                 break
-                case "LivedReligionObjectsTest":
+                case "LivedReligionObjects":
                     type = "Thing"
                 break
-                case "LivedReligionExperiencesTest":
+                case "LivedReligionExperiences":
                     type = "Event"
                 break
-                case "LivedReligionResearchersTest":
+                case "LivedReligionResearchers":
                     type = "Researcher"
                 break
-                case "LivedReligionPeopleTest":
+                case "LivedReligionPeople":
                     type = "Person"
                 break
                 default :
@@ -91,19 +91,19 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
         if(whichCollection){
             let check = whichCollection.replace("Test", "")
             switch(check){
-                case "LivedReligionLocationsTest":
+                case "LivedReligionLocations":
                     type = "Place"
                 break
-                case "LivedReligionObjectsTest":
+                case "LivedReligionObjects":
                     type = "Thing"
                 break
-                case "LivedReligionExperiencesTest":
+                case "LivedReligionExperiences":
                     type = "Event"
                 break
-                case "LivedReligionResearchersTest":
+                case "LivedReligionResearchers":
                     type = "Researcher"
                 break
-                case "LivedReligionPeopleTest":
+                case "LivedReligionPeople":
                     type = "Person"
                 break
                 default :
