@@ -21,7 +21,7 @@
                 <form id="objectForm" class="hidden" deer-type="Thing" deer-creator deer-motivation="supplementing"
                     deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionObjects">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionObjectsTest">
                     <!-- into this collection -->
                     <label>Name:</label>
                     <input type="text" deer-key="name">
@@ -91,7 +91,7 @@
                     <h4>History of this Object</h4>
                     <label>Select Former Location(s):</label>
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" />
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     <label>Select Former Use(s):</label>
                     <input type="hidden" deer-key="formerUses" deer-input-type="Set">
                     <!-- Looking at these as "former types", so just reuse the type values -->

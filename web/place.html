@@ -32,7 +32,7 @@
                     <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionLocationsTest">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
                     <div title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually." id="leafletPreview" class="col"></div>
@@ -269,7 +269,7 @@
                     <h4>Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" value="">
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     <label>Former Use(s)</label>
                     <input type="hidden" deer-input-type="Set" deer-key="formerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">

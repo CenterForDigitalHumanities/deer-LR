@@ -28,19 +28,19 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         if(whichCollection){
             let check = whichCollection.replace("Test", "")
             switch(check){
-                case "LivedReligionLocations":
+                case "LivedReligionLocationsTest":
                     type = "Place"
                 break
-                case "LivedReligionObjects":
+                case "LivedReligionObjectsTest":
                     type = "Thing"
                 break
-                case "LivedReligionExperiences":
+                case "LivedReligionExperiencesTest":
                     type = "Event"
                 break
-                case "LivedReligionResearchers":
+                case "LivedReligionResearchersTest":
                     type = "Researcher"
                 break
-                case "LivedReligionPeople":
+                case "LivedReligionPeopleTest":
                     type = "Person"
                 break
                 default :
@@ -91,19 +91,19 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
         if(whichCollection){
             let check = whichCollection.replace("Test", "")
             switch(check){
-                case "LivedReligionLocations":
+                case "LivedReligionLocationsTest":
                     type = "Place"
                 break
-                case "LivedReligionObjects":
+                case "LivedReligionObjectsTest":
                     type = "Thing"
                 break
-                case "LivedReligionExperiences":
+                case "LivedReligionExperiencesTest":
                     type = "Event"
                 break
-                case "LivedReligionResearchers":
+                case "LivedReligionResearchersTest":
                     type = "Researcher"
                 break
-                case "LivedReligionPeople":
+                case "LivedReligionPeopleTest":
                     type = "Person"
                 break
                 default :
@@ -535,15 +535,15 @@ let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 //Comment this out for dev-01 deploys
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://store.rerum.io/v1/since"
-}
+//DEER.URLS = {
+//    BASE_ID: "http://store.rerum.io/v1",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    QUERY: "query",
+//    OVERWRITE: "overwrite",
+//    DELETE: "delete",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/

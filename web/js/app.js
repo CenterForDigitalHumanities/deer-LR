@@ -6,36 +6,36 @@
 
 const LR = {}
 LR.VERSION = "1.0.0"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
 ///For dev-01
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    SINCE: "http://devstore.rerum.io/v1/since"
-//}
-
-//For prd-01
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "http://store.rerum.io/v1",
-    DELETE: "delete",
-    CREATE: "create",
-    UPDATE: "update",
-    OVERWRITE: "overwrite",
-    QUERY: "query",
-    SINCE: "http://store.rerum.io/v1/since"
+    BASE_ID: "http://devstore.rerum.io/v1",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since"
 }
+
+//For prd-01
+//LR.URLS = {
+//    LOGIN: "login",
+//    LOGOUT: "logout",
+//    BASE_ID: "http://store.rerum.io/v1",
+//    DELETE: "delete",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    OVERWRITE: "overwrite",
+//    QUERY: "query",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 if (typeof(Storage) !== "undefined") {
@@ -207,7 +207,7 @@ LR.ui.getUserEntries = async function(user) {
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiences')">&#x274C</a>`
+            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
         }
         return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
     },``):`<p class="text-error">No experiences found for this user</p>`

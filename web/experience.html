@@ -10,6 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
     <style>
+        #experienceReview{
+            background-image: url(https://i.pinimg.com/originals/a7/8f/55/a78f557….gif);
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-size: cover; 
+            background-size: 70%; 
+        }
         #experienceReview h4{
             margin: 0px;
         }
@@ -95,7 +102,7 @@
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/> <!-- https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#ExperienceUpload -->
                     <input id="experienceFieldNotes" type="hidden" deer-key="fieldNotes" />
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiences"> <!-- into this collection -->
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiencesTest"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
                     
@@ -103,22 +110,22 @@
                     <input id="uploadLabel" type="text" deer-key="name" />
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
                     
                     <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
-                    <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
-                    <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="people" deer-collection="LivedReligionPeopleTest" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
-                    <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label>Provide a description of what prompted you to do this</label>
                     <textarea deer-key="description"></textarea>
@@ -141,7 +148,7 @@
         </div>
         <div id="experienceReview" class="card is-hidden">
             <div class="card_body">
-                <deer-view deer-listening="theExperience" deer-template="Event"></deer-view>
+                <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
         <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
@@ -180,11 +187,11 @@
                             </select>
                             <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
                             <input type="hidden" deer-key="object" value="">
-                            <div deer-collection="LivedReligionObjects" class="deer-view col" deer-template="itemsAsDropdown"></div>
+                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
                             
                             <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
                             <input type="hidden" deer-input-type="Set" deer-todo="attendee" value="">
-                            <div deer-collection="LivedReligionPeople" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
+                            <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
                             
                             <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                             <textarea id="further_sense" type="text" deer-key="description"></textarea>
@@ -243,11 +250,11 @@
                     <textarea id="further_practice" type="text" deer-key="description"></textarea>
                     <label>Is there a particular object this practice is associated with?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
                     <input type="hidden" deer-key="object" value=""> 
-                    <div deer-collection="LivedReligionObjects" class="deer-view col" deer-template="itemsAsDropdown"></div>
+                    <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
                     
                     <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
                     <input deer-input-type="Set" type="hidden" deer-todo="attendee" value="">
-                    <div deer-collection="LivedReligionPeople" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
+                    <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
