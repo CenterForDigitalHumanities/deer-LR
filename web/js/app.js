@@ -256,6 +256,60 @@ LR.ui.toggleAreaHideOthers = function(event){
 }
 
 /**
+ * A specific toggle with multiple pieces of UI attached, so it does not fit the convention.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.ui.customToggles = function(event){
+    let area = event.target.getAttribute("area")
+    switch(area){
+        case "experienceContent":
+            let elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+                event.target.title = "Hide the details of the experience"
+                event.target.innerHTML = "View Less"
+            }  
+            else{
+                elem.classList.add("is-hidden")
+                event.target.title = "Show the details of this experience"
+                event.target.innerHTML = "View More"
+            }
+           
+        break
+        case "artifactArea":
+            let elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+                event.target.title = "Hide the sensory information area"
+                event.target.innerHTML = "Collapse"
+            }  
+            else{
+                elem.classList.add("is-hidden")
+                event.target.title = "Expand the area to add sensory information"
+                event.target.innerHTML = "Add Sensory Information"
+            }
+        break
+        case "startExperience":
+            document.getElementById("experienceReview").classList.add("is-hidden")
+            document.getElementById("experienceArtifacts").classList.add("is-hidden")
+            document.getElementById("startExperience").classList.remove("is-hidden")
+            let artifactArea = document.querySelector("div[tog='artifactArea']")
+            let experienceContent = document.querySelector("div[tog='experienceContent']")
+            if(!artifactArea.classList.contains("is-hidden")){
+                toggleArtifactArea.click()
+            }
+            if(!experienceContent.classList.contains("is-hidden")){
+                toggleExpArea.click()
+            }
+
+        break
+        
+        default:
+    }
+}
+
+/**
  * 
  * @param {type} event
  * @return {undefined}

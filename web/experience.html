@@ -5,16 +5,19 @@
 <html>
 
 <head>
-    <title>New Experience</title>
+    <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
     <style>
         #experienceReview{
-            background-image: url(./images/building-blocks.gif);
+            background-image: url(./images/load-blocks.gif);
             background-position: center;
             background-repeat: no-repeat;
             min-height: 35em;
+        }
+        .collapsed{
+            height : 2em;
         }
         #experienceReview h4{
             margin: 0px;
@@ -151,114 +154,107 @@
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
-        <div id="experienceArtifacts" class="fixDynamicHeight is-hidden">
+        <div id="experienceArtifacts" class="is-hidden">
             <h2 class="text-primary">Sensory Information</h2>
-            <label>Add information about the space, objects and activities.  Select a category to get started.</label>
-            <div class="row">
-                <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
-                <a class="button primary" area="objects" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the various objects in the vicinity of the experience.">Objects</a>
-                <a class="button primary" area="bodies" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
-                <a class="button primary" area="people" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record specific people encontered or noticed at the experience.">People</a>
-            </div>
-            <div tog="objects" class="kind is-hidden">
-                <h2> Objects </h2>
-                Objects are added at initial creation.  Would you like it as one of these options instead?     
-            </div>
-            <div tog="people" class="kind is-hidden">
-                <h2> People </h2>
-                People are added at initial creation.  Would you like it as one of these options instead?
-            </div>
-            <div tog="bodies" class="kind is-hidden">
-                <h2>Bodies</h2>
-                <p> More intimate information about what you are feeling and perceiving. </p>
-                <div class="card bd-primary">
-                    <div class="card_body">
-                        <form id="senseForm" deer-type="Sense" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
-                            <h4>What senses are prominent?  Add one at a time.</h4>
-                            <input type="hidden" deer-key="creator"/>
-                            <input class="expReference" type="hidden" deer-key="event">
-                            <select deer-key="additionalType">
-                                <option disabled selected value> Required </option>
-                                <option value="Sight">I see...</option>
-                                <option value="Sound">I hear...</option>
-                                <option value="Taste">I taste...</option>
-                                <option value="Feel">I feel...</option>
-                                <option value="Smell">I smell...</option>
-                            </select>
-                            <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
-                            <input type="hidden" deer-key="object" value="">
-                            <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
-                            
-                            <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
-                            <input type="hidden" deer-input-type="Set" deer-todo="attendee" value="">
-                            <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
-                            
-                            <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
-                            <textarea id="further_sense" type="text" deer-key="description"></textarea>
-                            <div class="row">
-                                <input class="button primary col" type="submit">
-                            </div>
-                        </form>
-                    </div>
-                </div>                    
-            </div>
-            <div tog="practices" class="kind is-hidden">
-                <h4>What practices are occurring? Add one at a time.</h4>
-                <form id="practiceForm" deer-type="Practice" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
-                    <input type="hidden" deer-key="creator" /> 
-                    <input class="expReference" type="hidden" deer-key="event"> 
-                    <input type="hidden" deer-key="name"/>
-                    <select deer-key="additionalType" onchange="this.previousElementSibling.value=this.options[this.selectedIndex].text">
-                        <option disabled selected value> Required </option>
-                        <option value="None">None Noted</option>
-                        <option value="EatAction">Eating</option>
-                        <option value="DrinkAction">Drinking</option>
-                        <option value="PlayAction">Playing</option>
-                        <option value="ClotheAction">Clothing</option>
-                        <option value="SingAction">Singing</option>
-                        <option value="MoveAction">Moving</option>
-                        <option value="SitAction">Sitting</option>
-                        <option value="StandAction">Standing</option>
-                        <option value="KneelAction">Kneeling</option>
-                        <option value="TravelAction">Traveling</option>
-                        <option value="DanceAction">Dancing</option>
-                        <option value="CookAction">Cooking</option>
-                        <option value="WorkAction">Working</option>
-                        <option value="ListenAction">Listening</option>
-                        <option value="WatchAction">Watching</option>
-                        <option value="WriteAction">Writing</option>
-                        <option value="TradeAction">Trading</option>
-                        <option value="GiveAction">Donating</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
-                    <select deer-key="practiceContext">
-                        <option disabled selected value> Not Supplied </option>
-                        <option value="religiousRitual">Religious Ritual</option>
-                        <option value="communityEvent">Community Event</option>
-                        <option value="civicRitual">Civic Ritual</option>
-                        <option value="commercial">Commercial</option>
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                        <option value="planned">Planned</option>
-                        <option value="spontaneous">Spontaneous</option>
-                        <option value="individual">Individual</option>
-                        <option value="collective">Collective</option>
-                        <option value="other">Other</option>
-                    </select>
-                    <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
-                    <textarea id="further_practice" type="text" deer-key="description"></textarea>
-                    <label>Is there a particular object this practice is associated with?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
-                    <input type="hidden" deer-key="object" value=""> 
-                    <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
-                    
-                    <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
-                    <input deer-input-type="Set" type="hidden" deer-todo="attendee" value="">
-                    <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
-                    <div class="row">
-                        <input class="button primary col" type="submit">
-                    </div>
-                </form>      
+            <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
+            <div class="artifaceContentWrapper is-hidden" tog="artifactArea">
+                <label>Add information about the space, objects and activities.  Select a category to get started.</label>
+                <div class="row">
+                    <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
+                    <a class="button primary" area="bodies" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
+                </div>
+                <div tog="bodies" class="kind is-hidden">
+                    <h2>Bodies</h2>
+                    <p> More intimate information about what you are feeling and perceiving. </p>
+                    <div class="card bd-primary">
+                        <div class="card_body">
+                            <form id="senseForm" deer-type="Sense" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
+                                <h4>What senses are prominent?  Add one at a time.</h4>
+                                <input type="hidden" deer-key="creator"/>
+                                <input class="expReference" type="hidden" deer-key="event">
+                                <select deer-key="additionalType">
+                                    <option disabled selected value> Required </option>
+                                    <option value="Sight">I see...</option>
+                                    <option value="Sound">I hear...</option>
+                                    <option value="Taste">I taste...</option>
+                                    <option value="Feel">I feel...</option>
+                                    <option value="Smell">I smell...</option>
+                                </select>
+                                <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
+                                <input type="hidden" deer-key="object" value="">
+                                <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
+
+                                <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
+                                <input type="hidden" deer-input-type="Set" deer-todo="attendee" value="">
+                                <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
+
+                                <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
+                                <textarea id="further_sense" type="text" deer-key="description"></textarea>
+                                <div class="row">
+                                    <input class="button primary col" type="submit">
+                                </div>
+                            </form>
+                        </div>
+                    </div>                    
+                </div>
+                <div tog="practices" class="kind is-hidden">
+                    <h4>What practices are occurring? Add one at a time.</h4>
+                    <form id="practiceForm" deer-type="Practice" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
+                        <input type="hidden" deer-key="creator" /> 
+                        <input class="expReference" type="hidden" deer-key="event"> 
+                        <input type="hidden" deer-key="name"/>
+                        <select deer-key="additionalType" onchange="this.previousElementSibling.value=this.options[this.selectedIndex].text">
+                            <option disabled selected value> Required </option>
+                            <option value="None">None Noted</option>
+                            <option value="EatAction">Eating</option>
+                            <option value="DrinkAction">Drinking</option>
+                            <option value="PlayAction">Playing</option>
+                            <option value="ClotheAction">Clothing</option>
+                            <option value="SingAction">Singing</option>
+                            <option value="MoveAction">Moving</option>
+                            <option value="SitAction">Sitting</option>
+                            <option value="StandAction">Standing</option>
+                            <option value="KneelAction">Kneeling</option>
+                            <option value="TravelAction">Traveling</option>
+                            <option value="DanceAction">Dancing</option>
+                            <option value="CookAction">Cooking</option>
+                            <option value="WorkAction">Working</option>
+                            <option value="ListenAction">Listening</option>
+                            <option value="WatchAction">Watching</option>
+                            <option value="WriteAction">Writing</option>
+                            <option value="TradeAction">Trading</option>
+                            <option value="GiveAction">Donating</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
+                        <select deer-key="practiceContext">
+                            <option disabled selected value> Not Supplied </option>
+                            <option value="religiousRitual">Religious Ritual</option>
+                            <option value="communityEvent">Community Event</option>
+                            <option value="civicRitual">Civic Ritual</option>
+                            <option value="commercial">Commercial</option>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                            <option value="planned">Planned</option>
+                            <option value="spontaneous">Spontaneous</option>
+                            <option value="individual">Individual</option>
+                            <option value="collective">Collective</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
+                        <textarea id="further_practice" type="text" deer-key="description"></textarea>
+                        <label>Is there a particular object this practice is associated with?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
+                        <input type="hidden" deer-key="object" value=""> 
+                        <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
+
+                        <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
+                        <input deer-input-type="Set" type="hidden" deer-todo="attendee" value="">
+                        <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
+                        <div class="row">
+                            <input class="button primary col" type="submit">
+                        </div>
+                    </form>      
+                </div>
             </div>
         </div>
     </div>
@@ -367,7 +363,26 @@
                 default:
                     
             }
-        })       
+        })      
+        
+        addEventListener('deer-updated', event => {
+            let what = event.target.id
+            switch(what){
+                case "theExperience":
+                    document.getElementById("startExperience").classList.add("is-hidden")
+                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceReview").classList.remove("is-hidden")
+                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+                    let e = event.target.querySelector(".locDropdown")
+                    let locName = e.options[e.selectedIndex].text
+                    document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
+                    document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
+                    document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
+                break
+                default:
+            }
+            LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
+        })
         
         addEventListener('deer-loaded', event => {
             let what = event.target.id

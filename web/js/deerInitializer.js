@@ -142,7 +142,11 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
 
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
+        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> 
+        <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">View More</a>
+        <dl tog="experienceContent" class="eventContentWrapper is-hidden">
+            <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit</a>
+        `
         let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
         let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
@@ -412,7 +416,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML + `</div>`
         return tmpl
     } catch (err) {
         console.log("Could not build Event or ExperienceUpload template.")
