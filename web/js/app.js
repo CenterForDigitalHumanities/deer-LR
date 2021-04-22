@@ -262,9 +262,10 @@ LR.ui.toggleAreaHideOthers = function(event){
  */
 LR.ui.customToggles = function(event){
     let area = event.target.getAttribute("area")
+    let elem = undefined
     switch(area){
         case "experienceContent":
-            let elem = document.querySelector("div[tog='"+area+"']")
+            elem = document.querySelector("div[tog='"+area+"']")
             if(elem.classList.contains("is-hidden")){
                 elem.classList.remove("is-hidden")
                 event.target.title = "Hide the details of the experience"
@@ -278,7 +279,7 @@ LR.ui.customToggles = function(event){
            
         break
         case "artifactArea":
-            let elem = document.querySelector("div[tog='"+area+"']")
+            elem = document.querySelector("div[tog='"+area+"']")
             if(elem.classList.contains("is-hidden")){
                 elem.classList.remove("is-hidden")
                 event.target.title = "Hide the sensory information area"

@@ -21,9 +21,17 @@
         }
         #experienceReview h4{
             margin: 0px;
+            display: inline-block;
+        }
+        #expereienceReview h2{
+            display: inline-block;
+            max-width: 36em;
         }
         #experienceReview p{
             font-size:10pt;
+        }
+        #experienceArtifacts{
+            border-top : 1px solid black;
         }
         #fieldNotesFloater{
             position: fixed;
@@ -83,8 +91,8 @@
     <lr-nav></lr-nav>
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
-        <h2 class="text-primary">Lived Religion Experience</h2>
         <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
+            <h2 class="text-primary">Lived Religion Experience</h2>
             <div class="card_body">
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
@@ -154,10 +162,10 @@
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
-        <div id="experienceArtifacts" class="is-hidden">
+        <div id="experienceArtifacts" class="card is-hidden">
             <h2 class="text-primary">Sensory Information</h2>
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
-            <div class="artifaceContentWrapper is-hidden" tog="artifactArea">
+            <div class="card_body artifaceContentWrapper is-hidden" tog="artifactArea">
                 <label>Add information about the space, objects and activities.  Select a category to get started.</label>
                 <div class="row">
                     <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
