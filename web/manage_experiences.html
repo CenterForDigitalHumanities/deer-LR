@@ -80,7 +80,7 @@
                 itemListElement: Array.from(LR.ui.experiences)
             }
             fetch(LR.URLS.OVERWRITE,{
-                method: "POST",
+                method: "PUT",
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -88,7 +88,6 @@
                 body: JSON.stringify(list)
             }).then(r=>r.ok?r.json():Promise.reject(Error(r.text)))
             .catch(err=>alert(`Failed to save: ${err}`))
-            
         }
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
