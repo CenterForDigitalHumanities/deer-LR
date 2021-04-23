@@ -177,7 +177,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 experiences.classList.remove("is-hidden")
                 fetch(LR.PUBLIC_EXPERIENCE_LIST).then(r=>r.json())
                 .then(list=>{
-                    LR.ui.experiences = new Set(list.itemListElement)
+                    LR.ui.experiences = new Set(list.itemListElement['@id'])
                     for (const elem of experiences.querySelectorAll('li')) {
                         elem.querySelector('a.removeCollectionItem').style.display = 'inline-block'
                         const include = LR.ui.experiences.has(elem.getAttribute("deer-id")) ? "add" : "remove"

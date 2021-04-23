@@ -71,13 +71,21 @@
         })
 
         function saveList(){
+            const experiences = []
+            LR.ui.experiences.forEach(uri=>{
+                experiences.push({
+                    label:document.querySelector(`deer-view[deer-id='${uri}']`).textContent.trim(),
+                    '@id':uri
+                })
+            })
+
             list = {
                 '@id':LR.PUBLIC_EXPERIENCE_LIST,
                 '@context':'https://schema.org/',
                 '@type': "ItemList",
                 name: "LRDA-STL Public Experiences",
                 numberOfItems: LR.ui.experiences.size,
-                itemListElement: Array.from(LR.ui.experiences)
+                itemListElement: experiences
             }
             fetch(LR.URLS.OVERWRITE,{
                 method: "PUT",
