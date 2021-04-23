@@ -177,7 +177,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                         const include = LR.ui.experiences.has(elem.getAttribute("deer-id")) ? "add" : "remove"
                         elem.classList[include]("text-primary")
                         elem.insertAdjacentHTML('beforeend',`
-                        <a onclick="LR.ui.togglePublic(event)"> public </a>
+                        <a onclick="LR.ui.togglePublic(event)" href="#" title="Toggle public visibility"> &#x1F441 </a>
                         `)
                     }
                 })

@@ -21,7 +21,7 @@
         <h1 class="text-primary"> Managing Lived Religion Experiences </h1>
         <button id="saveExperiences" class="is-hidden button primary" role="button" onclick="saveList()">Save List</button>
         <div class="row">
-            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col is-hidden"></div>
+            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col is-hidden" deer-template="managedlist"></div>
         </div>
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -84,6 +84,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                mode: 'cors',
                 body: JSON.stringify(list)
             }).then(r=>r.ok?r.json():Promise.reject(Error(r.text)))
             .catch(err=>alert(`Failed to save: ${err}`))
