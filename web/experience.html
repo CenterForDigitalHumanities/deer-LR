@@ -23,8 +23,9 @@
             margin: 0px;
             display: inline-block;
         }
-        #expereienceReview h2{
+        #experienceReview h2{
             display: inline-block;
+            margin: 0px;
             max-width: 36em;
         }
         #experienceReview p{
@@ -32,6 +33,11 @@
         }
         #experienceArtifacts{
             border-top : 1px solid black;
+        }
+        #experienceArtifacts h2{
+            display: inline-block;
+            margin: 0px;
+            max-width: 36em;
         }
         #fieldNotesFloater{
             position: fixed;
@@ -91,8 +97,8 @@
     <lr-nav></lr-nav>
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
+        <h2 class="text-primary">Lived Religion Experience</h2>
         <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
-            <h2 class="text-primary">Lived Religion Experience</h2>
             <div class="card_body">
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
@@ -163,7 +169,7 @@
             </div>
         </div>
         <div id="experienceArtifacts" class="card is-hidden">
-            <h2 class="text-primary">Sensory Information</h2>
+            <h2>Sensory Information</h2>
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
             <div class="card_body artifaceContentWrapper is-hidden" tog="artifactArea">
                 <label>Add information about the space, objects and activities.  Select a category to get started.</label>

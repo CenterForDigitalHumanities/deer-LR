@@ -265,7 +265,7 @@ LR.ui.customToggles = function(event){
     let elem = undefined
     switch(area){
         case "experienceContent":
-            elem = document.querySelector("div[tog='"+area+"']")
+            elem = document.querySelector("dl[tog='"+area+"']")
             if(elem.classList.contains("is-hidden")){
                 elem.classList.remove("is-hidden")
                 event.target.title = "Hide the details of the experience"
@@ -295,7 +295,7 @@ LR.ui.customToggles = function(event){
             document.getElementById("experienceReview").classList.add("is-hidden")
             document.getElementById("experienceArtifacts").classList.add("is-hidden")
             document.getElementById("startExperience").classList.remove("is-hidden")
-            let artifactArea = document.querySelector("div[tog='artifactArea']")
+            let artifactArea = document.querySelector("div[tog='"+area+"']")
             let experienceContent = document.querySelector("div[tog='experienceContent']")
             if(!artifactArea.classList.contains("is-hidden")){
                 toggleArtifactArea.click()
