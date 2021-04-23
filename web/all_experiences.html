@@ -23,6 +23,7 @@
         <div class="row">
             <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col" deer-link="experience.html?id="></div>
         </div>
+        <a href="manage_experiences.html" class="button primary is-hidden admin-only">Manage Experience List</a>
     </div>
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
@@ -36,7 +37,7 @@
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "experiences") {
-                // LR.utils.drawInterface(event, "experienceManagement")
+                LR.utils.drawInterface(event, "adminUpgrade")
             }
         }, false)
     

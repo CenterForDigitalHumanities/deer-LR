@@ -166,6 +166,11 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }    
         break
+        case "adminUpgrade":
+            if (user.roles.administrator) {
+                document.querySelectorAll('.admin-only').forEach(el=>el.classList.remove('is-hidden'))
+            }
+            break
         case "experienceManagement":
             if (user.roles.administrator) {
                 experiences.classList.remove("is-hidden")
@@ -181,7 +186,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                         `)
                     }
                 })
-            
             }
             else{
                 alert("You must be logged in as an administrator to use this!")
