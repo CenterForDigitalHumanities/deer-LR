@@ -48,12 +48,13 @@ LR.ui = {}
 LR.utils = {}
 
 LR.ui.togglePublic = (e) => {
+    e.preventDefault()
     const elem = e.target.closest("li[deer-id]")
     if(!elem) return false
 
     const uri = elem.getAttribute("deer-id")
     const included = LR.ui.experiences.has(uri)
-    elem.classList[included ? "add" : "remove"]("public-listing")
+    elem.classList[included ? "remove" : "add"]("text-primary")
     LR.ui.experiences[included ? "delete" : "add"](uri)
     saveExperiences.classList.remove('is-hidden')
 }
@@ -174,7 +175,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                     for (const elem of experiences.querySelectorAll('li')) {
                         elem.querySelector('a.removeCollectionItem').style.display = 'inline-block'
                         const include = LR.ui.experiences.has(elem.getAttribute("deer-id")) ? "add" : "remove"
-                        elem.classList[include]("bd-primary")
+                        elem.classList[include]("text-primary")
                         elem.insertAdjacentHTML('beforeend',`
                         <a onclick="LR.ui.togglePublic(event)"> public </a>
                         `)
