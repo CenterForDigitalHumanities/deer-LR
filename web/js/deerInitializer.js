@@ -434,7 +434,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
  * @param {type} options
  * @return {tmpl}
  */    
-DEER.TEMPLATES.list= function(obj, options={}) {
+DEER.TEMPLATES.managedlist= function(obj, options={}) {
     try{
         let tmpl = ``
         if(options.list){
@@ -442,10 +442,9 @@ DEER.TEMPLATES.list= function(obj, options={}) {
             obj[options.list].forEach((val,index)=>{
                 let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
                 let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
-                let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
+                let removeBtn = `<a href="#" class="removeCollectionItem" title="Delete This Entry"
                 onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
-                let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
+                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn} </li>` : `<li>${name}</li>`
             })
             tmpl += `</ul>`
         }
@@ -459,7 +458,6 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         console.error(err)
         return null
     }
-
 }
 
 DEER.TEMPLATES.completeLabel = function(obj, options = {}) {

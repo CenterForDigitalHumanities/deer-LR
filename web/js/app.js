@@ -11,6 +11,7 @@ LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
+LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
 ///For dev-01
 LR.URLS = {
     LOGIN: "login",
@@ -21,7 +22,7 @@ LR.URLS = {
     UPDATE: "http://tinydev.rerum.io/app/update",
     OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
     QUERY: "http://tinydev.rerum.io/app/query",
-    SINCE: "http://devstore.rerum.io/v1/since"
+    SINCE: "http://devstore.rerum.io/v1/since",
 }
 
 //For prd-01
@@ -46,6 +47,17 @@ if (typeof(Storage) !== "undefined") {
 LR.ui = {}
 LR.utils = {}
 
+LR.ui.togglePublic = (e) => {
+    e.preventDefault()
+    const elem = e.target.closest("li[deer-id]")
+    if(!elem) return false
+
+    const uri = elem.getAttribute("deer-id")
+    const included = LR.ui.experiences.has(uri)
+    elem.classList[included ? "remove" : "add"]("text-primary")
+    LR.ui.experiences[included ? "delete" : "add"](uri)
+    saveExperiences.classList.remove('is-hidden')
+}
 /**
  * Each interface has something triggered by user roles.  Implement contributor vs. admin
  * UI/UX here.  
@@ -154,10 +166,26 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }    
         break
+        case "adminUpgrade":
+            if (user.roles.administrator) {
+                document.querySelectorAll('.admin-only').forEach(el=>el.classList.remove('is-hidden'))
+            }
+            break
         case "experienceManagement":
             if (user.roles.administrator) {
                 experiences.classList.remove("is-hidden")
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
+                fetch(LR.PUBLIC_EXPERIENCE_LIST).then(r=>r.json())
+                .then(list=>{
+                    LR.ui.experiences = new Set(list.itemListElement)
+                    for (const elem of experiences.querySelectorAll('li')) {
+                        elem.querySelector('a.removeCollectionItem').style.display = 'inline-block'
+                        const include = LR.ui.experiences.has(elem.getAttribute("deer-id")) ? "add" : "remove"
+                        elem.classList[include]("text-primary")
+                        elem.insertAdjacentHTML('beforeend',`
+                        <a onclick="LR.ui.togglePublic(event)" href="#" title="Toggle public visibility"> &#x1F441 </a>
+                        `)
+                    }
+                })
             }
             else{
                 alert("You must be logged in as an administrator to use this!")
