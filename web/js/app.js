@@ -274,7 +274,7 @@ LR.ui.customToggles = function(event){
             else{
                 elem.classList.add("is-hidden")
                 event.target.title = "Show the details of this experience"
-                event.target.innerHTML = "View More"
+                event.target.innerHTML = "Review"
             }
            
         break
@@ -283,7 +283,7 @@ LR.ui.customToggles = function(event){
             if(elem.classList.contains("is-hidden")){
                 elem.classList.remove("is-hidden")
                 event.target.title = "Hide the sensory information area"
-                event.target.innerHTML = "Collapse"
+                event.target.innerHTML = "Collapse Sensory Area"
             }  
             else{
                 elem.classList.add("is-hidden")

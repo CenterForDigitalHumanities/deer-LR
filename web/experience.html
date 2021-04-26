@@ -158,12 +158,12 @@
         </div>
         <div id="experienceReview" class="card is-hidden">
             <p id="expLoadMessage"> Please wait while we bring the pieces together... </p>
-            <div class="card_body">
+            <div class="card_body" title="This area contains the information about the experience.  Expand with the 'Review' button to see more and have the option to edit the base data for this Experience.">
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
         <div id="experienceArtifacts" class="card is-hidden">
-            <h2>Sensory Information</h2>
+            <h2 title="Add new sensory information in this section.">Sensory Information</h2>
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
             <div id="artifactContent" class="card_body is-hidden" tog="artifactArea">
                 <label>Add information about the space, objects and activities.  Select a category to get started.</label>
@@ -188,12 +188,12 @@
                                     <option value="Feel">I feel...</option>
                                     <option value="Smell">I smell...</option>
                                 </select>
-                                <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
+                                <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-key="object" value="">
                                 <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
 
-                                <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
-                                <input type="hidden" deer-input-type="Set" deer-todo="attendee" value="">
+                                <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
+                                <input type="hidden" deer-input-type="Set" deer-key="attendee" value="">
                                 <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
 
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
@@ -251,12 +251,12 @@
                         </select>
                         <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
                         <textarea id="further_practice" type="text" deer-key="description"></textarea>
-                        <label>Is there a particular object this practice is associated with?  Choose from available objects or  <a pop="object"> create a new object (coming soon) </a></label>
+                        <label>Is there a particular object this practice is associated with? Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                         <input type="hidden" deer-key="object" value=""> 
                         <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
 
-                        <label>Were there specific people at the experience connected with this sense?  Choose from available people or  <a pop="person"> create a new person (coming soon) </a></label>
-                        <input deer-input-type="Set" type="hidden" deer-todo="attendee" value="">
+                        <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
+                        <input deer-input-type="Set" type="hidden" deer-key="attendee" value="">
                         <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
                         <div class="row">
                             <input class="button primary col" type="submit" value="Save Practice">
@@ -292,7 +292,7 @@
         addEventListener('deer-created', event => {
             let what = event.target.id
             let newObjID = event.detail["@id"]
-            let newObjName = (event.detail.hasOwnProperty("name")) ? event.detail.name : (event.detail.hasOwnProperty("label")) ?  event.detail.label : (event.detail.hasOwnProperty("title")) ? event.detail.title : "Name Unknown"
+            let newObjName = (event.detail.hasOwnProperty("name")) ? event.detail.name : (event.detail.hasOwnProperty("label")) ?  event.detail.label : (event.detail.hasOwnProperty("title")) ? event.detail.title : ""
             let expID = document.getElementById("theExperience").getAttribute("deer-id")
             switch(what){
                 case "theExperience":
@@ -381,11 +381,13 @@
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
-                    let e = event.target.querySelector(".locDropdown")
-                    let locName = e.options[e.selectedIndex].text
-                    document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
+                    let locDropdown = event.target.querySelector(".locDropdown")
+                    let locName = locDropdown.options[e.selectedIndex].text
+                    let expName = event.target.querySelector("input[deer-key='name']").value
+                    let expID = event.detail["@id"] ? event.detail["@id"] : ""
+                    document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = expName)
                     document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
-                    document.querySelectorAll(".expReference").forEach(elem => elem.value = newObjID)
+                    document.querySelectorAll(".expReference").forEach(elem => elem.value = expID)
                 break
                 default:
             }
@@ -429,7 +431,7 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "theExperience":
-                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "attendee"], event.target)
+                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "attendee", "object"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                 break
                 case "objectForm":

@@ -143,9 +143,9 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> 
-        <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">View More</a>
+        <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">Review</a>
         <dl tog="experienceContent" class="eventContentWrapper is-hidden">
-            <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit</a>
+            <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
         `
         let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
         let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
