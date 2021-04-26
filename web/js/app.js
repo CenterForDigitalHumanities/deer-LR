@@ -243,48 +243,6 @@ LR.ui.getUserEntries = async function(user) {
 }
 
 /**
- * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
- * @param {type} event
- * @return {undefined}
- */
-LR.ui.toggleAreas = function(event){
-    let area = event.target.getAttribute("area")
-    let elems = document.querySelectorAll("div[tog='"+area+"']")
-    for(let elem of elems){
-        if(elem.classList.contains("is-hidden")){
-            elem.classList.remove("is-hidden")
-        }  
-        else{
-            elem.classList.add("is-hidden")
-        }
-    }
-}
-
-/**
- * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
- * @param {type} event
- * @return {undefined}
- */
-LR.ui.toggleAreaHideOthers = function(event){
-    let area = event.target.getAttribute("area")
-    let elems = document.querySelectorAll("div[tog='"+area+"']")
-    let all = document.querySelectorAll("div[tog]")
-    for(let elem of all){
-        if (elem.getAttribute("tog") && elem.getAttribute("tog") === area){
-            if(elem.classList.contains("is-hidden")){
-                elem.classList.remove("is-hidden")
-            }  
-            else{
-                elem.classList.add("is-hidden")
-            }
-        }
-        else{
-            elem.classList.add("is-hidden")
-        }
-    }
-}
-
-/**
  * A specific toggle with multiple pieces of UI attached, so it does not fit the convention.
  * @param {type} event
  * @return {undefined}
@@ -293,6 +251,19 @@ LR.ui.customToggles = function(event){
     let area = event.target.getAttribute("area")
     let elem = undefined
     switch(area){
+        case "startExperience":
+            document.getElementById("experienceReview").classList.add("is-hidden")
+            document.getElementById("experienceArtifacts").classList.add("is-hidden")
+            document.getElementById("startExperience").classList.remove("is-hidden")
+            let artifactArea = document.querySelector("div[tog='"+area+"']")
+            let experienceContent = document.querySelector("div[tog='experienceContent']")
+            if(!artifactArea.classList.contains("is-hidden")){
+                toggleArtifactArea.click()
+            }
+            if(!experienceContent.classList.contains("is-hidden")){
+                toggleExpArea.click()
+            }
+        break
         case "experienceContent":
             elem = document.querySelector("dl[tog='"+area+"']")
             if(elem.classList.contains("is-hidden")){
@@ -320,19 +291,25 @@ LR.ui.customToggles = function(event){
                 event.target.innerHTML = "Add Sensory Information"
             }
         break
-        case "startExperience":
-            document.getElementById("experienceReview").classList.add("is-hidden")
-            document.getElementById("experienceArtifacts").classList.add("is-hidden")
-            document.getElementById("startExperience").classList.remove("is-hidden")
-            let artifactArea = document.querySelector("div[tog='"+area+"']")
-            let experienceContent = document.querySelector("div[tog='experienceContent']")
-            if(!artifactArea.classList.contains("is-hidden")){
-                toggleArtifactArea.click()
+        case "practices":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
             }
-            if(!experienceContent.classList.contains("is-hidden")){
-                toggleExpArea.click()
+            document.querySelector("div[tog='bodies']").classList.add("is-hidden")
+        break
+        case "bodies":
+             elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
             }
-
+            document.querySelector("div[tog='practices']").classList.add("is-hidden")
         break
         
         default:
@@ -631,8 +608,8 @@ LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
             let selectElemExists = true
             let sel
             if(area.tagName === "DEER-VIEW"){
-                //Then it is a <deer-view> template and we need to get the child to have the <select>
-                sel = area.firstElementChild
+                //Then it is a <deer-view> template and we need to find <select>
+                sel = area.querySelector("select")
             }
             else if(area.tagName === "SELECT"){
                 sel = area

@@ -10,14 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
     <style>
+        
         #experienceReview{
             background-image: url(./images/load-blocks.gif);
             background-position: center;
             background-repeat: no-repeat;
-            min-height: 35em;
-        }
-        .collapsed{
-            height : 2em;
+            transition: height 2s, display 2s, box-shadow 2s;
+            -webkit-transition: height 2s, display 2s, box-shadow 2s;
+            -moz-transition: height 2s, display 2s, box-shadow 2s;
+            height: 35em;
         }
         #experienceReview h4{
             margin: 0px;
@@ -38,6 +39,12 @@
             display: inline-block;
             margin: 0px;
             max-width: 36em;
+        }
+        #experienceContent, #artifactContent{
+            transition: height 2s, display 2s, box-shadow 2s;
+            -webkit-transition: height 2s, display 2s, box-shadow 2s;
+            -moz-transition: height 2s, display 2s, box-shadow 2s;
+            height: auto;
         }
         #fieldNotesFloater{
             position: fixed;
@@ -76,19 +83,6 @@
         }
         .backdrop{
             z-index: 2;
-            
-        }
-        div[popover]{
-            display:none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            /* bring your own prefixes */
-            transform: translate(-50%, -50%);
-            z-index: 3;
-        }
-        a[pop]{
-            cursor:pointer;
         }
     </style>
 </head>
@@ -158,7 +152,7 @@
 
                     <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="Tags">   
-                    <input type="submit" value="Continue" />
+                    <input type="submit" value="Save Data and Review" />
                 </form>
             </div>
         </div>
@@ -171,11 +165,11 @@
         <div id="experienceArtifacts" class="card is-hidden">
             <h2>Sensory Information</h2>
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
-            <div class="card_body artifaceContentWrapper is-hidden" tog="artifactArea">
+            <div id="artifactContent" class="card_body is-hidden" tog="artifactArea">
                 <label>Add information about the space, objects and activities.  Select a category to get started.</label>
                 <div class="row">
-                    <a class="button primary" area="practices" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
-                    <a class="button primary" area="bodies" onclick="LR.ui.toggleAreaHideOthers(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
+                    <a class="button primary" area="practices" onclick="LR.ui.customToggles(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
+                    <a class="button primary" area="bodies" onclick="LR.ui.customToggles(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
                 </div>
                 <div tog="bodies" class="kind is-hidden">
                     <h2>Bodies</h2>
@@ -205,7 +199,7 @@
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                                 <textarea id="further_sense" type="text" deer-key="description"></textarea>
                                 <div class="row">
-                                    <input class="button primary col" type="submit">
+                                    <input class="button primary col" type="submit" value="Save Sense">
                                 </div>
                             </form>
                         </div>
@@ -265,7 +259,7 @@
                         <input deer-input-type="Set" type="hidden" deer-todo="attendee" value="">
                         <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
                         <div class="row">
-                            <input class="button primary col" type="submit">
+                            <input class="button primary col" type="submit" value="Save Practice">
                         </div>
                     </form>      
                 </div>
@@ -415,6 +409,8 @@
                 break
                 case "experienceContent":
                     experienceReview.style.backgroundImage = "none"
+                    experienceReview.style.height = "auto"
+                    experienceArtifacts.classList.remove("is-hidden")
                     expLoadMessage.style.display = "none"
                 break
                 default:
