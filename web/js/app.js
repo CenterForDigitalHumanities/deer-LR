@@ -74,7 +74,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 if(user.roles.administrator){
                     theExperience.setAttribute("deer-id", entityID)
                     document.getElementById("startExperience").classList.add("is-hidden")
-                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                 }
@@ -88,7 +87,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                         if(permitted){
                             theExperience.setAttribute("deer-id", entityID)
                             document.getElementById("startExperience").classList.add("is-hidden")
-                            document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                             document.getElementById("experienceReview").classList.remove("is-hidden")
                             document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                         }
@@ -255,9 +253,7 @@ LR.ui.customToggles = function(event){
             document.getElementById("experienceReview").classList.add("is-hidden")
             document.getElementById("experienceArtifacts").classList.add("is-hidden")
             document.getElementById("startExperience").classList.remove("is-hidden")
-            let artifactArea = document.querySelector("div[tog='"+area+"']")
-            let experienceContent = document.querySelector("div[tog='experienceContent']")
-            if(!artifactArea.classList.contains("is-hidden")){
+            if(!artifactContent.classList.contains("is-hidden")){
                 toggleArtifactArea.click()
             }
             if(!experienceContent.classList.contains("is-hidden")){
@@ -274,7 +270,7 @@ LR.ui.customToggles = function(event){
             else{
                 elem.classList.add("is-hidden")
                 event.target.title = "Show the details of this experience"
-                event.target.innerHTML = "Review"
+                event.target.innerHTML = "Review "
             }
            
         break
@@ -302,7 +298,7 @@ LR.ui.customToggles = function(event){
             document.querySelector("div[tog='bodies']").classList.add("is-hidden")
         break
         case "bodies":
-             elem = document.querySelector("div[tog='"+area+"']")
+            elem = document.querySelector("div[tog='"+area+"']")
             if(elem.classList.contains("is-hidden")){
                 elem.classList.remove("is-hidden")
             }  

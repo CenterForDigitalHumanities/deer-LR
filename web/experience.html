@@ -29,9 +29,6 @@
             margin: 0px;
             max-width: 36em;
         }
-        #experienceReview p{
-            font-size:10pt;
-        }
         #experienceArtifacts{
             border-top : 1px solid black;
         }
@@ -84,6 +81,40 @@
         .backdrop{
             z-index: 2;
         }
+        #expLoadMessage{
+            font-size: 12pt;
+            text-align: center;
+            background-color: white;
+            animation-name: color;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+            position: relative;
+            height: 4em;
+            line-height: 4em;
+            width: 60%;
+            margin: 0 auto;
+            top: -.5em;
+        }
+        
+        @keyframes color {
+            0% {
+                color: black;
+                background-color: white;
+                top: -.5em;
+            }
+            50% {
+                color: white;
+                background-color: black;
+                top: 1.75em;
+            }
+            100 {
+                color: black;
+                background-color: white;
+                top: 2.75em
+            }
+        }
+        
+        
     </style>
 </head>
 
@@ -410,10 +441,10 @@
                     LR.utils.scrubForm(event.target) //Clear out all DEER attributes and input values of the form so the next submission will CREATE
                 break
                 case "experienceContent":
-                    experienceReview.style.backgroundImage = "none"
-                    experienceReview.style.height = "auto"
-                    experienceArtifacts.classList.remove("is-hidden")
-                    expLoadMessage.style.display = "none"
+                    document.getElementById("experienceReview").style.backgroundImage = "none"
+                    document.getElementById("experienceReview").style.height = "auto"
+                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("expLoadMessage").style.display = "none"
                 break
                 default:
                     
