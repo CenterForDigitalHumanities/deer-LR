@@ -359,7 +359,7 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "locationForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
+                    LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
                     LR.utils.populateCoordinates(annotationData, event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                 break

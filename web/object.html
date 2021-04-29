@@ -186,7 +186,7 @@
             let annotationData = event.detail
             switch (whatRecordForm) {
                 case "objectForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations"], event.target)
+                    LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                     break
                 default:

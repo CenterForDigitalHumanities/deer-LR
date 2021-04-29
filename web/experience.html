@@ -36,7 +36,7 @@
         #fieldNotesFloater{
             position: fixed;
             left: 0;
-            top: 1em;
+            top: 3.5em;
             width: 40px;
             height: 40px;
             transition: width 0.5s, box-shadow 1s;
@@ -456,12 +456,12 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "theExperience":
-                    LR.utils.preSelectMultiSelects(annotationData, ["contributor", "attendee", "object"], event.target)
+                    LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "object", "location"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                     
                 break
                 case "objectForm":
-                    LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations"], event.target)
+                    LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
                 break
                 
                 case "senseForm":

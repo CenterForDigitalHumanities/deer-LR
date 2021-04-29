@@ -48,6 +48,63 @@ if (typeof(Storage) !== "undefined") {
 LR.ui = {}
 LR.utils = {}
 
+LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
+    // TODO: There must be a best way to do this...
+    let prop;
+    if (property === undefined || property === "") {
+        console.error("Value of property to lookup is missing!")
+        return undefined
+    }
+    if (Array.isArray(property)) {
+        // It is an array of things, we can only presume that we want the array.  If it needs to become a string, local functions take on that responsibility.
+        return property
+    } else {
+        if (typeof property === "object") {
+            // TODO: JSON-LD insists on "@value", but this is simplified in a lot
+            // of contexts. Reading that is ideal in the future.
+            if (!Array.isArray(alsoPeek)) {
+                alsoPeek = [alsoPeek]
+            }
+            alsoPeek = alsoPeek.concat(["@value", "value", "$value", "val"])
+            for (let k of alsoPeek) {
+                if (property.hasOwnProperty(k)) {
+                    prop = property[k]
+                    break
+                } else {
+                    prop = property
+                }
+            }
+        } else {
+            prop = property
+        }
+    }
+    try {
+        switch (asType.toUpperCase()) {
+            case "STRING":
+                prop = prop.toString();
+                break
+            case "NUMBER":
+                prop = parseFloat(prop);
+                break
+            case "INTEGER":
+                prop = parseInt(prop);
+                break
+            case "BOOLEAN":
+                prop = !Boolean(["false", "no", "0", "", "undefined", "null"].indexOf(String(prop).toLowerCase().trim()));
+                break
+            default:
+        }
+    } catch (err) {
+        if (asType) {
+            throw new Error("asType: '" + asType + "' is not possible.\n" + err.message)
+        } else {
+            // no casting requested
+        }
+    } finally {
+        return (prop.length === 1) ? prop[0] : prop
+    }
+}
+
 LR.ui.togglePublic = (e) => {
     e.preventDefault()
     const elem = e.target.closest("li[deer-id]")
@@ -603,14 +660,9 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
  * @return None
  */
 LR.utils.preSelectSelects = function(annotationData, keys, form){
-    /**
-    
-     * 
-     * key?.value.items ?? key?.items ?? [ getValue(key) ] 
-     */
     keys.forEach(key =>{
         if(annotationData.hasOwnProperty(key)){
-            let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
+            let data_arr = annotationData[key]?.value?.items ?? annotationData[key]?.items ?? [ LR.utils.getAnnoValue(annotationData[key]) ]
             let input = form.querySelector("input[deer-key='"+key+"']")
             let area = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
             let selectElemExists = true
