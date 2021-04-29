@@ -15,8 +15,9 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 
 /**
- * Represent a collection as a <select> HTML dropdown.  
+ * Represent a collection as a <select> HTML dropdown.
  * Include the ability to quickly add an item to the collection, which will then be selected.
+ * Note that this data does not know which item should be selected.  See preSelectSelects().
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -25,11 +26,13 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
+        let key=""
         if(whichCollection){
             let check = whichCollection.replace("Test", "")
             switch(check){
                 case "LivedReligionLocations":
                     type = "Place"
+                    key="location"
                 break
                 case "LivedReligionObjects":
                     type = "Thing"
@@ -62,9 +65,9 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         </div>`
         let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allPlacesInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
-        for (let place of allPlacesInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
+        let allItemsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        for (let item of allItemsInCollection) {
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -75,11 +78,10 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     }
 }
 
-
-
 /**
  * Represent a collection as a <select multiple> HTML multi-select.  
  * Include the ability to quickly add an item to the collection, which will then be selected.
+ * Note that this data does not know which item should be selected.  See preSelectSelects().
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -124,12 +126,12 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
             <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        let allItemsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Choose Below"> `
-        for (let loc of allLocationsInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
+        for (let item of allItemsInCollection) {
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
         }
         tmpl += `</optgroup></select>${selected}`
         return tmpl

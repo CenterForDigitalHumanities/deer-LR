@@ -72,7 +72,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "experience":
             if (entityID) {
                 if(user.roles.administrator){
-                    theExperience.setAttribute("deer-id", entityID)
+                    document.getElementById("theExperience").setAttribute("deer-id", entityID)
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
@@ -85,7 +85,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                     })
                     .then(permitted => {
                         if(permitted){
-                            theExperience.setAttribute("deer-id", entityID)
+                            document.getElementById("theExperience").setAttribute("deer-id", entityID)
                             document.getElementById("startExperience").classList.add("is-hidden")
                             document.getElementById("experienceReview").classList.remove("is-hidden")
                             document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
@@ -110,7 +110,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
             if (entityID) {
                 if (user.roles.administrator) {
                     entity_form.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Object"
+                    document.querySelector("h2.text-primary").innerHTML = "Update Location"
                     document.querySelector("input[type='submit']").value = "Update"
                     let btn = document.createElement("a")
                     btn.href = window.location.pathname
@@ -126,13 +126,13 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "researcher":
             if (user.roles.administrator) {
                 if (entityID) {
-                    researcherForm.setAttribute("deer-id", entityID)
+                    document.getElementById("researcherForm").setAttribute("deer-id", entityID)
                     document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
                     document.querySelector("input[type='submit']").value = "Update"
                     let btn = document.createElement("a")
                     btn.href = window.location.pathname
                     btn.innerHTML = "Reset Page"
-                    researcherForm.append(btn)
+                    document.getElementById("researcherForm").append(btn)
                 }
             }
             else{
@@ -172,7 +172,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
             break
         case "experienceManagement":
             if (user.roles.administrator) {
-                experiences.classList.remove("is-hidden")
+                document.getElementById("experiences").classList.remove("is-hidden")
                 fetch(LR.PUBLIC_EXPERIENCE_LIST).then(r=>r.json())
                 .then(list=>{
                     LR.ui.experiences = new Set(list.itemListElement)
@@ -253,11 +253,11 @@ LR.ui.customToggles = function(event){
             document.getElementById("experienceReview").classList.add("is-hidden")
             document.getElementById("experienceArtifacts").classList.add("is-hidden")
             document.getElementById("startExperience").classList.remove("is-hidden")
-            if(!artifactContent.classList.contains("is-hidden")){
-                toggleArtifactArea.click()
+            if(!document.getElementById("artifactContent").classList.contains("is-hidden")){
+                document.getElementById("toggleArtifactArea").click()
             }
-            if(!experienceContent.classList.contains("is-hidden")){
-                toggleExpArea.click()
+            if(!document.getElementById("experienceContent").classList.contains("is-hidden")){
+                document.getElementById("toggleExpReviewContent").click()
             }
         break
         case "experienceContent":
@@ -590,12 +590,24 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
 /**
  * 
  * Make sure not to select options outside the <form> and <select> involved here.  
- * @param {Object} annotationData The expanded containing all annotation data for a form.
- * @param {Array(String)} keys The specific annotations we are looking for in annotationData
+ * This may be for a basic <select>, it may be for a <select multiple>
+ * These are dynamic selects built with custom UI and so DEER cannot preselect these.  We have to do it after the form loads.
+ * For dynamic selects, we follow a convention where there is a hidden input at this.parentElement.previousElementSibling with the deer-key
+ * Make sure to set that value as well as selecting the appropriate <options>
+ * 
+ * How about we do this with optional chaining.  This should work to pre select simple dropdowns AND multi selects (always at least an array of 1).
+ * 
+ * @param {Object} annotationData Expanded data that is all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData. 
  * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
  * @return None
  */
-LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
+LR.utils.preSelectSelects = function(annotationData, keys, form){
+    /**
+    
+     * 
+     * key?.value.items ?? key?.items ?? [ getValue(key) ] 
+     */
     keys.forEach(key =>{
         if(annotationData.hasOwnProperty(key)){
             let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items

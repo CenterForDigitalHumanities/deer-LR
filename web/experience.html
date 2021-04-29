@@ -28,11 +28,7 @@
         }
         #experienceArtifacts{
             border-top : 1px solid black;
-        }
-        #experienceArtifacts h2{
-            display: inline-block;
-            margin: 0px;
-            max-width: 36em;
+            min-height: 3.5em;
         }
         #experienceContent, #artifactContent{
             height: auto;
@@ -40,10 +36,12 @@
         #fieldNotesFloater{
             position: fixed;
             left: 0;
+            top: 1em;
             width: 40px;
             height: 40px;
-            transition: width 0.85s, box-shadow 2s;
-            -webkit-transition: width 0.85s, box-shadow 2s;
+            transition: width 0.5s, box-shadow 1s;
+            -webkit-transition: width 0.5s, box-shadow 1s;
+            -moz-transition: width 0.5s, box-shadow 1s;
             background-color: lightgray;
         }
         .fieldNotesInnards{
@@ -143,6 +141,7 @@
                     
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="name" />
+                    
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
                     <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsDropdown"></deer-view>
@@ -183,14 +182,14 @@
         </div>
         <div id="experienceReview" class="card is-hidden">
             <p id="expLoadMessage"> Please wait while we bring the pieces together... </p>
-            <div class="card_body" title="This area contains the information about the experience.  Expand with the 'Review' button to see more and have the option to edit the base data for this Experience.">
+            <div title="This area contains the information about the experience.  Expand with the 'Review' button to see more and have the option to edit the base data for this Experience." class="card_body">
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
         <div id="experienceArtifacts" class="card is-hidden">
-            <h2 title="Add new sensory information in this section.">Sensory Information</h2>
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
-            <div id="artifactContent" class="card_body is-hidden" tog="artifactArea">
+            <div id="artifactContent" class="card_body is-hidden" tog="artifactArea" title="Add new sensory information in this section">
+                <h2>Sensory Information</h2>
                 <label>Add information about the space, objects and activities.  Select a category to get started.</label>
                 <div class="row">
                     <a class="button primary" area="practices" onclick="LR.ui.customToggles(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
@@ -438,6 +437,7 @@
                     document.getElementById("experienceReview").style.backgroundImage = "none"
                     document.getElementById("experienceReview").style.height = "auto"
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("toggleExpReviewContent").click()
                     document.getElementById("expLoadMessage").style.display = "none"
                 break
                 default:
@@ -458,6 +458,7 @@
                 case "theExperience":
                     LR.utils.preSelectMultiSelects(annotationData, ["contributor", "attendee", "object"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    
                 break
                 case "objectForm":
                     LR.utils.preSelectMultiSelects(annotationData, ["formerUses", "formerLocations"], event.target)
