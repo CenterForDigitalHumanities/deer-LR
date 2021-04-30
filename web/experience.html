@@ -217,11 +217,11 @@
                                 </select>
                                 <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-key="object" value="">
-                                <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
+                                <div deer-collection="LivedReligionObjectsTest" class="deer-view" deer-template="itemsAsDropdown"></div>
 
                                 <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee" value="">
-                                <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionPeopleTest" class="deer-view" deer-template="itemsAsMultiSelect"></div>
 
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                                 <textarea id="further_sense" type="text" deer-key="description"></textarea>
@@ -280,11 +280,11 @@
                         <textarea id="further_practice" type="text" deer-key="description"></textarea>
                         <label>Is there a particular object this practice is associated with? Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                         <input type="hidden" deer-key="object" value=""> 
-                        <div deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-template="itemsAsDropdown"></div>
+                        <div deer-collection="LivedReligionObjectsTest" class="deer-view" deer-template="itemsAsDropdown"></div>
 
                         <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                         <input deer-input-type="Set" type="hidden" deer-key="attendee" value="">
-                        <div deer-collection="LivedReligionPeopleTest" class="deer-view col" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionPeopleTest" class="deer-view" deer-template="itemsAsMultiSelect"></div>
                         <div class="row">
                             <input class="button primary col" type="submit" value="Save Practice">
                         </div>

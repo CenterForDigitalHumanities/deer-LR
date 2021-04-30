@@ -134,3 +134,12 @@ a.tag{
   [deer-collection*="LivedReligion"] h2 {
     display: none; /* hide titles in default 'list' template */
   }
+  
+  .selectedEntities{
+    top: -8px;
+    position: relative;
+  }
+  
+  input, textarea, select {
+    margin: 3px 0px;
+}
