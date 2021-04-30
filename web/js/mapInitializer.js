@@ -10,16 +10,16 @@ import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/d
 
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
     
-    //Comment this out for dev-01 deploys
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://store.rerum.io/v1/since"
-}
+//Comment this out for dev-01 deploys
+//DEER.URLS = {
+//    BASE_ID: "http://store.rerum.io/v1",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    QUERY: "query",
+//    OVERWRITE: "overwrite",
+//    DELETE: "delete",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 let MAP = {}
 
