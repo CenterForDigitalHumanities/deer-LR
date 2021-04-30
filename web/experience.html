@@ -30,6 +30,9 @@
             border-top : 1px solid black;
             min-height: 3.5em;
         }
+        #experienceArtifacts h2{
+            margin : 0px;
+        }
         #experienceContent, #artifactContent{
             height: auto;
         }
@@ -164,7 +167,7 @@
                     <label> Provide other details or a description if desired</label>
                     <textarea deer-key="description"></textarea>
 
-                    <div class="card bg-light">
+                    <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Linked Media</header>
                         <p class="text-primary"><small>Optionally link to media from this event. 
                             Media specific to an object or person should not be added here.</small></p>
@@ -190,7 +193,7 @@
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
             <div id="artifactContent" class="card_body is-hidden" tog="artifactArea" title="Add new sensory information in this section">
                 <h2>Sensory Information</h2>
-                <label>Add information about the space, objects and activities.  Select a category to get started.</label>
+                <p>Add information about the space, objects and activities.  Select a category to get started.</p>
                 <div class="row">
                     <a class="button primary" area="practices" onclick="LR.ui.customToggles(event)" title="Record information about the rituals, practices or general actions taking place.">Practices</a>
                     <a class="button primary" area="bodies" onclick="LR.ui.customToggles(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
