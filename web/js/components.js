@@ -23,7 +23,8 @@ class LrNav extends HTMLElement {
         addEventListener('lrUserKnown', event => {
             let user = event.detail.user
             if(user !== null){
-                this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
+                this.querySelector('.tabs').innerHTML = `
+                <a href="dashboard.html">Dashboard</a>
                 <a href="places.html">Locations</a>
                 <a href="objects.html">Objects</a>
                 <a href="people.html">People</a>
@@ -36,6 +37,7 @@ class LrNav extends HTMLElement {
                     this.querySelector('.tabs').innerHTML += adminTabs
                 }
             }
+            setTimeout(()=>document.querySelector(`.tabs [href*="${location.href.split('/').pop()}"]`).classList.add("active"),0)
         })
     }
     connectedCallback() {
