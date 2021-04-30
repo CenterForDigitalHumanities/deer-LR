@@ -820,7 +820,7 @@ LR.utils.populateCoordinates = function(object, form){
  */
 LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
     if(fieldNotesFromData !== undefined){
-        let notes_str = (typeof fieldNotesFromData === "object" && fieldNotesFromData.hasOwnProperty("value")) ? fieldNotesFromData.value : fieldNotesFromData
+        let notes_str = LR.utils.getAnnoValue(fieldNotesFromData, [], "string")
         document.getElementById("fieldNotesEntry").value = notes_str
     }
 }
