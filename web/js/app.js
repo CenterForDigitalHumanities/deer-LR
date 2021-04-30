@@ -125,6 +125,16 @@ LR.ui.togglePublic = (e) => {
  * @return {undefined}
  */
 LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
+    let heading = "";
+    if(interface === "object"){
+        heading = "Object"
+    }
+    else if(interface === "person"){
+        heading = "Person"
+    }
+    else if(interface === "place"){
+        heading = "Location"
+    }
     switch(interface){
         case "experience":
             if (entityID) {
@@ -167,7 +177,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
             if (entityID) {
                 if (user.roles.administrator) {
                     entity_form.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Location"
+                    document.querySelector("h2.text-primary").innerHTML = "Update "+heading
                     document.querySelector("input[type='submit']").value = "Update"
                     let btn = document.createElement("a")
                     btn.href = window.location.pathname
@@ -489,13 +499,14 @@ LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
  * @return {Promise}
  */
 LR.utils.disassociate = function(event, objectID, experienceID, which){
-    let trackedObjs = document.getElementById(which).value
-    let delim = document.getElementById(which).hasAttribute("deer-array-delimeter") ? document.getElementById(which).getAttribute("deer-array-delimeter") : ","
+    let inpt = document.querySelector("input[deer-key='"+which+"']")
+    let trackedObjs = inpt.value
+    let delim = inpt.hasAttribute("deer-array-delimeter") ? inpt.getAttribute("deer-array-delimeter") : ","
     let trackedArr = trackedObjs.split(delim)
     if(trackedArr.indexOf(objectID) > -1){
         trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
-        document.getElementById(which).value = trackedObjs
-        document.getElementById(which).$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+        inpt.value = trackedObjs
+        inpt.$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
         document.getElementById("theExperience").$isDirty = true
         //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
@@ -645,12 +656,35 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
 }
 
 /**
+ * A hidden input is tracking a select or multi select. It is hidden and it is not a primitive, so DEER does not handle the value.
+ * Make sure to set the value of this hidden input.  The value is a string, that string contains a delimiter to join on for cases of multiple values.
+ * 
+ * @param {Object} annotationData Expanded data that is all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData. 
+ * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
+ * @return None
+ */
+LR.utils.setTrackedHiddenValues = function(annotationData, keys, form){
+    keys.forEach(key =>{
+        let data_arr = 
+        (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+        let input = form.querySelector("input[deer-key='"+key+"']")
+        //Set the value of the hidden input that tracks this for DEER
+        //Check if we need a different delimeter.  The input will tell us.
+        let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+        //Generate the value for the input that DEER supports - "uri,uri..."
+        let str_arr = (data_arr.length > 1) ? data_arr.join(delim) : (data_arr.length === 1 ) ? data_arr[0] : ""
+        input.value = str_arr
+    })
+}
+
+/**
  * 
  * Make sure not to select options outside the <form> and <select> involved here.  
  * This may be for a basic <select>, it may be for a <select multiple>
  * These are dynamic selects built with custom UI and so DEER cannot preselect these.  We have to do it after the form loads.
  * For dynamic selects, we follow a convention where there is a hidden input at this.parentElement.previousElementSibling with the deer-key
- * Make sure to set that value as well as selecting the appropriate <options>
+ * Make sure to select the appropriate <options>
  * 
  * How about we do this with optional chaining.  This should work to pre select simple dropdowns AND multi selects (always at least an array of 1).
  * 
@@ -681,11 +715,9 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
                 // Rememeber: the <input> with deer key tracking the select must come immediately before the select. 
                 console.warn("There is no select related to "+key+" to pre-select.")
             }
-            let arr_id = []
             let arr_names = []
             if(sel && sel.tagName === "SELECT"){
                 data_arr.forEach(val => {
-                    arr_id.push(val)
                     let option = sel.querySelector("option[value='"+val+"']")
                     if(option){
                         option.selected = true
@@ -697,12 +729,7 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
                         //The <option> is not available in the <select> HTML.
                     }  
                 })
-                //Set the value of the hidden input that tracks this for DEER
-                //Check if we need a different delimeter.  The input will tell us.
-                let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-                //Generate the value for the input that DEER supports - "uri,uri..."
-                let str_arr = (arr_id.length > 1) ? arr_id.join(delim) : (arr_id.length === 1 ) ? arr_id[0] : ""
-                input.value = str_arr
+                
                 //Now build the little tags, only for multi selects.
                 if(sel.hasAttribute("multiple")){
                     let selectedTagsArea = sel.nextElementSibling

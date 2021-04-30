@@ -44,8 +44,8 @@
             -moz-transition: width 0.5s, box-shadow 1s;
             background-color: lightgray;
         }
-        .fieldNotesInnards{
-            
+        .fieldNotesInnards input{
+            margin: .6em;
         }
         #notesIcon{
             position: absolute;
@@ -161,7 +161,7 @@
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
                     <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="itemsAsMultiSelect"></deer-view>
                     
-                    <label>Provide a description of what prompted you to do this</label>
+                    <label> Provide other details or a description if desired</label>
                     <textarea deer-key="description"></textarea>
 
                     <div class="card bg-light">
@@ -182,7 +182,7 @@
         </div>
         <div id="experienceReview" class="card is-hidden">
             <p id="expLoadMessage"> Please wait while we bring the pieces together... </p>
-            <div title="This area contains the information about the experience.  Expand with the 'Review' button to see more and have the option to edit the base data for this Experience." class="card_body">
+            <div class="card_body">
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
@@ -457,11 +457,13 @@
             switch(whatRecordForm){
                 case "theExperience":
                     LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "object", "location"], event.target)
+                    LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                     
                 break
                 case "objectForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
+                    LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations"], event.target)
                 break
                 
                 case "senseForm":

@@ -360,6 +360,7 @@
             switch(whatRecordForm){
                 case "locationForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
+                    LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
                     LR.utils.populateCoordinates(annotationData, event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                 break

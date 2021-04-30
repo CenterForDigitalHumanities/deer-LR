@@ -256,7 +256,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'objects')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'object')">Remove</a>
                     </li>
                     `
                 }
@@ -276,7 +276,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'objects')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'object')">Remove</a>
                     </li>
                     `
                 }
@@ -312,7 +312,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'practices')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
                     </li>
                     `
                 }
@@ -332,7 +332,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'practices')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
                     </li>
                     `
                 }
@@ -368,7 +368,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="senseListing"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'senses')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
                     </li>
                     `
                 }
@@ -388,7 +388,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="senseListing"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'senses')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
                     </li>
                     `
                 }

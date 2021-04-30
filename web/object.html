@@ -187,6 +187,7 @@
             switch (whatRecordForm) {
                 case "objectForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
+                    LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                     break
                 default:
