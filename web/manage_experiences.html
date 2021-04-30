@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--
     author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
@@ -5,7 +6,7 @@
 <html>
 
 <head>
-    <title>Religion in Place Objects</title>
+    <title>Lived Religion User Experiences</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
@@ -17,27 +18,28 @@
 
     <lr-nav></lr-nav>
     <div class="container">
-        <h1 class="text-primary"> Objects </h1>
-        <a class="button primary" href="object.html"> &#xFF0B; Object </a>
+        <h1 class="text-primary"> Managing Lived Religion Experiences </h1>
+        <button id="saveExperiences" class="is-hidden button primary" role="button" onclick="saveList()">Save List</button>
         <div class="row">
-            <div id="objects" deer-collection="LivedReligionObjectsTest" class="deer-view col" deer-link="object.html?id=">No objects.</div>
+            <div id="experiences" deer-collection="LivedReligionExperiencesTest" class="deer-view col is-hidden" deer-template="managedlist"></div>
         </div>
     </div>
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
 
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
-    <script>
+    <script>      
         /**
-         * Determine what to do with the items in the Lived Religion Locations collection based on a users roles
+         * Handler for when experiences view finishes loading
          * @param {type} event
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if (event.target.getAttribute("id") === "objects") {
-                LR.utils.drawInterface(event, "objects")
+            if (event.target.getAttribute("id") === "experiences") {
+                LR.utils.drawInterface(event, "experienceManagement")
             }
         }, false)
+    
         
         /**
          * A hack to force redraw by refreshing the page.
@@ -67,6 +69,34 @@
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
             document.location.href="dashboard.html"
         })
+
+        function saveList(){
+            const experiences = []
+            LR.ui.experiences.forEach(uri=>{
+                experiences.push({
+                    label:document.querySelector(`deer-view[deer-id='${uri}']`).textContent.trim(),
+                    '@id':uri
+                })
+            })
+
+            list = {
+                '@id':LR.PUBLIC_EXPERIENCE_LIST,
+                '@context':'https://schema.org/',
+                '@type': "ItemList",
+                name: "LRDA-STL Public Experiences",
+                numberOfItems: LR.ui.experiences.size,
+                itemListElement: experiences
+            }
+            fetch(LR.URLS.OVERWRITE,{
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify(list)
+            }).then(r=>r.ok?r.json():Promise.reject(Error(r.text)))
+            .catch(err=>alert(`Failed to save: ${err}`))
+        }
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>

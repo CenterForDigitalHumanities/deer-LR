@@ -15,8 +15,9 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 
 /**
- * Represent a collection as a <select> HTML dropdown.  
+ * Represent a collection as a <select> HTML dropdown.
  * Include the ability to quickly add an item to the collection, which will then be selected.
+ * Note that this data does not know which item should be selected.  See preSelectSelects().
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -25,11 +26,13 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
+        let key=""
         if(whichCollection){
             let check = whichCollection.replace("Test", "")
             switch(check){
                 case "LivedReligionLocations":
                     type = "Place"
+                    key="location"
                 break
                 case "LivedReligionObjects":
                     type = "Thing"
@@ -62,9 +65,9 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         </div>`
         let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allPlacesInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
-        for (let place of allPlacesInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
+        let allItemsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        for (let item of allItemsInCollection) {
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
         }
         tmpl += `</select>`
         return tmpl
@@ -75,11 +78,10 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     }
 }
 
-
-
 /**
  * Represent a collection as a <select multiple> HTML multi-select.  
  * Include the ability to quickly add an item to the collection, which will then be selected.
+ * Note that this data does not know which item should be selected.  See preSelectSelects().
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
@@ -124,12 +126,12 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
             <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        let allItemsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
         let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Choose Below"> `
-        for (let loc of allLocationsInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
+        for (let item of allItemsInCollection) {
+            tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
         }
         tmpl += `</optgroup></select>${selected}`
         return tmpl
@@ -142,7 +144,11 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
 
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
+        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> 
+        <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">Review</a>
+        <dl tog="experienceContent" class="eventContentWrapper is-hidden">
+            <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
+        `
         let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
         let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
@@ -250,7 +256,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'object')">Remove</a>
                     </li>
                     `
                 }
@@ -270,7 +276,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'object')">Remove</a>
                     </li>
                     `
                 }
@@ -306,7 +312,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
                     </li>
                     `
                 }
@@ -326,7 +332,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
                     </li>
                     `
                 }
@@ -361,8 +367,8 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="mostUpToLabelHelper"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                        <deer-view deer-id="${itemURI}" deer-template="senseListing"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
                     </li>
                     `
                 }
@@ -381,8 +387,8 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                        <deer-view deer-id="${val}" deer-template="senseListing"></deer-view>
+                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
                     </li>
                     `
                 }
@@ -412,7 +418,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML + `</div>`
         return tmpl
     } catch (err) {
         console.log("Could not build Event or ExperienceUpload template.")
@@ -430,7 +436,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
  * @param {type} options
  * @return {tmpl}
  */    
-DEER.TEMPLATES.list= function(obj, options={}) {
+DEER.TEMPLATES.managedlist= function(obj, options={}) {
     try{
         let tmpl = ``
         if(options.list){
@@ -438,10 +444,9 @@ DEER.TEMPLATES.list= function(obj, options={}) {
             obj[options.list].forEach((val,index)=>{
                 let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
                 let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
-                let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
+                let removeBtn = `<a href="#" class="removeCollectionItem" title="Delete This Entry"
                 onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
-                let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
+                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn} </li>` : `<li>${name}</li>`
             })
             tmpl += `</ul>`
         }
@@ -455,7 +460,6 @@ DEER.TEMPLATES.list= function(obj, options={}) {
         console.error(err)
         return null
     }
-
 }
 
 DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
@@ -474,14 +478,16 @@ DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
 
 
 /**
- * Ensure the most up to date additionalType annotation is gathered.  Often used when rendering collection items.
- * Using a template ensures that expand(obj) has happened, so we have all up to date annotations in obj.
+ * A sense is being listed somewhere.  List it by additionalType with the description as a tooltip.
+ * Note we could probably build something a little better to show.  We would need to put limits on the description. 
  * @param {Object} obj some obj  containing some label annotating it.
  */
-DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
+DEER.TEMPLATES.senseListing = function (obj, options = {}) {
     try {
         let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
-        return at
+        let descr = options.description ?  UTILS.getValue(options.description) : obj.description ?  UTILS.getValue(obj.description) : ""
+        let elem = `<span title="${descr}">${at}</span>`
+        return elem
     } catch (err) {
         console.log("Could not build most up to date additional type template.")
         console.error(err)
@@ -529,21 +535,21 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
     }
 }
 
-let LR_primitives = ["additionalType"]
+let LR_primitives = ["additionalType", "practiceContext"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
 let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 //Comment this out for dev-01 deploys
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://store.rerum.io/v1/since"
-}
+//DEER.URLS = {
+//    BASE_ID: "http://store.rerum.io/v1",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    QUERY: "query",
+//    OVERWRITE: "overwrite",
+//    DELETE: "delete",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/

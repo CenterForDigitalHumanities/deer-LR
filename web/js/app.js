@@ -6,36 +6,38 @@
 
 const LR = {}
 LR.VERSION = "1.0.0"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
+LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+//LR.PUBLIC_EXPERIENCE_LIST = http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb
 ///For dev-01
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    SINCE: "http://devstore.rerum.io/v1/since"
-//}
-
-//For prd-01
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "http://store.rerum.io/v1",
-    DELETE: "delete",
-    CREATE: "create",
-    UPDATE: "update",
-    OVERWRITE: "overwrite",
-    QUERY: "query",
-    SINCE: "http://store.rerum.io/v1/since"
+    BASE_ID: "http://devstore.rerum.io/v1",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since",
 }
+
+//For prd-01
+//LR.URLS = {
+//    LOGIN: "login",
+//    LOGOUT: "logout",
+//    BASE_ID: "http://store.rerum.io/v1",
+//    DELETE: "delete",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    OVERWRITE: "overwrite",
+//    QUERY: "query",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 if (typeof(Storage) !== "undefined") {
@@ -46,6 +48,74 @@ if (typeof(Storage) !== "undefined") {
 LR.ui = {}
 LR.utils = {}
 
+LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
+    // TODO: There must be a best way to do this...
+    let prop;
+    if (property === undefined || property === "") {
+        console.error("Value of property to lookup is missing!")
+        return undefined
+    }
+    if (Array.isArray(property)) {
+        // It is an array of things, we can only presume that we want the array.  If it needs to become a string, local functions take on that responsibility.
+        return property
+    } else {
+        if (typeof property === "object") {
+            // TODO: JSON-LD insists on "@value", but this is simplified in a lot
+            // of contexts. Reading that is ideal in the future.
+            if (!Array.isArray(alsoPeek)) {
+                alsoPeek = [alsoPeek]
+            }
+            alsoPeek = alsoPeek.concat(["@value", "value", "$value", "val"])
+            for (let k of alsoPeek) {
+                if (property.hasOwnProperty(k)) {
+                    prop = property[k]
+                    break
+                } else {
+                    prop = property
+                }
+            }
+        } else {
+            prop = property
+        }
+    }
+    try {
+        switch (asType.toUpperCase()) {
+            case "STRING":
+                prop = prop.toString();
+                break
+            case "NUMBER":
+                prop = parseFloat(prop);
+                break
+            case "INTEGER":
+                prop = parseInt(prop);
+                break
+            case "BOOLEAN":
+                prop = !Boolean(["false", "no", "0", "", "undefined", "null"].indexOf(String(prop).toLowerCase().trim()));
+                break
+            default:
+        }
+    } catch (err) {
+        if (asType) {
+            throw new Error("asType: '" + asType + "' is not possible.\n" + err.message)
+        } else {
+            // no casting requested
+        }
+    } finally {
+        return (prop.length === 1) ? prop[0] : prop
+    }
+}
+
+LR.ui.togglePublic = (e) => {
+    e.preventDefault()
+    const elem = e.target.closest("li[deer-id]")
+    if(!elem) return false
+
+    const uri = elem.getAttribute("deer-id")
+    const included = LR.ui.experiences.has(uri)
+    elem.classList[included ? "remove" : "add"]("text-primary")
+    LR.ui.experiences[included ? "delete" : "add"](uri)
+    saveExperiences.classList.remove('is-hidden')
+}
 /**
  * Each interface has something triggered by user roles.  Implement contributor vs. admin
  * UI/UX here.  
@@ -55,13 +125,22 @@ LR.utils = {}
  * @return {undefined}
  */
 LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
+    let heading = "";
+    if(interface === "object"){
+        heading = "Object"
+    }
+    else if(interface === "person"){
+        heading = "Person"
+    }
+    else if(interface === "place"){
+        heading = "Location"
+    }
     switch(interface){
         case "experience":
             if (entityID) {
                 if(user.roles.administrator){
-                    theExperience.setAttribute("deer-id", entityID)
+                    document.getElementById("theExperience").setAttribute("deer-id", entityID)
                     document.getElementById("startExperience").classList.add("is-hidden")
-                    document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                 }
@@ -73,9 +152,8 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                     })
                     .then(permitted => {
                         if(permitted){
-                            theExperience.setAttribute("deer-id", entityID)
+                            document.getElementById("theExperience").setAttribute("deer-id", entityID)
                             document.getElementById("startExperience").classList.add("is-hidden")
-                            document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                             document.getElementById("experienceReview").classList.remove("is-hidden")
                             document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                         }
@@ -99,7 +177,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
             if (entityID) {
                 if (user.roles.administrator) {
                     entity_form.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Object"
+                    document.querySelector("h2.text-primary").innerHTML = "Update "+heading
                     document.querySelector("input[type='submit']").value = "Update"
                     let btn = document.createElement("a")
                     btn.href = window.location.pathname
@@ -115,13 +193,13 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "researcher":
             if (user.roles.administrator) {
                 if (entityID) {
-                    researcherForm.setAttribute("deer-id", entityID)
+                    document.getElementById("researcherForm").setAttribute("deer-id", entityID)
                     document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
                     document.querySelector("input[type='submit']").value = "Update"
                     let btn = document.createElement("a")
                     btn.href = window.location.pathname
                     btn.innerHTML = "Reset Page"
-                    researcherForm.append(btn)
+                    document.getElementById("researcherForm").append(btn)
                 }
             }
             else{
@@ -154,10 +232,26 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
                 document.location.href="dashboard.html"
             }    
         break
+        case "adminUpgrade":
+            if (user.roles.administrator) {
+                document.querySelectorAll('.admin-only').forEach(el=>el.classList.remove('is-hidden'))
+            }
+            break
         case "experienceManagement":
             if (user.roles.administrator) {
-                experiences.classList.remove("is-hidden")
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
+                document.getElementById("experiences").classList.remove("is-hidden")
+                fetch(LR.PUBLIC_EXPERIENCE_LIST).then(r=>r.json())
+                .then(list=>{
+                    LR.ui.experiences = new Set(list.itemListElement['@id'])
+                    for (const elem of experiences.querySelectorAll('li')) {
+                        elem.querySelector('a.removeCollectionItem').style.display = 'inline-block'
+                        const include = LR.ui.experiences.has(elem.getAttribute("deer-id")) ? "add" : "remove"
+                        elem.classList[include]("text-primary")
+                        elem.insertAdjacentHTML('beforeend',`
+                        <a onclick="LR.ui.togglePublic(event)" href="#" title="Toggle public visibility"> &#x1F441 </a>
+                        `)
+                    }
+                })
             }
             else{
                 alert("You must be logged in as an administrator to use this!")
@@ -207,51 +301,81 @@ LR.ui.getUserEntries = async function(user) {
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiences')">&#x274C</a>`
+            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
         }
         return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
     },``):`<p class="text-error">No experiences found for this user</p>`
 }
 
 /**
- * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
+ * A specific toggle with multiple pieces of UI attached, so it does not fit the convention.
  * @param {type} event
  * @return {undefined}
  */
-LR.ui.toggleAreas = function(event){
+LR.ui.customToggles = function(event){
     let area = event.target.getAttribute("area")
-    let elems = document.querySelectorAll("div[tog='"+area+"']")
-    for(let elem of elems){
-        if(elem.classList.contains("is-hidden")){
-            elem.classList.remove("is-hidden")
-        }  
-        else{
-            elem.classList.add("is-hidden")
-        }
-    }
-}
-
-/**
- * A convention where area="xyz" will line up with tog="xyz" on some element(s) to toggle. 
- * @param {type} event
- * @return {undefined}
- */
-LR.ui.toggleAreaHideOthers = function(event){
-    let area = event.target.getAttribute("area")
-    let elems = document.querySelectorAll("div[tog='"+area+"']")
-    let all = document.querySelectorAll("div[tog]")
-    for(let elem of all){
-        if (elem.getAttribute("tog") && elem.getAttribute("tog") === area){
+    let elem = undefined
+    switch(area){
+        case "startExperience":
+            document.getElementById("experienceReview").classList.add("is-hidden")
+            document.getElementById("experienceArtifacts").classList.add("is-hidden")
+            document.getElementById("startExperience").classList.remove("is-hidden")
+            if(!document.getElementById("artifactContent").classList.contains("is-hidden")){
+                document.getElementById("toggleArtifactArea").click()
+            }
+            if(!document.getElementById("experienceContent").classList.contains("is-hidden")){
+                document.getElementById("toggleExpReviewContent").click()
+            }
+        break
+        case "experienceContent":
+            elem = document.querySelector("dl[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+                event.target.title = "Hide the details of the experience"
+                event.target.innerHTML = "View Less"
+            }  
+            else{
+                elem.classList.add("is-hidden")
+                event.target.title = "Show the details of this experience"
+                event.target.innerHTML = "Review "
+            }
+           
+        break
+        case "artifactArea":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+                event.target.title = "Hide the sensory information area"
+                event.target.innerHTML = "Collapse Sensory Area"
+            }  
+            else{
+                elem.classList.add("is-hidden")
+                event.target.title = "Expand the area to add sensory information"
+                event.target.innerHTML = "Add Sensory Information"
+            }
+        break
+        case "practices":
+            elem = document.querySelector("div[tog='"+area+"']")
             if(elem.classList.contains("is-hidden")){
                 elem.classList.remove("is-hidden")
             }  
             else{
                 elem.classList.add("is-hidden")
             }
-        }
-        else{
-            elem.classList.add("is-hidden")
-        }
+            document.querySelector("div[tog='bodies']").classList.add("is-hidden")
+        break
+        case "bodies":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+            document.querySelector("div[tog='practices']").classList.add("is-hidden")
+        break
+        
+        default:
     }
 }
 
@@ -374,14 +498,15 @@ LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
  * @param {string} The @#id of the experience to disaasociate it from
  * @return {Promise}
  */
-LR.utils.disassociateObject = function(event, objectID, experienceID){
-    let trackedObjs = document.getElementById("objects").value
-    let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
+LR.utils.disassociate = function(event, objectID, experienceID, which){
+    let inpt = document.querySelector("input[deer-key='"+which+"']")
+    let trackedObjs = inpt.value
+    let delim = inpt.hasAttribute("deer-array-delimeter") ? inpt.getAttribute("deer-array-delimeter") : ","
     let trackedArr = trackedObjs.split(delim)
     if(trackedArr.indexOf(objectID) > -1){
         trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
-        document.getElementById("objects").value = trackedObjs
-        document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+        inpt.value = trackedObjs
+        inpt.$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
         document.getElementById("theExperience").$isDirty = true
         //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
@@ -531,24 +656,56 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
 }
 
 /**
+ * A hidden input is tracking a select or multi select. It is hidden and it is not a primitive, so DEER does not handle the value.
+ * Make sure to set the value of this hidden input.  The value is a string, that string contains a delimiter to join on for cases of multiple values.
  * 
- * Make sure not to select options outside the <form> and <select> involved here.  
- * @param {Object} annotationData The expanded containing all annotation data for a form.
- * @param {Array(String)} keys The specific annotations we are looking for in annotationData
+ * @param {Object} annotationData Expanded data that is all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData. 
  * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
  * @return None
  */
-LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
+LR.utils.setTrackedHiddenValues = function(annotationData, keys, form){
+    keys.forEach(key =>{
+        let data_arr = 
+        (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+        let input = form.querySelector("input[deer-key='"+key+"']")
+        //Set the value of the hidden input that tracks this for DEER
+        //Check if we need a different delimeter.  The input will tell us.
+        let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+        //Generate the value for the input that DEER supports - "uri,uri..."
+        let str_arr = (data_arr.length > 1) ? data_arr.join(delim) : (data_arr.length === 1 ) ? data_arr[0] : ""
+        input.value = str_arr
+    })
+}
+
+/**
+ * 
+ * Make sure not to select options outside the <form> and <select> involved here.  
+ * This may be for a basic <select>, it may be for a <select multiple>
+ * These are dynamic selects built with custom UI and so DEER cannot preselect these.  We have to do it after the form loads.
+ * For dynamic selects, we follow a convention where there is a hidden input at this.parentElement.previousElementSibling with the deer-key
+ * Make sure to select the appropriate <options>
+ * 
+ * How about we do this with optional chaining.  This should work to pre select simple dropdowns AND multi selects (always at least an array of 1).
+ * 
+ * @param {Object} annotationData Expanded data that is all annotation data for a form.
+ * @param {Array(String)} keys The specific annotations we are looking for in annotationData. 
+ * @param {HTMLElement} form The completely loaded HTML <form> containing the <selects>s
+ * @return None
+ */
+LR.utils.preSelectSelects = function(annotationData, keys, form){
     keys.forEach(key =>{
         if(annotationData.hasOwnProperty(key)){
-            let data_arr = annotationData[key].hasOwnProperty("value") ? annotationData[key].value.items : annotationData[key].items
+            let data_arr = 
+            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+            //let data_arr = annotationData[key]?.value?.items ?? annotationData[key]?.items ?? [ LR.utils.getAnnoValue(annotationData[key]) ]
             let input = form.querySelector("input[deer-key='"+key+"']")
             let area = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
             let selectElemExists = true
             let sel
             if(area.tagName === "DEER-VIEW"){
-                //Then it is a <deer-view> template and we need to get the child to have the <select>
-                sel = area.firstElementChild
+                //Then it is a <deer-view> template and we need to find <select>
+                sel = area.querySelector("select")
             }
             else if(area.tagName === "SELECT"){
                 sel = area
@@ -558,16 +715,30 @@ LR.utils.preSelectMultiSelects = function(annotationData, keys, form){
                 // Rememeber: the <input> with deer key tracking the select must come immediately before the select. 
                 console.warn("There is no select related to "+key+" to pre-select.")
             }
+            let arr_names = []
             if(sel && sel.tagName === "SELECT"){
                 data_arr.forEach(val => {
                     let option = sel.querySelector("option[value='"+val+"']")
                     if(option){
                         option.selected = true
+                        //There should always be some kind of text here.
+                        arr_names.push(option.text ? option.text :  "")
+                        //arr_names.push(option?.text ?? "")
                     }
                     else{
                         //The <option> is not available in the <select> HTML.
                     }  
                 })
+                
+                //Now build the little tags, only for multi selects.
+                if(sel.hasAttribute("multiple")){
+                    let selectedTagsArea = sel.nextElementSibling
+                    selectedTagsArea.innerHTML = ""
+                    arr_names.forEach(selection => {
+                        let tag = `<span class="tag is-small">${selection}</span>` 
+                        selectedTagsArea.innerHTML += tag
+                    })
+                }
             }
             else{
                 //This is disconcerting.  The deer-view either didn't load or the DOM didn't draw it fast enough...
