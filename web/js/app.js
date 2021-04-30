@@ -662,7 +662,9 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
 LR.utils.preSelectSelects = function(annotationData, keys, form){
     keys.forEach(key =>{
         if(annotationData.hasOwnProperty(key)){
-            let data_arr = annotationData[key]?.value?.items ?? annotationData[key]?.items ?? [ LR.utils.getAnnoValue(annotationData[key]) ]
+            let data_arr = 
+            annotationData[key].hasOwnProperty("value").hasOwnProperty("items") ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+            //let data_arr = annotationData[key]?.value?.items ?? annotationData[key]?.items ?? [ LR.utils.getAnnoValue(annotationData[key]) ]
             let input = form.querySelector("input[deer-key='"+key+"']")
             let area = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
             let selectElemExists = true
@@ -688,7 +690,8 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
                     if(option){
                         option.selected = true
                         //There should always be some kind of text here.
-                        arr_names.push(option?.text ?? "")
+                        arr_names.push(option.text ? option.text :  "")
+                        //arr_names.push(option?.text ?? "")
                     }
                     else{
                         //The <option> is not available in the <select> HTML.
