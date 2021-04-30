@@ -16,6 +16,9 @@
             background-position: center;
             background-repeat: no-repeat;
             height: 35em;
+            filter: invert(100%);
+            -webkit-filter: invert(100%);
+            background-color: black;
         }
         #experienceReview h4{
             margin: 0px;
@@ -79,7 +82,8 @@
         #expLoadMessage{
             font-size: 12pt;
             text-align: center;
-            background-color: white;
+            background-color: black;
+            color: white;
             animation-name: color;
             animation-duration: 3s;
             animation-iteration-count: infinite;
@@ -93,18 +97,12 @@
         
         @keyframes color {
             0% {
-                color: black;
-                background-color: white;
                 top: -.5em;
             }
             50% {
-                color: white;
-                background-color: black;
                 top: 1.75em;
             }
             100 {
-                color: black;
-                background-color: white;
                 top: 2.75em
             }
         }
@@ -439,6 +437,8 @@
                 case "experienceContent":
                     document.getElementById("experienceReview").style.backgroundImage = "none"
                     document.getElementById("experienceReview").style.height = "auto"
+                    document.getElementById("experienceReview").style.filter = "none"
+                    document.getElementById("experienceReview").style.backgroundColor = "transparent"
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("toggleExpReviewContent").click()
                     document.getElementById("expLoadMessage").style.display = "none"
