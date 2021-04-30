@@ -679,16 +679,29 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
                 // Rememeber: the <input> with deer key tracking the select must come immediately before the select. 
                 console.warn("There is no select related to "+key+" to pre-select.")
             }
+            let arr_id = []
+            let arr_names = []
             if(sel && sel.tagName === "SELECT"){
                 data_arr.forEach(val => {
+                    arr_id.push(val)
                     let option = sel.querySelector("option[value='"+val+"']")
                     if(option){
                         option.selected = true
+                        //There should always be some kind of text here.
+                        arr_names.push(option?.text ?? "")
                     }
                     else{
                         //The <option> is not available in the <select> HTML.
                     }  
                 })
+                //Set the value of the hidden input that tracks this for DEER
+                //Check if we need a different delimeter.  The input will tell us.
+                let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+                //Generate the value for the input that DEER supports - "uri,uri..."
+                let str_arr = (arr_id.length > 1) ? arr_id.join(delim) : (arr_id.length === 1 ) ? arr_id[0] : ""
+                input.setAttribute("value", str_arr)
+                //Now build the little tags
+                let selectedTagsArea = sel.nextElementSibling
             }
             else{
                 //This is disconcerting.  The deer-view either didn't load or the DOM didn't draw it fast enough...
