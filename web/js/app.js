@@ -488,14 +488,14 @@ LR.utils.broadcastEvent = function(event = {}, type, element, obj = {}) {
  * @param {string} The @#id of the experience to disaasociate it from
  * @return {Promise}
  */
-LR.utils.disassociateObject = function(event, objectID, experienceID){
-    let trackedObjs = document.getElementById("objects").value
-    let delim = document.getElementById("objects").hasAttribute("deer-array-delimeter") ? document.getElementById("objects").getAttribute("deer-array-delimeter") : ","
+LR.utils.disassociate = function(event, objectID, experienceID, which){
+    let trackedObjs = document.getElementById(which).value
+    let delim = document.getElementById(which).hasAttribute("deer-array-delimeter") ? document.getElementById(which).getAttribute("deer-array-delimeter") : ","
     let trackedArr = trackedObjs.split(delim)
     if(trackedArr.indexOf(objectID) > -1){
         trackedObjs =  trackedArr.filter(e => e !== objectID).join(delim)
-        document.getElementById("objects").value = trackedObjs
-        document.getElementById("objects").$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
+        document.getElementById(which).value = trackedObjs
+        document.getElementById(which).$isDirty = true //This DEER thing was tricky to know off hand.  3rd party developers may struggle to know to do this.
         document.getElementById("theExperience").$isDirty = true
         //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
         document.getElementById("theExperience").querySelector("input[type='submit']").click()
@@ -663,7 +663,7 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
     keys.forEach(key =>{
         if(annotationData.hasOwnProperty(key)){
             let data_arr = 
-            annotationData[key].hasOwnProperty("value").hasOwnProperty("items") ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
             //let data_arr = annotationData[key]?.value?.items ?? annotationData[key]?.items ?? [ LR.utils.getAnnoValue(annotationData[key]) ]
             let input = form.querySelector("input[deer-key='"+key+"']")
             let area = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
@@ -702,9 +702,16 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
                 let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
                 //Generate the value for the input that DEER supports - "uri,uri..."
                 let str_arr = (arr_id.length > 1) ? arr_id.join(delim) : (arr_id.length === 1 ) ? arr_id[0] : ""
-                input.setAttribute("value", str_arr)
-                //Now build the little tags
-                let selectedTagsArea = sel.nextElementSibling
+                input.value = str_arr
+                //Now build the little tags, only for multi selects.
+                if(sel.hasAttribute("multiple")){
+                    let selectedTagsArea = sel.nextElementSibling
+                    selectedTagsArea.innerHTML = ""
+                    arr_names.forEach(selection => {
+                        let tag = `<span class="tag is-small">${selection}</span>` 
+                        selectedTagsArea.innerHTML += tag
+                    })
+                }
             }
             else{
                 //This is disconcerting.  The deer-view either didn't load or the DOM didn't draw it fast enough...

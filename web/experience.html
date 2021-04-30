@@ -406,7 +406,7 @@
                     document.getElementById("experienceReview").classList.remove("is-hidden")
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let locDropdown = event.target.querySelector(".locDropdown")
-                    let locName = locDropdown.options[e.selectedIndex].text
+                    let locName = locDropdown.options[locDropdown.selectedIndex].text
                     let expName = event.target.querySelector("input[deer-key='name']").value
                     let expID = event.detail["@id"] ? event.detail["@id"] : ""
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = expName)
