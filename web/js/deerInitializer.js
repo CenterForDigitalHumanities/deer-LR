@@ -367,7 +367,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
+                        <deer-view deer-id="${itemURI}" deer-template="senseListing"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'senses')">Remove</a>
                     </li>
                     `
@@ -387,7 +387,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="label"></deer-view>
+                        <deer-view deer-id="${val}" deer-template="senseListing"></deer-view>
                         <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'senses')">Remove</a>
                     </li>
                     `
@@ -478,14 +478,16 @@ DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
 
 
 /**
- * Ensure the most up to date additionalType annotation is gathered.  Often used when rendering collection items.
- * Using a template ensures that expand(obj) has happened, so we have all up to date annotations in obj.
+ * A sense is being listed somewhere.  List it by additionalType with the description as a tooltip.
+ * Note we could probably build something a little better to show.  We would need to put limits on the description. 
  * @param {Object} obj some obj  containing some label annotating it.
  */
-DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
+DEER.TEMPLATES.senseListing = function (obj, options = {}) {
     try {
         let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
-        return at
+        let descr = options.description ?  UTILS.getValue(options.description) : obj.description ?  UTILS.getValue(obj.description) : ""
+        let elem = `<span title="${descr}">${at}</span>`
+        return elem
     } catch (err) {
         console.log("Could not build most up to date additional type template.")
         console.error(err)
@@ -533,7 +535,7 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
     }
 }
 
-let LR_primitives = ["additionalType"]
+let LR_primitives = ["additionalType", "practiceContext"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
 let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
