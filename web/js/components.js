@@ -37,7 +37,13 @@ class LrNav extends HTMLElement {
                     this.querySelector('.tabs').innerHTML += adminTabs
                 }
             }
-            setTimeout(()=>document.querySelector(`.tabs [href*="${location.href.split('/').pop()}"]`)?.classList.add("active"),0)
+            // setTimeout(()=>document.querySelector(`.tabs [href*="${location.href.split('/').pop()}"]`)?.classList.add("active"),0)
+            setTimeout(()=>{
+                const thisTab = document.querySelector(`.tabs [href*="${location.href.split('/').pop()}"]`)
+                if(thisTab) {
+                    thisTab.classList.add("active")
+                }
+            },0)
         })
     }
     connectedCallback() {
