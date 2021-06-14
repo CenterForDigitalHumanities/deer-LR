@@ -4,11 +4,11 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-config.js'
+import { default as DEER } from 'https://deer.rerum.io/releases/alpha-0.11/deer-config.js'
 
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
+import { default as UTILS } from 'https://deer.rerum.io/releases/alpha-0.11/deer-utils.js'
 
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
+import { default as renderer, initializeDeerViews } from 'https://deer.rerum.io/releases/alpha-0.11/deer-render.js'
     
 //Comment this out for dev-01 deploys
 //DEER.URLS = {
