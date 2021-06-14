@@ -9,10 +9,10 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-config.js'
+import { default as DEER } from 'https://deer.rerum.io/releases/alpha-0.11/deer-config.js'
 
 // Identify a UTILS package
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
+import { default as UTILS } from 'https://deer.rerum.io/releases/alpha-0.11/deer-utils.js'
 
 /**
  * Represent a collection as a <select> HTML dropdown.
@@ -552,12 +552,12 @@ DEER.URLS = {
 }
 
 // Render is probably needed by all items, but can be removed.
-// CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
+// CDN at https://deer.rerum.io/releases/
+import { default as renderer, initializeDeerViews } from 'https://deer.rerum.io/releases/alpha-0.11/deer-render.js'
 
 // Record is only needed for saving or updating items.
-// CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
+// CDN at https://deer.rerum.io/releases/
+import { default as record, initializeDeerForms } from 'https://deer.rerum.io/releases/alpha-0.11/deer-record.js'
 
 // fire up the element detection as needed
 /**
