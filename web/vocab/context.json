@@ -84,6 +84,23 @@
                "@context":{
                   "Imagined":"loc:afset009298",
                   "Neighborhood":"loc:afset012412",
+                  "School" : "schema:School",
+                  "Accommodation":"schema:Accommodation",
+                  "AdministrativeArea" : "schema:AdministrativeArea",
+                  "CivicStructure": "schema:CivicStructure",
+                  "Landform":"schema:Landform",
+                  "LandmarksOrHistoricBuildings":"schema:LandmarksOrHistoricBuildings",
+                  "LocalBuisness":"schema:LocalBuisness",
+                  "Residence":"schema:Residence",
+                  "TouristDestination":"schema:TouristDestination",
+                  "House":"schema:House",
+                  "Cemetery":"schema:Cemetery",
+                  "Hospital":"schema:Hospital",
+                  "Museum":"schema:Museum",
+                  "Park":"schema:Park",
+                  "Street":"fast:1134794",
+                  "Zoo":"schema:Zoo",
+                  "Gym":"schema:ExerciseGym",
                   "Other":"Place"
                }
             }
@@ -185,7 +202,7 @@
                   "spontaneous":"lr:spontaneous",
                   "individual":"lr:individual",
                   "collective":"lr:collective",
-                  "other":""
+                  "other":"practiceContext"
                }
             }
          }
@@ -199,6 +216,8 @@
          "@container":"@set"
       },
       "fieldNotes":"fast:2007231",
-      "religiousTradition":"lr:religiousTradition"
+      "religiousTradition":"lr:religiousTradition",
+      "secondaryFunction":"lr:secondaryFunction",
+      "Action":"schema:Action"
    }
 }
