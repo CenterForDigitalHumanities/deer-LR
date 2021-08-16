@@ -160,119 +160,24 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
        
         //experienceData.location is most likely a String that is a URI, we want the label
-        let placeLabelHTML = ""
-        if(typeof place === "object"){
-            //Then the URI is the value
-            let placeURI = UTILS.getValue(place)
-            if(URIisValid(placeURI)){
-                placeLabelHTML = `<deer-view deer-id="${placeURI}" deer-template="label"></deer-view>`
-            }
-            else{
-                //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                //TODO what should we do here?
-                placeLabelHTML = placeURI
-            }
-        }
-        else{
-            // The URI is this string, probably
-            if(URIisValid(place)){
-                //Gamble that it is a resolvable ID...
-                placeLabelHTML = `<deer-view deer-id="${place}" deer-template="label"></deer-view>`
-            }
-            else{
-                //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                placeLabelHTML = place
-            }
-        }
+        let placeLabelHTML = setNamesTemplate([place])
         
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
-        let contributorsByName = ``
-        contributors.items.forEach((val)=>{
-            let name = ""
-            const itemURI = UTILS.getValue(val)
-            name =  URIisValid(itemURI)
-                ?`<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
-                :`<li> ${itemURI} </li>`
-            contributorsByName += name
-        })
+        let contributorsByName = setNamesTemplate(contributors.items)
         
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
-        let peopleByName = ``
-        people.items.forEach((val)=>{
-            let name = ""
-            if(typeof val === "object"){
-                let itemURI = UTILS.getValue(val)
-                if(URIisValid(itemURI)){
-                    //item.value is a string and it is a URI value, as expected.
-                    name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
-                }
-                else{
-                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                    //TODO what should we do here?
-                    name =  `<li> ${itemURI} </li>`
-                }
-            }
-            else{
-                if(URIisValid(val)){
-                    //item is a string and it is a URI value, as expected.
-                    name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
-                }
-                else{
-                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                    //TODO what should we do here?
-                    name = `<li> ${val} </li>`
-                }
-            }
-            peopleByName += name
-        })
+        let peopleByName = setNamesTemplate(people.items)
+
         //Gather relatedObjects, an array of URIs
-        let relatedObjectsByName = ``
+        let relatedObjectsByName = setNamesTemplate(relatedObjects.items,
+            `<li>
+                <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
+                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'object')">Remove</a>
+            </li>`,
+            `<li>
+                ${itemURI}
+            </li>`)
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
-        relatedObjects.items.forEach((val)=>{
-            let name = ""
-            if(typeof val === "object"){
-                //See if the value is the URI we want
-                let itemURI = UTILS.getValue(val)
-                if(URIisValid(itemURI)){
-                    name = `
-                    <li>
-                        <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'object')">Remove</a>
-                    </li>
-                    `
-                }
-                else{
-                    //We know it is just a string of some kind.  Just use it.
-                    //TODO what should we do here?
-                    name = `
-                    <li>
-                        ${itemURI}
-                    </li>
-                    `
-                }
-            }
-            else{
-                if(URIisValid(val)){
-                    //We expect this is item entry is the URI we were looking for
-                    name = `
-                    <li>
-                        <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'object')">Remove</a>
-                    </li>
-                    `
-                }
-                else{
-                    //We know it is just a string of some kind and not the URI, so we can show this string.  
-                    //TODO what should we do here?
-                    name = `
-                    <li>
-                        ${val}
-                    </li>
-                    `
-                }
-            }
-            relatedObjectsByName += name
-        })
         let objectsHTML = `
             <h4>Objects at Experience "${UTILS.getLabel(experienceData)}"</h4>
             <p>Objects you add will appear here and can be removed, but not edited.</p>
@@ -282,53 +187,15 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         `
         
         //Gather relatedPractices, an array of URIs
-        let relatedPracticesByName = ``
+        let relatedPracticesByName = setNamesTemplate(relatedPractices.items,
+            `<li>
+                <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
+                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
+            </li>`,
+            `<li>
+                ${itemURI}
+            </li>`)
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
-        relatedPractices.items.forEach((val)=>{
-            let name = ""
-            if(typeof val === "object"){
-                //See if the value is the URI we want
-                let itemURI = UTILS.getValue(val)
-                if(URIisValid(itemURI)){
-                    name = `
-                    <li>
-                        <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
-                    </li>
-                    `
-                }
-                else{
-                    //We know it is just a string of some kind.  Just use it.
-                    //TODO what should we do here?
-                    name = `
-                    <li>
-                        ${itemURI}
-                    </li>
-                    `
-                }
-            }
-            else{
-                if(URIisValid(val)){
-                    //We expect this is item entry is the URI we were looking for
-                    name = `
-                    <li>
-                        <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
-                    </li>
-                    `
-                }
-                else{
-                    //We know it is just a string of some kind and not the URI, so we can show this string.  
-                    //TODO what should we do here?
-                    name = `
-                    <li>
-                        ${val}
-                    </li>
-                    `
-                }
-            }
-            relatedPracticesByName += name
-        })
         let practicesHTML = `
             <h4>Practices at Experience "${UTILS.getLabel(experienceData)}"</h4>
             <p>Practices you add will appear here and can be removed, but not edited.</p>
@@ -338,53 +205,15 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         `
         
         //Gather relatedSenses, an array of URIs
-        let relatedSensesByName = ``
+        let relatedSensesByName = setNamesTemplate(relatedSenses.items,
+            `<li>
+                <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
+                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
+            </li>`,
+            `<li>
+                ${itemURI}
+            </li>`)
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
-        relatedSenses.items.forEach((val)=>{
-            let name = ""
-            if(typeof val === "object"){
-                //See if the value is the URI we want
-                let itemURI = UTILS.getValue(val)
-                if(URIisValid(itemURI)){
-                    name = `
-                    <li>
-                        <deer-view deer-id="${itemURI}" deer-template="senseListing"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
-                    </li>
-                    `
-                }
-                else{
-                    //We know it is just a string of some kind.  Just use it.
-                    //TODO what should we do here?
-                    name = `
-                    <li>
-                        ${itemURI}
-                    </li>
-                    `
-                }
-            }
-            else{
-                if(URIisValid(val)){
-                    //We expect this is item entry is the URI we were looking for
-                    name = `
-                    <li>
-                        <deer-view deer-id="${val}" deer-template="senseListing"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${val}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
-                    </li>
-                    `
-                }
-                else{
-                    //We know it is just a string of some kind and not the URI, so we can show this string.  
-                    //TODO what should we do here?
-                    name = `
-                    <li>
-                        ${val}
-                    </li>
-                    `
-                }
-            }
-            relatedSensesByName += name
-        })
         let sensesHTML = `
             <h4>Senses at Experience "${UTILS.getLabel(experienceData)}"</h4>
             <p>Senses you add will appear here and can be removed, but not edited.</p>
@@ -558,4 +387,16 @@ function URIisValid(uriString) {
         isHTTP = false
     }
     return isHTTP
+}
+
+function setNamesTemplate(items,
+    trueTemplate=`<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`,
+    falseTemplate=`<li> ${itemURI} </li>`) {
+    let nameText= ``
+    items.forEach((val)=>{
+        const itemURI = UTILS.getValue(val)
+        const name =  URIisValid(itemURI) ? trueTemplate: falseTemplate
+        nameText += name
+    })
+    return nameText
 }
