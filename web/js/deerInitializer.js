@@ -164,7 +164,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         if(typeof place === "object"){
             //Then the URI is the value
             let placeURI = UTILS.getValue(place)
-            if(placeURI.indexOf("http://") > -1 || placeURI.indexOf("https://") > -1){
+            if(URIisValid(placeURI)){
                 placeLabelHTML = `<deer-view deer-id="${placeURI}" deer-template="label"></deer-view>`
             }
             else{
@@ -175,7 +175,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         }
         else{
             // The URI is this string, probably
-            if(place.indexOf("http://") > -1 || place.indexOf("https://") > -1){
+            if(URIisValid(place)){
                 //Gamble that it is a resolvable ID...
                 placeLabelHTML = `<deer-view deer-id="${place}" deer-template="label"></deer-view>`
             }
@@ -191,7 +191,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             let name = ""
             if(typeof val === "object"){
                 let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                if(URIisValid(itemURI)){
                     //item.value is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
                 }
@@ -202,7 +202,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 }
             }
             else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                if(URIisValid(val)){
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
                 }
@@ -221,7 +221,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             let name = ""
             if(typeof val === "object"){
                 let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                if(URIisValid(itemURI)){
                     //item.value is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
                 }
@@ -232,7 +232,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 }
             }
             else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                if(URIisValid(val)){
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
                 }
@@ -252,7 +252,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             if(typeof val === "object"){
                 //See if the value is the URI we want
                 let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                if(URIisValid(itemURI)){
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
@@ -271,7 +271,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 }
             }
             else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                if(URIisValid(val)){
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
@@ -308,7 +308,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             if(typeof val === "object"){
                 //See if the value is the URI we want
                 let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                if(URIisValid(itemURI)){
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
@@ -327,7 +327,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 }
             }
             else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                if(URIisValid(val)){
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
@@ -364,7 +364,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             if(typeof val === "object"){
                 //See if the value is the URI we want
                 let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                if(URIisValid(itemURI)){
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="senseListing"></deer-view>
@@ -383,7 +383,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 }
             }
             else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                if(URIisValid(val)){
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
@@ -567,3 +567,14 @@ import { default as record, initializeDeerForms } from 'https://deer.rerum.io/re
  * We seek to streamline the logic around these threads in the near future.  Make sure these remain treated as asyncronous.
  */
 initializeDeerViews(DEER).then(() => initializeDeerForms(DEER))
+
+function URIisValid(uriString) {
+    let isHTTP = false
+    try {
+        isHTTP = uriString.startsWith(/https?:\/\//)
+        new URL(uriString)
+    } catch(err) {
+        isHTTP = false
+    }
+    return isHTTP
+}
