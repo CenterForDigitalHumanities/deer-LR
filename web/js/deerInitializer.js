@@ -189,29 +189,10 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let contributorsByName = ``
         contributors.items.forEach((val)=>{
             let name = ""
-            if(typeof val === "object"){
-                let itemURI = UTILS.getValue(val)
-                if(URIisValid(itemURI)){
-                    //item.value is a string and it is a URI value, as expected.
-                    name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
-                }
-                else{
-                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                    //TODO what should we do here?
-                    name =  `<li> ${itemURI} </li>`
-                }
-            }
-            else{
-                if(URIisValid(val)){
-                    //item is a string and it is a URI value, as expected.
-                    name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
-                }
-                else{
-                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
-                    //TODO what should we do here?
-                    name = `<li> ${val} </li>`
-                }
-            }
+            const itemURI = UTILS.getValue(val)
+            name =  URIisValid(itemURI)
+                ?`<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
+                :`<li> ${itemURI} </li>`
             contributorsByName += name
         })
         
