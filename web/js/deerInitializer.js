@@ -22,36 +22,36 @@ import { default as UTILS } from 'https://deer.rerum.io/releases/alpha-0.11/deer
  * @param {type} options
  * @return {tmpl}
  */
-DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
+DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
-        let key=""
-        if(whichCollection){
+        let key = ""
+        if (whichCollection) {
             let check = whichCollection.replace("Test", "")
-            switch(check){
+            switch (check) {
                 case "LivedReligionLocations":
                     type = "Place"
-                    key="location"
-                break
+                    key = "location"
+                    break
                 case "LivedReligionObjects":
                     type = "Thing"
-                break
+                    break
                 case "LivedReligionExperiences":
                     type = "Event"
-                break
+                    break
                 case "LivedReligionResearchers":
                     type = "Researcher"
-                break
+                    break
                 case "LivedReligionPeople":
                     type = "Person"
-                break
-                default :
-                    console.error("This is an unknown collection: "+whichCollection+".")
+                    break
+                default:
+                    console.error("This is an unknown collection: " + whichCollection + ".")
                     return null
             }
         }
-        else{
+        else {
             console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
             console.log(obj)
             return null
@@ -86,34 +86,34 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
  * @param {type} options
  * @return {tmpl}
  */
-DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
+DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
-        if(whichCollection){
+        if (whichCollection) {
             let check = whichCollection.replace("Test", "")
-            switch(check){
+            switch (check) {
                 case "LivedReligionLocations":
                     type = "Place"
-                break
+                    break
                 case "LivedReligionObjects":
                     type = "Thing"
-                break
+                    break
                 case "LivedReligionExperiences":
                     type = "Event"
-                break
+                    break
                 case "LivedReligionResearchers":
                     type = "Researcher"
-                break
+                    break
                 case "LivedReligionPeople":
                     type = "Person"
-                break
-                default :
-                    console.error("This is an unknown collection: "+whichCollection+".")
+                    break
+                default:
+                    console.error("This is an unknown collection: " + whichCollection + ".")
                     return null
             }
         }
-        else{
+        else {
             console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
             console.log(obj)
             return null
@@ -142,29 +142,29 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
     }
 }
 
-DEER.TEMPLATES.Event = function(experienceData, options = {}) {
+DEER.TEMPLATES.Event = function (experienceData, options = {}) {
     try {
         let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> 
         <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">Review</a>
         <dl tog="experienceContent" class="eventContentWrapper is-hidden">
             <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
         `
-        let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
-        let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
-        let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
-        let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : {"items":[]}
-        let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : {"items":[]}
+        let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : { "items": [] }
+        let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : { "items": [] }
+        let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : { "items": [] }
+        let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : { "items": [] }
+        let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : { "items": [] }
         let place = experienceData.location ? UTILS.getValue(experienceData.location) : ""
         let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
         let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
         let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
-       
+
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = setNamesTemplate([place])
-        
+
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let contributorsByName = setNamesTemplate(contributors.items)
-        
+
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let peopleByName = setNamesTemplate(people.items)
 
@@ -185,7 +185,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 ${relatedObjectsByName}
             </ul>
         `
-        
+
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = setNamesTemplate(relatedPractices.items,
             `<li>
@@ -203,7 +203,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                 ${relatedPracticesByName}
             </ul>
         `
-        
+
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = setNamesTemplate(relatedSenses.items,
             `<li>
@@ -220,7 +220,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             <ul id="sensesInExperience">
                 ${relatedSensesByName}
             </ul>
-        `     
+        `
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
@@ -245,22 +245,22 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
- */    
-DEER.TEMPLATES.managedlist= function(obj, options={}) {
-    try{
+ */
+DEER.TEMPLATES.managedlist = function (obj, options = {}) {
+    try {
         let tmpl = ``
-        if(options.list){
+        if (options.list) {
             tmpl += `<ul>`
-            obj[options.list].forEach((val,index)=>{
-                let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
+            obj[options.list].forEach((val, index) => {
+                let currentKnownLabel = UTILS.getLabel(val, (val.type || val['@type'] || "")) //May not be the most recent.  
                 let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
                 let removeBtn = `<a href="#" class="removeCollectionItem" title="Delete This Entry"
                 onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
-                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn} </li>` : `<li>${name}</li>`
+                tmpl += val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name} ${removeBtn} </li>` : `<li>${name}</li>`
             })
             tmpl += `</ul>`
         }
-        else{
+        else {
             console.log("There are no items in this list to draw.")
             console.log(obj)
         }
@@ -272,12 +272,12 @@ DEER.TEMPLATES.managedlist= function(obj, options={}) {
     }
 }
 
-DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
-    try{
+DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
+    try {
         let key = options.key || "@id"
         let prop = obj[key] || "[ undefined ]"
         let label = options.label || UTILS.getLabel(obj, prop)
-        let isDescribed = obj["@type"]==="Researcher" || Object.keys(obj).some(i=>["description","geometry","email","fieldNotes"].includes(i))
+        let isDescribed = obj["@type"] === "Researcher" || Object.keys(obj).some(i => ["description", "geometry", "email", "fieldNotes"].includes(i))
         return isDescribed ? `${label}` : `<span class="needs-more" title="This entry may require more details">${label}</span>`
     } catch (err) {
         console.log("Could not build complete label template.")
@@ -294,8 +294,8 @@ DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
  */
 DEER.TEMPLATES.senseListing = function (obj, options = {}) {
     try {
-        let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
-        let descr = options.description ?  UTILS.getValue(options.description) : obj.description ?  UTILS.getValue(obj.description) : ""
+        let at = options.additionalType ? UTILS.getValue(options.additionalType) : obj.additionalType ? UTILS.getValue(obj.additionalType) : ""
+        let descr = options.description ? UTILS.getValue(options.description) : obj.description ? UTILS.getValue(obj.description) : ""
         let elem = `<span title="${descr}">${at}</span>`
         return elem
     } catch (err) {
@@ -383,19 +383,19 @@ function URIisValid(uriString) {
     try {
         isHTTP = uriString.startsWith(/https?:\/\//)
         new URL(uriString)
-    } catch(err) {
+    } catch (err) {
         isHTTP = false
     }
     return isHTTP
 }
 
 function setNamesTemplate(items,
-    trueTemplate=`<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`,
-    falseTemplate=`<li> ${itemURI} </li>`) {
-    let nameText= ``
-    items.forEach((val)=>{
+    trueTemplate = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`,
+    falseTemplate = `<li> ${itemURI} </li>`) {
+    let nameText = ``
+    items.forEach((val) => {
         const itemURI = UTILS.getValue(val)
-        const name =  URIisValid(itemURI) ? trueTemplate: falseTemplate
+        const name = URIisValid(itemURI) ? trueTemplate : falseTemplate
         nameText += name
     })
     return nameText
