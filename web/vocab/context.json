@@ -101,6 +101,7 @@
                   "Street":"fast:1134794",
                   "Zoo":"schema:Zoo",
                   "Gym":"schema:ExerciseGym",
+                  "Edifice":"loc:afset002364",
                   "Other":"Place"
                }
             }

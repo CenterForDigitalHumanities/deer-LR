@@ -141,56 +141,59 @@
 ## Neighborhood
 - See http://id.loc.gov/vocabulary/ethnographicTerms/afset012412.html
 
+## Edifice
+- See https://id.loc.gov/vocabulary/ethnographicTerms/afset002364.html
+
 ## School
 - See http://schema.org/School
 
 ## Accommodation
-- see https://schema.org/Accomodation
+- See https://schema.org/Accomodation
 
 ## AdministrativeArea
 - see https://schema.org/AdministrativeArea
 
 ## CivicStructure
-- see https://schema.org/CivicStructure
+- See https://schema.org/CivicStructure
 
 ## Landform
-- see https://schema.org/Landform
+- See https://schema.org/Landform
 
 ## LandmarksOrHistoricalBuildings
-- see https://schema.org/LandmarksOrHistoricalBuildings
+- See https://schema.org/LandmarksOrHistoricalBuildings
 
 ## LocalBusiness
-- see https://schema.org/LocalBusiness
+- See https://schema.org/LocalBusiness
 
 ## Residence
-- see https://schema.org/Residence
+- See https://schema.org/Residence
 
 ## TouristDestination
-- see https://schema.org/TouristDestination
+- See https://schema.org/TouristDestination
 
 ## House
-- see https://schema.org/House
+- See https://schema.org/House
 
 ## Cemetery
-- see https://schema.org/Cemetery
+- See https://schema.org/Cemetery
 
 ## Hospital
-- see https://schema.org/Hospital
+- See https://schema.org/Hospital
 
 ## Museum
-- see https://schema.org/Museum
+- See https://schema.org/Museum
 
 ## Park
-- see https://schema.org/Park
+- See https://schema.org/Park
 
 ## Street
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 ## Zoo
-- see https://schema.org/Zoo
+- See https://schema.org/Zoo
 
 ## Gym
-- see https://schema.org/Gym
+- See https://schema.org/Gym
 
 
 ## Vocabulary has not be finalized for the following terms.  Check https://schema.org/TERM to see if one already exists.
