@@ -460,7 +460,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML + `</div>`
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + orgHTML + descriptionHTML + artifactsHTML + `</div>`
         return tmpl
     } catch (err) {
         console.log("Could not build Event or ExperienceUpload template.")
