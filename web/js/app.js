@@ -133,6 +133,9 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
     else if(interface === "person"){
         heading = "Person"
     }
+    else if(interface === "organization"){
+        heading = "Organization"
+    }
     else if(interface === "place"){
         heading = "Location"
     }
@@ -173,6 +176,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         break
         case "object":
         case "person":
+        case "organization":
         case "place":
             let entity_form = document.querySelector("form[deer-type]")
             if (entityID) {
@@ -210,6 +214,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         break
         case "objects":
         case "people":
+        case "organizations":
         case "places":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
