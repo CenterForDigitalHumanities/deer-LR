@@ -46,6 +46,9 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
                 case "LivedReligionPeople":
                     type = "Person"
                 break
+                case "LivedReligionOrganizations":
+                    type = "Organization"
+                break
                 default :
                     console.error("This is an unknown collection: "+whichCollection+".")
                     return null
@@ -107,6 +110,9 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
                 break
                 case "LivedReligionPeople":
                     type = "Person"
+                break
+                case "LivedReligionOrganizations":
+                    type = "Organization"
                 break
                 default :
                     console.error("This is an unknown collection: "+whichCollection+".")
