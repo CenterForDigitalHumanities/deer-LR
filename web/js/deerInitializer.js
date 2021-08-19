@@ -150,7 +150,11 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
         `
         let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
+        
+        //Interesting...will attendee have both?
         let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
+        let organizations = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
+        
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
         let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : {"items":[]}
         let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : {"items":[]}
@@ -244,6 +248,37 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
             }
             peopleByName += name
         })
+        
+        //experienceData.contributors is probably a Set or List of URIs and we want their labels
+        let organizationsByName = ``
+        organizations.items.forEach((val)=>{
+            let name = ""
+            if(typeof val === "object"){
+                let itemURI = UTILS.getValue(val)
+                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                    //item.value is a string and it is a URI value, as expected.
+                    name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name =  `<li> ${itemURI} </li>`
+                }
+            }
+            else{
+                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+                    //item is a string and it is a URI value, as expected.
+                    name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
+                }
+                else{
+                    //We know it is just a string of some kind, probably the label they want to display, so just use it.
+                    //TODO what should we do here?
+                    name = `<li> ${val} </li>`
+                }
+            }
+            organizationsByName += name
+        })
+        
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = ``
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
@@ -413,6 +448,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         `     
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
+        let orgHTML = `<dt>Organizations Involved</dt><dd><ul id="organizationsInExperience">${organizationsByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
         let dateHTML = `<dt>Associated Date</dt><dd>${date}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`

@@ -158,6 +158,10 @@
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
                     <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect"></deer-view>
                     
+                    <label> Select organizations that were involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new organization with the &#x2b; below. </a> </label>
+                    <input deer-input-type="Set" type="hidden" deer-key-TODO="attendee?" />
+                    <deer-view id="organizations" deer-collection="LivedReligionOrganizationsTest" deer-template="itemsAsMultiSelect"></deer-view>
+                    
                     <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
                     <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect"></deer-view>
