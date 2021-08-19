@@ -171,11 +171,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = setNamesTemplate(relatedObjects.items,
             `<li>
-                <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'object')">Remove</a>
-            </li>`,
-            `<li>
-                ${itemURI}
+                <deer-view deer-id="$itemURI" deer-template="label"></deer-view>
+                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '$itemURI', '${experienceData["@id"]}', 'object')">Remove</a>
             </li>`)
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
         let objectsHTML = `
@@ -189,11 +186,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = setNamesTemplate(relatedPractices.items,
             `<li>
-                <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
-            </li>`,
-            `<li>
-                ${itemURI}
+                <deer-view deer-id="$itemURI" deer-template="label"></deer-view>
+                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '$itemURI', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
             </li>`)
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
         let practicesHTML = `
@@ -207,11 +201,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = setNamesTemplate(relatedSenses.items,
             `<li>
-                <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '${itemURI}', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
-            </li>`,
-            `<li>
-                ${itemURI}
+                <deer-view deer-id="$itemURI" deer-template="label"></deer-view>
+                <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '$itemURI', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
             </li>`)
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
         let sensesHTML = `
@@ -390,12 +381,12 @@ function URIisValid(uriString) {
 }
 
 function setNamesTemplate(items,
-    trueTemplate = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`,
-    falseTemplate = `<li> ${itemURI} </li>`) {
+    trueTemplate = `<li><deer-view deer-id="$itemURI" deer-template="label"></deer-view></li>`,
+    falseTemplate = `<li> $itemURI </li>`) {
     let nameText = ``
     items.forEach((val) => {
         const itemURI = UTILS.getValue(val)
-        const name = URIisValid(itemURI) ? trueTemplate : falseTemplate
+        const name = URIisValid(itemURI) ? trueTemplate.replaceAll("$itemURI",itemURI) : falseTemplate.replaceAll("$itemURI",itemURI)
         nameText += name
     })
     return nameText
