@@ -217,6 +217,7 @@
       "fieldNotes":"fast:2007231",
       "religiousTradition":"lr:religiousTradition",
       "secondaryFunction":"lr:secondaryFunction",
+      "attendee-org":"schema:attendee",
       "Action":"schema:Action"
    }
 }

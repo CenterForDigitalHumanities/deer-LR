@@ -159,7 +159,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         
         //Interesting...will attendee have both?
         let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
-        let organizations = experienceData.attendeeOrg ? UTILS.getValue(experienceData.attendeeOrg) : {"items":[]}
+        let organizations = experienceData["attendee-org"] ? UTILS.getValue(experienceData["attendee-org"]) : {"items":[]}
         
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
         let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : {"items":[]}
