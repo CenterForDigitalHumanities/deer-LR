@@ -108,10 +108,8 @@
          }
       },
       "Person":"schema:Person",
-      "Researcher":{
-         "@id":"lr:Researcher",
-         "@vocab" : "http://schema.org/"
-      },
+      "Organization":"schema:Organization",
+      "Researcher":"schema:Researcher",
       "Object":{
          "@id":"ebu:PhysicalResource",
          "@context":{

@@ -10,6 +10,9 @@
 ## Person
 - An imaginary or real human being.  See http://schema.org/Person
 
+## Organization
+- An organization such as a school, NGO, corporation, club, etc.  See http://schema.org/Organization
+
 ## Researcher
 - A subclass of Person who partook in an Event or has otherwise produced research data at some capacity.
 
