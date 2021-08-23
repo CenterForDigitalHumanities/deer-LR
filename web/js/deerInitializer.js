@@ -26,25 +26,24 @@ DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
-        let key = ""
         if (whichCollection) {
             let check = whichCollection.replace("Test", "")
             switch (check) {
                 case "LivedReligionLocations":
                     type = "Place"
-                    key = "location"
-                    break
+                break
                 case "LivedReligionObjects":
                     type = "Thing"
-                    break
+                break
                 case "LivedReligionExperiences":
                     type = "Event"
-                    break
+                break
                 case "LivedReligionResearchers":
                     type = "Researcher"
-                    break
+                break
                 case "LivedReligionPeople":
                     type = "Person"
+                break
                 case "LivedReligionOrganizations":
                     type = "Organization"
                 break
@@ -97,19 +96,19 @@ DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
             switch (check) {
                 case "LivedReligionLocations":
                     type = "Place"
-                    break
+                break
                 case "LivedReligionObjects":
                     type = "Thing"
-                    break
+                break
                 case "LivedReligionExperiences":
                     type = "Event"
-                    break
+                break
                 case "LivedReligionResearchers":
                     type = "Researcher"
-                    break
+                break
                 case "LivedReligionPeople":
                     type = "Person"
-
+                break
                 case "LivedReligionOrganizations":
                     type = "Organization"
                 break
