@@ -28,17 +28,19 @@ LR.URLS = {
 }
 
 //For prd-01
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "http://store.rerum.io/v1",
-//    DELETE: "delete",
-//    CREATE: "create",
-//    UPDATE: "update",
-//    OVERWRITE: "overwrite",
-//    QUERY: "query",
-//    SINCE: "http://store.rerum.io/v1/since"
-//}
+/*
+LR.URLS = {
+    LOGIN: "login",
+    LOGOUT: "logout",
+    BASE_ID: "http://store.rerum.io/v1",
+    DELETE: "delete",
+    CREATE: "create",
+    UPDATE: "update",
+    OVERWRITE: "overwrite",
+    QUERY: "query",
+    SINCE: "http://store.rerum.io/v1/since"
+}
+*/
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 if (typeof(Storage) !== "undefined") {
