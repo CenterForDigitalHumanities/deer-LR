@@ -136,7 +136,7 @@
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/> <!-- https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#ExperienceUpload -->
                     <input id="experienceFieldNotes" type="hidden" deer-key="fieldNotes" />
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiencesTest"> <!-- into this collection -->
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiences"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
                     
@@ -145,26 +145,26 @@
                     
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
-                    <deer-view deer-collection="LivedReligionLocationsTest" deer-template="itemsAsDropdown"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown"></deer-view>
                     <!--TODO allow time range??-->
                     <label> On what date was this data gathered?</label>
                     <input type="date" deer-key="startDate" />
                     
                     <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
-                    <deer-view id="researchers" deer-collection="LivedReligionResearchersTest" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
-                    <deer-view id="people" deer-collection="LivedReligionPeopleTest" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label> Select organizations that were involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new organization with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee-org" />
-                    <deer-view id="organizations" deer-collection="LivedReligionOrganizationsTest" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="organizations" deer-collection="LivedReligionOrganizations" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
-                    <deer-view id="objects" deer-collection="LivedReligionObjectsTest" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect"></deer-view>
                     
                     <label> Provide other details or a description if desired</label>
                     <textarea deer-key="description"></textarea>
@@ -219,15 +219,15 @@
                                 </select>
                                 <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-key="object" value="">
-                                <div deer-collection="LivedReligionObjectsTest" class="deer-view" deer-template="itemsAsDropdown"></div>
+                                <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown"></div>
 
                                 <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee" value="">
-                                <div deer-collection="LivedReligionPeopleTest" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
                                 
                                 <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee-org" value="">
-                                <div deer-collection="LivedReligionOrganizationsTest" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
 
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                                 <textarea id="further_sense" type="text" deer-key="description"></textarea>
@@ -286,14 +286,14 @@
                         <textarea id="further_practice" type="text" deer-key="description"></textarea>
                         <label>Is there a particular object this practice is associated with? Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                         <input type="hidden" deer-key="object" value=""> 
-                        <div deer-collection="LivedReligionObjectsTest" class="deer-view" deer-template="itemsAsDropdown"></div>
+                        <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown"></div>
 
                         <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                         <input deer-input-type="Set" type="hidden" deer-key="attendee" value="">
-                        <div deer-collection="LivedReligionPeopleTest" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
                         
                         <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
-                        <div deer-collection="LivedReligionOrganizationsTest" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
                         
                         <div class="row">
                             <input class="button primary col" type="submit" value="Save Practice">
