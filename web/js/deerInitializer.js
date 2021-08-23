@@ -154,7 +154,6 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
             <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
         `
         let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : { "items": [] }
-        let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : { "items": [] }
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : { "items": [] }
         let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : { "items": [] }
         let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : { "items": [] }

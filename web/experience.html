@@ -471,8 +471,8 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "theExperience":
-                    LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "object", "location"], event.target)
-                    LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "object", "location", "relatedSenses", "relatedPractices"], event.target)
+                    LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "attendee-org", "object", "location"], event.target)
+                    LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                     
                 break
