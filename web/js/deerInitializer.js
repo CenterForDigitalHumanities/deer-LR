@@ -45,9 +45,11 @@ DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
                     break
                 case "LivedReligionPeople":
                     type = "Person"
-                    break
-                default:
-                    console.error("This is an unknown collection: " + whichCollection + ".")
+                case "LivedReligionOrganizations":
+                    type = "Organization"
+                break
+                default :
+                    console.error("This is an unknown collection: "+whichCollection+".")
                     return null
             }
         }
@@ -107,9 +109,12 @@ DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
                     break
                 case "LivedReligionPeople":
                     type = "Person"
-                    break
-                default:
-                    console.error("This is an unknown collection: " + whichCollection + ".")
+
+                case "LivedReligionOrganizations":
+                    type = "Organization"
+                break
+                default :
+                    console.error("This is an unknown collection: "+whichCollection+".")
                     return null
             }
         }
@@ -154,6 +159,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : { "items": [] }
         let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : { "items": [] }
         let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : { "items": [] }
+        let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items": [] }
+        let organizations = experienceData["attendee-org"] ? UTILS.getValue(experienceData["attendee-org"]) : { "items" : []}
         let place = experienceData.location ? UTILS.getValue(experienceData.location) : ""
         let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
         let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
@@ -167,6 +174,9 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
 
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let peopleByName = setNamesTemplate(people.items)
+        
+        //experienceData.organizations is probably a Set or List of URIs and we want their labels
+        let organizationsByName = setNamesTemplate(organizations.items)
 
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = setNamesTemplate(relatedObjects.items,
@@ -214,12 +224,13 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         `
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
+        let orgHTML = `<dt>Organizations Involved</dt><dd><ul id="organizationsInExperience">${organizationsByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
         let dateHTML = `<dt>Associated Date</dt><dd>${date}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML + `</div>`
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + orgHTML + descriptionHTML + artifactsHTML + `</div>`
         return tmpl
     } catch (err) {
         console.log("Could not build Event or ExperienceUpload template.")

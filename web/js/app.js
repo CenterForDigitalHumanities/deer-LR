@@ -41,6 +41,7 @@ LR.URLS = {
     SINCE: "http://store.rerum.io/v1/since"
 }
 */
+
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 if (typeof(Storage) !== "undefined") {
     LR.localInfo = window.localStorage
@@ -134,6 +135,9 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
     else if(interface === "person"){
         heading = "Person"
     }
+    else if(interface === "organization"){
+        heading = "Organization"
+    }
     else if(interface === "place"){
         heading = "Location"
     }
@@ -174,6 +178,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         break
         case "object":
         case "person":
+        case "organization":
         case "place":
             let entity_form = document.querySelector("form[deer-type]")
             if (entityID) {
@@ -211,6 +216,7 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         break
         case "objects":
         case "people":
+        case "organizations":
         case "places":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
@@ -303,7 +309,7 @@ LR.ui.getUserEntries = async function(user) {
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiences')">&#x274C</a>`
+            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
         }
         return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
     },``):`<p class="text-error">No experiences found for this user</p>`
