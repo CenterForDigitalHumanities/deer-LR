@@ -381,7 +381,7 @@ initializeDeerViews(DEER).then(() => initializeDeerForms(DEER))
 function URIisValid(uriString) {
     let isHTTP = false
     try {
-        isHTTP = uriString.startsWith(/https?:\/\//)
+        isHTTP = (/https?:\/\//).test(uriString)
         new URL(uriString)
     } catch (err) {
         isHTTP = false
