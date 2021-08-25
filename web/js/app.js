@@ -178,10 +178,10 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     resetBtn.href = window.location.pathname
                     resetBtn.innerHTML = "Reset Page"
                     let removeBtn = document.createElement("a")
-                    removeBtn.classList.add("tag", "is-rounded", "is-small", "text-error", "removeCollectionItem")
+                    removeBtn.classList.add("tag", "is-small", "text-error")
                     removeBtn.setAttribute("title","Delete This Entry")
                     removeBtn.onclick = event=>LR.utils.removeCollectionEntry(event, entityID, entity_form, document.querySelector("input[deer-key='targetCollection']").value)
-                    removeBtn.innerHTML = `&#x274C`
+                    removeBtn.innerHTML = `&#x274C Destroy this Record`
                     entity_form.append(resetBtn,removeBtn)
                 }
                 else {
