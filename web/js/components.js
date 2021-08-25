@@ -142,3 +142,69 @@ class LrGlobalFeedback extends HTMLElement {
     }
 }
 customElements.define("lr-global-feedback", LrGlobalFeedback)
+
+class LrMediaUpload extends HTMLElement {
+    constructor() {
+        super()
+        this.innerHTML = `
+        <style>
+        backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9000;
+            background-color: rgba(7,42,12,1);
+        }
+        fieldset {
+            background: #FFF;
+            box-shadow: 0 0 0 2rem #FFF, .25rem .25rem 2rem 2rem #000;
+            top: 15vh;
+            position: relative;
+        }
+        </style>
+        <form class="card bg-light" style="margin-top: 3px;">
+            <header class="text-primary">Lived Religion Media Upload</header>
+            <p class="text-primary"><small>Upload your media file to Lived Religion media storage (admins only)</small></p>
+            <input type="file" id="myFile" name="filename">
+            <input type="submit">
+        </form>
+
+        `   
+    }
+    connectedCallback() {
+        try {
+            let lrMediaUpload = this
+            let AWSurl = ""
+            let AWScreds = {}
+            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
+                event.preventDefault()
+                let data = new FormData(this)
+                fetch(AWSurl, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: new Headers({
+                        'Content-Type': 'application/json; charset=utf-8'
+                    }),
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if(response.ok){
+                        console.log("Upload completed successfully.  URI of uploaded media is ...")
+                    }
+                    else{
+                        console.error(response.statusText)
+                        throw Error("AWS bucket responded with an error")
+                    }
+                })
+                .catch(err => {
+                    console.error("There was an error trying to upload to the AWS bucket")
+                    console.error(err)
+                })
+            }
+        } catch (err) {
+            // already logged in or other error
+            // TODO: focus this catch
+        }
+    }
+}
+customElements.define("lr-media-upload", LrMediaUpload)
