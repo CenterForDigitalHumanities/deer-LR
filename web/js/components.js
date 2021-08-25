@@ -148,19 +148,6 @@ class LrMediaUpload extends HTMLElement {
         super()
         this.innerHTML = `
         <style>
-        backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9000;
-            background-color: rgba(7,42,12,1);
-        }
-        fieldset {
-            background: #FFF;
-            box-shadow: 0 0 0 2rem #FFF, .25rem .25rem 2rem 2rem #000;
-            top: 15vh;
-            position: relative;
-        }
         </style>
         <form class="card bg-light" style="margin-top: 3px;">
             <header class="text-primary">Lived Religion Media Upload</header>
