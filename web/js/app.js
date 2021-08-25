@@ -122,26 +122,13 @@ LR.ui.togglePublic = (e) => {
 /**
  * Each interface has something triggered by user roles.  Implement contributor vs. admin
  * UI/UX here.  
- * @param {string} interface The name of the interface to draw
+ * @param {string} interfaceType The name of the interface to draw
  * @param {object} user The user from localStorage or an event, parsed into JSON already
  * @param {string || null} entityID If ?id= was on the page, then there is an entity to load.
  * @return {undefined}
  */
-LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
-    let heading = "";
-    if(interface === "object"){
-        heading = "Object"
-    }
-    else if(interface === "person"){
-        heading = "Person"
-    }
-    else if(interface === "organization"){
-        heading = "Organization"
-    }
-    else if(interface === "place"){
-        heading = "Location"
-    }
-    switch(interface){
+LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
+    switch(interfaceType){
         case "experience":
             if (entityID) {
                 if(user.roles.administrator){
@@ -180,38 +167,27 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "person":
         case "organization":
         case "place":
+        case "researcher":
             let entity_form = document.querySelector("form[deer-type]")
             if (entityID) {
                 if (user.roles.administrator) {
                     entity_form.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update "+heading
+                    document.querySelector("h2.text-primary").innerHTML = "Update "+interfaceType
                     document.querySelector("input[type='submit']").value = "Update"
-                    let btn = document.createElement("a")
-                    btn.href = window.location.pathname
-                    btn.innerHTML = "Reset Page"
-                    entity_form.append(btn)
+                    let resetBtn = document.createElement("a")
+                    resetBtn.href = window.location.pathname
+                    resetBtn.innerHTML = "Reset Page"
+                    let removeBtn = document.createElement("a")
+                    removeBtn.classList.add("tag", "is-rounded", "is-small", "text-error", "removeCollectionItem")
+                    removeBtn.setAttribute("title","Delete This Entry")
+                    removeBtn.onclick = event=>LR.utils.removeCollectionEntry(event, entityID, entity_form, document.querySelector("input[deer-key='targetCollection']").value)
+                    removeBtn.innerHTML = `&#x274C`
+                    entity_form.append(resetBtn,removeBtn)
                 }
-                else{
+                else {
                     alert("Only administrators can review and edit entity details at this time.")
                     document.location.href="dashboard.html"
                 }
-            }
-        break
-        case "researcher":
-            if (user.roles.administrator) {
-                if (entityID) {
-                    document.getElementById("researcherForm").setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
-                    document.querySelector("input[type='submit']").value = "Update"
-                    let btn = document.createElement("a")
-                    btn.href = window.location.pathname
-                    btn.innerHTML = "Reset Page"
-                    document.getElementById("researcherForm").append(btn)
-                }
-            }
-            else{
-                alert("You must be logged in as an administrator to use this!")
-                document.location.href="dashboard.html"
             }
         break
         case "objects":

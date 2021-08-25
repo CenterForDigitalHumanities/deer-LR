@@ -19,7 +19,9 @@
         <h2 class="text-primary">Create a New Researcher</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="researcherForm" deer-creator deer-type="Researcher" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
+                <form id="researcherForm" deer-creator deer-type="Researcher" deer-creator
+                    deer-motivation="supplementing"
+                    deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="additionalType" value="Researcher">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionResearchers">
@@ -46,38 +48,38 @@
         addEventListener('lrUserKnown', event => {
             LR.utils.drawInterface(event, "researcher")
         })
-        
+
         addEventListener('deer-updated', event => {
             LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
         })
-        
+
         /**
          * A hack to force redraw by refreshing the page.
          */
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
         })
-        
-       /**
-         * Handle Login and Logout across tabs
-         */
-        local_socket.on('loginError', function(obj) {
+
+        /**
+          * Handle Login and Logout across tabs
+          */
+        local_socket.on('loginError', function (obj) {
             alert("There was a problem logging in.  Refresh the page and try again.")
         })
 
-        local_socket.on('loginFinished', function(obj) {
+        local_socket.on('loginFinished', function (obj) {
             //Perhaps it could be more elegant to dispatch the lrUserKnown event.  Socket events are not caught on the page they are generated...
             //Reload does everything we want inside the framework we already built in <lr-login> elements
             document.location.reload()
         })
 
-        local_socket.on('logoutError', function(obj) {
+        local_socket.on('logoutError', function (obj) {
             alert("There was a problem logging out.  Refresh the page and try again.")
         })
 
-        local_socket.on('logoutFinished', function(obj) {
+        local_socket.on('logoutFinished', function (obj) {
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
-            document.location.href="dashboard.html"
+            document.location.href = "dashboard.html"
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
