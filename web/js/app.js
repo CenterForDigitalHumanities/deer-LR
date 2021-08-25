@@ -218,10 +218,6 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         case "people":
         case "organizations":
         case "places":
-            if (user.roles.administrator) {
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
-            }         
-        break
         case "researchers":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
