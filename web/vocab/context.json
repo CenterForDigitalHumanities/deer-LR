@@ -108,10 +108,8 @@
          }
       },
       "Person":"schema:Person",
-      "Researcher":{
-         "@id":"lr:Researcher",
-         "@vocab" : "http://schema.org/"
-      },
+      "Organization":"schema:Organization",
+      "Researcher":"schema:Researcher",
       "Object":{
          "@id":"ebu:PhysicalResource",
          "@context":{
@@ -219,6 +217,7 @@
       "fieldNotes":"fast:2007231",
       "religiousTradition":"lr:religiousTradition",
       "secondaryFunction":"lr:secondaryFunction",
+      "attendee-org":"schema:attendee",
       "Action":"schema:Action"
    }
 }

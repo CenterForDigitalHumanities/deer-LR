@@ -158,6 +158,10 @@
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
                     <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect"></deer-view>
                     
+                    <label> Select organizations that were involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new organization with the &#x2b; below. </a> </label>
+                    <input deer-input-type="Set" type="hidden" deer-key="attendee-org" />
+                    <deer-view id="organizations" deer-collection="LivedReligionOrganizations" deer-template="itemsAsMultiSelect"></deer-view>
+                    
                     <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
                     <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect"></deer-view>
@@ -168,7 +172,7 @@
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Linked Media</header>
                         <p class="text-primary"><small>Optionally link to media from this event. 
-                            Media specific to an object or person should not be added here.</small></p>
+                            Media specific to an object, person, or organization should not be added here.</small></p>
                         <label>Photograph or depiction </label>
                         <input type="url" deer-key="image" >
                         <label>Recording or performance </label>
@@ -220,6 +224,10 @@
                                 <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee" value="">
                                 <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                
+                                <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
+                                <input type="hidden" deer-input-type="Set" deer-key="attendee-org" value="">
+                                <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
 
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                                 <textarea id="further_sense" type="text" deer-key="description"></textarea>
@@ -283,6 +291,10 @@
                         <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                         <input deer-input-type="Set" type="hidden" deer-key="attendee" value="">
                         <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        
+                        <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
+                        <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        
                         <div class="row">
                             <input class="button primary col" type="submit" value="Save Practice">
                         </div>
@@ -459,8 +471,8 @@
             let annotationData = event.detail
             switch(whatRecordForm){
                 case "theExperience":
-                    LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "object", "location"], event.target)
-                    LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "object", "location", "relatedSenses", "relatedPractices"], event.target)
+                    LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "attendee-org", "object", "location"], event.target)
+                    LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                     
                 break
