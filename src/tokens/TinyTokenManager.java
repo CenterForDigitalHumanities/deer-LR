@@ -28,6 +28,8 @@ public class TinyTokenManager{
     //Notice that when it is initialized, nothing is set.
     private String currentAccessToken = "";
     private String currentRefreshToken = "";
+    private String currentS3AccessID = "";
+    private String currentS3Secret = "";
     private String propFileLocation = Constant.PROPERTIES_FILE_NAME; //This package.
     private String apiSetting = "";
     private Properties props = new Properties();
@@ -60,6 +62,8 @@ public class TinyTokenManager{
         input.close();
         currentAccessToken = props.getProperty("access_token");
         currentRefreshToken = props.getProperty("refresh_token");
+        currentS3AccessID = props.getProperty("s3_access_id");
+        currentS3Secret = props.getProperty("s3_secret");
         apiSetting = props.getProperty("open_api_cors");
         return props;
     }
@@ -297,6 +301,14 @@ public class TinyTokenManager{
     
     public String getFileLocation(){
         return propFileLocation;
+    }
+    
+    public String getS3Secret(){
+        return currentS3Secret;
+    }
+    
+    public String getS3AccessID(){
+        return currentS3AccessID;
     }
     
 }
