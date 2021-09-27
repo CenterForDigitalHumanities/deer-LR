@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <title>Religion In Place Researcher</title>
+    <title>Religion In Place Organization</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
@@ -16,19 +16,32 @@
     <lr-nav></lr-nav>
 
     <div class="container">
-        <h2 class="text-primary">Create a New Researcher</h2>
+        <h2 class="text-primary">Create a New Organization</h2>
         <div class="card bd-primary">
             <div class="card_body">
-                <form id="researcherForm" deer-creator deer-type="Researcher" deer-creator
-                    deer-motivation="supplementing"
-                    deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
+                <form id="organizationForm" class="hidden" deer-type="Organization" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading">
-                    <input type="hidden" deer-key="additionalType" value="Researcher">
-                    <input type="hidden" deer-key="targetCollection" value="LivedReligionResearchers">
+                    <input type="hidden" deer-key="targetCollection" value="LivedReligionOrganizations">
+                    <h4>Contact Details</h4>
                     <div class="grouped">
-                        <label>Name:</label>
+                        <label>Name</label>
                         <input type="text" deer-key="name">
+                        <label>Founding Date</label>
+                        <input type="date" deer-key="foundingDate">
                     </div>
+                    <div class="grouped">
+                        <label>E‑mail</label>
+                        <input type="text" deer-key="email">
+                        <label>Phone Number</label>
+                        <input type="text" deer-key="telephone">
+                    </div>
+                    <label>Address</label>
+                    <textarea type="text" deer-key="address"></textarea>
+                    <h4 title="This information is not required.">Additional Details</h4>
+                    <label title="Provide a short decription of this organization with otherwise unprovided or disambiguating details.">Brief Description</label>
+                    <textarea  title="Provide a short decription of this organization with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
+                    <label>Link a photograph or depiction: </label>
+                    <input type="url" deer-key="image" >
                     <footer>
                         <input class="button primary" type="submit">
                     </footer>
@@ -39,47 +52,47 @@
     <div class="pageShade is-hidden"></div>
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
-
+    
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         /**
         * Catch user detection and trigger draw() for interfaces.
         */
         addEventListener('lrUserKnown', event => {
-            LR.utils.drawInterface(event, "researcher")
+            LR.utils.drawInterface(event, "organization")
         })
 
         addEventListener('deer-updated', event => {
             LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
         })
-
+        
         /**
          * A hack to force redraw by refreshing the page.
          */
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
-        })
-
+        })   
+        
         /**
-          * Handle Login and Logout across tabs
-          */
-        local_socket.on('loginError', function (obj) {
+         * Handle Login and Logout across tabs
+         */
+        local_socket.on('loginError', function(obj) {
             alert("There was a problem logging in.  Refresh the page and try again.")
         })
 
-        local_socket.on('loginFinished', function (obj) {
+        local_socket.on('loginFinished', function(obj) {
             //Perhaps it could be more elegant to dispatch the lrUserKnown event.  Socket events are not caught on the page they are generated...
             //Reload does everything we want inside the framework we already built in <lr-login> elements
             document.location.reload()
         })
 
-        local_socket.on('logoutError', function (obj) {
+        local_socket.on('logoutError', function(obj) {
             alert("There was a problem logging out.  Refresh the page and try again.")
         })
 
-        local_socket.on('logoutFinished', function (obj) {
+        local_socket.on('logoutFinished', function(obj) {
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
-            document.location.href = "dashboard.html"
+            document.location.href="dashboard.html"
         })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>

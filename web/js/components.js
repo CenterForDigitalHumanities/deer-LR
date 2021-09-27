@@ -28,6 +28,7 @@ class LrNav extends HTMLElement {
                 <a href="places.html">Locations</a>
                 <a href="objects.html">Objects</a>
                 <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
                 <a href="map.html">Map View</a>
                 `
                 if(user.roles.administrator){
@@ -53,6 +54,7 @@ class LrNav extends HTMLElement {
             <a href="places.html">Locations</a>
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
+            <a href="organizations.html">Organizations</a>
             <a href="map.html">Map View</a>
         </div>
     </div>

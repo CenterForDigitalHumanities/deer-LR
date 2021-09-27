@@ -6,15 +6,15 @@
 
 const LR = {}
 LR.VERSION = "1.0.1"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
-//LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
-LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
+LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+//LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
 ///For dev-01
-/*
+
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
@@ -26,8 +26,9 @@ LR.URLS = {
     QUERY: "http://tinydev.rerum.io/app/query",
     SINCE: "http://devstore.rerum.io/v1/since",
 }
-*/
+
 //For prd-01
+/*
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
@@ -39,6 +40,7 @@ LR.URLS = {
     QUERY: "query",
     SINCE: "http://store.rerum.io/v1/since"
 }
+*/
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 if (typeof(Storage) !== "undefined") {
@@ -120,23 +122,13 @@ LR.ui.togglePublic = (e) => {
 /**
  * Each interface has something triggered by user roles.  Implement contributor vs. admin
  * UI/UX here.  
- * @param {string} interface The name of the interface to draw
+ * @param {string} interfaceType The name of the interface to draw
  * @param {object} user The user from localStorage or an event, parsed into JSON already
  * @param {string || null} entityID If ?id= was on the page, then there is an entity to load.
  * @return {undefined}
  */
-LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
-    let heading = "";
-    if(interface === "object"){
-        heading = "Object"
-    }
-    else if(interface === "person"){
-        heading = "Person"
-    }
-    else if(interface === "place"){
-        heading = "Location"
-    }
-    switch(interface){
+LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
+    switch(interfaceType){
         case "experience":
             if (entityID) {
                 if(user.roles.administrator){
@@ -173,48 +165,35 @@ LR.ui.setInterfaceBasedOnRole = function(interface, user, entityID){
         break
         case "object":
         case "person":
+        case "organization":
         case "place":
+        case "researcher":
             let entity_form = document.querySelector("form[deer-type]")
             if (entityID) {
                 if (user.roles.administrator) {
                     entity_form.setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update "+heading
+                    document.querySelector("h2.text-primary").innerHTML = "Update "+interfaceType
                     document.querySelector("input[type='submit']").value = "Update"
-                    let btn = document.createElement("a")
-                    btn.href = window.location.pathname
-                    btn.innerHTML = "Reset Page"
-                    entity_form.append(btn)
+                    let resetBtn = document.createElement("a")
+                    resetBtn.href = window.location.pathname
+                    resetBtn.innerHTML = "Reset Page"
+                    let removeBtn = document.createElement("a")
+                    removeBtn.classList.add("tag", "is-small", "text-error")
+                    removeBtn.setAttribute("title","Delete This Entry")
+                    removeBtn.onclick = event=>LR.utils.removeCollectionEntry(event, entityID, entity_form, document.querySelector("input[deer-key='targetCollection']").value)
+                    removeBtn.innerHTML = `&#x274C Destroy this Record`
+                    entity_form.append(resetBtn,removeBtn)
                 }
-                else{
+                else {
                     alert("Only administrators can review and edit entity details at this time.")
                     document.location.href="dashboard.html"
                 }
             }
         break
-        case "researcher":
-            if (user.roles.administrator) {
-                if (entityID) {
-                    document.getElementById("researcherForm").setAttribute("deer-id", entityID)
-                    document.querySelector("h2.text-primary").innerHTML = "Update Researcher"
-                    document.querySelector("input[type='submit']").value = "Update"
-                    let btn = document.createElement("a")
-                    btn.href = window.location.pathname
-                    btn.innerHTML = "Reset Page"
-                    document.getElementById("researcherForm").append(btn)
-                }
-            }
-            else{
-                alert("You must be logged in as an administrator to use this!")
-                document.location.href="dashboard.html"
-            }
-        break
         case "objects":
         case "people":
+        case "organizations":
         case "places":
-            if (user.roles.administrator) {
-                for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
-            }         
-        break
         case "researchers":
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
@@ -302,7 +281,7 @@ LR.ui.getUserEntries = async function(user) {
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiences')">&#x274C</a>`
+            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
         }
         return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
     },``):`<p class="text-error">No experiences found for this user</p>`
