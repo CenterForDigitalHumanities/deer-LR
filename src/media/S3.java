@@ -5,13 +5,8 @@
  */
 package media;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import tokens.TinyTokenManager;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Random;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.transfer.s3.S3ClientConfiguration;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.CompletedDownload;
 import software.amazon.awssdk.transfer.s3.CompletedUpload;
@@ -19,10 +14,8 @@ import software.amazon.awssdk.transfer.s3.Download;
 import software.amazon.awssdk.transfer.s3.Upload;
 import software.amazon.awssdk.transfer.s3.UploadRequest;
 
-import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 import software.amazon.awssdk.regions.Region;
@@ -33,6 +26,10 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import java.util.List;
 import java.util.ListIterator;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.transfer.s3.S3ClientConfiguration;
 
 
 /**
@@ -43,7 +40,10 @@ public class S3 {
     
     private String s3_access_id = "";
     private String s3_secret = "";
-    S3TransferManager transferManager = S3TransferManager.create();
+    private String bucket_name = "";
+    private Region region;
+    private S3TransferManager transferManager;
+    private S3Client s3;
     /**
      * Initializer for a TinyTokenManager that reads in the properties File
      * @throws IOException if no properties file
@@ -61,57 +61,62 @@ public class S3 {
         TinyTokenManager manager = new TinyTokenManager();
         s3_access_id = manager.getS3AccessID();
         s3_secret = manager.getS3Secret();
+        bucket_name = manager.getS3BucketName();
+        region = manager.getS3Region();
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(s3_access_id,s3_secret);
         
+        //How the TransferManager docs said to build this out for it when we have to provide the connection info
+        S3ClientConfiguration s3Config =
+            S3ClientConfiguration.builder()
+                .region(Region.US_WEST_1)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+            .build();
+        transferManager = S3TransferManager.builder().s3ClientConfiguration(s3Config).build(); 
+        
+        //How the General AWS docs said to make the client.
+        s3 = S3Client.builder()
+            .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+            .region(Region.US_WEST_1)
+            .build();
     }
     
-    private void downloadFile(){
-        String bucket = "a";
-        String key = "b";
-        Download download =
-        transferManager.download(b -> b.getObjectRequest(r -> r.bucket(bucket).key(key)).destination(Paths.get("downloadedFile.txt")));
+    public CompletedDownload downloadFile(String filename, String saveAs){
+        Download download = transferManager.download(b -> b.getObjectRequest(r -> r.bucket(bucket_name).key(filename)).destination(Paths.get(saveAs)));
         CompletedDownload completedDownload = download.completionFuture().join();
-        System.out.println("Content length: "+ completedDownload.response().contentLength());
+        return completedDownload;
     }
     
-    private void uploadFile(){
-        String bucket = "a";
-        String key = "b";
-        Upload upload = transferManager.upload(b -> b.putObjectRequest(r -> r.bucket(bucket).key(key)).source(Paths.get("fileToUpload.txt")));
+    public CompletedUpload uploadFile(String filename, String saveAs){
+        Upload upload = transferManager.upload(b -> b.putObjectRequest(r -> r.bucket(bucket_name).key(saveAs)).source(Paths.get(saveAs)));
         CompletedUpload completedUpload = upload.completionFuture().join();
-
-        System.out.println("PutObjectResponse: " + completedUpload.response());
+        return completedUpload;
     }
     
-    public static void listBucketObjects(S3Client s3, String bucketName ) {
-
+    public ArrayList<String> listBucketFiles(){
+        
+       ArrayList<String> filenames = new ArrayList<>();
        try {
             ListObjectsRequest listObjects = ListObjectsRequest
                     .builder()
-                    .bucket(bucketName)
+                    .bucket(bucket_name)
                     .build();
-
             ListObjectsResponse res = s3.listObjects(listObjects);
             List<S3Object> objects = res.contents();
-
             for (ListIterator iterVals = objects.listIterator(); iterVals.hasNext(); ) {
                 S3Object myValue = (S3Object) iterVals.next();
-                System.out.print("\n The name of the key is " + myValue.key());
-                System.out.print("\n The object is " + calKb(myValue.size()) + " KBs");
-                System.out.print("\n The owner is " + myValue.owner());
-
-             }
-
-        } catch (S3Exception e) {
+                filenames.add(myValue.key() +"  "+calKb(myValue.size()) + " KBs");
+            }
+        } 
+        catch (S3Exception e) {
             System.err.println(e.awsErrorDetails().errorMessage());
-            System.exit(1);
+            filenames.clear();
         }
+        return filenames;
     }
+    
     //convert bytes to kbs
     private static long calKb(Long val) {
         return val/1024;
     }
-    
-    
-    
-    
+
 }

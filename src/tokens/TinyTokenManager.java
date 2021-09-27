@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Properties;
 import net.sf.json.JSONObject;
+import software.amazon.awssdk.regions.Region;
 
 /**
  * @author bhaberbe
@@ -29,7 +30,9 @@ public class TinyTokenManager{
     private String currentAccessToken = "";
     private String currentRefreshToken = "";
     private String currentS3AccessID = "";
+    private String currentS3BucketName = "";
     private String currentS3Secret = "";
+    private Region currentS3Region;
     private String propFileLocation = Constant.PROPERTIES_FILE_NAME; //This package.
     private String apiSetting = "";
     private Properties props = new Properties();
@@ -64,6 +67,8 @@ public class TinyTokenManager{
         currentRefreshToken = props.getProperty("refresh_token");
         currentS3AccessID = props.getProperty("s3_access_id");
         currentS3Secret = props.getProperty("s3_secret");
+        currentS3BucketName = props.getProperty("s3_bucket_name");
+        currentS3Region = Region.US_WEST_2;
         apiSetting = props.getProperty("open_api_cors");
         return props;
     }
@@ -309,6 +314,14 @@ public class TinyTokenManager{
     
     public String getS3AccessID(){
         return currentS3AccessID;
+    }
+    
+    public String getS3BucketName(){
+        return currentS3BucketName;
+    }
+    
+    public Region getS3Region(){
+        return currentS3Region;
     }
     
 }
