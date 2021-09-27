@@ -25,6 +25,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
+import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.S3Object;
+import java.util.List;
+import java.util.ListIterator;
+
+
 /**
  *
  * @author bhaberbe
@@ -33,6 +43,7 @@ public class S3 {
     
     private String s3_access_id = "";
     private String s3_secret = "";
+    S3TransferManager transferManager = S3TransferManager.create();
     /**
      * Initializer for a TinyTokenManager that reads in the properties File
      * @throws IOException if no properties file
@@ -53,8 +64,16 @@ public class S3 {
         
     }
     
+    private void downloadFile(){
+        String bucket = "a";
+        String key = "b";
+        Download download =
+        transferManager.download(b -> b.getObjectRequest(r -> r.bucket(bucket).key(key)).destination(Paths.get("downloadedFile.txt")));
+        CompletedDownload completedDownload = download.completionFuture().join();
+        System.out.println("Content length: "+ completedDownload.response().contentLength());
+    }
+    
     private void uploadFile(){
-        S3TransferManager transferManager = S3TransferManager.create();
         String bucket = "a";
         String key = "b";
         Upload upload = transferManager.upload(b -> b.putObjectRequest(r -> r.bucket(bucket).key(key)).source(Paths.get("fileToUpload.txt")));
@@ -63,8 +82,33 @@ public class S3 {
         System.out.println("PutObjectResponse: " + completedUpload.response());
     }
     
-    private void listAvailableFiles(){
-        
+    public static void listBucketObjects(S3Client s3, String bucketName ) {
+
+       try {
+            ListObjectsRequest listObjects = ListObjectsRequest
+                    .builder()
+                    .bucket(bucketName)
+                    .build();
+
+            ListObjectsResponse res = s3.listObjects(listObjects);
+            List<S3Object> objects = res.contents();
+
+            for (ListIterator iterVals = objects.listIterator(); iterVals.hasNext(); ) {
+                S3Object myValue = (S3Object) iterVals.next();
+                System.out.print("\n The name of the key is " + myValue.key());
+                System.out.print("\n The object is " + calKb(myValue.size()) + " KBs");
+                System.out.print("\n The owner is " + myValue.owner());
+
+             }
+
+        } catch (S3Exception e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            System.exit(1);
+        }
+    }
+    //convert bytes to kbs
+    private static long calKb(Long val) {
+        return val/1024;
     }
     
     
