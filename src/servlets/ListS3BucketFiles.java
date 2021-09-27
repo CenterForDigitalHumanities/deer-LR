@@ -31,8 +31,10 @@ public class ListS3BucketFiles extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("List files from S3 bucket...");
         S3 bucket = new S3();
         ArrayList<String> list = bucket.listBucketFiles();
+        System.out.println(list);
         response.setHeader("Content-Type", "text/plain; charset=utf-8");
         response.getWriter().print(list);
     }

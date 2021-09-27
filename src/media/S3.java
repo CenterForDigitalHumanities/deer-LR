@@ -49,6 +49,7 @@ public class S3 {
      * @throws IOException if no properties file
      */
     public S3() throws IOException {
+        System.out.println("initializing S3...");
         init();
     }
     
@@ -65,6 +66,14 @@ public class S3 {
         region = manager.getS3Region();
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(s3_access_id,s3_secret);
         
+        System.out.println("Build S3 Client...");
+        //How the General AWS docs said to make the client.
+        s3 = S3Client.builder()
+            .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+            .region(Region.US_WEST_1)
+            .build();
+        
+        System.out.println("Build S3 Transfer Manager...");
         //How the TransferManager docs said to build this out for it when we have to provide the connection info
         S3ClientConfiguration s3Config =
             S3ClientConfiguration.builder()
@@ -72,12 +81,6 @@ public class S3 {
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
             .build();
         transferManager = S3TransferManager.builder().s3ClientConfiguration(s3Config).build(); 
-        
-        //How the General AWS docs said to make the client.
-        s3 = S3Client.builder()
-            .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-            .region(Region.US_WEST_1)
-            .build();
     }
     
     public CompletedDownload downloadFile(String filename, String saveAs){
