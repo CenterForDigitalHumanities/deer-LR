@@ -45,6 +45,26 @@ public class TinyQuery extends HttpServlet {
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
         TinyTokenManager manager = new TinyTokenManager();
+        String l = request.getParameter("limit");
+        String s = request.getParameter("skip");
+        int lim = 50;
+        int skip = 0;
+        if(null != l){
+            try{
+                lim = Integer.parseInt(l);
+            }
+            catch(Exception e){
+                lim = 0;
+            }
+        }
+        if(null != s){
+            try{
+                skip = Integer.parseInt(s);
+            }
+            catch(Exception e){
+                skip = 0;
+            }
+        }
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
         String line;
@@ -77,8 +97,10 @@ public class TinyQuery extends HttpServlet {
                 System.out.println("Lived Religion detected an expired token, auto getting and setting a new one...");
                 pubTok = manager.generateNewAccessToken();
             }
+            String serv = "/getByProperties.action?skip=" + skip + "&limit=" + lim;
+
             //Point to rerum server v1
-            URL postUrl = new URL(Constant.RERUM_API_ADDR + "/getByProperties.action");
+            URL postUrl = new URL(Constant.RERUM_API_ADDR + serv);
             HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -126,6 +148,7 @@ public class TinyQuery extends HttpServlet {
             connection.disconnect();
             if(manager.getAPISetting().equals("true")){
                 response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
             }
             response.setStatus(codeOverwrite);
             response.setHeader("Content-Type", "application/json; charset=utf-8");
