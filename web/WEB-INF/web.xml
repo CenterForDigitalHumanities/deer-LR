@@ -56,18 +56,6 @@
         <servlet-name>removeUser</servlet-name>
         <servlet-class>users.RemoveUser</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>uploadFile</servlet-name>
-        <servlet-class>servlets.UploadFileToS3Bucket</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>downloadFile</servlet-name>
-        <servlet-class>servlets.DownloadFileFromS3Bucket</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListMediaFiles</servlet-name>
-        <servlet-class>servlets.ListS3BucketFiles</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
@@ -123,18 +111,6 @@
     <servlet-mapping>
         <servlet-name>removeUser</servlet-name>
         <url-pattern>/removeUser</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>uploadFile</servlet-name>
-        <url-pattern>/uploadFile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>downloadFile</servlet-name>
-        <url-pattern>/downloadFile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListMediaFiles</servlet-name>
-        <url-pattern>/listMediaFiles</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
