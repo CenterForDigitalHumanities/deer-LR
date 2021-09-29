@@ -41,6 +41,9 @@ and open the template in the editor.
         <script src="./js/components.js" type="text/javascript"></script>
     </body>
     <script>
+        window.onload = function() {
+            listFilesForDownload()
+        }
         function fileSelected() {
             var file = document.getElementById('fileToUpload').files[0];
             if (file) {
@@ -57,28 +60,26 @@ and open the template in the editor.
         }
         
         async function listFilesForDownload(){
-            fetch("http://localhost:8080/S3/listFiles", {
-                method: "GET",
-                mode: "cors",
-                body: fileInput.files[0]
-            })
+            document.getElementById("availableS3Files").innerHTML = ""
+            fetch("http://localhost:8080/S3/listFiles")
             .then(resp => resp.text())
-            .then(resp => {
-                resp = resp.susbtring(1) //remove [
-                resp = resp.slice(0, -1) // remove ]
-                let arr = resp.split(",");
+            .then(respText => {
+                let text = String(respText)
+                text = text.slice(1, -1) // remove ]
+                let arr = text.split(", ")
+                let html = ""
                 arr.forEach(file => {
                     // Note that file is the S3 'key' for the item in the bucket.
-                    let li = `<li><a onclick="downloadFile("${file}")"> ${file} </a></li>`
+                    let li = `<li><a onclick="downloadFile('${file}')"> ${file} </a></li>`
+                    html += li
                 })
+                document.getElementById("availableS3Files").innerHTML = html
                 return arr
             })
             .catch(err => {
                 console.error(err);
                 return []
             })
-            
-            return filesArr
         }
         
         async function downloadFile(key){
