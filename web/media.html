@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>LRDA Media Upload</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/lr.css">
@@ -62,7 +62,7 @@ and open the template in the editor.
         
         async function listFilesForDownload(){
             document.getElementById("availableS3Files").innerHTML = ""
-            fetch("http://localhost:8080/S3/listFiles")
+            fetch("http://s3-proxy.rerum.io/S3/listFiles")
             .then(resp => resp.text())
             .then(respText => {
                 let text = String(respText)
@@ -89,31 +89,35 @@ and open the template in the editor.
             fetch("http://localhost:8080/S3/uploadFile", {
                 method: "POST",
                 mode: "cors",
-                body: fileInput.files[0]
+                body: document.getElementById('form1').files[0]
             })
             .then(resp => {
                 console.log("Got the response from the upload file servlet");
-                consle.log(resp);
+                uploadComplete(resp.headers.get("Location"));
             })
             .catch(err => {
                 console.error(err);
             })
-             */
+            */
+           
+            
             let xhr = new XMLHttpRequest();
             let form_data = new FormData(document.getElementById('form1'))
 
-            /* event listners */
+           
             xhr.upload.addEventListener("progress", uploadProgress, false);
             xhr.addEventListener("error", uploadFailed, false);
             xhr.addEventListener("abort", uploadCanceled, false);
             xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                  uploadComplete(xhr.getResponseHeader("Location"));
+                if (xhr.readyState === 4) {
+                    if (xhr.getAllResponseHeaders().indexOf("location") >= 0) {
+                        uploadComplete(xhr.getResponseHeader("location"));
+                    }
                 }
             }
-            /* Be sure to change the url below to the url of your upload server side script */
-            xhr.open("POST", "http://localhost:8080/S3/uploadFile");
+            xhr.open("POST", "http://s3-proxy.rerum.io/S3/uploadFile");
             xhr.send(form_data);
+        
         }
           
         function uploadProgress(evt) {
