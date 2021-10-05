@@ -16,14 +16,14 @@ and open the template in the editor.
             <!-- <lr-media-upload></lr-media-upload> -->
             <div class="row">
                 <input type="hidden" deer-key="url" deer-input-type="Set" />
-                <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
+                <form id="form1" class="mediaUploadForm" enctype="multipart/form-data" method="post">
                     <div class="row">
                       <label for="file">Select a File to Upload</label><br />
                       <input type="file" name="file" id="fileToUpload" onchange="fileSelected();"/>
                     </div>
-                    <div class="fileName"></div>
-                    <div class="fileSize"></div>
-                    <div class="fileType"></div>
+                    <div id="fileName"></div>
+                    <div id="fileSize"></div>
+                    <div id="fileType"></div>
                     <div class="row">
                       <input type="button" onclick="uploadFile()" value="Upload" />
                     </div>
@@ -45,7 +45,7 @@ and open the template in the editor.
         const S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
         const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
         window.onload = function() {
-            //listFilesForDownload()
+            listFilesForDownload()
         }
         
         function fileSelected() {
@@ -101,23 +101,23 @@ and open the template in the editor.
             })
             .catch(err => {
                 console.error(err)
-                uploadFailed(resp)
+                uploadFailed(err)
             })
         }
           
         function uploadProgress(evt) {
             if (evt.lengthComputable) {
               var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-              document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+              document.getElementById('status').innerHTML = percentComplete.toString() + '%';
             }
             else {
-              document.getElementById('progressNumber').innerHTML = 'unable to compute';
+              document.getElementById('status').innerHTML = 'unable to compute';
             }
         }
 
         function uploadComplete(uri) {
             /* This event is raised when the server send back a response */
-            document.getElementById('progressNumber').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
+            document.getElementById('status').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
         }
 
         function uploadFailed(evt) {
