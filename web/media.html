@@ -15,18 +15,19 @@ and open the template in the editor.
         <div class="container">
             <!-- <lr-media-upload></lr-media-upload> -->
             <div class="row">
-                <form id="form1" enctype="multipart/form-data" method="post" action="uploadFile()">
+                <input type="hidden" deer-key="url" deer-input-type="Set" />
+                <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
                     <div class="row">
                       <label for="file">Select a File to Upload</label><br />
                       <input type="file" name="file" id="fileToUpload" onchange="fileSelected();"/>
                     </div>
-                    <div id="fileName"></div>
-                    <div id="fileSize"></div>
-                    <div id="fileType"></div>
+                    <div class="fileName"></div>
+                    <div class="fileSize"></div>
+                    <div class="fileType"></div>
                     <div class="row">
                       <input type="button" onclick="uploadFile()" value="Upload" />
                     </div>
-                    <div id="progressNumber"></div>
+                    <div id="status">. . .</div>
                 </form>
             </div>
             
@@ -42,9 +43,11 @@ and open the template in the editor.
     </body>
     <script>
         const S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
+        const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
         window.onload = function() {
-            listFilesForDownload()
+            //listFilesForDownload()
         }
+        
         function fileSelected() {
             var file = document.getElementById('fileToUpload').files[0];
             if (file) {
@@ -62,11 +65,11 @@ and open the template in the editor.
         
         async function listFilesForDownload(){
             document.getElementById("availableS3Files").innerHTML = ""
-            fetch("http://s3-proxy.rerum.io/S3/listFiles")
+            fetch(S3_PROXY_PREFIX+"listFiles")
             .then(resp => resp.text())
             .then(respText => {
                 let text = String(respText)
-                text = text.slice(1, -1) // remove ]
+                text = text.slice(1, -1)
                 let arr = text.split(", ")
                 let html = ""
                 arr.forEach(file => {
@@ -85,39 +88,21 @@ and open the template in the editor.
         
         async function uploadFile() {
             //NOTE there is no file upload progress with fetch API...
-            /*
-            fetch("http://localhost:8080/S3/uploadFile", {
+            let form_data = new FormData(document.getElementById('form1'))
+            fetch(S3_PROXY_PREFIX+"uploadFile", {
                 method: "POST",
                 mode: "cors",
-                body: document.getElementById('form1').files[0]
+                body: form_data
             })
             .then(resp => {
                 console.log("Got the response from the upload file servlet");
-                uploadComplete(resp.headers.get("Location"));
+                if(resp.ok) uploadComplete(resp.headers.get("Location"))
+                else uploadFailed(resp)
             })
             .catch(err => {
-                console.error(err);
+                console.error(err)
+                uploadFailed(resp)
             })
-            */
-           
-            
-            let xhr = new XMLHttpRequest();
-            let form_data = new FormData(document.getElementById('form1'))
-
-           
-            xhr.upload.addEventListener("progress", uploadProgress, false);
-            xhr.addEventListener("error", uploadFailed, false);
-            xhr.addEventListener("abort", uploadCanceled, false);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.getAllResponseHeaders().indexOf("location") >= 0) {
-                        uploadComplete(xhr.getResponseHeader("location"));
-                    }
-                }
-            }
-            xhr.open("POST", "http://s3-proxy.rerum.io/S3/uploadFile");
-            xhr.send(form_data);
-        
         }
           
         function uploadProgress(evt) {

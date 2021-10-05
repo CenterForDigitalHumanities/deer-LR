@@ -151,48 +151,101 @@ class LrMediaUpload extends HTMLElement {
         this.innerHTML = `
         <style>
         </style>
-        <form class="card bg-light" style="margin-top: 3px;">
-            <header class="text-primary">Lived Religion Media Upload</header>
-            <p class="text-primary"><small>Upload your media file to Lived Religion media storage (admins only)</small></p>
-            <input type="file" id="myFile" name="filename">
-            <input type="submit">
+        <input type="hidden" deer-key="url" deer-input-type="Set" />
+        <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
+            <div class="row">
+              <label for="file">Select a File to Upload</label><br />
+              <input type="file" name="file" id="fileToUpload" onchange="fileSelected();"/>
+            </div>
+            <div class="fileName"></div>
+            <div class="fileSize"></div>
+            <div class="fileType"></div>
+            <div class="row">
+              <input type="button" onclick="uploadFile()" value="Upload" />
+            </div>
+            <div id="status">. . .</div>
         </form>
-
         `   
     }
     connectedCallback() {
         try {
             let lrMediaUpload = this
-            let AWSurl = ""
-            let AWScreds = {}
-            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
-                event.preventDefault()
-                let data = new FormData(this)
-                fetch(AWSurl, {
+            const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+            const S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
+            
+            /**
+             *  Helper function for showing the selected file information 
+             **/
+            function fileSelected() {
+                var file = document.getElementById('fileToUpload').files[0];
+                if (file) {
+                  var fileSize = 0;
+                  if (file.size > 1024 * 1024)
+                    fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+                  else
+                    fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+                  document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
+                  document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
+                  document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
+                }
+            }
+            
+            /**
+             * Fetch to the S3 bucket and react to the response.
+             * @return {undefined}
+             */
+            async function uploadFile() {
+            //NOTE there is no file upload progress with fetch API...
+                let form_data = new FormData(document.getElementById('form1'))
+                fetch(S3_PROXY_PREFIX+"uploadFile", {
                     method: "POST",
                     mode: "cors",
-                    headers: new Headers({
-                        'Content-Type': 'application/json; charset=utf-8'
-                    }),
-                    body: JSON.stringify(data)
+                    body: form_data
                 })
-                .then(response => {
-                    if(response.ok){
-                        console.log("Upload completed successfully.  URI of uploaded media is ...")
-                    }
-                    else{
-                        console.error(response.statusText)
-                        throw Error("AWS bucket responded with an error")
-                    }
+                .then(resp => {
+                    console.log("Got the response from the upload file servlet");
+                    if(resp.ok) uploadComplete(resp.headers.get("Location"))
+                    else uploadFailed(resp)
                 })
                 .catch(err => {
-                    console.error("There was an error trying to upload to the AWS bucket")
                     console.error(err)
+                    uploadFailed(resp)
+                })
+            }
+            
+            /* A successful File upload fires this function.  Return the URI of the file.*/
+            function uploadComplete(uri) {
+                
+                document.getElementById('progressNumber').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
+            }
+            
+            /* A failed upload fires this function.  No URI for the client :( */
+            function uploadFailed(evt) {
+                alert("There was an error attempting to upload the file.");
+            }
+
+            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
+                event.preventDefault()
+                let form_elem = event.target
+                let form_data = new FormData(form_elem)
+                fetch(S3_PROXY_PREFIX+"uploadFile", {
+                    method: "POST",
+                    mode: "cors",
+                    body: form_data
+                })
+                .then(resp => {
+                    console.log("Got the response from the upload file servlet");
+                    if(resp.ok) uploadComplete(resp.headers.get("Location"))
+                    else uploadFailed(resp)
+                })
+                .catch(err => {
+                    console.error(err)
+                    uploadFailed(resp)
                 })
             }
         } catch (err) {
-            // already logged in or other error
-            // TODO: focus this catch
+            // RAWR
         }
     }
 }
