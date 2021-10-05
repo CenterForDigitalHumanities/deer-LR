@@ -122,18 +122,27 @@
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
                     </select>
-                    <!-- TODO -->
-                    <!--<h3> Upload Media </h3>-->
-                    <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" >
-                    <label>Recording or performance: </label>
-                    <input type="url" deer-key="associatedMedia" >
                     <label
                         title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Brief
                         Description</label>
                     <textarea id="further_object" type="text" deer-key="description"></textarea>
-                    <label>Tags separated by ',':</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">
+                    
+                    <!-- The idea is the user needs a URI.  They can have it already and provide it, or they can upload something to get one -->
+                    <!-- The web component itself cannot contain the input to change, or a web component would have to be created for each media. -->
+                    <!-- The convention will be Link or Upload where choosing the upload will hide the input until the upload is done and has a URI. -->
+                    <!-- The upload component should be the next element sibling of the element being interacted with to trigger it -->
+                    <!-- It should be the previous element sibling of the input it needs to populate -->
+                    <!-- -->
+                    <h3> Media </h3>
+                    <label>Link or <a onclick="LR.utils.uploadForURI(event)">Upload</a> a photograph or depiction: </label>
+                    <lr-media-upload> </lr-media-upload>
+                    <input type="url" deer-key="image" >
+                    
+                    <label>Link or <a onclick="LR.utils.uploadForURI(event)">Upload</a> a Recording or performance: </label>
+                    <lr-media-upload> </lr-media-upload>
+                    <input type="url" deer-key="associatedMedia" >
+<!--                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">-->
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
