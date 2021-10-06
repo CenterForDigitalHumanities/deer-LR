@@ -148,86 +148,65 @@ customElements.define("lr-global-feedback", LrGlobalFeedback)
 class LrMediaUpload extends HTMLElement {
     constructor() {
         super()
+        //<input type="hidden" deer-key="url" deer-input-type="Set" />
         this.innerHTML = `
         <style>
         </style>
-        <input type="hidden" deer-key="url" deer-input-type="Set" />
         <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
             <div class="row">
               <label for="file">Select a File to Upload</label><br />
-              <input type="file" name="file" id="fileToUpload" onchange="fileSelected();"/>
+              <input type="file" name="file" class="fileToUpload" onchange="fileSelected(event)"/>
             </div>
             <div class="fileName"></div>
             <div class="fileSize"></div>
             <div class="fileType"></div>
             <div class="row">
-              <input type="button" onclick="uploadFile()" value="Upload" />
+              <input type="submit" value="Upload" />
             </div>
-            <div id="status">. . .</div>
+            <div class="status">. . .</div>
         </form>
         `   
     }
     connectedCallback() {
+        const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+        const S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
+        
+        /*  Helper function for showing the selected file information */
+       function fileSelected(event) {
+           let form = event.target.closest("form")
+           let file = event.target.files[0]
+           if (file) {
+               let fileSize = 0;
+               if (file.size > 1024 * 1024)
+                 fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB'
+               else
+                 fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
+               form.querySelector('.fileName').innerHTML = 'Name: ' + file.name
+               form.querySelector('fileSize').innerHTML = 'Size: ' + fileSize
+               form.querySelector('fileType').innerHTML = 'Type: ' + file.type
+           }
+        }
+       
+        /* A successful File upload fires this function.  Return the URI of the file.*/
+        function uploadComplete(uri, form_elem) {
+            form_elem.querySelector('.status').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
+        }
+
+        /* A failed upload fires this function.  No URI for the client :( */
+        function uploadFailed(err, form_elem) {
+            form_elem.querySelector('.status').innerHTML = "There was an error attempting to upload the file."
+            alert("There was an error attempting to upload the file.");
+        }
+        
         try {
             let lrMediaUpload = this
-            const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-            const S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
-            
-            /**
-             *  Helper function for showing the selected file information 
-             **/
-            function fileSelected() {
-                var file = document.getElementById('fileToUpload').files[0];
-                if (file) {
-                  var fileSize = 0;
-                  if (file.size > 1024 * 1024)
-                    fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
-                  else
-                    fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
-
-                  document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
-                  document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
-                  document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
-                }
-            }
-            
             /**
              * Fetch to the S3 bucket and react to the response.
              * @return {undefined}
              */
-            async function uploadFile() {
-            //NOTE there is no file upload progress with fetch API...
-                let form_data = new FormData(document.getElementById('form1'))
-                fetch(S3_PROXY_PREFIX+"uploadFile", {
-                    method: "POST",
-                    mode: "cors",
-                    body: form_data
-                })
-                .then(resp => {
-                    console.log("Got the response from the upload file servlet");
-                    if(resp.ok) uploadComplete(resp.headers.get("Location"))
-                    else uploadFailed(resp)
-                })
-                .catch(err => {
-                    console.error(err)
-                    uploadFailed(resp)
-                })
-            }
-            
-            /* A successful File upload fires this function.  Return the URI of the file.*/
-            function uploadComplete(uri) {
-                
-                document.getElementById('progressNumber').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
-            }
-            
-            /* A failed upload fires this function.  No URI for the client :( */
-            function uploadFailed(evt) {
-                alert("There was an error attempting to upload the file.");
-            }
-
-            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
+           lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
-                let form_elem = event.target
+                let form_elem = this
                 let form_data = new FormData(form_elem)
                 fetch(S3_PROXY_PREFIX+"uploadFile", {
                     method: "POST",
@@ -236,12 +215,12 @@ class LrMediaUpload extends HTMLElement {
                 })
                 .then(resp => {
                     console.log("Got the response from the upload file servlet");
-                    if(resp.ok) uploadComplete(resp.headers.get("Location"))
+                    if(resp.ok) uploadComplete(resp.headers.get("Location"), form_elem)
                     else uploadFailed(resp)
                 })
                 .catch(err => {
                     console.error(err)
-                    uploadFailed(resp)
+                    uploadFailed(err, form_elem)
                 })
             }
         } catch (err) {
