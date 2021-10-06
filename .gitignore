@@ -1,6 +1,7 @@
 /nbproject/
 /build/
 /dist/
+/lib/
 build.xml
 /src/auth/users.txt
 /src/tokens/lr.properties
