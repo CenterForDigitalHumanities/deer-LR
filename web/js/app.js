@@ -1105,7 +1105,8 @@ LR.media.uploadComplete = function(uri, form_elem){
     deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
     deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
     deer_input.$isDirty = true
-    //TODO paginate this into the connectedMedia area?  How to mark it so it looks different from the URIs that are actually saved to the annotation?
+    
+    //TODO paginate this into the connectedMedia area?  Need to/How to mark it so it looks different from the URIs that are actually saved to the annotation?
     LR.utils.broadcastEvent(null, "fileUploadSuccess", form_elem, { message: "File upload Successful!  URI is"+ LR.media.S3_URI_PREFIX+uri })
     
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
@@ -1170,7 +1171,7 @@ LR.media.submitURI = function(event){
         deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
         deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
         deer_input.$isDirty = true
-        //TODO paginate this into the connectedMedia area?  How to mark it so it looks different from the URIs that are actually saved to the annotation?
+        //TODO paginate this into the connectedMedia area?  Need to/How to mark it so it looks different from the URIs that are actually saved to the annotation?
     }
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
