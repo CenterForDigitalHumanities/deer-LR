@@ -134,13 +134,14 @@
                     <!-- It should be the previous element sibling of the input it needs to populate -->
                     <!-- -->
                     <h3> Media </h3>
-                    <label>Link or <a onclick="LR.utils.uploadForURI(event)">Upload</a> a photograph or depiction: </label>
-                    <lr-media-upload> </lr-media-upload>
-                    <input type="url" deer-key="image" >
                     
-                    <label>Link or <a onclick="LR.utils.uploadForURI(event)">Upload</a> a Recording or performance: </label>
-                    <lr-media-upload> </lr-media-upload>
-                    <input type="url" deer-key="associatedMedia" >
+                    <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> photographs or depictions one at a time: </label>
+                    <lr-media-upload media-key="image"> </lr-media-upload>
+                    <input type="url" deer-input-type="Set" deer-key="image" >
+                    
+                    <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> a recordings or performances one at a time: </label>
+                    <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                    <input type="url" deer-input-type="Set" deer-key="associatedMedia" >
 <!--                    <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="LR:Tags">-->
                     <div class="row">

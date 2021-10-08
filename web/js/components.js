@@ -148,7 +148,7 @@ customElements.define("lr-global-feedback", LrGlobalFeedback)
 class LrMediaUpload extends HTMLElement {
     constructor() {
         super()
-        //<input type="hidden" deer-key="url" deer-input-type="Set" />
+        /*
         this.innerHTML = `
         <style>
         </style>
@@ -166,45 +166,28 @@ class LrMediaUpload extends HTMLElement {
             <div class="status">. . .</div>
         </form>
         `   
+        */
+       this.innerHTML = `
+        <style>
+            .mediaUploadForm{
+                display: none;
+            }
+        </style>
+        <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
+            <input type="file" name="file" class="fileToUpload" onchange="LR.media.fileSelected(event)"/>
+            <input type="submit"/>
+        </form>
+       `
     }
     connectedCallback() {
         const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-        const S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
-        
-        /*  Helper function for showing the selected file information */
-       function fileSelected(event) {
-           let form = event.target.closest("form")
-           let file = event.target.files[0]
-           if (file) {
-               let fileSize = 0;
-               if (file.size > 1024 * 1024)
-                 fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB'
-               else
-                 fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
-               form.querySelector('.fileName').innerHTML = 'Name: ' + file.name
-               form.querySelector('fileSize').innerHTML = 'Size: ' + fileSize
-               form.querySelector('fileType').innerHTML = 'Type: ' + file.type
-           }
-        }
-       
-        /* A successful File upload fires this function.  Return the URI of the file.*/
-        function uploadComplete(uri, form_elem) {
-            form_elem.querySelector('.status').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
-        }
-
-        /* A failed upload fires this function.  No URI for the client :( */
-        function uploadFailed(err, form_elem) {
-            form_elem.querySelector('.status').innerHTML = "There was an error attempting to upload the file."
-            alert("There was an error attempting to upload the file.");
-        }
-        
         try {
             let lrMediaUpload = this
             /**
              * Fetch to the S3 bucket and react to the response.
              * @return {undefined}
              */
-           lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
+            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
                 let form_elem = this
                 let form_data = new FormData(form_elem)
@@ -215,12 +198,12 @@ class LrMediaUpload extends HTMLElement {
                 })
                 .then(resp => {
                     console.log("Got the response from the upload file servlet");
-                    if(resp.ok) uploadComplete(resp.headers.get("Location"), form_elem)
-                    else uploadFailed(resp)
+                    if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), form_elem)
+                    else resp.text().then(text => LR.media.uploadFailed(text, form_elem))
                 })
                 .catch(err => {
                     console.error(err)
-                    uploadFailed(err, form_elem)
+                    LR.media.uploadFailed(err, form_elem)
                 })
             }
         } catch (err) {

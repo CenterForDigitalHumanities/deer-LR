@@ -50,6 +50,9 @@ if (typeof(Storage) !== "undefined") {
 }
 LR.ui = {}
 LR.utils = {}
+LR.media = {}
+
+LR.media.S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
@@ -1055,3 +1058,69 @@ LR.utils.isCreator = async function(agentID, item){
     }
     return ((agentID && creatorID) && agentID === creatorID)
 }
+
+/**
+ * Media upload component functionality.  
+ * Perhaps this could be abstracted to DEER.
+ */
+
+/**
+ * User has clicked to upload a file to use the URI as a value for some associated media.
+ * Once user selects the file, fire the form submit to upload the file
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.uploadForURI = function(event){
+    //This usually comes from an <a> inside a <label>, the lr-media-upload component is after that <label>
+    let container = event.target.parentElement
+    let lr_media_component = container.nextElementSibling
+    let media_form = lr_media_component.firstElementChild
+    media_form.querySelector("input[type='file']").click() //Trigger browser file upload UI
+    
+
+}
+
+/**
+ * User has chosen and confirmed the file.  Let's upload it.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.fileSelected = function(event){
+    //File input is the event.target.  The submit button is just after it.
+    event.target.nextElementSibling.click() //see the onsubmit handler in components.js
+    /*
+    let file = event.target.files[0];
+    if (file) {
+        let fileSize = 0;
+        if (file.size > 1024 * 1024)
+          fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB'
+        else
+          fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
+        form.querySelector('.fileName').innerHTML = 'Name: ' + file.name
+        form.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize
+        form.querySelector('.fileType').innerHTML = 'Type: ' + file.type
+     */
+}
+
+LR.media.uploadComplete = function(uri, form_elem){
+    //The form_elem is inside lr-media-upload.  The input[deer-key] to place a value on and make dirty is the next element.
+    let media_component = form_elem.parentElement
+    let deer_input = media_component.nextElementSibling
+    
+    //It is a Set, so make sure to add commas when you need to
+    deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
+    deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
+    deer_input.$isDirty = true
+    LR.utils.broadcastEvent(null, "fileUploadSuccess", form_elem, { message: "File upload Successful!  URI is"+ LR.media.S3_URI_PREFIX+uri })
+}
+
+LR.media.uploadFailed = function(message, form_elem){
+    form_elem.querySelector('.status').innerHTML = message
+    console.error("upload failed")
+    console.error(message)
+    let media_component = form_elem.parentElement
+    let deer_input = media_component.nextElementSibling
+    deer_input.$isDirty = false
+    LR.utils.broadcastEvent(null, "fileUploadFailed", form_elem, { message: message })
+}
+
