@@ -148,6 +148,7 @@ customElements.define("lr-global-feedback", LrGlobalFeedback)
 class LrMediaUpload extends HTMLElement {
     constructor() {
         super()
+       let dk = this.getAttribute("media-key")
        this.innerHTML = `
         <style>
             .mediaUploadForm{
@@ -157,13 +158,22 @@ class LrMediaUpload extends HTMLElement {
                 display: none;
             }
         </style>
+        <!--
+        <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> a recordings or performances one at a time: </label>
+        -->
+        
         <label> Type or paste URI here.  Click 'Upload' to upload a file instead.<label>
         <input type="url" onchange="LR.media.uriProvided(event)"/>
-        <input type="button" value="Submit URI" onclick="LR.media.submitURI(event)"
+        <input type="button" value="Confirm URI" onclick="LR.media.submitURI(event)"
         <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
             <input type="file" name="file" class="fileToUpload" onchange="LR.media.fileSelected(event)"/>
             <input type="submit"/>
         </form>
+        
+        <!--
+        <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
+        <div class="connectedMedia"></div>
+        -->
        `
     }
     connectedCallback() {

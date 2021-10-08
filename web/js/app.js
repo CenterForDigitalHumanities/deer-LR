@@ -1097,15 +1097,18 @@ LR.media.fileSelected = function(event){
 LR.media.uploadComplete = function(uri, form_elem){
     //The form_elem is inside lr-media-upload.  The input[deer-key] to place a value on and make dirty is the next element.
     let media_component = form_elem.parentElement
-    let deer_input = media_component.nextElementSibling
+    let key = media_component.getAttribute("media-key")
+    let deer_input = document.querySelector("input[deer-key='"+key+"']")
+    //let deer_input = media_component.nextElementSibling //maybe we can just do this?  I think we can make it a convention to say it is alway the next sibling.
     
     //It is a Set, so make sure to add commas when you need to
     deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
     deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
     deer_input.$isDirty = true
+    //TODO paginate this into the connectedMedia area?  How to mark it so it looks different from the URIs that are actually saved to the annotation?
     LR.utils.broadcastEvent(null, "fileUploadSuccess", form_elem, { message: "File upload Successful!  URI is"+ LR.media.S3_URI_PREFIX+uri })
     
-    //Note this is not actually saved as an annotation until the user submits the parent form!  All they have done is changed an input tracking these values!!
+    //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
 
 LR.media.uploadFailed = function(message, form_elem){
@@ -1118,15 +1121,27 @@ LR.media.uploadFailed = function(message, form_elem){
     LR.utils.broadcastEvent(null, "fileUploadFailed", form_elem, { message: message })
 }
 
+/**
+ * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.
+ * Can be as simple as the array of URIs.  Could be as complex as preview areas and thumbnails, depending on media type. 
+ * 
+ * @param {type} annotationData
+ * @param {type} keys
+ * @param {type} form
+ * @return {undefined}
+ */
 LR.media.showConnectedMedia = function(annotationData, keys, form){
-    keys.forEach(key =>{
+    keys.forEach(key =>{  
         if(annotationData.hasOwnProperty(key)){
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            let areaToPopulate = input.nextElementSibling //div.connectedMedia
+            
             let data_arr = 
             (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
             annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
             [ LR.utils.getAnnoValue(annotationData[key]) ]
-
-            let areaToPopulate = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
+    
+            areaToPopulate.innerHTML = data_arr
         }
     })
 }
@@ -1148,12 +1163,15 @@ LR.media.uriProvided = function(event){
  * @return {undefined}
  */
 LR.media.submitURI = function(event){
-    let deer_input = event.target.parentElement.nextElementSibling
-    //It is a Set, so make sure to add commas when you need to
-    deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
-    deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
-    deer_input.$isDirty = true
-    
-    //Note this is not actually saved as an annotation until the user submits the parent form!  All they have done is changed an input tracking these values!!
+    let uri = event.target.previousElementSibling.value
+    if(uri){
+        let deer_input = event.target.parentElement.nextElementSibling
+        //It is a Set, so make sure to add commas when you need to
+        deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
+        deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
+        deer_input.$isDirty = true
+        //TODO paginate this into the connectedMedia area?  How to mark it so it looks different from the URIs that are actually saved to the annotation?
+    }
+    //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
 
