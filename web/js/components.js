@@ -148,31 +148,18 @@ customElements.define("lr-global-feedback", LrGlobalFeedback)
 class LrMediaUpload extends HTMLElement {
     constructor() {
         super()
-        /*
-        this.innerHTML = `
-        <style>
-        </style>
-        <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
-            <div class="row">
-              <label for="file">Select a File to Upload</label><br />
-              <input type="file" name="file" class="fileToUpload" onchange="fileSelected(event)"/>
-            </div>
-            <div class="fileName"></div>
-            <div class="fileSize"></div>
-            <div class="fileType"></div>
-            <div class="row">
-              <input type="submit" value="Upload" />
-            </div>
-            <div class="status">. . .</div>
-        </form>
-        `   
-        */
        this.innerHTML = `
         <style>
             .mediaUploadForm{
                 display: none;
             }
+            input[type="button"]{
+                display: none;
+            }
         </style>
+        <label> Type or paste URI here.  Click 'Upload' to upload a file instead.<label>
+        <input type="url" onchange="LR.media.uriProvided(event)"/>
+        <input type="button" value="Submit URI" onclick="LR.media.submitURI(event)"
         <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
             <input type="file" name="file" class="fileToUpload" onchange="LR.media.fileSelected(event)"/>
             <input type="submit"/>

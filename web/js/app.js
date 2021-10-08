@@ -1065,7 +1065,7 @@ LR.utils.isCreator = async function(agentID, item){
  */
 
 /**
- * User has clicked to upload a file to use the URI as a value for some associated media.
+ * User has clicked to upload a file to use the resulting URI as a value for some associated media.
  * Once user selects the file, fire the form submit to upload the file
  * @param {type} event
  * @return {undefined}
@@ -1076,8 +1076,6 @@ LR.media.uploadForURI = function(event){
     let lr_media_component = container.nextElementSibling
     let media_form = lr_media_component.firstElementChild
     media_form.querySelector("input[type='file']").click() //Trigger browser file upload UI
-    
-
 }
 
 /**
@@ -1088,20 +1086,14 @@ LR.media.uploadForURI = function(event){
 LR.media.fileSelected = function(event){
     //File input is the event.target.  The submit button is just after it.
     event.target.nextElementSibling.click() //see the onsubmit handler in components.js
-    /*
-    let file = event.target.files[0];
-    if (file) {
-        let fileSize = 0;
-        if (file.size > 1024 * 1024)
-          fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB'
-        else
-          fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB'
-        form.querySelector('.fileName').innerHTML = 'Name: ' + file.name
-        form.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize
-        form.querySelector('.fileType').innerHTML = 'Type: ' + file.type
-     */
 }
 
+/**
+ * The file upload was successful.  Make sure the list of connected media files includes this new one.
+ * @param {type} uri
+ * @param {type} form_elem
+ * @return {undefined}
+ */
 LR.media.uploadComplete = function(uri, form_elem){
     //The form_elem is inside lr-media-upload.  The input[deer-key] to place a value on and make dirty is the next element.
     let media_component = form_elem.parentElement
@@ -1112,6 +1104,8 @@ LR.media.uploadComplete = function(uri, form_elem){
     deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
     deer_input.$isDirty = true
     LR.utils.broadcastEvent(null, "fileUploadSuccess", form_elem, { message: "File upload Successful!  URI is"+ LR.media.S3_URI_PREFIX+uri })
+    
+    //Note this is not actually saved as an annotation until the user submits the parent form!  All they have done is changed an input tracking these values!!
 }
 
 LR.media.uploadFailed = function(message, form_elem){
@@ -1122,5 +1116,44 @@ LR.media.uploadFailed = function(message, form_elem){
     let deer_input = media_component.nextElementSibling
     deer_input.$isDirty = false
     LR.utils.broadcastEvent(null, "fileUploadFailed", form_elem, { message: message })
+}
+
+LR.media.showConnectedMedia = function(annotationData, keys, form){
+    keys.forEach(key =>{
+        if(annotationData.hasOwnProperty(key)){
+            let data_arr = 
+            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
+            annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
+            [ LR.utils.getAnnoValue(annotationData[key]) ]
+
+            let areaToPopulate = input.nextElementSibling //The view or select should always be just after the input tracking the values from it.
+        }
+    })
+}
+
+/**
+ * Detection that a user is providing a URI instead of uploading a file.  Might not need this.
+ * Show the "confirm URI" button.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.uriProvided = function(event){
+    //Show the button to save the URI
+    event.target.nextElementSibling.style.display = "block"
+}
+
+/**
+ * User has typed in a URI instead of doing a file upload to produce one.  Add this URI to the set of connected media.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.submitURI = function(event){
+    let deer_input = event.target.parentElement.nextElementSibling
+    //It is a Set, so make sure to add commas when you need to
+    deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
+    deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
+    deer_input.$isDirty = true
+    
+    //Note this is not actually saved as an annotation until the user submits the parent form!  All they have done is changed an input tracking these values!!
 }
 

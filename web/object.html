@@ -137,11 +137,11 @@
                     
                     <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> photographs or depictions one at a time: </label>
                     <lr-media-upload media-key="image"> </lr-media-upload>
-                    <input type="url" deer-input-type="Set" deer-key="image" >
+                    <input type="hidden" deer-input-type="Set" deer-key="image" >
                     
                     <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> a recordings or performances one at a time: </label>
                     <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
-                    <input type="url" deer-input-type="Set" deer-key="associatedMedia" >
+                    <input type="hidden" deer-input-type="Set" deer-key="associatedMedia" >
 <!--                    <label>Tags separated by ',':</label>
                     <input disabled type="text" deer-key-x="LR:Tags">-->
                     <div class="row">
@@ -200,6 +200,7 @@
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.preSelectType(annotationData, event.target)
+                    LR.media.showConnectedMedia(annotationData, ["image", "associatedMedia"])
                     break
                 default:
 
