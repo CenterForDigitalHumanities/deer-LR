@@ -1,6 +1,6 @@
 class LrFooter extends HTMLElement {
     connectedCallback() {
-        this.innerHTML = `<small>&copy;2020 Walter J. Ong, S.J. Center for Digital Humanities</small>
+        this.innerHTML = `<small>&copy;2022 Research Computing Group</small>
         <img class="brand" src="https://www.slu.edu/marcom/tools-downloads/imgs/logo/left-aligned/slu_logoleftaligned_rgb.png">
         <img class="brand" src="https://centerfordigitalhumanities.github.io/media-assets/logos/rcg-logo.png">
         `
