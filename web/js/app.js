@@ -27,8 +27,8 @@ LR.URLS = {
     SINCE: "http://devstore.rerum.io/v1/since",
 }
 */
-//For prd-01
 
+//For prd-01
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
