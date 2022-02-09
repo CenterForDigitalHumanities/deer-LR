@@ -46,6 +46,18 @@
                "@type":"@id",
                "@container":"@set"
             },
+            "image":{
+               "@id":"schema:image",
+               "@type":"@id"
+            },
+            "audio":{
+               "@id":"schema:audio",
+               "@type":"@id"
+            },
+            "video":{
+               "@id":"schema:video",
+               "@type":"@id"
+            },
             "associatedMedia":{
                "@id":"schema:associatedMedia",
                "@type":"@id"
@@ -63,6 +75,18 @@
       "Place":{
          "@id":"schema:Place",
          "@context":{
+            "image":{
+               "@id":"schema:image",
+               "@type":"@id"
+            },
+            "audio":{
+               "@id":"schema:audio",
+               "@type":"@id"
+            },
+            "video":{
+               "@id":"schema:video",
+               "@type":"@id"
+            },
             "associatedMedia":{
                "@id":"schema:associatedMedia",
                "@type":"@id"
@@ -113,6 +137,18 @@
       "Object":{
          "@id":"ebu:PhysicalResource",
          "@context":{
+            "image":{
+               "@id":"schema:image",
+               "@type":"@id"
+            },
+            "audio":{
+               "@id":"schema:audio",
+               "@type":"@id"
+            },
+            "video":{
+               "@id":"schema:video",
+               "@type":"@id"
+            },
             "associatedMedia":{
                "@id":"schema:associatedMedia",
                "@type":"@id"
