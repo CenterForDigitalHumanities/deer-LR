@@ -3,7 +3,8 @@
 /dist/
 /lib/
 build.xml
-/src/auth/users.txt
+*.properties
+/src/auth/*.json
 /src/tokens/lr.properties
 /src/auth/users_dev.txt
 /src/tokens/lr_dev.properties
