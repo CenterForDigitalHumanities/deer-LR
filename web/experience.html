@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Lived Religion Experiences</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
@@ -118,7 +118,7 @@
         <h2 class="text-primary">Lived Religion Experience</h2>
         <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
             <div class="card_body">
-                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
+                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This Experience</h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
                 <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
                 <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
@@ -414,6 +414,7 @@
         
         addEventListener('deer-updated', event => {
             let what = event.target.id
+            let expName = ""
             switch(what){
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
@@ -422,7 +423,12 @@
                     document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let locDropdown = event.target.querySelector(".locDropdown")
                     let locName = locDropdown.options[locDropdown.selectedIndex].text
-                    let expName = event.target.querySelector("input[deer-key='name']").value
+                    expName = 
+                        (event.detail.hasOwnProperty("name")) ? event.detail.name : 
+                        (event.detail.hasOwnProperty("label")) ?  event.detail.label : 
+                        (event.detail.hasOwnProperty("title")) ? event.detail.title : 
+                        expLabel.innerHTML
+            
                     let expID = event.detail["@id"] ? event.detail["@id"] : ""
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = expName)
                     document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
@@ -430,7 +436,8 @@
                 break
                 default:
             }
-            LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
+            //note event.detail.name could be blank, and it could instead have a label via an annotation.
+            LR.ui.globalFeedbackBlip(event, `Saving '${expName}' successful!`, true)
         })
         
         addEventListener('deer-loaded', event => {

@@ -647,15 +647,18 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
  */
 LR.utils.setTrackedHiddenValues = function(annotationData, keys, form){
     keys.forEach(key =>{
-        let data_arr = 
-        (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
-        let input = form.querySelector("input[deer-key='"+key+"']")
-        //Set the value of the hidden input that tracks this for DEER
-        //Check if we need a different delimeter.  The input will tell us.
-        let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-        //Generate the value for the input that DEER supports - "uri,uri..."
-        let str_arr = (data_arr.length > 1) ? data_arr.join(delim) : (data_arr.length === 1 ) ? data_arr[0] : ""
-        input.value = str_arr
+        if(annotationData.hasOwnProperty(key)){
+            let data_arr = 
+            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            //Set the value of the hidden input that tracks this for DEER
+            //Check if we need a different delimeter.  The input will tell us.
+            let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+            //Generate the value for the input that DEER supports - "uri,uri..."
+            let str_arr = (data_arr.length > 1) ? data_arr.join(delim) : (data_arr.length === 1 ) ? data_arr[0] : ""
+            input.value = str_arr
+        }
+
     })
 }
 

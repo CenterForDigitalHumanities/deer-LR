@@ -148,7 +148,7 @@ DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
 
 DEER.TEMPLATES.Event = function (experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> 
+        let tmpl = `<h2 id="expLabel">${UTILS.getLabel(experienceData)}</h2> 
         <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">Review</a>
         <dl tog="experienceContent" class="eventContentWrapper is-hidden">
             <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
@@ -163,6 +163,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
         let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
         let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
+        
+        //When setting the names, we should pass the citation source along the name came from.  Sometimes, the value is just bad and needs checked. 
 
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = setNamesTemplate([place])
@@ -394,9 +396,15 @@ function setNamesTemplate(items,
     falseTemplate = `<li> $itemURI </li>`) {
     let nameText = ``
     items.forEach((val) => {
-        const itemURI = UTILS.getValue(val)
-        const name = URIisValid(itemURI) ? trueTemplate.replaceAll("$itemURI",itemURI) : falseTemplate.replaceAll("$itemURI",itemURI)
-        nameText += name
+        //This should always be either the string value for the label or an item URI.  
+        //In most cases, we expect it will be a URI.
+        //If the item is blank or undefined, ignore it.  It is not real and should not be considered.  The citation source should be checked, it's value is off.
+        if(val && UTILS.getValue(val)){
+            const itemURI = UTILS.getValue(val)
+            const itemLabel = UTILS.getLabel(val) ? UTILS.getLabel(val) : URIisValid(itemURI) ? itemURI : "Entity Not Labeled"
+            const name = URIisValid(itemURI) ? trueTemplate.replaceAll("$itemURI",itemURI) : falseTemplate.replaceAll("$itemURI", itemLabel)
+            nameText += name
+        }
     })
     return nameText
 }
