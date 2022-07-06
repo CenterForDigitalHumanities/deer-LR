@@ -226,7 +226,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let orgHTML = `<dt>Organizations Involved</dt><dd><ul id="organizationsInExperience">${organizationsByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
-        let dateHTML = `<dt>Associated Date</dt><dd>${date}</dd>`
+        let dateHTML = `<dt>Associated Date and Time</dt><dd>${date}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 

@@ -60,6 +60,9 @@
 ## purpose
 - The purpose for which an Object or Place exists, if any.
 
+## startDate
+- The starting date and time for an Event (or Experience).  See https://schema.org/startDate.
+
 ## attendee-org
 - A mimicing of https://schema.org/attendee.  It tracks the Organizations that are a part of an Experience separate from the People.
 

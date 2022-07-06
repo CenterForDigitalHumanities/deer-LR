@@ -255,6 +255,7 @@
       "religiousTradition":"lr:religiousTradition",
       "secondaryFunction":"lr:secondaryFunction",
       "attendee-org":"schema:attendee",
+      "startDate":"schema:startDate",
       "Action":"schema:Action"
    }
 }
