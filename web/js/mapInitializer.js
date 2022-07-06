@@ -34,7 +34,13 @@ MAP.init =  async function(){
     let expandedEntities = entitiesInCollection.map(async function(locationID){
         return  await UTILS.expand({"@id":locationID})
         .then(expandedLocation => {
-            let targetProps = {"targetID": UTILS.getValue(expandedLocation["@id"]), "label": UTILS.getLabel(expandedLocation), "description":UTILS.getValue(expandedLocation.description), "madeByApp" : "Lived_Religion"}
+            let targetProps = {
+                "targetID": UTILS.getValue(expandedLocation["@id"]), 
+                "label": UTILS.getLabel(expandedLocation), 
+                "description":UTILS.getValue(expandedLocation.description), 
+                "madeByApp" : "Lived_Religion",
+                "thumbnail" : UTILS.getValue(expandedLocation.image)
+            }
             return {"@id":expandedLocation.geometry.source.citationSource, "properties":targetProps, "type":"Feature", "geometry":expandedLocation.geometry.value} 
         })
         .catch(err => {
@@ -126,6 +132,9 @@ MAP.pointEachFeature = function (feature, layer) {
         }
         if(feature["@id"]) {
             popupContent += `<div class="featureInfo"><label>Annotation URI:</label><a target='_blank' href='${feature["@id"]}'>See Annotation Data</a></div>`
+        }
+        if(feature.properties.thumbnail) {
+            popupContent += `<div class="featureInfo centered"><img src="${feature.properties.thumbnail}"\></div>`
         }
     }
     layer.bindPopup(popupContent);
