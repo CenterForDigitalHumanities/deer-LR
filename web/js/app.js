@@ -814,7 +814,7 @@ LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
  * @param {type} event
  * @return {undefined}
  */
-LR.utils.saveFieldNotesInExperience = function(event){
+LR.utils.saveFieldNotesInExperience = function(event, real=false){
     let notesSoFar = document.getElementById("experienceFieldNotes").value
     let newNotes = document.getElementById("fieldNotesEntry").value
     if(newNotes !== notesSoFar){
@@ -825,8 +825,13 @@ LR.utils.saveFieldNotesInExperience = function(event){
         })
         document.getElementById("experienceFieldNotes").dispatchEvent(inputEvent)
     }
-     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
-    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Experience form has a new value for field notes, trigger the update.            
+    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
+    if(startExperience.classList.contains("is-hidden")){
+       document.getElementById("theExperience").querySelector("input[type='submit']").click() //Experience form has a new value for field notes, trigger the update.            
+    }
+    else{
+        alert("The field notes will be saved when you submit the form with 'Save' or 'Update'")
+    }
 }
 
 /**

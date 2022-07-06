@@ -116,7 +116,7 @@
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
         <h2 class="text-primary">Lived Religion Experience</h2>
-        <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
+        <div class="card" id="fieldNotesFloater" expanded="false">
             <div class="card_body">
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This Experience</h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
@@ -169,8 +169,8 @@
                     <label> Provide other details or a description if desired</label>
                     <textarea deer-key="description"></textarea>
                     
-                    <label title="Provide any general notes in relation to this experience.">Notes</label>
-                    <textarea type="text" title="Provide any general notes in relation to this experience." deer-key="notes"> </textarea>
+                    <label> Provide any other general notes if desired</label>
+                    <textarea deer-key="notes"></textarea>
 
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Linked Media</header>
@@ -183,7 +183,6 @@
                         <label>Link a video: </label>
                         <input type="url" deer-key="video" >
                     </div>
-
 
                     <input type="submit" value="Save Data and Review" />
                 </form>
@@ -340,7 +339,7 @@
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+//                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let e = event.target.querySelector(".locDropdown")
                     let locName = e.options[e.selectedIndex].text
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
@@ -422,7 +421,7 @@
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+//                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let locDropdown = event.target.querySelector(".locDropdown")
                     let locName = locDropdown.options[locDropdown.selectedIndex].text
                     expName = 
