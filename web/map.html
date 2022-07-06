@@ -53,6 +53,8 @@ and open the template in the editor.
             .featureInfo{
                 margin: 4px 0px;
                 font-family: monospace;
+                border-bottom: 1px solid black;
+                font-size: 8pt;
             }
             
             .featureInfo label{
@@ -94,7 +96,17 @@ and open the template in the editor.
               background-color: white;
             }
           }
-           
+          
+          /* Help with phones and tablets */
+@media only screen and (max-width: 763px) {
+        #leafletInstanceContainer {
+            height: 50em;
+        }
+        footer {
+            font-size:  65%;
+        }
+    }
+
         </style>
     </head>
     
