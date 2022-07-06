@@ -128,7 +128,12 @@
                     <label>National Origin</label>
                     <input type="text" deer-key="nationality">
                     <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" >
+                    <input type="url" deer-key="image" id="depiction">
+                    <p id="depictionPreview" class="text-center"></p>
+                    <label>Link audio: </label>
+                    <input type="url" deer-key="audio" >
+                    <label>Link a video: </label>
+                    <input type="url" deer-key="video" >
                     <label title="Provide any general notes in relation to this person.">Notes</label>
                     <textarea type="text" title="Provide any general notes in relation to this person." deer-key="notes"> </textarea>
                     <footer>
@@ -161,6 +166,25 @@
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
         })   
+        
+        /**
+         * Do a thumbnail preview when a user links a depiction
+         * @type {type}
+         */
+        depiction.addEventListener("input",event=>{
+            let url = event.target.value
+            if(url) {
+                try {
+                    fetch(url).then(res=>{
+                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
+                    })
+                } catch(err){
+                    depictionPreview.innerHTML = ``
+                }
+            } else {
+                depictionPreview.innerHTML = ``
+            }
+        })
         
         /**
          * Handle Login and Logout across tabs

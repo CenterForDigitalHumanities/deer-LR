@@ -314,9 +314,14 @@
                         <option value="otherPublic">Other Public</option>
                     </select>
                     <!--<h3> Upload Media </h3>-->
-                    <label>Link a photograph or depiction </label>
-                    <input type="url" deer-key="image" id="depiction" >
+                    <label>Link a photograph or depiction: </label>
+                    <input type="url" deer-key="image" id="depiction">
                     <p id="depictionPreview" class="text-center"></p>
+                    <label>Link audio: </label>
+                    <input type="url" deer-key="audio" >
+                    <label>Link a video: </label>
+                    <input type="url" deer-key="video" >
+                    
                     <label title="Provide any general notes in relation to this location.">Notes</label>
                     <textarea type="text" title="Provide any general notes in relation to this location." deer-key="notes"> </textarea>
                     <div class="row">
@@ -373,6 +378,25 @@
         })
         
         /**
+         * Do a thumbnail preview when a user links a depiction
+         * @type {type}
+         */
+        depiction.addEventListener("input",event=>{
+            let url = event.target.value
+            if(url) {
+                try {
+                    fetch(url).then(res=>{
+                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
+                    })
+                } catch(err){
+                    depictionPreview.innerHTML = ``
+                }
+            } else {
+                depictionPreview.innerHTML = ``
+            }
+        })
+        
+        /**
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
@@ -394,20 +418,6 @@
             document.location.href="dashboard.html"
         })
 
-        depiction.addEventListener("input",event=>{
-            let url = event.target.value
-            if(url) {
-                try {
-                    fetch(url).then(res=>{
-                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
-                    })
-                } catch(err){
-                    depictionPreview.innerHTML = ``
-                }
-            } else {
-                depictionPreview.innerHTML = ``
-            }
-        })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>

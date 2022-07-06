@@ -125,7 +125,8 @@
                     <!-- TODO -->
                     <!--<h3> Upload Media </h3>-->
                     <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" >
+                    <input type="url" deer-key="image" id="depiction">
+                    <p id="depictionPreview" class="text-center"></p>
                     <label>Link audio: </label>
                     <input type="url" deer-key="audio" >
                     <label>Link a video: </label>
@@ -197,6 +198,25 @@
 
             }
 
+        })
+        
+        /**
+         * Do a thumbnail preview when a user links a depiction
+         * @type {type}
+         */
+        depiction.addEventListener("input",event=>{
+            let url = event.target.value
+            if(url) {
+                try {
+                    fetch(url).then(res=>{
+                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
+                    })
+                } catch(err){
+                    depictionPreview.innerHTML = ``
+                }
+            } else {
+                depictionPreview.innerHTML = ``
+            }
         })
 
         /**

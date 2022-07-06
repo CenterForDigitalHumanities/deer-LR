@@ -175,9 +175,9 @@
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Linked Media</header>
                         <p class="text-primary"><small>Optionally link to media from this event. 
-                            Media specific to an object, person, or organization should not be added here.</small></p>
                         <label>Link a photograph or depiction: </label>
-                        <input type="url" deer-key="image" >
+                        <input type="url" deer-key="image" id="depiction">
+                        <p id="depictionPreview" class="text-center"></p>
                         <label>Link audio: </label>
                         <input type="url" deer-key="audio" >
                         <label>Link a video: </label>
@@ -504,6 +504,25 @@
         })
         
         /**
+         * Do a thumbnail preview when a user links a depiction
+         * @type {type}
+         */
+        depiction.addEventListener("input",event=>{
+            let url = event.target.value
+            if(url) {
+                try {
+                    fetch(url).then(res=>{
+                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
+                    })
+                } catch(err){
+                    depictionPreview.innerHTML = ``
+                }
+            } else {
+                depictionPreview.innerHTML = ``
+            }
+        })
+        
+        /**
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
@@ -524,6 +543,7 @@
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
             document.location.href="dashboard.html"
         })
+        
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
