@@ -10,7 +10,10 @@
     <!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" accesskey=""crossorigin=""></script>
     <style>
         #leafletPreview {
             height: 30rem;
@@ -44,9 +47,6 @@
                         <label>Longitude</label>
                         <input id="leafLong" step=".000000001" type="number">
                     </div>
-
-                    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
-                    <!--<script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>-->
 
                     <script>
                         var previewMap = L.map('leafletPreview').setView([38.628009, -90.201101], 16)
@@ -317,8 +317,8 @@
                     <label>Link a photograph or depiction </label>
                     <input type="url" deer-key="image" id="depiction" >
                     <p id="depictionPreview" class="text-center"></p>
-                    <label>Tags separated by ','</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">
+                    <label title="Provide any general notes in relation to this location.">Notes</label>
+                    <textarea type="text" title="Provide any general notes in relation to this location." deer-key="notes"> </textarea>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>

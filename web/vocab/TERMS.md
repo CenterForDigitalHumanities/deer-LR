@@ -45,6 +45,9 @@
 ## formerLocations
 - Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
 
+## notes
+- Descriptive notes about an entity.  More generalized than field notes.  See http://id.worldcat.org/fast/1039599/.
+
 ## fieldNotes
 - Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
 

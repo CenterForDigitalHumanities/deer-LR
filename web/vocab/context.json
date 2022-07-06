@@ -250,6 +250,7 @@
          "@id":"ebu:hasArtefactRelatedLocation",
          "@container":"@set"
       },
+      "notes" :"fast:1039599",
       "fieldNotes":"fast:2007231",
       "religiousTradition":"lr:religiousTradition",
       "secondaryFunction":"lr:secondaryFunction",
