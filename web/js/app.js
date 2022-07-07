@@ -139,7 +139,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     document.getElementById("theExperience").setAttribute("deer-id", entityID)
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                 }
                 else{
                     //Determine if the current user is the creator of this entity.  If so, they can view it.
@@ -152,7 +151,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                             document.getElementById("theExperience").setAttribute("deer-id", entityID)
                             document.getElementById("startExperience").classList.add("is-hidden")
                             document.getElementById("experienceReview").classList.remove("is-hidden")
-                            document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                         }
                         else{
                             alert("Only an administrator can review this experience.  If this is your experience, contact an administrator.")
@@ -818,6 +816,9 @@ LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
     if(fieldNotesFromData !== undefined){
         let notes_str = LR.utils.getAnnoValue(fieldNotesFromData, [], "string")
         document.getElementById("fieldNotesEntry").value = notes_str
+    }
+    else{
+        document.getElementById("fieldNotesEntry").value = ""
     }
 }
 

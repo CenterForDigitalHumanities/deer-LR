@@ -166,7 +166,7 @@ class FieldNotes extends HTMLElement {
                     During Experience review, you can click 'Save Notes' to record the notes without submitting the form.
                 </p>
                 <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
-                    <textarea id="fieldNotesEntry" type="text"></textarea>
+                    <textarea id="fieldNotesEntry" type="text">Please Wait.  Loading...</textarea>
                     <div id="fieldNotesSaveBtn" class="row is-hidden">
                         <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotes(event)" />
                     </div>
