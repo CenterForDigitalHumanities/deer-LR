@@ -143,3 +143,48 @@ a.tag{
   input, textarea, select {
     margin: 3px 0px;
 }
+
+#fieldNotesFloater{
+    position: fixed;
+    left: 0;
+    top: 3.5em;
+    width: 40px;
+    height: 40px;
+    transition: width 0.5s, box-shadow 1s;
+    -webkit-transition: width 0.5s, box-shadow 1s;
+    -moz-transition: width 0.5s, box-shadow 1s;
+    background-color: lightgray;
+    z-index: 2;
+}
+.fieldNotesInnards{
+    transition: width 0.5s, box-shadow 1s;
+    -webkit-transition: width 0.5s, box-shadow 1s;
+    -moz-transition: width 0.5s, box-shadow 1s;
+}
+.fieldNotesInnards input{
+    margin: .6em;
+}
+
+#notesIcon{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+#notesIcon:hover{
+    border: 2px solid black;
+}
+#notesInfo{
+    position: relative;
+}
+#notesTitle{
+    text-align:center;
+}
+#fieldNotes textarea{
+    height: 185px;
+    max-width: 500px;
+    max-height: 300px;
+    font-size: 90%;
+}

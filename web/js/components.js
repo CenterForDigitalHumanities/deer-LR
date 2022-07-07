@@ -144,3 +144,42 @@ class LrGlobalFeedback extends HTMLElement {
     }
 }
 customElements.define("lr-global-feedback", LrGlobalFeedback)
+
+class FieldNotes extends HTMLElement {
+    constructor() {
+        super()
+        this.innerHTML = `
+            <div class="card" id="fieldNotesFloater" expanded="false">
+            <div class="card_body">
+                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This Experience</h6>
+                <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
+                <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
+                <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
+                <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
+                    <textarea id="fieldNotesEntry" type="text"> </textarea>
+                    <div id="fieldNotesSaveBtn" class="row is-hidden">
+                        <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotes(event)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+    }
+    connectedCallback() {
+        //Need to take the text from this textarea and put it into the hidden deer input for fieldNotes
+        //That deer-input needs to fire an input event for $isDirty
+        this.querySelector('textarea').addEventListener("input",event=>{
+            let notesSoFar = document.querySelector("input[deer-key='fieldNotes']").value
+            let newNotes = this.querySelector('textarea').value
+            if(newNotes !== notesSoFar){
+                document.querySelector("input[deer-key='fieldNotes']").value = newNotes
+                let inputEvent = new Event('input', {
+                    bubbles: false,
+                    cancelable: true
+                })
+               document.querySelector("input[deer-key='fieldNotes']").dispatchEvent(inputEvent)
+            }
+        })
+    }
+}
+customElements.define("lr-field-notes", FieldNotes)

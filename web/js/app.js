@@ -367,15 +367,23 @@ LR.ui.customToggles = function(event){
  */
 LR.ui.toggleFieldNotes = function(event){
     let floater = document.getElementById("fieldNotesFloater")
+    if(document.getElementById("startExperience") && document.getElementById("startExperience").classList.contains("is-hidden")){
+        document.getElementById("fieldNotesSaveBtn").classList.remove("is-hidden")    
+    }
+    else{
+        document.getElementById("fieldNotesSaveBtn").classList.add("is-hidden")    
+    }
     if(floater.getAttribute("expanded") === "true"){
         floater.setAttribute("expanded", "false")
         floater.style.width = "40px"
         floater.style.height = "40px"
+        floater.querySelector(".card_body").style.width= "40px"
         floater.style["box-shadow"] = "none"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.add("is-hidden"))
     }
     else{
         floater.setAttribute("expanded", "true")
+        floater.querySelector(".card_body").style.width= "500px"
         floater.style.width = "550px"
         floater.style.height = "400px"
         floater.style["box-shadow"] = "1px 1px 18px black"
@@ -810,27 +818,16 @@ LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
 }
 
 /**
- * A helper function that saves the field notes from the field notes widget as a fieldNotes annotation on the experiences.  
+ * Actually save the field notes by submitting the form with the new fields notes.
+ * DURING EXPERIENCE REVIEW ONLY!  The button should not be visible.  Make this function dependent upon being on experience.html and reviewing.
  * @param {type} event
  * @return {undefined}
  */
-LR.utils.saveFieldNotesInExperience = function(event, real=false){
-    let notesSoFar = document.getElementById("experienceFieldNotes").value
-    let newNotes = document.getElementById("fieldNotesEntry").value
-    if(newNotes !== notesSoFar){
-        document.getElementById("experienceFieldNotes").value = newNotes
-        let inputEvent = new Event('input', {
-            bubbles: false,
-            cancelable: true
-        })
-        document.getElementById("experienceFieldNotes").dispatchEvent(inputEvent)
-    }
-    //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
-    if(startExperience.classList.contains("is-hidden")){
-       document.getElementById("theExperience").querySelector("input[type='submit']").click() //Experience form has a new value for field notes, trigger the update.            
-    }
-    else{
-        alert("The field notes will be saved when you submit the form with 'Save' or 'Update'")
+LR.utils.saveFieldNotes = function(event, real=false){
+    if(document.querySelector("input[deer-key='fieldNotes']").$isDirty){
+        if(document.getElementById("startExperience") && document.getElementById("startExperience").classList.contains("is-hidden")){
+            document.getElementById("theExperience").querySelector("input[type='submit']").click()         
+        }
     }
 }
 

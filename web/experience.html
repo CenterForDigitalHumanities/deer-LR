@@ -39,43 +39,8 @@
         #experienceContent, #artifactContent{
             height: auto;
         }
-        #fieldNotesFloater{
-            position: fixed;
-            left: 0;
-            top: 3.5em;
-            width: 40px;
-            height: 40px;
-            transition: width 0.5s, box-shadow 1s;
-            -webkit-transition: width 0.5s, box-shadow 1s;
-            -moz-transition: width 0.5s, box-shadow 1s;
-            background-color: lightgray;
-        }
-        .fieldNotesInnards input{
-            margin: .6em;
-        }
-        #notesIcon{
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 40px;
-            width: 40px;
-            cursor: pointer;
-        }
-        #notesIcon:hover{
-            border: 2px solid black;
-        }
-        #notesInfo{
-            position: relative;
-        }
-        #notesTitle{
-            text-align:center;
-        }
-        #fieldNotes textarea{
-            height: 185px;
-            max-width: 500px;
-            max-height: 300px;
-            font-size: 90%;
-        }
+
+        
         .backdrop{
             z-index: 2;
         }
@@ -116,26 +81,13 @@
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
         <h2 class="text-primary">Lived Religion Experience</h2>
-        <div class="card" id="fieldNotesFloater" expanded="false">
-            <div class="card_body">
-                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This Experience</h6>
-                <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
-                <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
-                <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
-                    <textarea id="fieldNotesEntry" type="text"> </textarea>
-                    <div class="row">
-                        <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotesInExperience(event)" />
-                    </div>
-                </div>
-            </div>
-        </div>
+        <lr-field-notes class="card" id="fieldNotesFloater" expanded="false"></lr-field-notes>
         <div id="startExperience" class="card bd-primary" tog="startExperience">
             <div class="card_body">
                 <form id="theExperience" class="experience" deer-type="Event" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/> <!-- https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#ExperienceUpload -->
-                    <input id="experienceFieldNotes" type="hidden" deer-key="fieldNotes" />
+                    <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiences"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
@@ -519,6 +471,7 @@
                 depictionPreview.innerHTML = ``
             }
         })
+        
         
         /**
          * Handle Login and Logout across tabs
