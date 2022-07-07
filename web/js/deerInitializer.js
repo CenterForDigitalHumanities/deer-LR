@@ -289,23 +289,6 @@ DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
 }
 
 /**
- * Retreive the best label for object and return it formatted as HTML to be drawn.  
- * @param {Object} obj some obj to be labeled
- * @param {Object} options for lookup
- */
-DEER.TEMPLATES.label = function (obj, options = {}) {
-    let key = options.key || "@id"
-    let prop = obj[key] || "[ undefined ]"
-    let label = options.label || UTILS.getLabel(obj, prop)
-    try {
-        return `${label}`
-    } catch (err) {
-        return null
-    }
-}
-
-
-/**
  * A sense is being listed somewhere.  List it by additionalType with the description as a tooltip.
  * Note we could probably build something a little better to show.  We would need to put limits on the description. 
  * @param {Object} obj some obj  containing some label annotating it.
