@@ -208,7 +208,7 @@ class LrMediaUpload extends HTMLElement {
             }
         </style>
         <div class="row">
-            <input type="hidden" deer-key="url" deer-input-type="Set" />
+            <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
             <div class="mediaUploadForm" >
                 <div class="row">
                   <label for="file">Select a File to Upload</label><br />
@@ -224,37 +224,6 @@ class LrMediaUpload extends HTMLElement {
             </div>
         </div>
        `
-    }
-    connectedCallback() {
-        const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-        try {
-            let lrMediaUpload = this
-            /**
-             * Fetch to the S3 bucket and react to the response.
-             * @return {undefined}
-             */
-            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
-                event.preventDefault()
-                let form_elem = this
-                let form_data = new FormData(form_elem)
-                fetch(S3_PROXY_PREFIX+"uploadFile", {
-                    method: "POST",
-                    mode: "cors",
-                    body: form_data
-                })
-                .then(resp => {
-                    console.log("Got the response from the upload file servlet");
-                    if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), form_elem)
-                    else resp.text().then(text => LR.media.uploadFailed(text, form_elem))
-                })
-                .catch(err => {
-                    console.error(err)
-                    LR.media.uploadFailed(err, form_elem)
-                })
-            }
-        } catch (err) {
-            // RAWR
-        }
     }
 }
 customElements.define("lr-media-upload", LrMediaUpload)

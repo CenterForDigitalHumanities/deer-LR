@@ -1184,14 +1184,18 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
     keys.forEach(key =>{  
         if(annotationData.hasOwnProperty(key)){
             let input = form.querySelector("input[deer-key='"+key+"']")
-            let areaToPopulate = input.nextElementSibling //div.connectedMedia
-            
+            let areaToPopulate = form.querySelector("div[media-key='"+key+"']")
+            areaToPopulate.innerHTML = ""
             let data_arr = 
             (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
             annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
             [ LR.utils.getAnnoValue(annotationData[key]) ]
     
-            areaToPopulate.innerHTML = data_arr
+            data_arr.forEach(uri => {
+                let elem = `<li><a target="_blank" href="${uri}">${uri}</a></li>`
+                areaToPopulate.innerHTML += elem
+            })
+    
         }
     })
 }
