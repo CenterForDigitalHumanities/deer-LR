@@ -158,24 +158,25 @@
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
-                            <p class="text-primary"><small>Upload media for the event.  It will add to the collection of media files associated with this event.</p>
+                            <p class="text-primary">
+                                <small>
+                                    Upload media for the event.  It will add to the collection of media files associated with this event.
+                                </small>
+                            </p>
                         </div>
-                        <h3>Upload Images</h3>
-                        <lr-media-upload media-key="image"> </lr-media-upload>
-                        <input type="hidden" deer-input-type="Set" deer-key="image" >
-                        <div media-key="image" class="connectedMedia"></div>
-
-                        <h3>Upload Audio or Video</h3>
                         <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
                         <input type="hidden" deer-input-type="Set" deer-key="associatedMedia" >
-                        
                         <div media-key="associatedMedia" class="connectedMedia"></div>
                     </div>
 
                     <div class="card bg-light" style="margin-top: 3px;">
-                        <header class="text-primary">Descriptive Media Files</header>
+                        <header class="text-primary">Set Top Level Media</header>
                         <div class="card_body">
-                            <p class="text-primary"><small>Optionally link to media from this event. Only one link per field.</p>
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this experience.
+                                </small>
+                            </p>
                             <label>Link a photograph or depiction: </label>
                             <input type="url" deer-key="image" id="depiction">
                             <p id="depictionPreview" class="text-center"></p>
