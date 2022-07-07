@@ -193,3 +193,68 @@ class FieldNotes extends HTMLElement {
     }
 }
 customElements.define("lr-field-notes", FieldNotes)
+
+class LrMediaUpload extends HTMLElement {
+    constructor() {
+        super()
+       let dk = this.getAttribute("media-key")
+       this.innerHTML = `
+        <style>
+            .mediaUploadForm{
+                display: none;
+            }
+            input[type="button"]{
+                display: none;
+            }
+        </style>
+        <!--
+        <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> a recordings or performances one at a time: </label>
+        -->
+        
+        <label> Type or paste URI here.  Click 'Upload' to upload a file instead.<label>
+        <input type="url" onchange="LR.media.uriProvided(event)"/>
+        <input type="button" value="Confirm URI" onclick="LR.media.submitURI(event)"
+        <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
+            <input type="file" name="file" class="fileToUpload" onchange="LR.media.fileSelected(event)"/>
+            <input type="submit"/>
+        </form>
+        
+        <!--
+        <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
+        <div class="connectedMedia"></div>
+        -->
+       `
+    }
+    connectedCallback() {
+        const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+        try {
+            let lrMediaUpload = this
+            /**
+             * Fetch to the S3 bucket and react to the response.
+             * @return {undefined}
+             */
+            lrMediaUpload.querySelector('FORM').onsubmit = async function(event) {
+                event.preventDefault()
+                let form_elem = this
+                let form_data = new FormData(form_elem)
+                fetch(S3_PROXY_PREFIX+"uploadFile", {
+                    method: "POST",
+                    mode: "cors",
+                    body: form_data
+                })
+                .then(resp => {
+                    console.log("Got the response from the upload file servlet");
+                    if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), form_elem)
+                    else resp.text().then(text => LR.media.uploadFailed(text, form_elem))
+                })
+                .catch(err => {
+                    console.error(err)
+                    LR.media.uploadFailed(err, form_elem)
+                })
+            }
+        } catch (err) {
+            // RAWR
+        }
+    }
+}
+customElements.define("lr-media-upload", LrMediaUpload)

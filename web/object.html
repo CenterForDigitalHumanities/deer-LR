@@ -124,6 +124,7 @@
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
                     </select>
+<<<<<<< HEAD
                     <!-- TODO -->
                     <!--<h3> Upload Media </h3>-->
                     <label>Link a photograph or depiction: </label>
@@ -133,12 +134,40 @@
                     <input type="url" deer-key="audio" >
                     <label>Link a video: </label>
                     <input type="url" deer-key="video" >
+=======
+>>>>>>> 126-media
                     <label
                         title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Brief
                         Description</label>
                     <textarea id="further_object" type="text" deer-key="description"></textarea>
+<<<<<<< HEAD
                     <label title="Provide any general notes in relation to this object.">Notes</label>
                     <textarea type="text" title="Provide any general notes in relation to this object." deer-key="notes"></textarea>
+=======
+                    
+                    <!-- The idea is the user needs a URI.  They can have it already and provide it, or they can upload something to get one -->
+                    <!-- The web component itself cannot contain the input to change, or a web component would have to be created for each media. -->
+                    <!-- The convention will be Link or Upload where choosing the upload will hide the input until the upload is done and has a URI. -->
+                    <!-- The upload component should be the next element sibling of the element being interacted with to trigger it -->
+                    <!-- It should be the previous element sibling of the input it needs to populate -->
+                    <!-- -->
+                    <h3> Media </h3>
+                    
+                    <!-- ?? Should this whole thing just be the component ?? -->
+                    <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> photographs or depictions one at a time: </label>
+                    <lr-media-upload media-key="image"> </lr-media-upload>
+                    <input type="hidden" deer-input-type="Set" deer-key="image" >
+                    <div media-key="image" class="connectedMedia"></div>
+                    
+                    <!-- Should this whole thing just be the component ?? -->
+                    <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> a recordings or performances one at a time: </label>
+                    <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                    <input type="hidden" deer-input-type="Set" deer-key="associatedMedia" >
+                    <div media-key="associatedMedia" class="connectedMedia"></div>
+                    
+<!--                    <label>Tags separated by ',':</label>
+                    <input disabled type="text" deer-key-x="LR:Tags">-->
+>>>>>>> 126-media
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -196,6 +225,7 @@
                     LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "associatedMedia"])
                     break
                 default:
 

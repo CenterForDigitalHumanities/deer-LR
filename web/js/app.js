@@ -51,6 +51,9 @@ if (typeof(Storage) !== "undefined") {
 }
 LR.ui = {}
 LR.utils = {}
+LR.media = {}
+
+LR.media.S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
@@ -1062,3 +1065,121 @@ LR.utils.isCreator = async function(agentID, item){
     }
     return ((agentID && creatorID) && agentID === creatorID)
 }
+
+/**
+ * Media upload component functionality.  
+ * Perhaps this could be abstracted to DEER.
+ */
+
+/**
+ * User has clicked to upload a file to use the resulting URI as a value for some associated media.
+ * Once user selects the file, fire the form submit to upload the file
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.uploadForURI = function(event){
+    //This usually comes from an <a> inside a <label>, the lr-media-upload component is after that <label>
+    let container = event.target.parentElement
+    let lr_media_component = container.nextElementSibling
+    let media_form = lr_media_component.firstElementChild
+    media_form.querySelector("input[type='file']").click() //Trigger browser file upload UI
+}
+
+/**
+ * User has chosen and confirmed the file.  Let's upload it.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.fileSelected = function(event){
+    //File input is the event.target.  The submit button is just after it.
+    event.target.nextElementSibling.click() //see the onsubmit handler in components.js
+}
+
+/**
+ * The file upload was successful.  Make sure the list of connected media files includes this new one.
+ * @param {type} uri
+ * @param {type} form_elem
+ * @return {undefined}
+ */
+LR.media.uploadComplete = function(uri, form_elem){
+    //The form_elem is inside lr-media-upload.  The input[deer-key] to place a value on and make dirty is the next element.
+    let media_component = form_elem.parentElement
+    let key = media_component.getAttribute("media-key")
+    let deer_input = document.querySelector("input[deer-key='"+key+"']")
+    //let deer_input = media_component.nextElementSibling //maybe we can just do this?  I think we can make it a convention to say it is alway the next sibling.
+    
+    //It is a Set, so make sure to add commas when you need to
+    deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
+    deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
+    deer_input.$isDirty = true
+    
+    //TODO paginate this into the connectedMedia area?  Need to/How to mark it so it looks different from the URIs that are actually saved to the annotation?
+    LR.utils.broadcastEvent(null, "fileUploadSuccess", form_elem, { message: "File upload Successful!  URI is"+ LR.media.S3_URI_PREFIX+uri })
+    
+    //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
+}
+
+LR.media.uploadFailed = function(message, form_elem){
+    form_elem.querySelector('.status').innerHTML = message
+    console.error("upload failed")
+    console.error(message)
+    let media_component = form_elem.parentElement
+    let deer_input = media_component.nextElementSibling
+    deer_input.$isDirty = false
+    LR.utils.broadcastEvent(null, "fileUploadFailed", form_elem, { message: message })
+}
+
+/**
+ * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.
+ * Can be as simple as the array of URIs.  Could be as complex as preview areas and thumbnails, depending on media type. 
+ * 
+ * @param {type} annotationData
+ * @param {type} keys
+ * @param {type} form
+ * @return {undefined}
+ */
+LR.media.showConnectedMedia = function(annotationData, keys, form){
+    keys.forEach(key =>{  
+        if(annotationData.hasOwnProperty(key)){
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            let areaToPopulate = input.nextElementSibling //div.connectedMedia
+            
+            let data_arr = 
+            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
+            annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
+            [ LR.utils.getAnnoValue(annotationData[key]) ]
+    
+            areaToPopulate.innerHTML = data_arr
+        }
+    })
+}
+
+/**
+ * Detection that a user is providing a URI instead of uploading a file.  Might not need this.
+ * Show the "confirm URI" button.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.uriProvided = function(event){
+    //Show the button to save the URI
+    event.target.nextElementSibling.style.display = "block"
+}
+
+/**
+ * User has typed in a URI instead of doing a file upload to produce one.  Add this URI to the set of connected media.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.submitURI = function(event){
+    let uri = event.target.previousElementSibling.value
+    if(uri){
+        let deer_input = event.target.parentElement.nextElementSibling
+        //It is a Set, so make sure to add commas when you need to
+        deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
+        deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
+        deer_input.$isDirty = true
+        //TODO paginate this into the connectedMedia area?  Need to/How to mark it so it looks different from the URIs that are actually saved to the annotation?
+    }
+    //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
+}
+
