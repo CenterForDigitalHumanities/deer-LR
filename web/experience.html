@@ -77,7 +77,18 @@
 </head>
 
 <body>
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
     <lr-field-notes></lr-field-notes>
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
@@ -97,26 +108,46 @@
                     
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown">
+                        <select>
+                            <option disabled selected value=""> Loading... </option>
+                        </select>
+                    </deer-view>
                     <!--TODO allow time range??-->
                     <label> When was this data gathered?</label>
                     <input type="datetime-local" deer-key="startDate" />
                     
                     <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
-                    <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
                     <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the the &#x2b; to the right.. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
-                    <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
                     <label> Select organizations that were involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new organization with the the &#x2b; to the right.. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee-org" />
-                    <deer-view id="organizations" deer-collection="LivedReligionOrganizations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="organizations" deer-collection="LivedReligionOrganizations" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
                     <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the the &#x2b; to the right.. </a> </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
-                    <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
                     <label> Provide other details or a description if desired</label>
                     <textarea deer-key="description"></textarea>
@@ -174,15 +205,27 @@
                                 </select>
                                 <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-key="object" value="">
-                                <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown"></div>
+                                <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown">
+                                    <select>
+                                        <option disabled selected value=""> Loading... </option>
+                                    </select>
+                                </div>
 
                                 <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee" value="">
-                                <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect">
+                                    <select multiple>
+                                        <option disabled selected value=""> Loading... </option>
+                                    </select>
+                                </div>
                                 
                                 <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee-org" value="">
-                                <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect">
+                                    <select multiple>
+                                        <optgroup label="Loading..."></optgroup>
+                                    </select>
+                                </div>
 
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                                 <textarea id="further_sense" type="text" deer-key="description"></textarea>
@@ -241,14 +284,26 @@
                         <textarea id="further_practice" type="text" deer-key="description"></textarea>
                         <label>Is there a particular object this practice is associated with? Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                         <input type="hidden" deer-key="object" value=""> 
-                        <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown"></div>
+                        <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown">
+                            <select>
+                                <optgroup label="Loading..."></optgroup>
+                            </select>
+                        </div>
 
                         <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                         <input deer-input-type="Set" type="hidden" deer-key="attendee" value="">
-                        <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect">
+                            <select multiple>
+                                <optgroup label="Loading..."></optgroup>
+                            </select>
+                        </div>
                         
                         <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
-                        <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect">
+                            <select multiple>
+                                <optgroup label="Loading..."></optgroup>
+                            </select>
+                        </div>
                         
                         <div class="row">
                             <input class="button primary col" type="submit" value="Save Practice">

@@ -13,7 +13,18 @@
 </head>
 
 <body>
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
     <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Object</h2>
@@ -93,7 +104,11 @@
                     <h4>History of this Object</h4>
                     <label>Select Former Location(s):</label>
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" />
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <option disabled selected value=""> Loading... </option>
+                        </select>
+                    </deer-view>
                     <label>Select Former Use(s):</label>
                     <input type="hidden" deer-key="formerUses" deer-input-type="Set">
                     <!-- Looking at these as "former types", so just reuse the type values -->
