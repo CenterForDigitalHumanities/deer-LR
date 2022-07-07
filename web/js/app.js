@@ -375,6 +375,7 @@ LR.ui.toggleFieldNotes = function(event){
     }
     if(floater.getAttribute("expanded") === "true"){
         floater.setAttribute("expanded", "false")
+        floater.style.minHeight = "0px"
         floater.style.width = "40px"
         floater.style.height = "40px"
         floater.querySelector(".card_body").style.width= "40px"
@@ -385,7 +386,7 @@ LR.ui.toggleFieldNotes = function(event){
         floater.setAttribute("expanded", "true")
         floater.querySelector(".card_body").style.width= "500px"
         floater.style.width = "550px"
-        floater.style.height = "400px"
+        floater.style.minHeight = "450px"
         floater.style["box-shadow"] = "1px 1px 18px black"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
     }

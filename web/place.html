@@ -25,7 +25,7 @@
 
 <body>
     <lr-nav></lr-nav>
-
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Location</h2>
         <div class="card bd-primary">
@@ -35,6 +35,7 @@
                     <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
+                    <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
@@ -323,7 +324,7 @@
                     <input type="url" deer-key="video" >
                     
                     <label title="Provide any general notes in relation to this location.">Notes</label>
-                    <textarea type="text" title="Provide any general notes in relation to this location." deer-key="notes"> </textarea>
+                    <textarea type="text" title="Provide any general notes in relation to this location." deer-key="notes"></textarea>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -370,6 +371,7 @@
                     LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
                     LR.utils.populateCoordinates(annotationData, event.target)
                     LR.utils.preSelectType(annotationData, event.target)
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                 break
                 
                 default:

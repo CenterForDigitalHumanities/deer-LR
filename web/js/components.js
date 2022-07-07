@@ -148,15 +148,25 @@ customElements.define("lr-global-feedback", LrGlobalFeedback)
 class FieldNotes extends HTMLElement {
     constructor() {
         super()
+        let entityName = location.pathname.split("/").pop().replace(".html", "")
+        if(entityName){
+            entityName = entityName[0].toUpperCase() + entityName.substring(1)
+        }
+        else{
+            entityName = "Entity"
+        }
         this.innerHTML = `
-            <div class="card" id="fieldNotesFloater" expanded="false">
+        <div class="card" id="fieldNotesFloater" expanded="false">
             <div class="card_body">
-                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This Experience</h6>
+                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This ${entityName}</h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
-                <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
+                <p id="notesInfo" class="fieldNotesInnards is-hidden">
+                    Enter field notes for this ${entityName}.  You can continue to update these as you upload more information.
+                    You must submit the form for the field notes to be recorded, just like filling out any other piece of the form.
+                    During Experience review, you can click 'Save Notes' to record the notes without submitting the form.
+                </p>
                 <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
-                    <textarea id="fieldNotesEntry" type="text"> </textarea>
+                    <textarea id="fieldNotesEntry" type="text"></textarea>
                     <div id="fieldNotesSaveBtn" class="row is-hidden">
                         <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotes(event)" />
                     </div>

@@ -14,7 +14,7 @@
 
 <body>
     <lr-nav></lr-nav>
-
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Organization</h2>
         <div class="card bd-primary">
@@ -22,6 +22,7 @@
                 <form id="organizationForm" class="hidden" deer-type="Organization" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionOrganizations">
+                    <input type="hidden" deer-key="fieldNotes" />
                     <h4>Contact Details</h4>
                     <div class="grouped">
                         <label>Name</label>
@@ -48,7 +49,7 @@
                     <label>Link a video: </label>
                     <input type="url" deer-key="video" >
                     <label title="Provide any general notes in relation to this organization.">Notes</label>
-                    <textarea type="text" title="Provide any general notes in relation to this organization." deer-key="notes"> </textarea>
+                    <textarea type="text" title="Provide any general notes in relation to this organization." deer-key="notes"></textarea>
                     <footer>
                         <input class="button primary" type="submit">
                     </footer>
@@ -79,6 +80,24 @@
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
         })   
+        
+         /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all deer-view-rendered events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
+        addEventListener('deer-form-rendered', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch (whatRecordForm) {
+                case "organizationForm":
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    break
+                default:
+
+            }
+        })
         
         /**
          * Do a thumbnail preview when a user links a depiction

@@ -185,6 +185,6 @@ a.tag{
 #fieldNotes textarea{
     height: 185px;
     max-width: 500px;
-    max-height: 300px;
+    max-height: 41em;
     font-size: 90%;
 }
