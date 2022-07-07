@@ -207,22 +207,22 @@ class LrMediaUpload extends HTMLElement {
                 display: none;
             }
         </style>
-        <!--
-        <label>Link or <a onclick="LR.medai.uploadForURI(event)">Upload</a> a recordings or performances one at a time: </label>
-        -->
-        
-        <label> Type or paste URI here.  Click 'Upload' to upload a file instead.<label>
-        <input type="url" onchange="LR.media.uriProvided(event)"/>
-        <input type="button" value="Confirm URI" onclick="LR.media.submitURI(event)"
-        <form class="mediaUploadForm" enctype="multipart/form-data" method="post">
-            <input type="file" name="file" class="fileToUpload" onchange="LR.media.fileSelected(event)"/>
-            <input type="submit"/>
-        </form>
-        
-        <!--
-        <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
-        <div class="connectedMedia"></div>
-        -->
+        <div class="row">
+                <input type="hidden" deer-key="url" deer-input-type="Set" />
+                <form id="form1" class="mediaUploadForm" enctype="multipart/form-data" method="post">
+                    <div class="row">
+                      <label for="file">Select a File to Upload</label><br />
+                      <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
+                    </div>
+                    <div id="fileName"></div>
+                    <div id="fileSize"></div>
+                    <div id="fileType"></div>
+                    <div class="row">
+                      <input type="button" onclick="LR.media.uploadFile()" value="Upload" />
+                    </div>
+                    <div id="status">. . .</div>
+                </form>
+            </div>
        `
     }
     connectedCallback() {

@@ -154,17 +154,36 @@
                     
                     <label> Provide any other general notes if desired</label>
                     <textarea deer-key="notes"></textarea>
+                    
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary"><small>Upload media for the event.  It will add to the collection of media files associated with this event.</p>
+                        </div>
+                        <h3>Upload Images</h3>
+                        <lr-media-upload media-key="image"> </lr-media-upload>
+                        <input type="hidden" deer-input-type="Set" deer-key="image" >
+                        <div media-key="image" class="connectedMedia"></div>
+
+                        <h3>Upload Audio or Video</h3>
+                        <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                        <input type="hidden" deer-input-type="Set" deer-key="associatedMedia" >
+                        
+                        <div media-key="associatedMedia" class="connectedMedia"></div>
+                    </div>
 
                     <div class="card bg-light" style="margin-top: 3px;">
-                        <header class="text-primary">Linked Media</header>
-                        <p class="text-primary"><small>Optionally link to media from this event. 
-                        <label>Link a photograph or depiction: </label>
-                        <input type="url" deer-key="image" id="depiction">
-                        <p id="depictionPreview" class="text-center"></p>
-                        <label>Link audio: </label>
-                        <input type="url" deer-key="audio" >
-                        <label>Link a video: </label>
-                        <input type="url" deer-key="video" >
+                        <header class="text-primary">Descriptive Media Files</header>
+                        <div class="card_body">
+                            <p class="text-primary"><small>Optionally link to media from this event. Only one link per field.</p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <p id="depictionPreview" class="text-center"></p>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                        </div>
                     </div>
 
                     <input type="submit" value="Save Data and Review" />
@@ -491,7 +510,7 @@
                     LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "attendee-org", "object", "location"], event.target)
                     LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
-                    
+                    LR.media.showConnectedMedia(annotationData, ["image", "associatedMedia"])
                 break
                 case "objectForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)

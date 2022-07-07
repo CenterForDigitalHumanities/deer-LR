@@ -19,11 +19,11 @@ and open the template in the editor.
                 <form id="form1" class="mediaUploadForm" enctype="multipart/form-data" method="post">
                     <div class="row">
                       <label for="file">Select a File to Upload</label><br />
-                      <input type="file" name="file" id="fileToUpload" onchange="fileSelected();"/>
+                      <input type="file" name="file" onchange="LR.UTILS.fileSelected(event)"/>
                     </div>
-                    <div id="fileName"></div>
-                    <div id="fileSize"></div>
-                    <div id="fileType"></div>
+                    <div class="fileName"></div>
+                    <div class="fileSize"></div>
+                    <div class="fileType"></div>
                     <div class="row">
                       <input type="button" onclick="uploadFile()" value="Upload" />
                     </div>
@@ -50,21 +50,6 @@ and open the template in the editor.
             listFilesForDownload()
         }
         
-        function fileSelected() {
-            var file = document.getElementById('fileToUpload').files[0];
-            if (file) {
-              var fileSize = 0;
-              if (file.size > 1024 * 1024)
-                fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
-              else
-                fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
-
-              document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
-              document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
-              document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
-            }
-        }
-        
         async function listFilesForDownload(){
             document.getElementById("availableS3Files").innerHTML = ""
             fetch(S3_PROXY_PREFIX+"listFiles")
@@ -89,7 +74,6 @@ and open the template in the editor.
         }
         
         async function uploadFile() {
-            //NOTE there is no file upload progress with fetch API...
             let form_data = new FormData(document.getElementById('form1'))
             fetch(S3_PROXY_PREFIX+"uploadFile", {
                 method: "POST",
