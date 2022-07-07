@@ -1086,14 +1086,35 @@ LR.media.uploadForURI = function(event){
     media_form.querySelector("input[type='file']").click() //Trigger browser file upload UI
 }
 
+LR.media.uploadFile = function(event){
+    let area = event.target.closest("lr-media-upload")
+    let file = area.closest("input[type='file']").files[0]
+    var data = new FormData()
+    data.append('file', file)
+    fetch(S3_PROXY_PREFIX+"uploadFile", {
+        method: "POST",
+        mode: "cors",
+        body: data
+    })
+    .then(resp => {
+        console.log("Got the response from the upload file servlet");
+        if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), form_elem)
+        else resp.text().then(text => LR.media.uploadFailed(text, form_elem))
+    })
+    .catch(err => {
+        console.error(err)
+        LR.media.uploadFailed(err, form_elem)
+    })
+}
+
 /**
  * User has chosen and confirmed the file.  Let's upload it.
  * @param {type} event
  * @return {undefined}
  */
 LR.media.fileSelected = function(event) {
-    let form = event.target.closest("form");
-    var file = event.target.files[0];
+    let file = event.target.files[0]
+    let area = event.target.closest("lr-media-upload")
     if (file) {
       var fileSize = 0;
       if (file.size > 1024 * 1024)
@@ -1101,9 +1122,9 @@ LR.media.fileSelected = function(event) {
       else
         fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
 
-      form.querySelector('.fileName').innerHTML = 'Name: ' + file.name;
-      form.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize;
-      form.querySelector('.fileType').innerHTML = 'Type: ' + file.type;
+      area.querySelector('.fileName').innerHTML = 'Name: ' + file.name;
+      area.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize;
+      area.querySelector('.fileType').innerHTML = 'Type: ' + file.type;
     }
 }
 /**

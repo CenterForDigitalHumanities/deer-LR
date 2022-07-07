@@ -208,21 +208,21 @@ class LrMediaUpload extends HTMLElement {
             }
         </style>
         <div class="row">
-                <input type="hidden" deer-key="url" deer-input-type="Set" />
-                <form id="form1" class="mediaUploadForm" enctype="multipart/form-data" method="post">
-                    <div class="row">
-                      <label for="file">Select a File to Upload</label><br />
-                      <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
-                    </div>
-                    <div id="fileName"></div>
-                    <div id="fileSize"></div>
-                    <div id="fileType"></div>
-                    <div class="row">
-                      <input type="button" onclick="LR.media.uploadFile()" value="Upload" />
-                    </div>
-                    <div id="status">. . .</div>
-                </form>
+            <input type="hidden" deer-key="url" deer-input-type="Set" />
+            <div class="mediaUploadForm" >
+                <div class="row">
+                  <label for="file">Select a File to Upload</label><br />
+                  <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
+                </div>
+                <div id="fileName"></div>
+                <div id="fileSize"></div>
+                <div id="fileType"></div>
+                <div class="row">
+                  <input type="button" onclick="LR.media.uploadFile(event)" value="Upload" />
+                </div>
+                <div id="status">. . .</div>
             </div>
+        </div>
        `
     }
     connectedCallback() {
