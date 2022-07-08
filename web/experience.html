@@ -105,7 +105,6 @@
                     <h4 class="text-primary">General Details</h4>
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="name" />
-                    <h4 class="text-primary">Involved People, Places, and Things</h4>
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
                     <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown">
@@ -116,6 +115,8 @@
                     <!--TODO allow time range??-->
                     <label> When was this data gathered?</label>
                     <input type="datetime-local" deer-key="startDate" />
+                    
+                    <h4 class="text-primary">Involved People, Places, and Things</h4>
                     
                     <label> Select the Lived Religion researchers that were involved. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new researcher with the the &#x2b; to the right.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />

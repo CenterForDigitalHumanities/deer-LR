@@ -165,6 +165,10 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     }) 
                 }
             }
+            else{
+                //Get rid of loading message in field notes widget
+                document.getElementById("fieldNotesEntry").value = ""
+            }
         break
         case "object":
         case "person":
@@ -191,6 +195,10 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     alert("Only administrators can review and edit entity details at this time.")
                     document.location.href="dashboard.html"
                 }
+            }
+            else{
+                //Get rid of loading message in field notes widget
+                document.getElementById("fieldNotesEntry").value = ""
             }
         break
         case "objects":
