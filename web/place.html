@@ -43,12 +43,13 @@
             <div class="card_body">
                 <form id="locationForm" deer-type="Place" deer-creator deer-motivation="supplementing" 
                 deer-context="[http://lived-religion.rerum.io/deer-lr/vocab/context.json][https://geojson.org/geojson-ld/geojson-context.jsonld]">
-                    <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
+                    <h4>Contact  Details</h4>
+                    <label>Name or Label</label>
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
                     <div title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually." id="leafletPreview" class="col"></div>
                     <input type="hidden" deer-key="geometry" value="{}">
@@ -98,7 +99,7 @@
                     </script>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    
+                    <h4>General Details</h4>
                     <label title="The primary function of this location should determine its type.">Primary Specification</label>
                     <div class="row">
                         <div data-rdf="Accommodation" class="bd-primary text-center card col" title="Accommodation">
@@ -326,15 +327,7 @@
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
                     </select>
-                    <!--<h3> Upload Media </h3>-->
-                    <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" id="depiction">
-                    <p id="depictionPreview" class="text-center"></p>
-                    <label>Link audio: </label>
-                    <input type="url" deer-key="audio" >
-                    <label>Link a video: </label>
-                    <input type="url" deer-key="video" >
-                    
+                    <h4>Media</h4>
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
@@ -369,7 +362,7 @@
                             <div media-key="video"></div>
                         </div>
                     </div>
-                    
+                    <h4>Additional Details</h4>
                     <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
                     

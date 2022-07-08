@@ -49,92 +49,95 @@
                     </div>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    <div class="traditionWrapper col">
-                        <label>Religious Tradition</label>
-                        <select deer-key="religiousTradition">
-                            <option disabled selected value> Not Supplied </option>
-                            <optgroup label="Christian">
-                                <option value="Evangelical Protestant">Evangelical Protestant</option>
-                                <option value="Mainline Protestant">Mainline Protestant</option>
-                                <option value="Historically Black Protestant">Historically Black Protestant</option>
-                                <option value="Catholic">Catholic</option>
-                                <option value="Mormon">Mormon</option>
-                                <option value="Othodox Christian">Orthodox Christian</option>
-                                <option value="Jehova's Witness">Jehovah’s Witness</option>
-                                <option value="Other Christian">Other Christian</option>
-                            </optgroup>
-                            <optgroup label="Jewish">
-                                <option value="Conservative">Conservative</option>
-                                <option value="Reform">Reform</option>
-                                <option value="Orthodox">Orthodox</option>
-                                <option value="Reconstructionist">Reconstructionist</option>
+                    <h4>General Details</h4>
+                    <div class="row">
+                        <div class="traditionWrapper col">
+                            <label>Religious Tradition</label>
+                            <select deer-key="religiousTradition">
+                                <option disabled selected value> Not Supplied </option>
+                                <optgroup label="Christian">
+                                    <option value="Evangelical Protestant">Evangelical Protestant</option>
+                                    <option value="Mainline Protestant">Mainline Protestant</option>
+                                    <option value="Historically Black Protestant">Historically Black Protestant</option>
+                                    <option value="Catholic">Catholic</option>
+                                    <option value="Mormon">Mormon</option>
+                                    <option value="Othodox Christian">Orthodox Christian</option>
+                                    <option value="Jehova's Witness">Jehovah’s Witness</option>
+                                    <option value="Other Christian">Other Christian</option>
+                                </optgroup>
+                                <optgroup label="Jewish">
+                                    <option value="Conservative">Conservative</option>
+                                    <option value="Reform">Reform</option>
+                                    <option value="Orthodox">Orthodox</option>
+                                    <option value="Reconstructionist">Reconstructionist</option>
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Daoist">Daoist</option>
+                                <option value="Confucianism">Confucianism</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Pagan">Pagan</option>
+                                <option value="Indigenous">Indigenous</option>
+                                <option value="Native American Traditions">Native American Traditions</option>
+                                <option value="Other Religions">Other Religions</option>
+                                <option value="Other Faiths">Other Faiths</option>
+                                <option value="Unaffiliated">Unaffiliated</option>
+                                <option value="Atheist">Atheist</option>
+                                <option value="Agnostic">Agnostic</option>
+                                <option value="Humanist">Humanist</option>
+                                <option value="Nothing in particular">Nothing in particular</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Race/Ethnicity</label>
+                            <select deer-key="ethnicity">
+                                <option disabled selected value> Not Supplied </option>
+                                <option value="African American/Black/African">African American/Black/African</option>
+                                <option value="Bosniak">Bosniak</option>
+                                <option value="Caribbean">Caribbean</option>
+                                <option value="East Asian">East Asian</option>
+                                <option value="Hispanic/Latin">Hispanic/Latin</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Bosniak">Native American/indigenous American</option>
+                                <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Pacific Islander">Pacific Islander</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Mixed-Race">Mixed-race</option>
                                 <option value="Other">Other</option>
-                            </optgroup>
-                            <option value="Muslim">Muslim</option>
-                            <option value="Buddhist">Buddhist</option>
-                            <option value="Daoist">Daoist</option>
-                            <option value="Confucianism">Confucianism</option>
-                            <option value="Hindu">Hindu</option>
-                            <option value="Sikh">Sikh</option>
-                            <option value="Pagan">Pagan</option>
-                            <option value="Indigenous">Indigenous</option>
-                            <option value="Native American Traditions">Native American Traditions</option>
-                            <option value="Other Religions">Other Religions</option>
-                            <option value="Other Faiths">Other Faiths</option>
-                            <option value="Unaffiliated">Unaffiliated</option>
-                            <option value="Atheist">Atheist</option>
-                            <option value="Agnostic">Agnostic</option>
-                            <option value="Humanist">Humanist</option>
-                            <option value="Nothing in particular">Nothing in particular</option>
-                        </select>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Gender & Sexuality</label>
+                            <select deer-key="gender">
+                                <option disabled selected value> Not Supplied </option>
+                                <option value="Female-presenting">Female-presenting</option>
+                                <option value="Male-presenting">Male-presenting</option>
+                                <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
+                                <option value="Mostly transgender or queer">Mostly transgender or queer</option>
+                                <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
+                                <option value="Genders are intermingled">Genders are intermingled</option>
+                                <option value="Genders are separated">Genders are separated</option>
+                                <option value="Other">Other</option>
+                                <option value="Not applicable">Not applicable</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Education</label>
+                            <select deer-key="education">
+                                <option disabled selected value> Not Supplied </option>
+                                <option value="Some high school">Some high school</option>
+                                <option value="High school graduate">High school graduate</option>
+                                <option value="Some college">Some college</option>
+                                <option value="College Degree">College degree</option>
+                                <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col">
-                        <label>Race/Ethnicity</label>
-                        <select deer-key="ethnicity">
-                            <option disabled selected value> Not Supplied </option>
-                            <option value="African American/Black/African">African American/Black/African</option>
-                            <option value="Bosniak">Bosniak</option>
-                            <option value="Caribbean">Caribbean</option>
-                            <option value="East Asian">East Asian</option>
-                            <option value="Hispanic/Latin">Hispanic/Latin</option>
-                            <option value="Middle Eastern">Middle Eastern</option>
-                            <option value="Bosniak">Native American/indigenous American</option>
-                            <option value="Native American/indigenous American">North African/Mediterranean</option>
-                            <option value="Pacific Islander">Pacific Islander</option>
-                            <option value="South Asian">South Asian</option>
-                            <option value="Mixed-Race">Mixed-race</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <label>Gender & Sexuality</label>
-                        <select deer-key="gender">
-                            <option disabled selected value> Not Supplied </option>
-                            <option value="Female-presenting">Female-presenting</option>
-                            <option value="Male-presenting">Male-presenting</option>
-                            <option value="Mostly cisgender mixed">Mostly cisgender mixed</option>
-                            <option value="Mostly transgender or queer">Mostly transgender or queer</option>
-                            <option value="Mix of transgender, queer, and cisgender">Mix of transgender, queer, and cisgender</option>
-                            <option value="Genders are intermingled">Genders are intermingled</option>
-                            <option value="Genders are separated">Genders are separated</option>
-                            <option value="Other">Other</option>
-                            <option value="Not applicable">Not applicable</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <label>Education</label>
-                        <select deer-key="education">
-                            <option disabled selected value> Not Supplied </option>
-                            <option value="Some high school">Some high school</option>
-                            <option value="High school graduate">High school graduate</option>
-                            <option value="Some college">Some college</option>
-                            <option value="College Degree">College degree</option>
-                            <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
-                        </select>
-                    </div>
-                
                     <label>National Origin</label>
                     <input type="text" deer-key="nationality">
+                    <h4>Media</h4>
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
@@ -169,6 +172,7 @@
                             <div media-key="video"></div>
                         </div>
                     </div>
+                    <h4>Additional Details</h4>
                     <label title="Provide a short decription of this person with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea  title="Provide a short decription of this person with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
                     <label title="Provide any general notes in relation to this person.">Notes</label>
