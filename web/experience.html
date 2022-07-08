@@ -117,7 +117,7 @@
                     <label> When was this data gathered?</label>
                     <input type="datetime-local" deer-key="startDate" />
                     
-                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new researcher with the the &#x2b; to the right.</label>
+                    <label> Select the Lived Religion researchers that were involved. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new researcher with the the &#x2b; to the right.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
                     <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect">
                         <select multiple>
@@ -125,7 +125,7 @@
                         </select>
                     </deer-view>
                     
-                    <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the the &#x2b; to the right.</label>
+                    <label> Select other people that were involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the the &#x2b; to the right.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
                     <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect">
                         <select multiple>
