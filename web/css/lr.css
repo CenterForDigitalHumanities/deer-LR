@@ -188,3 +188,8 @@ a.tag{
     max-height: 41em;
     font-size: 90%;
 }
+div[media-key="image"] img{
+    max-height: 200px;
+    position: relative;
+    display: inline-block;
+}

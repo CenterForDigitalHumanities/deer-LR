@@ -1205,7 +1205,7 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
                 //Then there is a single URI value to show a preview for
                 areaToPopulate = form.querySelector("div[media-key='"+key+"']")
                 let uri = annotationData[key].value
-                areaToPopulate.innerHTML += `<a target="_blank" href="${uri}">${uri}</a>`
+                areaToPopulate.innerHTML += `<img class="imgPreview" src="${uri}"/>`
             }
         }
     })
