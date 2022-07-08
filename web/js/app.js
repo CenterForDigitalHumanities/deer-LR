@@ -52,8 +52,9 @@ if (typeof(Storage) !== "undefined") {
 LR.ui = {}
 LR.utils = {}
 LR.media = {}
-
 LR.media.S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
+//LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
@@ -1072,38 +1073,24 @@ LR.utils.isCreator = async function(agentID, item){
  * Perhaps this could be abstracted to DEER.
  */
 
-/**
- * User has clicked to upload a file to use the resulting URI as a value for some associated media.
- * Once user selects the file, fire the form submit to upload the file
- * @param {type} event
- * @return {undefined}
- */
-LR.media.uploadForURI = function(event){
-    //This usually comes from an <a> inside a <label>, the lr-media-upload component is after that <label>
-    let container = event.target.parentElement
-    let lr_media_component = container.nextElementSibling
-    let media_form = lr_media_component.firstElementChild
-    media_form.querySelector("input[type='file']").click() //Trigger browser file upload UI
-}
-
 LR.media.uploadFile = function(event){
     let area = event.target.closest("lr-media-upload")
-    let file = area.closest("input[type='file']").files[0]
+    let file = area.querySelector("input[type='file']").files[0]
     var data = new FormData()
     data.append('file', file)
-    fetch(S3_PROXY_PREFIX+"uploadFile", {
+    fetch(LR.media.S3_PROXY_PREFIX+"uploadFile", {
         method: "POST",
         mode: "cors",
         body: data
     })
     .then(resp => {
         console.log("Got the response from the upload file servlet");
-        if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), form_elem)
-        else resp.text().then(text => LR.media.uploadFailed(text, form_elem))
+        if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), area)
+        else resp.text().then(text => LR.media.uploadFailed(text, area))
     })
     .catch(err => {
         console.error(err)
-        LR.media.uploadFailed(err, form_elem)
+        LR.media.uploadFailed(err, area)
     })
 }
 
@@ -1133,42 +1120,50 @@ LR.media.fileSelected = function(event) {
  * @param {type} form_elem
  * @return {undefined}
  */
-LR.media.uploadComplete = function(uri, form_elem){
+LR.media.uploadComplete = function(uri, media_component){
     //The form_elem is inside lr-media-upload.  The input[deer-key] to place a value on and make dirty is the next element.
-    let media_component = form_elem.parentElement
     let key = media_component.getAttribute("media-key")
-    let deer_input = document.querySelector("input[deer-key='"+key+"']")
+    let deer_input = media_component.querySelector("input[deer-key='"+key+"']")
     //let deer_input = media_component.nextElementSibling //maybe we can just do this?  I think we can make it a convention to say it is alway the next sibling.
     
     //It is a Set, so make sure to add commas when you need to
-    deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
-    deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
+    deer_input.value = (deer_input.value) ? deer_input.value+","+uri : uri
+    deer_input.setAttribute("value", deer_input.value)
     deer_input.$isDirty = true
     
-    //TODO paginate this into the connectedMedia area?  Need to/How to mark it so it looks different from the URIs that are actually saved to the annotation?
-    LR.utils.broadcastEvent(null, "fileUploadSuccess", form_elem, { message: "File upload Successful!  URI is"+ LR.media.S3_URI_PREFIX+uri })
-    
+    // Create the event.
+    let event = document.createEvent('Event')
+    event.initEvent('media-upload-success', true, true);
+    event.target = media_component
+    LR.utils.broadcastEvent(event, "fileUploadSuccess", media_component, { message: "File upload Successful!  URI is"+ uri })
+    media_component.querySelector('.status').innerHTML = "Upload Complete.  You should see the URI in the input area now."
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
 
-LR.media.uploadFailed = function(message, form_elem){
-    form_elem.querySelector('.status').innerHTML = message
+LR.media.uploadFailed = function(message, media_component){
+    media_component.querySelector('.status').innerHTML = message
     console.error("upload failed")
     console.error(message)
-    let media_component = form_elem.parentElement
-    let deer_input = media_component.nextElementSibling
+    let deer_input = media_component.querySelector("input[deer-key]")
     deer_input.$isDirty = false
-    LR.utils.broadcastEvent(null, "fileUploadFailed", form_elem, { message: message })
+    // Create the event.
+    let event = document.createEvent('Event')
+    event.initEvent('media-upload-fail', true, true);
+    event.target = media_component
+    LR.utils.broadcastEvent(event, "fileUploadFailed", media_component, { message: message })
 }
 
- LR.media.uploadCanceled = function(message="Upload Cancelled", form_elem) {
-    form_elem.querySelector('.status').innerHTML = message
+ LR.media.uploadCanceled = function(message="Upload Cancelled", media_component) {
+    media_component.querySelector('.status').innerHTML = message
     console.error("upload failed")
     console.error(message)
-    let media_component = form_elem.parentElement
-    let deer_input = media_component.nextElementSibling
+    let deer_input = media_component.querySelector("input[deer-key]")
     deer_input.$isDirty = false
-    LR.utils.broadcastEvent(null, "fileUploadFailed", form_elem, { message: message })
+        // Create the event.
+    let event = document.createEvent('Event')
+    event.initEvent('media-upload-cancelled', true, true);
+    event.target = media_component
+    LR.utils.broadcastEvent(event, "fileUploadFailed", media_component, { message: message })
 }
 
 /**
@@ -1184,18 +1179,26 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
     keys.forEach(key =>{  
         if(annotationData.hasOwnProperty(key)){
             let input = form.querySelector("input[deer-key='"+key+"']")
-            let areaToPopulate = form.querySelector("div[media-key='"+key+"']")
-            areaToPopulate.innerHTML = ""
-            let data_arr = 
-            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
-            annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
-            [ LR.utils.getAnnoValue(annotationData[key]) ]
-    
-            data_arr.forEach(uri => {
-                let elem = `<li><a target="_blank" href="${uri}">${uri}</a></li>`
-                areaToPopulate.innerHTML += elem
-            })
-    
+            let areaToPopulate
+            if(key === "associatedMedia"){
+                //Then there is a Set with a bunch of media and we need it all to show in a list.
+                areaToPopulate = form.querySelector("ul[media-key='"+key+"']")
+                let data_arr = 
+                (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
+                annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
+                [ LR.utils.getAnnoValue(annotationData[key]) ]
+
+                data_arr.forEach(uri => {
+                    let elem = `<li><a target="_blank" href="${uri}">${uri}</a></li>`
+                    areaToPopulate.innerHTML += elem
+                })
+            }
+            else{
+                //Then there is a single URI value to show a preview for
+                areaToPopulate = form.querySelector("div[media-key='"+key+"']")
+                let uri = annotationData[key].value
+                areaToPopulate.innerHTML += `<a target="_blank" href="${uri}">${uri}</a>`
+            }
         }
     })
 }

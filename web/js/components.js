@@ -201,27 +201,33 @@ class LrMediaUpload extends HTMLElement {
        this.innerHTML = `
         <style>
             .mediaUploadForm{
-                display: none;
+                
             }
             input[type="button"]{
-                display: none;
+                
+            }
+            .fileName{
+
+            }
+            .fileType{
+
+            }
+            .fileSize{
+
+            }
+            .status{
+
             }
         </style>
-        <div class="row">
-            <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
-            <div class="mediaUploadForm" >
-                <div class="row">
-                  <label for="file">Select a File to Upload</label><br />
-                  <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
-                </div>
-                <div id="fileName"></div>
-                <div id="fileSize"></div>
-                <div id="fileType"></div>
-                <div class="row">
-                  <input type="button" onclick="LR.media.uploadFile(event)" value="Upload" />
-                </div>
-                <div id="status">. . .</div>
-            </div>
+        <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
+        <div class="mediaUploadForm" >
+            <header class="text-primary">Select a File to Upload</header>
+            <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
+            <div class="fileName"></div>
+            <div class="fileSize"></div>
+            <div class="fileType"></div>
+            <input type="button" class="button secondary" onclick="LR.media.uploadFile(event)" value="Upload" />
+            <div class="status"></div>
         </div>
        `
     }
