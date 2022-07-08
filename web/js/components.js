@@ -229,6 +229,7 @@ class LrMediaUpload extends HTMLElement {
             <input type="button" class="button secondary" onclick="LR.media.uploadFile(event)" value="Upload" />
             <div class="status"></div>
         </div>
+        <header class="text-primary">Connected Media</header>
        `
     }
     connectedCallback() {

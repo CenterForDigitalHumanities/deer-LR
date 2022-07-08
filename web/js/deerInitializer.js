@@ -163,6 +163,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
         let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
         let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
+        let notes = experienceData.notes ? UTILS.getValue(experienceData.notes) : ""
         
         //When setting the names, we should pass the citation source along the name came from.  Sometimes, the value is just bad and needs checked. 
 
@@ -228,9 +229,10 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
         let dateHTML = `<dt>Associated Date and Time</dt><dd>${date}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
+        let notesHTML = `<dt>General Notes</dt><dd>${notes}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + orgHTML + descriptionHTML + artifactsHTML + `</div>`
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + orgHTML + descriptionHTML + notesHTML + artifactsHTML + `</div>`
         return tmpl
     } catch (err) {
         console.log("Could not build Event or ExperienceUpload template.")
