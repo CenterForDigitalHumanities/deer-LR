@@ -1074,8 +1074,9 @@ LR.utils.isCreator = async function(agentID, item){
  */
 
 LR.media.uploadFile = function(event){
-    let area = event.target.closest("lr-media-upload")
-    let file = area.querySelector("input[type='file']").files[0]
+    let media_component = event.target.closest("lr-media-upload")
+    media_component.querySelector('.status').innerHTML = "Uploading, please wait..."
+    let file = media_component.querySelector("input[type='file']").files[0]
     var data = new FormData()
     data.append('file', file)
     fetch(LR.media.S3_PROXY_PREFIX+"uploadFile", {
@@ -1085,12 +1086,12 @@ LR.media.uploadFile = function(event){
     })
     .then(resp => {
         console.log("Got the response from the upload file servlet");
-        if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), area)
-        else resp.text().then(text => LR.media.uploadFailed(text, area))
+        if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), media_component)
+        else resp.text().then(text => LR.media.uploadFailed(text, media_component))
     })
     .catch(err => {
         console.error(err)
-        LR.media.uploadFailed(err, area)
+        LR.media.uploadFailed(err, media_component)
     })
 }
 
@@ -1101,7 +1102,7 @@ LR.media.uploadFile = function(event){
  */
 LR.media.fileSelected = function(event) {
     let file = event.target.files[0]
-    let area = event.target.closest("lr-media-upload")
+    let media_component = event.target.closest("lr-media-upload")
     if (file) {
       var fileSize = 0;
       if (file.size > 1024 * 1024)
@@ -1109,9 +1110,10 @@ LR.media.fileSelected = function(event) {
       else
         fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
 
-      area.querySelector('.fileName').innerHTML = 'Name: ' + file.name;
-      area.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize;
-      area.querySelector('.fileType').innerHTML = 'Type: ' + file.type;
+      media_component.querySelector('.fileName').innerHTML = 'Name: ' + file.name;
+      media_component.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize;
+      media_component.querySelector('.fileType').innerHTML = 'Type: ' + file.type;
+      media_component.querySelector('.status').innerHTML = "File chosen.  Click 'Upload' to upload."
     }
 }
 /**
@@ -1135,8 +1137,8 @@ LR.media.uploadComplete = function(uri, media_component){
     let event = document.createEvent('Event')
     event.initEvent('media-upload-success', true, true);
     event.target = media_component
-    LR.utils.broadcastEvent(event, "fileUploadSuccess", media_component, { message: "File upload Successful!  URI is"+ uri })
-    media_component.querySelector('.status').innerHTML = "Upload Complete.  You should see the URI in the input area now."
+    LR.utils.broadcastEvent(event, "fileUploadSuccess", media_component, { message: "File upload Successful!", 'uri':uri})
+    media_component.querySelector('.status').innerHTML = "Upload Complete.  Don't forget to submit!"
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
 
@@ -1151,9 +1153,10 @@ LR.media.uploadFailed = function(message, media_component){
     event.initEvent('media-upload-fail', true, true);
     event.target = media_component
     LR.utils.broadcastEvent(event, "fileUploadFailed", media_component, { message: message })
+    media_component.querySelector('.status').innerHTML = "Upload Failed."
 }
 
- LR.media.uploadCanceled = function(message="Upload Cancelled", media_component) {
+ LR.media.uploadCancelled = function(message="Upload Cancelled", media_component) {
     media_component.querySelector('.status').innerHTML = message
     console.error("upload failed")
     console.error(message)
@@ -1163,7 +1166,8 @@ LR.media.uploadFailed = function(message, media_component){
     let event = document.createEvent('Event')
     event.initEvent('media-upload-cancelled', true, true);
     event.target = media_component
-    LR.utils.broadcastEvent(event, "fileUploadFailed", media_component, { message: message })
+    LR.utils.broadcastEvent(event, "fileUploadCancelled", media_component, { message: message })
+    media_component.querySelector('.status').innerHTML = "Upload Cancelled"
 }
 
 /**
@@ -1179,6 +1183,7 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
     keys.forEach(key =>{  
         if(annotationData.hasOwnProperty(key)){
             let input = form.querySelector("input[deer-key='"+key+"']")
+            let v = []
             let areaToPopulate
             if(key === "associatedMedia"){
                 //Then there is a Set with a bunch of media and we need it all to show in a list.
@@ -1191,7 +1196,10 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
                 data_arr.forEach(uri => {
                     let elem = `<li><a target="_blank" href="${uri}">${uri}</a></li>`
                     areaToPopulate.innerHTML += elem
+                    v.push(uri)
                 })
+                input.value = v.join()
+                input.setAttribute("value", v.join())
             }
             else{
                 //Then there is a single URI value to show a preview for

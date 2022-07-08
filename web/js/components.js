@@ -231,5 +231,13 @@ class LrMediaUpload extends HTMLElement {
         </div>
        `
     }
+    connectedCallback() {
+        //When a file upload is complete, add it to the list of files attached to this entity.
+        this.addEventListener("fileUploadSuccess",event=>{
+            let media_component = event.target
+            let mediaList = media_component.nextElementSibling
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${event.detail.uri}</a> <b>(MUST submit!)</b></li>`
+        })
+    }
 }
 customElements.define("lr-media-upload", LrMediaUpload)
