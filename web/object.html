@@ -35,7 +35,7 @@
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjects">
                     <input type="hidden" deer-key="fieldNotes" />
-                    <h4>General Details</h4>
+                    <h4 class="text-primary">General Details</h4>
                     <label>Name:</label>
                     <input type="text" deer-key="name">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -101,7 +101,7 @@
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <h4>History of this Object</h4>
+                    <h4 class="text-primary">History of this Object</h4>
                     <label>Select Former Location(s):</label>
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" />
                     <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect">
@@ -126,7 +126,7 @@
                         <option value="Other">Other</option>
                     </select>
                     <div class="selectedEntities"></div>
-                    <h4>Descriptive Information</h4>
+                    <h4 class="text-primary">Descriptive Information</h4>
                     <label>Material(s) this object is made of:</label>
                     <!-- This should probably be a Set -->
                     <textarea deer-key="material"></textarea>
@@ -139,7 +139,7 @@
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
                     </select>
-                    <h4>Media</h4>
+                    <h4 class="text-primary">Media</h4>
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
@@ -174,7 +174,7 @@
                             <div media-key="video"></div>
                         </div>
                     </div>
-                    <h4>Additional Details</h4>
+                    <h4 class="text-primary">Additional Details</h4>
                     <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">
                         Brief Description
                     </label>

@@ -102,10 +102,10 @@
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiences"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
-                    <h4>General Details</h4>
+                    <h4 class="text-primary">General Details</h4>
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="name" />
-                    <h4>Involved People, Places, and Things</h4>
+                    <h4 class="text-primary">Involved People, Places, and Things</h4>
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
                     <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown">
@@ -148,7 +148,7 @@
                             <optgroup label="Loading..."></optgroup>
                         </select>
                     </deer-view>
-                    <h4>Media</h4>
+                    <h4 class="text-primary">Media</h4>
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
@@ -183,7 +183,7 @@
                             <div media-key="video"></div>
                         </div>
                     </div>
-                    <h4>Additional Details</h4>
+                    <h4 class="text-primary">Additional Details</h4>
                     <label> Provide other details or a description if desired</label>
                     <textarea deer-key="description"></textarea>
                     
@@ -215,7 +215,7 @@
                     <div class="card bd-primary">
                         <div class="card_body">
                             <form id="senseForm" deer-type="Sense" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
-                                <h4>What senses are prominent?  Add one at a time.</h4>
+                                <h4 class="text-primary">What senses are prominent?  Add one at a time.</h4>
                                 <input type="hidden" deer-key="creator"/>
                                 <input class="expReference" type="hidden" deer-key="event">
                                 <select deer-key="additionalType">
@@ -260,7 +260,7 @@
                     </div>                    
                 </div>
                 <div tog="practices" class="kind is-hidden">
-                    <h4>What practices are occurring? Add one at a time.</h4>
+                    <h4 class="text-primary">What practices are occurring? Add one at a time.</h4>
                     <form id="practiceForm" deer-type="Practice" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                         <input type="hidden" deer-key="creator" /> 
                         <input class="expReference" type="hidden" deer-key="event"> 

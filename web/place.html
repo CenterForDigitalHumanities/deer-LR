@@ -48,7 +48,7 @@
                     <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
-                    <h4>Contact  Details</h4>
+                    <h4 class="text-primary">Contact  Details</h4>
                     <label>Name or Label</label>
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
                     <div title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually." id="leafletPreview" class="col"></div>
@@ -99,7 +99,7 @@
                     </script>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    <h4>General Details</h4>
+                    <h4 class="text-primary">General Details</h4>
                     <label title="The primary function of this location should determine its type.">Primary Specification</label>
                     <div class="row">
                         <div data-rdf="Accommodation" class="bd-primary text-center card col" title="Accommodation">
@@ -276,7 +276,7 @@
                         </optgroup>
                     </select>
                     <div class="selectedEntities"></div>
-                    <h4>Historical Information</h4>
+                    <h4 class="text-primary">Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" value="">
                     <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect">
@@ -327,7 +327,7 @@
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
                     </select>
-                    <h4>Media</h4>
+                    <h4 class="text-primary">Media</h4>
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
@@ -362,7 +362,7 @@
                             <div media-key="video"></div>
                         </div>
                     </div>
-                    <h4>Additional Details</h4>
+                    <h4 class="text-primary">Additional Details</h4>
                     <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
                     
