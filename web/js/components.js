@@ -190,6 +190,10 @@ class FieldNotes extends HTMLElement {
                document.querySelector("input[deer-key='fieldNotes']").dispatchEvent(inputEvent)
             }
         })
+        
+        if(!LR.utils.getEntityIdFromURL()){
+            this.querySelector("textarea").value = ""
+        }
     }
 }
 customElements.define("lr-field-notes", FieldNotes)

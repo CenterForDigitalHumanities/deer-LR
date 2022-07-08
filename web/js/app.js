@@ -165,10 +165,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     }) 
                 }
             }
-            else{
-                //Get rid of loading message in field notes widget
-                document.getElementById("fieldNotesEntry").value = ""
-            }
         break
         case "object":
         case "person":
