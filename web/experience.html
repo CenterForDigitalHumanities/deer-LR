@@ -149,23 +149,19 @@
                         </select>
                     </deer-view>
                     
-                    <label> Provide other details or a description if desired</label>
-                    <textarea deer-key="description"></textarea>
-                    
-                    <label> Provide any other general notes if desired</label>
-                    <textarea deer-key="notes"></textarea>
-                    
                     <div class="card bg-light" style="margin-top: 3px;">
                         <header class="text-primary">Upload New Media</header>
                         <div class="card_body">
                             <p class="text-primary">
                                 <small>
                                     Upload media for the event.  It will add to the collection of media files associated with this event.
+                                    Even though your files are in the collection you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the files you have uploaded to be saved into this event.
                                 </small>
                             </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
                         </div>
-                        <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
-                        <div media-key="associatedMedia" class="connectedMedia"></div>
                     </div>
 
                     <div class="card bg-light" style="margin-top: 3px;">
@@ -178,13 +174,21 @@
                             </p>
                             <label>Link a photograph or depiction: </label>
                             <input type="url" deer-key="image" id="depiction">
-                            <p id="depictionPreview" class="text-center"></p>
+                            <div media-key="image"></div>
                             <label>Link audio: </label>
                             <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
                             <label>Link a video: </label>
                             <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
                         </div>
                     </div>
+                    
+                    <label> Provide other details or a description if desired</label>
+                    <textarea deer-key="description"></textarea>
+                    
+                    <label> Provide any other general notes if desired</label>
+                    <textarea deer-key="notes"></textarea>
 
                     <input type="submit" value="Save Data and Review" />
                 </form>
@@ -510,7 +514,7 @@
                     LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "attendee-org", "object", "location"], event.target)
                     LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
-                    LR.media.showConnectedMedia(annotationData, ["image", "associatedMedia"], event.target)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
                 break
                 case "objectForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)

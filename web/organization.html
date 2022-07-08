@@ -49,16 +49,45 @@
                     </div>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    <h4 title="This information is not required.">Additional Details</h4>
+                    
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload media for the event.  It will add to the collection of media files associated with this event.
+                                    Even though your files are in the collection you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the files you have uploaded to be saved into this event.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this experience.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+
                     <label title="Provide a short decription of this organization with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea  title="Provide a short decription of this organization with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
-                    <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" id="depiction">
-                    <p id="depictionPreview" class="text-center"></p>
-                    <label>Link audio: </label>
-                    <input type="url" deer-key="audio" >
-                    <label>Link a video: </label>
-                    <input type="url" deer-key="video" >
+                    
                     <label title="Provide any general notes in relation to this organization.">Notes</label>
                     <textarea type="text" title="Provide any general notes in relation to this organization." deer-key="notes"></textarea>
                     <footer>
@@ -104,6 +133,7 @@
             switch (whatRecordForm) {
                 case "organizationForm":
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
                     break
                 default:
 

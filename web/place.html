@@ -99,9 +99,6 @@
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
                     
-                    <h4>Descriptive Properties </h4>
-                    <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
-                    <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
                     <label title="The primary function of this location should determine its type.">Primary Specification</label>
                     <div class="row">
                         <div data-rdf="Accommodation" class="bd-primary text-center card col" title="Accommodation">
@@ -338,6 +335,44 @@
                     <label>Link a video: </label>
                     <input type="url" deer-key="video" >
                     
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload media for the event.  It will add to the collection of media files associated with this event.
+                                    Even though your files are in the collection you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the files you have uploaded to be saved into this event.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this experience.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+                    
+                    <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
+                    <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
+                    
                     <label title="Provide any general notes in relation to this location.">Notes</label>
                     <textarea type="text" title="Provide any general notes in relation to this location." deer-key="notes"></textarea>
                     <div class="row">
@@ -387,6 +422,7 @@
                     LR.utils.populateCoordinates(annotationData, event.target)
                     LR.utils.preSelectType(annotationData, event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
                 break
                 
                 default:
