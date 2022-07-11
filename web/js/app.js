@@ -766,7 +766,10 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
  */
 LR.utils.preSelectType = function(object, form){
     let type = object.hasOwnProperty("additionalType") ? object.additionalType : ""
-    type = type[0] // It is saving twice right now, so this handles the bug for DEMO purposes.  TODO FIXME
+    if(type.value){
+        type = type.value
+    }
+    //type = type[0] // It is saving twice right now, so this handles the bug for DEMO purposes.  TODO FIXME
     if(type){
         var data_key_elements = form.querySelectorAll("[data-rdf]")
         Array.from(data_key_elements).forEach(el => {
