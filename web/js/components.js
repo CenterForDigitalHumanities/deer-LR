@@ -160,7 +160,10 @@ class FieldNotes extends HTMLElement {
             <div class="card_body">
                 <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This ${entityName}</h6>
                 <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
-                <p id="notesInfo" class="fieldNotesInnards is-hidden">
+                <p id="notesInfoShort" class="fieldNotesInnards is-hidden">
+                    Enter field notes for this ${entityName}.  You must submit the form for the field notes to be recorded, just like filling out any other piece of the form.
+                </p>
+                <p id="notesInfoLong" class="fieldNotesInnards is-hidden">
                     Enter field notes for this ${entityName}.  You can continue to update these as you upload more information.
                     You must submit the form for the field notes to be recorded, just like filling out any other piece of the form.
                     During Experience review, you can click 'Save Notes' to record the notes without submitting the form.
@@ -203,27 +206,13 @@ class LrMediaUpload extends HTMLElement {
         super()
        let dk = this.getAttribute("media-key")
        this.innerHTML = `
-        <style>
-            .mediaUploadForm{
-                
-            }
-            input[type="button"]{
-                
-            }
-            .fileName{
-
-            }
-            .fileType{
-
-            }
-            .fileSize{
-
-            }
-            .status{
-
-            }
-        </style>
         <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
+        <div class="supplyURI" >
+            <header class="text-primary">Provide Media URI</header>
+            <input type="text" class="mediaURI"/>
+            <input type="button" class="button secondary" onclick="LR.media.addMediaURI(event)" value="Add" />
+            <div class="uristatus"></div>
+        </div>
         <div class="mediaUploadForm" >
             <header class="text-primary">Select a File to Upload</header>
             <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
@@ -231,7 +220,7 @@ class LrMediaUpload extends HTMLElement {
             <div class="fileSize"></div>
             <div class="fileType"></div>
             <input type="button" class="button secondary" onclick="LR.media.uploadFile(event)" value="Upload" />
-            <div class="status"></div>
+            <div class="mediastatus"></div>
         </div>
         <header class="text-primary">Connected Media</header>
        `
@@ -239,6 +228,13 @@ class LrMediaUpload extends HTMLElement {
     connectedCallback() {
         //When a file upload is complete, add it to the list of files attached to this entity.
         this.addEventListener("fileUploadSuccess",event=>{
+            let media_component = event.target
+            let mediaList = media_component.nextElementSibling
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${event.detail.uri}</a> <b>(MUST submit!)</b></li>`
+        })
+        
+        //When a file upload is complete, add it to the list of files attached to this entity.
+        this.addEventListener("addMediaURISuccess",event=>{
             let media_component = event.target
             let mediaList = media_component.nextElementSibling
             mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${event.detail.uri}</a> <b>(MUST submit!)</b></li>`

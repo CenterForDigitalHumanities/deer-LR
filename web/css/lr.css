@@ -176,7 +176,7 @@ a.tag{
 #notesIcon:hover{
     border: 2px solid black;
 }
-#notesInfo{
+#notesInfoShort, #notesInfoLong{
     position: relative;
 }
 #notesTitle{

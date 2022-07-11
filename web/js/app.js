@@ -373,12 +373,7 @@ LR.ui.customToggles = function(event){
  */
 LR.ui.toggleFieldNotes = function(event){
     let floater = document.getElementById("fieldNotesFloater")
-    if(document.getElementById("startExperience") && document.getElementById("startExperience").classList.contains("is-hidden")){
-        document.getElementById("fieldNotesSaveBtn").classList.remove("is-hidden")    
-    }
-    else{
-        document.getElementById("fieldNotesSaveBtn").classList.add("is-hidden")    
-    }
+    
     if(floater.getAttribute("expanded") === "true"){
         floater.setAttribute("expanded", "false")
         floater.style.minHeight = "0px"
@@ -395,6 +390,15 @@ LR.ui.toggleFieldNotes = function(event){
         floater.style.minHeight = "450px"
         floater.style["box-shadow"] = "1px 1px 18px black"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
+        if(document.getElementById("startExperience") && document.getElementById("startExperience").classList.contains("is-hidden")){
+            document.getElementById("fieldNotesSaveBtn").classList.remove("is-hidden")
+            document.getElementById("notesInfoLong").classList.remove("is-hidden")
+            document.getElementById("notesInfoShort").classList.add("is-hidden")
+        }
+        else{
+            document.getElementById("fieldNotesSaveBtn").classList.add("is-hidden")
+            document.getElementById("notesInfoLong").classList.add("is-hidden")
+        }
     }
     
 }
@@ -1079,7 +1083,7 @@ LR.utils.isCreator = async function(agentID, item){
 
 LR.media.uploadFile = function(event){
     let media_component = event.target.closest("lr-media-upload")
-    media_component.querySelector('.status').innerHTML = "Uploading, please wait..."
+    media_component.querySelector('.mediastatus').innerHTML = "Uploading, please wait..."
     let file = media_component.querySelector("input[type='file']").files[0]
     var data = new FormData()
     data.append('file', file)
@@ -1117,7 +1121,7 @@ LR.media.fileSelected = function(event) {
       media_component.querySelector('.fileName').innerHTML = 'Name: ' + file.name;
       media_component.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize;
       media_component.querySelector('.fileType').innerHTML = 'Type: ' + file.type;
-      media_component.querySelector('.status').innerHTML = "File chosen.  Click 'Upload' to upload."
+      media_component.querySelector('.mediastatus').innerHTML = "File chosen.  Click 'Upload' to upload."
     }
 }
 /**
@@ -1142,12 +1146,12 @@ LR.media.uploadComplete = function(uri, media_component){
     event.initEvent('media-upload-success', true, true);
     event.target = media_component
     LR.utils.broadcastEvent(event, "fileUploadSuccess", media_component, { message: "File upload Successful!", 'uri':uri})
-    media_component.querySelector('.status').innerHTML = "Upload Complete.  Don't forget to submit!"
+    media_component.querySelector('.mediastatus').innerHTML = "Upload Complete.  Don't forget to submit!"
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
 
 LR.media.uploadFailed = function(message, media_component){
-    media_component.querySelector('.status').innerHTML = message
+    media_component.querySelector('.mediastatus').innerHTML = message
     console.error("upload failed")
     console.error(message)
     let deer_input = media_component.querySelector("input[deer-key]")
@@ -1157,11 +1161,11 @@ LR.media.uploadFailed = function(message, media_component){
     event.initEvent('media-upload-fail', true, true);
     event.target = media_component
     LR.utils.broadcastEvent(event, "fileUploadFailed", media_component, { message: message })
-    media_component.querySelector('.status').innerHTML = "Upload Failed."
+    media_component.querySelector('.mediastatus').innerHTML = "Upload Failed."
 }
 
  LR.media.uploadCancelled = function(message="Upload Cancelled", media_component) {
-    media_component.querySelector('.status').innerHTML = message
+    media_component.querySelector('.mediastatus').innerHTML = message
     console.error("upload failed")
     console.error(message)
     let deer_input = media_component.querySelector("input[deer-key]")
@@ -1171,7 +1175,7 @@ LR.media.uploadFailed = function(message, media_component){
     event.initEvent('media-upload-cancelled', true, true);
     event.target = media_component
     LR.utils.broadcastEvent(event, "fileUploadCancelled", media_component, { message: message })
-    media_component.querySelector('.status').innerHTML = "Upload Cancelled"
+    media_component.querySelector('.mediastatus').innerHTML = "Upload Cancelled"
 }
 
 /**
@@ -1216,30 +1220,32 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
 }
 
 /**
- * Detection that a user is providing a URI instead of uploading a file.  Might not need this.
- * Show the "confirm URI" button.
- * @param {type} event
- * @return {undefined}
- */
-LR.media.uriProvided = function(event){
-    //Show the button to save the URI
-    event.target.nextElementSibling.style.display = "block"
-}
-
-/**
  * User has typed in a URI instead of doing a file upload to produce one.  Add this URI to the set of connected media.
  * @param {type} event
  * @return {undefined}
  */
-LR.media.submitURI = function(event){
-    let uri = event.target.previousElementSibling.value
+LR.media.addMediaURI = function(event){
+    let media_component = event.target.closest("lr-media-upload")
+    let key = media_component.getAttribute("media-key")
+    let deer_input = media_component.querySelector("input[deer-key='"+key+"']")
+    let uri = media_component.querySelector(".mediaURI").value
+    let e = document.createEvent('Event')
     if(uri){
-        let deer_input = event.target.parentElement.nextElementSibling
-        //It is a Set, so make sure to add commas when you need to
-        deer_input.value = (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri
-        deer_input.setAttribute("value", (deer_input.value) ? deer_input.value+","+LR.media.S3_URI_PREFIX+uri : LR.media.S3_URI_PREFIX+uri)
-        deer_input.$isDirty = true
-        //TODO paginate this into the connectedMedia area?  Need to/How to mark it so it looks different from the URIs that are actually saved to the annotation?
+        if(deer_input.value.indexOf(uri) === -1){
+            deer_input.value = (deer_input.value) ? deer_input.value+","+uri : uri
+            deer_input.setAttribute("value", deer_input.value)
+            deer_input.$isDirty = true
+            e.initEvent('add-uri-success', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "addMediaURISuccess", media_component, { message: "URI Added.", 'uri':uri})
+            media_component.querySelector('.uristatus').innerHTML = "URI Added.  Don't forget to submit!"
+        }
+        else{
+            e.initEvent('duplicate-media-warning', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "duplicateURIWarning", media_component, { message: "This media is already associated with this entity.", 'uri':uri})
+            media_component.querySelector('.uristatus').innerHTML = "Duplicate URI was not added."
+        }
     }
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
 }
