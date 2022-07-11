@@ -53,8 +53,8 @@ LR.ui = {}
 LR.utils = {}
 LR.media = {}
 LR.media.S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
-//LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
+LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+//LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
