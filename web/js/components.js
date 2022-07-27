@@ -224,20 +224,24 @@ class LrMediaUpload extends HTMLElement {
         </div>
         <header class="text-primary">Connected Media</header>
        `
+        //Make sure to put <ul media-key="{dk}" class="connectedMedia"></ul> after the lr-media element.
+        //It will show the file names for the list of connected media.
     }
     connectedCallback() {
         //When a file upload is complete, add it to the list of files attached to this entity.
         this.addEventListener("fileUploadSuccess",event=>{
             let media_component = event.target
             let mediaList = media_component.nextElementSibling
-            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${event.detail.uri}</a> <b>(MUST submit!)</b></li>`
+            let mediaFileName = event.detail.uri.split('/').pop()
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a> <b>(MUST submit!)</b></li>`
         })
         
         //When a file upload is complete, add it to the list of files attached to this entity.
         this.addEventListener("addMediaURISuccess",event=>{
             let media_component = event.target
             let mediaList = media_component.nextElementSibling
-            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${event.detail.uri}</a> <b>(MUST submit!)</b></li>`
+            let mediaFileName = event.detail.uri.split('/').pop()
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a> <b>(MUST submit!)</b></li>`
         })
     }
 }

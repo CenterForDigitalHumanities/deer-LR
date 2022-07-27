@@ -51,9 +51,9 @@ if (typeof(Storage) !== "undefined") {
 LR.ui = {}
 LR.utils = {}
 LR.media = {}
-LR.media.S3_URI_PREFIX = "https://rerum-server-files.s3.us-east-1.amazonaws.com/"
-LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-//LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
+LR.media.S3_URI_PREFIX = "https://livedreligion.s3.amazonaws.com/"
+//LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
@@ -1189,11 +1189,11 @@ LR.media.uploadFailed = function(message, media_component){
  * @param {type} form
  * @return {undefined}
  */
-LR.media.showConnectedMedia = function(annotationData, keys, form){
-    keys.forEach(key =>{  
+LR.media.showConnectedMedia = async function(annotationData, keys, form){
+    for await (const key of keys){  
         if(annotationData.hasOwnProperty(key)){
             let input = form.querySelector("input[deer-key='"+key+"']")
-            let v = []
+            let mediaURIs = []
             let areaToPopulate
             if(key === "associatedMedia"){
                 //Then there is a Set with a bunch of media and we need it all to show in a list.
@@ -1204,21 +1204,51 @@ LR.media.showConnectedMedia = function(annotationData, keys, form){
                 [ LR.utils.getAnnoValue(annotationData[key]) ]
 
                 data_arr.forEach(uri => {
-                    let elem = `<li><a target="_blank" href="${uri}">${uri}</a></li>`
+                    let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a></li>`
                     areaToPopulate.innerHTML += elem
-                    v.push(uri)
+                    mediaURIs.push(uri)
                 })
-                input.value = v.join()
-                input.setAttribute("value", v.join())
+                input.value = mediaURIs.join()
+                input.setAttribute("value", mediaURIs.join())
             }
             else{
                 //Then there is a single URI value to show a preview for
+                //We can show a preview for image - audio - video. but nothing else.
                 areaToPopulate = form.querySelector("div[media-key='"+key+"']")
                 let uri = annotationData[key].value
-                areaToPopulate.innerHTML += `<img class="imgPreview" src="${uri}"/>`
+                let fileType = await fetch(uri, {"method":"HEAD"}).then(resp => {
+                    return resp.headers.get("content-type") ?? "Unknown"
+                })
+                .catch(err => {
+                    console.error("Could not get HEAD information for file '"+uri+"'")
+                    return err.headers.get("content-type") ?? "Error"
+                })
+                let basicType = fileType.split("/")[0] ?? fileType
+                switch(basicType){
+                    case "image":
+                        areaToPopulate.innerHTML += `<img class="imgPreview" src="${uri}"/>`
+                    break
+                    case "audio":
+                        areaToPopulate.innerHTML += `
+                            <audio controls class="audioPreview">
+                                <source src="${uri}" type="${fileType}">
+                                Audio Not Supported
+                            </audio>`
+                    break
+                    case"video":
+                        areaToPopulate.innerHTML += `
+                            <video controls class="videoPreview">
+                                <source src="${uri}" type="${fileType}">
+                                Audio Not Supported
+                            </video>`
+                    break
+                    default:
+                        console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+                }
+                
             }
         }
-    })
+    }
 }
 
 /**
@@ -1239,8 +1269,8 @@ LR.media.addMediaURI = function(event){
             deer_input.$isDirty = true
             e.initEvent('add-uri-success', true, true);
             e.target = media_component
-            LR.utils.broadcastEvent(e, "addMediaURISuccess", media_component, { message: "URI Added.", 'uri':uri})
-            media_component.querySelector('.uristatus').innerHTML = "URI Added.  Don't forget to submit!"
+            LR.utils.broadcastEvent(e, "addMediaURISuccess", media_component, { message: "Media (URI) Added.", 'uri':uri})
+            media_component.querySelector('.uristatus').innerHTML = "Media (URI) Added.  Don't forget to submit!"
         }
         else{
             e.initEvent('duplicate-media-warning', true, true);

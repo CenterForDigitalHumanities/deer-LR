@@ -190,6 +190,17 @@ a.tag{
 }
 div[media-key="image"] img{
     max-height: 200px;
+    max-width: 400px;
+    position: relative;
+    display: inline-block;
+}
+div[media-key="audio"] audio{
+    position: relative;
+    display: inline-block;
+}
+div[media-key="video"] video{
+    max-height: 200px;
+    max-width: 400px;
     position: relative;
     display: inline-block;
 }
