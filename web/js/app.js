@@ -1221,7 +1221,7 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 })
                 .catch(err => {
                     console.error("Could not get HEAD information for file '"+uri+"'")
-                    return err.headers.get("content-type") ?? "Error"
+                    return "Error"
                 })
                 let basicType = fileType.split("/")[0] ?? fileType
                 switch(basicType){
