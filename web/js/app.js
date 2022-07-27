@@ -52,8 +52,8 @@ LR.ui = {}
 LR.utils = {}
 LR.media = {}
 LR.media.S3_URI_PREFIX = "https://livedreligion.s3.amazonaws.com/"
-//LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
+LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+//LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
@@ -1216,7 +1216,7 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 //We can show a preview for image - audio - video. but nothing else.
                 areaToPopulate = form.querySelector("div[media-key='"+key+"']")
                 let uri = annotationData[key].value
-                let fileType = await fetch(uri, {"method":"HEAD"}).then(resp => {
+                let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
                     return resp.headers.get("content-type") ?? "Unknown"
                 })
                 .catch(err => {
