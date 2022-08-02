@@ -205,7 +205,21 @@
         <div id="experienceMedia" class="card is-hidden"> 
             <a id="toggleMediaArea" area="mediaArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to see associated media">View Media</a>
             <div id="mediaContent" class="card_body is-hidden" tog="mediaArea" title="View associated media in this section">
-                <ul class="scrollableMedia"></ul>
+                <div class="row">
+                    <a class="button primary" area="associated" onclick="LR.ui.customToggles(event)" title="View Associated Media">Associated Media</a>
+                    <a class="button primary" area="assigned" onclick="LR.ui.customToggles(event)" title="View Top Level Media">Top Level Media</a>
+                </div>
+                <div tog="associated" class="kind is-hidden">
+                    <ul class="scrollableMedia"></ul>
+                </div>
+                <div tog="assigned" class="kind is-hidden">
+                    <h4> Image </h4>
+                    <div assigned-media-image></div>
+                    <h4> Audio </h4>
+                    <div assigned-media-audio></div>
+                    <h4> Video </h4>
+                    <div assigned-media-video></div>
+                </div>
             </div>
         </div>
         <div id="experienceArtifacts" class="card is-hidden">
@@ -526,6 +540,7 @@
                     LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                     LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
+                    LR.media.populateAssignedMedia(annotationData, ["image", "audio", "video"])
                     if(annotationData.hasOwnProperty("associatedMedia")){
                         LR.media.populateMediaPreview(annotationData.associatedMedia)
                     }

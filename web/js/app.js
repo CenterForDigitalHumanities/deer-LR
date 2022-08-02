@@ -305,6 +305,7 @@ LR.ui.customToggles = function(event){
         case "startExperience":
             document.getElementById("experienceReview").classList.add("is-hidden")
             document.getElementById("experienceArtifacts").classList.add("is-hidden")
+            document.getElementById("experienceMedia").classList.add("is-hidden")
             document.getElementById("startExperience").classList.remove("is-hidden")
             if(!document.getElementById("artifactContent").classList.contains("is-hidden")){
                 document.getElementById("toggleArtifactArea").click()
@@ -372,6 +373,26 @@ LR.ui.customToggles = function(event){
                 event.target.title = "Expand the area to view associated media"
                 event.target.innerHTML = "View Media"
             }
+        break
+        case "associated":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+            document.querySelector("div[tog='assigned']").classList.add("is-hidden")
+        break
+        case "assigned":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+            document.querySelector("div[tog='associated']").classList.add("is-hidden")
         break
         
         default:
@@ -1191,6 +1212,48 @@ LR.media.uploadFailed = function(message, media_component){
     event.target = media_component
     LR.utils.broadcastEvent(event, "fileUploadCancelled", media_component, { message: message })
     media_component.querySelector('.mediastatus').innerHTML = "Upload Cancelled"
+}
+
+LR.media.populateAssignedMedia = async function(annotationData, keys){
+    for await (const key of keys){
+        let uri = annotationData[key].value
+        let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+            return resp.headers.get("content-type") ?? "Unknown"
+        })
+        .catch(err => {
+            console.error("Could not get HEAD information for file '"+uri+"'")
+            return "Error"
+        })
+        let areasToPopulate = document.querySelectorAll("div[assigned-media-"+key+"]")
+        areasToPopulate.forEach(area => {area.innerHTML = ""})
+        switch(key){
+            case "image":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `<img class="imgPreview" src="${uri}"/>`
+                })
+            break
+            case "audio":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `
+                    <audio controls class="audioPreview">
+                        <source src="${uri}" type="${fileType}">
+                        Audio Not Supported
+                    </audio>`
+                })
+            break
+            case"video":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `
+                    <video controls class="videoPreview">
+                        <source src="${uri}" type="${fileType}">
+                        Audio Not Supported
+                    </video>`
+                })
+            break
+            default:
+                console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+        }
+    }
 }
 
 /**

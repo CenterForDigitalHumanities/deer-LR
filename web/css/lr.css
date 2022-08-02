@@ -224,3 +224,14 @@ li video{
     max-height: 200px;
     max-width: 400px;
 }
+div[assigned-media-image] img{
+    max-height: 400px;
+    max-width: 800px;
+}
+div[assigned-media-audio] audio{
+    
+}
+div[assigned-media-video] video{
+    max-height: 400px;
+    max-width: 800px;
+}
