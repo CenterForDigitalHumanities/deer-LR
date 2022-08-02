@@ -34,14 +34,20 @@ MAP.init =  async function(){
     let expandedEntities = entitiesInCollection.map(async function(locationID){
         return  await UTILS.expand({"@id":locationID})
         .then(expandedLocation => {
-            let targetProps = {
-                "targetID": UTILS.getValue(expandedLocation["@id"]), 
-                "label": UTILS.getLabel(expandedLocation), 
-                "description":UTILS.getValue(expandedLocation.description), 
-                "madeByApp" : "Lived_Religion",
-                "thumbnail" : UTILS.getValue(expandedLocation.image)
+            if(expandedLocation.hasOwnProperty("geometry")){
+                let targetProps = {
+                    "targetID": UTILS.getValue(expandedLocation["@id"]), 
+                    "label": UTILS.getLabel(expandedLocation), 
+                    "description":UTILS.getValue(expandedLocation.description), 
+                    "madeByApp" : "Lived_Religion",
+                    "thumbnail" : UTILS.getValue(expandedLocation.image)
+                }
+                return {"@id":expandedLocation.geometry.source.citationSource, "properties":targetProps, "type":"Feature", "geometry":expandedLocation.geometry.value} 
             }
-            return {"@id":expandedLocation.geometry.source.citationSource, "properties":targetProps, "type":"Feature", "geometry":expandedLocation.geometry.value} 
+            else{
+                //There is no way to show this in the viewer.  Just hand back an empty object so this location is ignored.
+                return {}
+            }
         })
         .catch(err => {
             console.error(err)

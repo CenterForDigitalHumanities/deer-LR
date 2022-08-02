@@ -360,6 +360,19 @@ LR.ui.customToggles = function(event){
             }
             document.querySelector("div[tog='practices']").classList.add("is-hidden")
         break
+        case "mediaArea":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+                event.target.title = "Hide the associated media area"
+                event.target.innerHTML = "Collapse Media Area"
+            }  
+            else{
+                elem.classList.add("is-hidden")
+                event.target.title = "Expand the area to view associated media"
+                event.target.innerHTML = "View Media"
+            }
+        break
         
         default:
     }
@@ -1179,6 +1192,60 @@ LR.media.uploadFailed = function(message, media_component){
     LR.utils.broadcastEvent(event, "fileUploadCancelled", media_component, { message: message })
     media_component.querySelector('.mediastatus').innerHTML = "Upload Cancelled"
 }
+
+/**
+ * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.
+ * Can be as simple as the array of URIs.  Could be as complex as preview areas and thumbnails, depending on media type. 
+ * 
+ * @param {type} mediaList  The expanded items associatedMedia key
+ * @return {undefined}
+ */
+LR.media.populateMediaPreview = async function(mediaList){
+    let media_arr = 
+        (mediaList.hasOwnProperty("value") && mediaList.value.hasOwnProperty("items")) ? mediaList.value.items : 
+        mediaList.hasOwnProperty("items") ? mediaList.items : 
+        [ LR.utils.getAnnoValue(mediaList) ]
+    let areasToPopulate = document.querySelectorAll(".scrollableMedia")
+    areasToPopulate.forEach(area => {area.innerHTML=""})
+    for await (const uri of media_arr){
+        let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+            return resp.headers.get("content-type") ?? "Unknown"
+        })
+        .catch(err => {
+            console.error("Could not get HEAD information for file '"+uri+"'")
+            return "Error"
+        })
+        let basicType = fileType.split("/")[0] ?? fileType
+        switch(basicType){
+            case "image":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `<li><img class="imgPreview scrollable" src="${uri}"/></li>`
+                })
+            break
+            case "audio":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `
+                    <li><audio controls class="audioPreview scrollable">
+                        <source src="${uri}" type="${fileType}">
+                        Audio Not Supported
+                    </audio></li>`
+                })
+            break
+            case"video":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `
+                    <li><video controls class="videoPreview scrollable">
+                        <source src="${uri}" type="${fileType}">
+                        Audio Not Supported
+                    </video></li>`
+                })
+            break
+            default:
+                console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+        }
+    }
+}
+
 
 /**
  * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.

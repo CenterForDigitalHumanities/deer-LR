@@ -204,3 +204,23 @@ div[media-key="video"] video{
     position: relative;
     display: inline-block;
 }
+ul.scrollableMedia {
+   white-space: nowrap;
+   overflow-x: scroll;
+   margin: 3em 0px 0px 0px;
+}
+ul.scrollableMedia li {
+   display:inline;
+   margin-right: 10px
+}
+li img{
+    max-height: 200px;
+    max-width: 400px;
+}
+li audio{
+
+}
+li video{
+    max-height: 200px;
+    max-width: 400px;
+}

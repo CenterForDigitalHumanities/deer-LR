@@ -30,7 +30,7 @@
             margin: 0px;
             max-width: 36em;
         }
-        #experienceArtifacts{
+        #experienceArtifacts, #experienceMedia{
             border-top : 1px solid black;
             min-height: 3.5em;
         }
@@ -202,6 +202,12 @@
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
             </div>
         </div>
+        <div id="experienceMedia" class="card is-hidden"> 
+            <a id="toggleMediaArea" area="mediaArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to see associated media">View Media</a>
+            <div id="mediaContent" class="card_body is-hidden" tog="mediaArea" title="View associated media in this section">
+                <ul class="scrollableMedia"></ul>
+            </div>
+        </div>
         <div id="experienceArtifacts" class="card is-hidden">
             <a id="toggleArtifactArea" area="artifactArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to add sensory information">Add Sensory Information</a>
             <div id="artifactContent" class="card_body is-hidden" tog="artifactArea" title="Add new sensory information in this section">
@@ -370,6 +376,7 @@
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceMedia").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
 //                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let e = event.target.querySelector(".locDropdown")
@@ -452,6 +459,7 @@
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceMedia").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
 //                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let locDropdown = event.target.querySelector(".locDropdown")
@@ -494,6 +502,7 @@
                     document.getElementById("experienceReview").style.filter = "none"
                     document.getElementById("experienceReview").style.backgroundColor = "transparent"
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceMedia").classList.remove("is-hidden")
                     document.getElementById("toggleExpReviewContent").click()
                     document.getElementById("expLoadMessage").style.display = "none"
                 break
@@ -517,6 +526,9 @@
                     LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
                     LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
+                    if(annotationData.hasOwnProperty("associatedMedia")){
+                        LR.media.populateMediaPreview(annotationData.associatedMedia)
+                    }
                 break
                 case "objectForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
