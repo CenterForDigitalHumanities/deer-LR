@@ -1317,6 +1317,35 @@ LR.media.populateMediaPreview = async function(mediaList){
     }
 }
 
+LR.media.unassociateMedia = function(event, uri){
+    let liToRemove = event.target.closest("li")
+    let associatedURIs = event.target.closest("ul[media-key='associatedMedia']")
+    let media_component = associatedURIs.previousElementSibling
+    let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
+    let e = document.createEvent('Event')
+    if(uri){
+        if(deer_input.value.indexOf(uri) > -1){
+            let orig = deer_input.value
+            let orig_arr = orig.split()
+            let spliced_arr = orig_arr.splice(orig_arr.indexOf(uri),1)
+            let newVal = spliced_arr.join()
+            deer_input.value = newVal
+            deer_input.setAttribute("value", newVal)
+            deer_input.$isDirty = true
+            e.initEvent('unassociate-uri-success', true, true);
+            e.target = media_component
+            liToRemove.remove()
+            LR.utils.broadcastEvent(e, "unassociate-uri-success", media_component, { message: "Media (URI) Unassociated.", 'uri':uri})
+            media_component.querySelector('.uristatus').innerHTML = "Media (URI) Unassociated.  Don't forget to submit!"
+        }
+        else{
+            e.initEvent('unassociate-uri-warning', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "unassociate-uri-warning", media_component, { message: "This media could not be unassociated.", 'uri':uri})
+            media_component.querySelector('.uristatus').innerHTML = "Unassociation issue."
+        }
+    }
+}
 
 /**
  * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.
@@ -1335,6 +1364,8 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
             let areaToPopulate
             if(key === "associatedMedia"){
                 //Then there is a Set with a bunch of media and we need it all to show in a list.
+                //The items in this list should be removable
+                
                 areaToPopulate = form.querySelector("ul[media-key='"+key+"']")
                 let data_arr = 
                 (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
@@ -1342,7 +1373,8 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 [ LR.utils.getAnnoValue(annotationData[key]) ]
 
                 data_arr.forEach(uri => {
-                    let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a></li>`
+                    let removeBtn = `<input type="button" class="button primary" onclick="LR.media.unassociateMedia(event, '${uri}')" value="Unassociate"/>`
+                    let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a>${removeBtn}</li>`
                     areaToPopulate.innerHTML += elem
                     mediaURIs.push(uri)
                 })
