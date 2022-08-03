@@ -1326,9 +1326,9 @@ LR.media.unassociateMedia = function(event, uri){
     if(uri){
         if(deer_input.value.indexOf(uri) > -1){
             let orig = deer_input.value
-            let orig_arr = orig.split()
-            let spliced_arr = orig_arr.splice(orig_arr.indexOf(uri),1)
-            let newVal = spliced_arr.join()
+            let orig_arr = orig.split(",")
+            orig_arr.splice(orig_arr.indexOf(uri),1)
+            let newVal = orig_arr.join(",")
             deer_input.value = newVal
             deer_input.setAttribute("value", newVal)
             deer_input.$isDirty = true
