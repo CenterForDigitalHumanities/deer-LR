@@ -55,6 +55,13 @@ LR.media.S3_URI_PREFIX = "https://livedreligion.s3.amazonaws.com/"
 LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
 //LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
 
+//Stop 'Enter' from submitting forms
+document.querySelectorAll("form").forEach(f => {
+    f.addEventListener("keydown", (event) => {
+        return event.key != "Enter";
+    })
+})
+
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
     let prop;
