@@ -251,7 +251,7 @@
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

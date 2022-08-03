@@ -610,6 +610,7 @@ LR.utils.login = async function(loginWidget, data, submitEvent){
         else{
             //TODO maybe handle special?  
             throw new Error("There was a server error logging in.")
+            return {}
         }
     })
     .catch(err => {
@@ -630,7 +631,7 @@ LR.utils.login = async function(loginWidget, data, submitEvent){
     else {
         localStorage.removeItem("lr-user")
         local_socket.broadcast('loginError', {message:"Login Error"})
-        return null
+        alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
     }
 }
 
