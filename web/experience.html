@@ -171,7 +171,9 @@
                         <div class="card_body">
                             <p class="text-primary">
                                 <small>
-                                    Link singular pieces of media that should always be present in views for this experience.
+                                    Link singular pieces of media that should always be present in views for this experience.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
                                 </small>
                             </p>
                             <label>Link a photograph or depiction: </label>
@@ -289,7 +291,6 @@
                         <input type="hidden" deer-key="name"/>
                         <select deer-key="additionalType" onchange="this.previousElementSibling.value=this.options[this.selectedIndex].text">
                             <option disabled selected value> Required </option>
-                            <option value="None">None Noted</option>
                             <option value="EatAction">Eating</option>
                             <option value="DrinkAction">Drinking</option>
                             <option value="PlayAction">Playing</option>
@@ -309,6 +310,7 @@
                             <option value="TradeAction">Trading</option>
                             <option value="GiveAction">Donating</option>
                             <option value="Other">Other</option>
+                            <option value="None">None Noted</option>
                         </select>
                         <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
                         <select deer-key="practiceContext">
@@ -324,6 +326,7 @@
                             <option value="individual">Individual</option>
                             <option value="collective">Collective</option>
                             <option value="other">Other</option>
+                             <option value="None">None Noted</option>
                         </select>
                         <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
                         <textarea id="further_practice" type="text" deer-key="description"></textarea>
@@ -369,6 +372,7 @@
             bubbles: false,
             cancelable: true
         })
+       
 
         /**
         * Catch user detection and trigger draw() for interfaces.
@@ -558,27 +562,7 @@
                 
                 default:
             }
-        })
-        
-        /**
-         * Do a thumbnail preview when a user links a depiction
-         * @type {type}
-         */
-        depiction.addEventListener("input",event=>{
-            let url = event.target.value
-            if(url) {
-                try {
-                    fetch(url).then(res=>{
-                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
-                    })
-                } catch(err){
-                    depictionPreview.innerHTML = ``
-                }
-            } else {
-                depictionPreview.innerHTML = ``
-            }
-        })
-        
+        })  
         
         /**
          * Handle Login and Logout across tabs

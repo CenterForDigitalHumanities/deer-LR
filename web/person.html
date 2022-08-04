@@ -88,7 +88,7 @@
                                 <option value="Atheist">Atheist</option>
                                 <option value="Agnostic">Agnostic</option>
                                 <option value="Humanist">Humanist</option>
-                                <option value="Nothing in particular">Nothing in particular</option>
+                                <option value="None">Nothing in particular</option>
                             </select>
                         </div>
                         <div class="col">
@@ -107,6 +107,7 @@
                                 <option value="South Asian">South Asian</option>
                                 <option value="Mixed-Race">Mixed-race</option>
                                 <option value="Other">Other</option>
+                                <option value="None">N/A</option>
                             </select>
                         </div>
                         <div class="col">
@@ -121,7 +122,7 @@
                                 <option value="Genders are intermingled">Genders are intermingled</option>
                                 <option value="Genders are separated">Genders are separated</option>
                                 <option value="Other">Other</option>
-                                <option value="Not applicable">Not applicable</option>
+                                <option value="None">N/A</option>
                             </select>
                         </div>
                         <div class="col">
@@ -133,6 +134,7 @@
                                 <option value="Some college">Some college</option>
                                 <option value="College Degree">College degree</option>
                                 <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                                <option value="None">N/A</option>
                             </select>
                         </div>
                     </div>
@@ -159,7 +161,9 @@
                         <div class="card_body">
                             <p class="text-primary">
                                 <small>
-                                    Link singular pieces of media that should always be present in views for this experience.
+                                    Link singular pieces of media that should always be present in views for this person.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
                                 </small>
                             </p>
                             <label>Link a photograph or depiction: </label>
@@ -228,24 +232,6 @@
             }
         })
         
-        /**
-         * Do a thumbnail preview when a user links a depiction
-         * @type {type}
-         */
-        depiction.addEventListener("input",event=>{
-            let url = event.target.value
-            if(url) {
-                try {
-                    fetch(url).then(res=>{
-                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
-                    })
-                } catch(err){
-                    depictionPreview.innerHTML = ``
-                }
-            } else {
-                depictionPreview.innerHTML = ``
-            }
-        })
         
         /**
          * Handle Login and Logout across tabs

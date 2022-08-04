@@ -62,6 +62,118 @@ document.querySelectorAll("form").forEach(f => {
     })
 })
 
+//Event listeners for top-level media designations.  This updates the preview for the provided media, and checks if it has changed.
+//Limit the fetches by only fetching under certain conditions, like if the input is a URI or different than the URI for the preview already showing.
+let image = document.querySelector('input[deer-key="image"]')
+let audio = document.querySelector('input[deer-key="audio"]')
+let video = document.querySelector('input[deer-key="video"]')
+if(image){
+    image.addEventListener("change", async (e)=>{
+        let uri = e.target.value
+        let area = e.target.nextElementSibling
+        let originalURI = area.querySelector("img") ? area.querySelector("img").getAttribute("originalValue") : ""
+        let currentPreviewURI = area.querySelector("img") ? area.querySelector("img").getAttribute("src") : ""
+        if(uri === originalURI){
+            e.target.$isDirty = false
+        }
+        if(uri !== currentPreviewURI && (uri.indexOf("http://") || uri.indexOf("https://"))){
+            let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                return resp.headers.get("content-type") ?? "Unknown"
+            })
+            .catch(err => {
+                console.error("Could not get HEAD information for file '"+uri+"'")
+                return "Error"
+            })
+            let basicType = fileType.split("/")[0] ?? fileType
+            if(basicType === "image"){
+                if(area.querySelector("img")){
+                    area.querySelector("img").setAttribute("src", uri)
+                }
+                else{
+                    area.innerHTML = `<img class="imgPreview" originalValue="" src="${uri}"/>`
+                }
+            }
+            else{
+                area.innerHTML = "Preview not available..."
+            }
+        }
+    })    
+}
+if(audio){
+    audio.addEventListener("change", async (e)=>{
+        let uri = event.target.value
+        let area = event.target.nextElementSibling
+        let originalURI = area.querySelector("audio") ? area.querySelector("audio").querySelector("source").getAttribute("originalValue") : ""
+        let currentPreviewURI = area.querySelector("audio") ? area.querySelector("audio").querySelector("source").getAttribute("src") : ""
+        if(uri === originalURI){
+            e.target.$isDirty = false
+        }
+        if(uri !== currentPreviewURI && (uri.indexOf("http://") || uri.indexOf("https://"))){
+            let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                return resp.headers.get("content-type") ?? "Unknown"
+            })
+            .catch(err => {
+                console.error("Could not get HEAD information for file '"+uri+"'")
+                return "Error"
+            })
+            let basicType = fileType.split("/")[0] ?? fileType
+            if(basicType === "audio"){
+                if(area.querySelector("audio")){
+                    area.querySelector("audio").querySelector("source").setAttribute("src", uri)
+                    area.querySelector("audio").querySelector("source").setAttribute("type", fileType)
+                }
+                else{
+                    area.innerHTML = `
+                    <audio controls class="audioPreview">
+                        <source originalValue="" src="${uri}" type="${fileType}"></source>
+                        Audio Not Supported
+                    </audio>`
+                }
+            }
+            else{
+               area.innerHTML = "Preview Not Available..." 
+            }
+        }
+    })    
+}
+if(video){
+    video.addEventListener("change", async (e)=>{
+        let uri = event.target.value
+        let area = event.target.nextElementSibling
+        let originalURI = area.querySelector("video") ? area.querySelector("video").querySelector("source").getAttribute("originalValue") : ""
+        let currentPreviewURI = area.querySelector("video") ? area.querySelector("video").querySelector("source").getAttribute("src") : ""
+        if(uri === originalURI){
+            e.target.$isDirty = false
+        }
+        if(uri !== currentPreviewURI && (uri.indexOf("http://") || uri.indexOf("https://"))){
+            let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                return resp.headers.get("content-type") ?? "Unknown"
+            })
+            .catch(err => {
+                console.error("Could not get HEAD information for file '"+uri+"'")
+                return "Error"
+            })
+            let basicType = fileType.split("/")[0] ?? fileType
+            if(basicType === "video"){
+                if(area.querySelector("video")){
+                    area.querySelector("video").querySelector("source").setAttribute("src", uri)
+                    area.querySelector("video").querySelector("source").setAttribute("type", fileType)
+                }
+                else{
+                    area.innerHTML = `
+                    <video controls class="videoPreview">
+                        <source originalValue="" src="${uri}" type="${fileType}"></source>
+                        Video Not Supported
+                    </video>`
+                }
+            }
+            else{
+               area.innerHTML = "Preview Not Available..." 
+            }
+        }
+    })    
+}
+
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
     let prop;
@@ -1237,14 +1349,14 @@ LR.media.populateAssignedMedia = async function(annotationData, keys){
         switch(key){
             case "image":
                 areasToPopulate.forEach(area =>{
-                    area.innerHTML += `<img class="imgPreview" src="${uri}"/>`
+                    area.innerHTML += `<img originalValue="${uri}" class="imgPreview" src="${uri}"/>`
                 })
             break
             case "audio":
                 areasToPopulate.forEach(area =>{
                     area.innerHTML += `
                     <audio controls class="audioPreview">
-                        <source src="${uri}" type="${fileType}">
+                        <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
                         Audio Not Supported
                     </audio>`
                 })
@@ -1253,8 +1365,8 @@ LR.media.populateAssignedMedia = async function(annotationData, keys){
                 areasToPopulate.forEach(area =>{
                     area.innerHTML += `
                     <video controls class="videoPreview">
-                        <source src="${uri}" type="${fileType}">
-                        Audio Not Supported
+                        <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
+                        Video Not Supported
                     </video>`
                 })
             break
@@ -1297,7 +1409,7 @@ LR.media.populateMediaPreview = async function(mediaList){
                 areasToPopulate.forEach(area =>{
                     area.innerHTML += `
                     <li><audio controls class="audioPreview scrollable">
-                        <source src="${uri}" type="${fileType}">
+                        <source src="${uri}" type="${fileType}"></source>
                         Audio Not Supported
                     </audio></li>`
                 })
@@ -1306,8 +1418,8 @@ LR.media.populateMediaPreview = async function(mediaList){
                 areasToPopulate.forEach(area =>{
                     area.innerHTML += `
                     <li><video controls class="videoPreview scrollable">
-                        <source src="${uri}" type="${fileType}">
-                        Audio Not Supported
+                        <source src="${uri}" type="${fileType}"></source>
+                        Video Not Supported
                     </video></li>`
                 })
             break
@@ -1336,7 +1448,7 @@ LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
             deer_input.setAttribute("value", newVal)
             deer_input.$isDirty = true
             labelToStrike.classList.add("disassociate")
-            let undoElem = `<a href="#" title="Undo Media Disassociation" onclick="LR.media.reassociateMedia(event, ${index}, '${uri}', ${nosubmit})">&#10133;</a>`
+            let undoElem = `<a href="#" title="Undo Media Disassociation" onclick="LR.media.reassociateMedia(event, ${index}, '${uri}', ${nosubmit})">&#9100;</a>`
             ev.target.classList.add("is-hidden")
             if(nosubmit){
                 //This is taking back to the previous state where the change does not need to be submitted.  Remove the MUST submit message
@@ -1419,10 +1531,13 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 [ LR.utils.getAnnoValue(annotationData[key]) ]
 
                 data_arr.forEach(uri => {
-                    let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${uri}')">&#x274C;</a>`
-                    let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a>${removeBtn}</li>`
-                    areaToPopulate.innerHTML += elem
-                    mediaURIs.push(uri)
+                    //Although we probably want it to be possible to remove blanks in they end up in here...
+                    if(uri !== ""){
+                        let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${uri}')">&#x274C;</a>`
+                        let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a>${removeBtn}</li>`
+                        areaToPopulate.innerHTML += elem
+                        mediaURIs.push(uri)
+                    }
                 })
                 input.value = mediaURIs.join()
                 input.setAttribute("value", mediaURIs.join())
@@ -1448,15 +1563,15 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                     case "audio":
                         areaToPopulate.innerHTML += `
                             <audio controls class="audioPreview">
-                                <source originalValue="${uri}" src="${uri}" type="${fileType}">
+                                <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
                                 Audio Not Supported
                             </audio>`
                     break
                     case"video":
                         areaToPopulate.innerHTML += `
                             <video controls class="videoPreview">
-                                <source originalValue="${uri}" src="${uri}" type="${fileType}">
-                                Audio Not Supported
+                                <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
+                                Video Not Supported
                             </video>`
                     break
                     default:

@@ -71,7 +71,9 @@
                         <div class="card_body">
                             <p class="text-primary">
                                 <small>
-                                    Link singular pieces of media that should always be present in views for this experience.
+                                    Link singular pieces of media that should always be present in views for this organization.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
                                 </small>
                             </p>
                             <label>Link a photograph or depiction: </label>
@@ -138,25 +140,6 @@
                     break
                 default:
 
-            }
-        })
-        
-        /**
-         * Do a thumbnail preview when a user links a depiction
-         * @type {type}
-         */
-        depiction.addEventListener("input",event=>{
-            let url = event.target.value
-            if(url) {
-                try {
-                    fetch(url).then(res=>{
-                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
-                    })
-                } catch(err){
-                    depictionPreview.innerHTML = ``
-                }
-            } else {
-                depictionPreview.innerHTML = ``
             }
         })
         

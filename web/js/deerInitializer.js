@@ -70,6 +70,7 @@ DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
         for (let item of allItemsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
         }
+        tmpl += `<option value="None">None</option>`
         tmpl += `</select>`
         return tmpl
     } catch (err) {
@@ -338,6 +339,7 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
             <option value="TradeAction">Trading</option>
             <option value="GiveAction">Donating</option>
             <option value="Other">Other</option>
+            <option value="None">None Noted</option>
         `
         tmpl += "</select>"
         return tmpl
