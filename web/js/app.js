@@ -1317,9 +1317,11 @@ LR.media.populateMediaPreview = async function(mediaList){
     }
 }
 
-LR.media.unassociateMedia = function(event, uri){
-    let liToRemove = event.target.closest("li")
-    let associatedURIs = event.target.closest("ul[media-key='associatedMedia']")
+LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
+    ev.preventDefault()
+    let li = ev.target.closest("li")
+    let labelToStrike = li.firstChild
+    let associatedURIs = ev.target.closest("ul[media-key='associatedMedia']")
     let media_component = associatedURIs.previousElementSibling
     let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
     let e = document.createEvent('Event')
@@ -1327,24 +1329,68 @@ LR.media.unassociateMedia = function(event, uri){
         if(deer_input.value.indexOf(uri) > -1){
             let orig = deer_input.value
             let orig_arr = orig.split(",")
-            orig_arr.splice(orig_arr.indexOf(uri),1)
+            let index = orig_arr.indexOf(uri)
+            orig_arr.splice(index,1)
             let newVal = orig_arr.join(",")
             deer_input.value = newVal
             deer_input.setAttribute("value", newVal)
             deer_input.$isDirty = true
-            e.initEvent('unassociate-uri-success', true, true);
+            labelToStrike.classList.add("disassociate")
+            let undoElem = `<a href="#" title="Undo Media Disassociation" onclick="LR.media.reassociateMedia(event, ${index}, '${uri}', ${nosubmit})">&#10133;</a>`
+            ev.target.classList.add("is-hidden")
+            if(nosubmit){
+                //This is taking back to the previous state where the change does not need to be submitted.  Remove the MUST submit message
+                li.querySelector("b").remove()
+            }
+            else{
+                //This is a state of change that must be submitted.  Add the MUST submit message.
+                undoElem = `<b>(MUST submit!)</b>${undoElem}`
+            }
+            li.innerHTML += (undoElem)
+            e.initEvent('disassociate-uri-success', true, true);
             e.target = media_component
-            liToRemove.remove()
-            LR.utils.broadcastEvent(e, "unassociate-uri-success", media_component, { message: "Media (URI) Unassociated.", 'uri':uri})
-            media_component.querySelector('.uristatus').innerHTML = "Media (URI) Unassociated.  Don't forget to submit!"
+            LR.utils.broadcastEvent(e, "disassociate-uri-success", media_component, { message: "Media (URI) disassociated.", 'uri':uri})
+            //media_component.querySelector('.uristatus').innerHTML = "Media (URI) disassociated.  Don't forget to submit!"
         }
         else{
-            e.initEvent('unassociate-uri-warning', true, true);
+            e.initEvent('disassociate-uri-warning', true, true);
             e.target = media_component
-            LR.utils.broadcastEvent(e, "unassociate-uri-warning", media_component, { message: "This media could not be unassociated.", 'uri':uri})
-            media_component.querySelector('.uristatus').innerHTML = "Unassociation issue."
+            LR.utils.broadcastEvent(e, "disassociate-uri-warning", media_component, { message: "This media could not be disassociated.", 'uri':uri})
+            //media_component.querySelector('.uristatus').innerHTML = "Unassociation issue."
         }
     }
+}
+
+LR.media.reassociateMedia = function (ev, index, uri, nosubmit=false){
+    ev.preventDefault()
+    let associatedURIs = ev.target.closest("ul[media-key='associatedMedia']")
+    let media_component = associatedURIs.previousElementSibling
+    let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
+    let li = ev.target.parentElement
+    let labelToUnstrike = li.firstChild
+    labelToUnstrike.classList.remove("disassociate")
+    let orig = deer_input.value
+    let orig_arr = orig.split(",")
+    orig_arr.splice(index, 0, uri)
+    let newVal = orig_arr.join(",")
+    deer_input.value = newVal
+    deer_input.setAttribute("value", newVal)
+    if(newVal === deer_input.getAttribute("originalValue")){
+        deer_input.$isDirty = false
+    }
+    //Do we need an event for this?
+    if(nosubmit){
+         //This is a state of change that must be submitted.  Restore the MUST submit message.
+        let elem = document.createElement("b")
+        elem.innerHTML = "(MUST submit!)"
+        ev.target.previousElementSibling.classList.remove("is-hidden")
+        ev.target.previousElementSibling.before(elem)
+    }
+    else{
+         ev.target.previousElementSibling.previousElementSibling.classList.remove("is-hidden")
+         ev.target.previousElementSibling.remove()
+    }
+    ev.target.remove()
 }
 
 /**
@@ -1373,13 +1419,14 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 [ LR.utils.getAnnoValue(annotationData[key]) ]
 
                 data_arr.forEach(uri => {
-                    let removeBtn = `<input type="button" class="button primary" onclick="LR.media.unassociateMedia(event, '${uri}')" value="Unassociate"/>`
+                    let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${uri}')">&#x274C;</a>`
                     let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a>${removeBtn}</li>`
                     areaToPopulate.innerHTML += elem
                     mediaURIs.push(uri)
                 })
                 input.value = mediaURIs.join()
                 input.setAttribute("value", mediaURIs.join())
+                input.setAttribute("originalValue", mediaURIs.join())
             }
             else{
                 //Then there is a single URI value to show a preview for
@@ -1396,19 +1443,19 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 let basicType = fileType.split("/")[0] ?? fileType
                 switch(basicType){
                     case "image":
-                        areaToPopulate.innerHTML += `<img class="imgPreview" src="${uri}"/>`
+                        areaToPopulate.innerHTML += `<img class="imgPreview" originalValue="${uri}" src="${uri}"/>`
                     break
                     case "audio":
                         areaToPopulate.innerHTML += `
                             <audio controls class="audioPreview">
-                                <source src="${uri}" type="${fileType}">
+                                <source originalValue="${uri}" src="${uri}" type="${fileType}">
                                 Audio Not Supported
                             </audio>`
                     break
                     case"video":
                         areaToPopulate.innerHTML += `
                             <video controls class="videoPreview">
-                                <source src="${uri}" type="${fileType}">
+                                <source originalValue="${uri}" src="${uri}" type="${fileType}">
                                 Audio Not Supported
                             </video>`
                     break
@@ -1440,13 +1487,13 @@ LR.media.addMediaURI = function(event){
             e.initEvent('add-uri-success', true, true);
             e.target = media_component
             LR.utils.broadcastEvent(e, "addMediaURISuccess", media_component, { message: "Media (URI) Added.", 'uri':uri})
-            media_component.querySelector('.uristatus').innerHTML = "Media (URI) Added.  Don't forget to submit!"
+            //media_component.querySelector('.uristatus').innerHTML = "Media (URI) Added.  Don't forget to submit!"
         }
         else{
             e.initEvent('duplicate-media-warning', true, true);
             e.target = media_component
             LR.utils.broadcastEvent(e, "duplicateURIWarning", media_component, { message: "This media is already associated with this entity.", 'uri':uri})
-            media_component.querySelector('.uristatus').innerHTML = "Duplicate URI was not added."
+            //media_component.querySelector('.uristatus').innerHTML = "Duplicate URI was not added."
         }
     }
     //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!

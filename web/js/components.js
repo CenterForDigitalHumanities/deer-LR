@@ -230,20 +230,20 @@ class LrMediaUpload extends HTMLElement {
     connectedCallback() {
         //When a file upload is complete, add it to the list of files attached to this entity.
         this.addEventListener("fileUploadSuccess",event=>{
-            let removeBtn = `<input type="button" class="button primary" onclick="LR.media.unassociateMedia(event, '${event.detail.uri}'')" value="Unassociate"/>`
+            let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${event.detail.uri}', true)">&#x274C;</a>`
             let media_component = event.target
             let mediaList = media_component.nextElementSibling
             let mediaFileName = event.detail.uri.split('/').pop()
-            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a> <b>(MUST submit!)</b>${removeBtn}</li>`
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a><b class="removeme">(MUST submit!)</b>${removeBtn}</li>`
         })
         
         //When a user supplies a URI and clicks ADD, put it in the list of files attached to this entity.
         this.addEventListener("addMediaURISuccess",event=>{
-            let removeBtn = `<input type="button" class="button primary" onclick="LR.media.unassociate(event, '${event.detail.uri}'')" value="Unassociate"/>`
+            let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${event.detail.uri}', true)">&#x274C;</a>`
             let media_component = event.target
             let mediaList = media_component.nextElementSibling
             let mediaFileName = event.detail.uri.split('/').pop()
-            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a> <b>(MUST submit!)</b>${removeBtn}</li>`
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a> <b class="removeme">(MUST submit!)</b>${removeBtn}</li>`
         })
     }
 }

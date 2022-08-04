@@ -99,6 +99,10 @@ textarea {
     display: none;
 }
 
+.disassociate{
+    text-decoration: line-through wavy red 3px;
+}
+
 .viewCollectionItem{
     margin-left: .5rem
 }
