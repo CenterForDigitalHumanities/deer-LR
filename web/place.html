@@ -245,7 +245,7 @@
                         }
                     </script>
                     <label title="If there are secondary functions for this location, note them here.">Additional Types (if any)</label>
-                    Hold <kbd>CTRL</kbd> to make multiple selections.
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <!-- We are already using additionalType... -->
                     <input type="hidden" deer-input-type="Set" deer-key="secondaryFunction" >
                     <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
@@ -281,6 +281,7 @@
                     <div class="selectedEntities"></div>
                     <h4 class="text-primary">Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" value="">
                     <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect">
                         <select multiple>
@@ -288,6 +289,7 @@
                         </select>
                     </deer-view>
                     <label>Former Use(s)</label>
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <input type="hidden" deer-input-type="Set" deer-key="formerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                         <optgroup label="General Categories"> 
