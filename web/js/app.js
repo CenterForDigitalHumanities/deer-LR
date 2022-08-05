@@ -1362,12 +1362,12 @@ LR.media.populateAssignedMedia = async function(annotationData, keys){
         switch(key){
             case "image":
                 areasToPopulate.forEach(area =>{
-                    area.innerHTML += `<img originalValue="${uri}" class="imgPreview" src="${uri}"/>`
+                    area.innerHTML = `<img originalValue="${uri}" class="imgPreview" src="${uri}"/>`
                 })
             break
             case "audio":
                 areasToPopulate.forEach(area =>{
-                    area.innerHTML += `
+                    area.innerHTML = `
                     <audio controls class="audioPreview">
                         <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
                         Audio Not Supported
@@ -1376,7 +1376,7 @@ LR.media.populateAssignedMedia = async function(annotationData, keys){
             break
             case"video":
                 areasToPopulate.forEach(area =>{
-                    area.innerHTML += `
+                    area.innerHTML = `
                     <video controls class="videoPreview">
                         <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
                         Video Not Supported
@@ -1386,7 +1386,7 @@ LR.media.populateAssignedMedia = async function(annotationData, keys){
             default:
                 console.warn("Cannot generate preview for this file type: '"+fileType+"'")
                 areasToPopulate.forEach(area =>{
-                    area.innerHTML += `Preview Not Available...`
+                    area.innerHTML = `Preview Not Available...`
                 })
         }
     }
@@ -1463,7 +1463,7 @@ LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
     let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
     let e = document.createEvent('Event')
     let originalValue = deer_input.getAttribute("originalValue")
-    let originalValueArr = originalValue ? originValue.split(",") : []
+    let originalValueArr = originalValue ? originalValue.split(",") : []
     let origIndex = originalValueArr.indexOf(uri)
     if(uri){
         if(deer_input.value.indexOf(uri) > -1){
@@ -1570,6 +1570,7 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 //The items in this list should be removable
                 
                 areaToPopulate = form.querySelector("ul[media-key='"+key+"']")
+                areaToPopulate.innerHTML = ""
                 let data_arr = 
                 (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
                 annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
@@ -1592,6 +1593,7 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 //Then there is a single URI value to show a preview for
                 //We can show a preview for image - audio - video. but nothing else.
                 areaToPopulate = form.querySelector("div[media-key='"+key+"']")
+                areaToPopulate.innerHTML = ""
                 let uri = annotationData[key].value
                 let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
                     return resp.headers.get("content-type") ?? "Unknown"
@@ -1603,17 +1605,17 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                 let basicType = fileType.split("/")[0] ?? fileType
                 switch(basicType){
                     case "image":
-                        areaToPopulate.innerHTML += `<img class="imgPreview" originalValue="${uri}" src="${uri}"/>`
+                        areaToPopulate.innerHTML = `<img class="imgPreview" originalValue="${uri}" src="${uri}"/>`
                     break
                     case "audio":
-                        areaToPopulate.innerHTML += `
+                        areaToPopulate.innerHTML = `
                             <audio controls class="audioPreview">
                                 <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
                                 Audio Not Supported
                             </audio>`
                     break
                     case"video":
-                        areaToPopulate.innerHTML += `
+                        areaToPopulate.innerHTML = `
                             <video controls class="videoPreview">
                                 <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
                                 Video Not Supported
