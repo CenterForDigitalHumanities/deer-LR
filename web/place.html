@@ -44,13 +44,13 @@
             <div class="card_body">
                 <form id="locationForm" deer-type="Place" deer-creator deer-motivation="supplementing" 
                 deer-context="[http://lived-religion.rerum.io/deer-lr/vocab/context.json][https://geojson.org/geojson-ld/geojson-context.jsonld]">
+                    <label>Name or Label</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
                     <h4 class="text-primary">Contact  Details</h4>
-                    <label>Name or Label</label>
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
                     <div title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually." id="leafletPreview" class="col"></div>
                     <input type="hidden" deer-key="geometry" value="{}">
