@@ -58,7 +58,11 @@ LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
 //Stop 'Enter' from submitting forms
 document.querySelectorAll("form").forEach(f => {
     f.addEventListener("keydown", (event) => {
-        return event.key != "Enter";
+        if(event.key === "Enter" && event.target.tagName !== "TEXTAREA"){
+            event.preventDefault()
+            event.stopPropagation()
+            return false
+        }
     })
 })
 
@@ -1340,6 +1344,9 @@ LR.media.uploadFailed = function(message, media_component){
     media_component.querySelector('.mediastatus').innerHTML = "Upload Cancelled"
 }
 
+/**
+ * Assigned media is an image, audio, or video file and just one for which there needs to be a preview.
+ */
 LR.media.populateAssignedMedia = async function(annotationData, keys){
     for await (const key of keys){
         let uri = annotationData[key].value ?? ""
@@ -1378,6 +1385,9 @@ LR.media.populateAssignedMedia = async function(annotationData, keys){
             break
             default:
                 console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `Preview Not Available...`
+                })
         }
     }
 }
@@ -1430,6 +1440,9 @@ LR.media.populateMediaPreview = async function(mediaList){
                 })
             break
             default:
+//                areasToPopulate.forEach(area =>{
+//                    area.innerHTML += `<li>Preview Not Available...</li>`
+//                })
                 console.warn("Cannot generate preview for this file type: '"+fileType+"'")
         }
     }
@@ -1607,6 +1620,7 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                             </video>`
                     break
                     default:
+                        areaToPopulate.innerHTML = "Preview Not Available..."
                         console.warn("Cannot generate preview for this file type: '"+fileType+"'")
                 }
                 
