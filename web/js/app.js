@@ -347,12 +347,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                 document.getElementById("experiences").classList.remove("is-hidden")
                 fetch(LR.PUBLIC_EXPERIENCE_LIST).then(r=>r.json())
                 .then(list=>{
-                    //Sort the experiences by label alphabetically
-//                    list.sort((a, b) => {
-//                        let a_label = a.label ?? a.name ?? "Unlabeled Upload"
-//                        let b_label = b.label ?? b.name ?? "Unlabeled Upload"
-//                        return a_label.localeCompare(b_label)
-//                    })
                     LR.ui.experiences = new Set(list.itemListElement['@id'])
                     for (const elem of experiences.querySelectorAll('li')) {
                         elem.querySelector('a.removeCollectionItem').style.display = 'inline-block'
