@@ -206,10 +206,10 @@ class LrMediaUpload extends HTMLElement {
         super()
        let dk = this.getAttribute("media-key")
        this.innerHTML = `
-        <input type="hidden" deer-input-type="Set" deer-key="${dk}" >
+        <input type="hidden" deer-input-type="Set" deer-key="${dk}" value="" originalValue="" >
         <div class="supplyURI" >
             <header class="text-primary">Provide Media URI</header>
-            <input type="text" class="mediaURI"/>
+            <input type="url" class="mediaURI"/>
             <input type="button" class="button secondary" onclick="LR.media.addMediaURI(event)" value="Add" />
             <div class="uristatus"></div>
         </div>

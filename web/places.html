@@ -48,9 +48,20 @@
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "locations") {
+                let lis = Array.from(locations.querySelectorAll("li"))
+                //Sort the experiences by label alphabetically
+                lis.sort((a, b) => {
+                    let a_label = a.querySelector("a").innerHTML ?? ""
+                    let b_label = b.querySelector("a").innerHTML ?? ""
+                    return a_label.localeCompare(b_label)
+                })
+                locations.querySelector("ul").innerHTML = ""
+                for(const li of lis){
+                    locations.querySelector("ul").appendChild(li)
+                }
                 LR.utils.drawInterface(event, "places")
             }
-        }, false)             
+        }, false)            
         
         /**
          * Handle Login and Logout across tabs

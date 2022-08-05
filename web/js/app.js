@@ -347,6 +347,12 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                 document.getElementById("experiences").classList.remove("is-hidden")
                 fetch(LR.PUBLIC_EXPERIENCE_LIST).then(r=>r.json())
                 .then(list=>{
+                    //Sort the experiences by label alphabetically
+//                    list.sort((a, b) => {
+//                        let a_label = a.label ?? a.name ?? "Unlabeled Upload"
+//                        let b_label = b.label ?? b.name ?? "Unlabeled Upload"
+//                        return a_label.localeCompare(b_label)
+//                    })
                     LR.ui.experiences = new Set(list.itemListElement['@id'])
                     for (const elem of experiences.querySelectorAll('li')) {
                         elem.querySelector('a.removeCollectionItem').style.display = 'inline-block'
@@ -400,9 +406,15 @@ LR.ui.getUserEntries = async function(user) {
     })
     .then(response => response.json())
     .catch(err => {return []})
+    //Sort the experiences by label alphabetically
+    experiences.sort((a, b) => {
+        let a_label = a.label ?? a.name ?? "Unlabeled Upload"
+        let b_label = b.label ?? b.name ?? "Unlabeled Upload"
+        return a_label.localeCompare(b_label)
+    })
     previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>{
         let obj = (b.value) ? b.value : b
-        let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
+        let label = obj.label ?? obj.name ?? "Unlabeled Upload"
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
@@ -1336,7 +1348,7 @@ LR.media.uploadFailed = function(message, media_component){
 
 LR.media.populateAssignedMedia = async function(annotationData, keys){
     for await (const key of keys){
-        let uri = annotationData[key].value
+        let uri = annotationData[key].value ?? ""
         let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
             return resp.headers.get("content-type") ?? "Unknown"
         })
@@ -1429,6 +1441,12 @@ LR.media.populateMediaPreview = async function(mediaList){
     }
 }
 
+/**
+ * For media already associated and newly added, diassociate by striking the media and removing it from the deer-input.
+ * @param {type} ev  The click event from the diassociate icon
+ * @param {type} uri  The uri to disassociate
+ * @param {type} nosubmit  A flag to control whether or not to show the "Must Submit" message.                                                                                                                     
+ */
 LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
     ev.preventDefault()
     let li = ev.target.closest("li")
@@ -1437,18 +1455,24 @@ LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
     let media_component = associatedURIs.previousElementSibling
     let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
     let e = document.createEvent('Event')
+    let originalValue = deer_input.getAttribute("originalValue")
+    let originalValueArr = originalValue ? originValue.split(",") : []
+    let origIndex = originalValueArr.indexOf(uri)
     if(uri){
         if(deer_input.value.indexOf(uri) > -1){
             let orig = deer_input.value
             let orig_arr = orig.split(",")
             let index = orig_arr.indexOf(uri)
-            orig_arr.splice(index,1)
+            orig_arr.splice(index, 1)
             let newVal = orig_arr.join(",")
             deer_input.value = newVal
             deer_input.setAttribute("value", newVal)
             deer_input.$isDirty = true
+            if(newVal === deer_input.getAttribute("originalValue")){
+                deer_input.$isDirty = false
+            }
             labelToStrike.classList.add("disassociate")
-            let undoElem = `<a href="#" title="Undo Media Disassociation" onclick="LR.media.reassociateMedia(event, ${index}, '${uri}', ${nosubmit})">&#9100;</a>`
+            let undoElem = `<a class="undo" href="#" title="Undo Media Disassociation" onclick="LR.media.reassociateMedia(event, ${origIndex}, '${uri}', ${nosubmit})">&#9100;</a>`
             ev.target.classList.add("is-hidden")
             if(nosubmit){
                 //This is taking back to the previous state where the change does not need to be submitted.  Remove the MUST submit message
@@ -1473,6 +1497,9 @@ LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
     }
 }
 
+/**
+ * Put a disassociated media URI back into its place.  Put it back at the same index it was spliced, if possible. 
+ */
 LR.media.reassociateMedia = function (ev, index, uri, nosubmit=false){
     ev.preventDefault()
     let associatedURIs = ev.target.closest("ul[media-key='associatedMedia']")
@@ -1482,11 +1509,22 @@ LR.media.reassociateMedia = function (ev, index, uri, nosubmit=false){
     let labelToUnstrike = li.firstChild
     labelToUnstrike.classList.remove("disassociate")
     let orig = deer_input.value
-    let orig_arr = orig.split(",")
-    orig_arr.splice(index, 0, uri)
+    let orig_arr = []
+    if(orig !== ""){
+        orig_arr = orig.split(",")
+    }
+    if(index === -1){
+        //It was not in the original, add to the end not the beginning
+        orig_arr.push(uri)
+    }
+    else{
+        //Try to put it back in its place in relation to the original value.
+        orig_arr.splice(index, 0, uri)
+    }
     let newVal = orig_arr.join(",")
     deer_input.value = newVal
     deer_input.setAttribute("value", newVal)
+    deer_input.$isDirty = true
     if(newVal === deer_input.getAttribute("originalValue")){
         deer_input.$isDirty = false
     }
@@ -1539,9 +1577,9 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                         mediaURIs.push(uri)
                     }
                 })
-                input.value = mediaURIs.join()
-                input.setAttribute("value", mediaURIs.join())
-                input.setAttribute("originalValue", mediaURIs.join())
+                input.value = mediaURIs.join(",")
+                input.setAttribute("value", mediaURIs.join(","))
+                input.setAttribute("originalValue", mediaURIs.join(","))
             }
             else{
                 //Then there is a single URI value to show a preview for
@@ -1578,6 +1616,14 @@ LR.media.showConnectedMedia = async function(annotationData, keys, form){
                         console.warn("Cannot generate preview for this file type: '"+fileType+"'")
                 }
                 
+            }
+        }
+        else{
+            //set the original value to blank for associatedMeda
+            if(key === "associatedMedia"){
+                form.querySelector("input[deer-key='"+key+"']").setAttribute("value", "")
+                form.querySelector("input[deer-key='"+key+"']").setAttribute("originalValue", "")
+                form.querySelector("input[deer-key='"+key+"']").value = ""
             }
         }
     }

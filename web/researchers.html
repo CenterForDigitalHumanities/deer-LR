@@ -42,12 +42,23 @@
     <script>
 
         /**
-         * Determine what to do with the items in the Lived Religion Locations collection based on a users roles
+         * Determine what to do with the items in the Lived Religion Researchers collection based on a users roles
          * @param {type} event
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "researchers") {
+                let lis = Array.from(researchers.querySelectorAll("li"))
+                //Sort the experiences by label alphabetically
+                lis.sort((a, b) => {
+                    let a_label = a.querySelector("a").innerHTML ?? ""
+                    let b_label = b.querySelector("a").innerHTML ?? ""
+                    return a_label.localeCompare(b_label)
+                })
+                researchers.querySelector("ul").innerHTML = ""
+                for(const li of lis){
+                    researchers.querySelector("ul").appendChild(li)
+                }
                 LR.utils.drawInterface(event, "researchers")
             }
         }, false)

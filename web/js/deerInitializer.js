@@ -224,6 +224,9 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 ${relatedSensesByName}
             </ul>
         `
+        if(date){
+            date = new Date(date).toLocaleString()
+        }
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let orgHTML = `<dt>Organizations Involved</dt><dd><ul id="organizationsInExperience">${organizationsByName}</ul></dd>`

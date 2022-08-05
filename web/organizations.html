@@ -47,7 +47,18 @@
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "organizations") {
-               LR.utils.drawInterface(event, "organizations")
+                let lis = Array.from(organizations.querySelectorAll("li"))
+                //Sort the experiences by label alphabetically
+                lis.sort((a, b) => {
+                    let a_label = a.querySelector("a").innerHTML ?? ""
+                    let b_label = b.querySelector("a").innerHTML ?? ""
+                    return a_label.localeCompare(b_label)
+                })
+                organizations.querySelector("ul").innerHTML = ""
+                for(const li of lis){
+                    organizations.querySelector("ul").appendChild(li)
+                }
+                LR.utils.drawInterface(event, "organizations")
             }
         }, false)
                

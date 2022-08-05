@@ -239,3 +239,13 @@ div[assigned-media-video] video{
     max-height: 400px;
     max-width: 800px;
 }
+.undo{
+    font-size: 21pt;
+    color: green;
+    line-height:1;
+    margin-left:3px;
+}
+
+.removeAssociatedMedia {
+    margin-left: 3px;
+}
