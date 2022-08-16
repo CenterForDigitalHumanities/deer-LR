@@ -52,8 +52,8 @@ LR.ui = {}
 LR.utils = {}
 LR.media = {}
 LR.media.S3_URI_PREFIX = "https://livedreligion.s3.amazonaws.com/"
-//LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
-LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
+LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+//LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
 
 //Stop 'Enter' from submitting forms
 document.querySelectorAll("form").forEach(f => {
