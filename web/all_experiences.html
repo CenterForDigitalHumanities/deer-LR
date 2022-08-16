@@ -49,16 +49,17 @@
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "experiences") {
                 let lis = Array.from(experiences.querySelectorAll("li"))
+                let ul = document.createElement("ul")
                 //Sort the experiences by label alphabetically
                 lis.sort((a, b) => {
                     let a_label = a.querySelector("a").innerHTML ?? ""
                     let b_label = b.querySelector("a").innerHTML ?? ""
                     return a_label.localeCompare(b_label)
                 })
-                experiences.querySelector("ul").innerHTML = ""
                 for(const li of lis){
-                    experiences.querySelector("ul").appendChild(li)
+                    ul.appendChild(li)
                 }
+                experiences.querySelector("ul").replaceWith(ul)
                 LR.utils.drawInterface(event, "adminUpgrade")
             }
         }, false)

@@ -48,17 +48,18 @@
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "people") {
                 let lis = Array.from(people.querySelectorAll("li"))
-                //Sort the experiences by label alphabetically
+                let ul = document.createElement("ul")
+                //Sort the people by label alphabetically
                 lis.sort((a, b) => {
                     let a_label = a.querySelector("a").innerHTML ?? ""
                     let b_label = b.querySelector("a").innerHTML ?? ""
                     return a_label.localeCompare(b_label)
                 })
-                people.querySelector("ul").innerHTML = ""
                 for(const li of lis){
-                    people.querySelector("ul").appendChild(li)
+                    ul.appendChild(li)
                 }
-                LR.utils.drawInterface(event, "people")
+                people.querySelector("ul").replaceWith(ul)
+                LR.utils.drawInterface(event, "adminUpgrade")
             }
         }, false)
                

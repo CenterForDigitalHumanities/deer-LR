@@ -47,21 +47,22 @@
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if (event.target.getAttribute("id") === "locations") {
-                let lis = Array.from(locations.querySelectorAll("li"))
+            if (event.target.getAttribute("id") === "experiences") {
+                let lis = Array.from(experiences.querySelectorAll("li"))
+                let ul = document.createElement("ul")
                 //Sort the experiences by label alphabetically
                 lis.sort((a, b) => {
                     let a_label = a.querySelector("a").innerHTML ?? ""
                     let b_label = b.querySelector("a").innerHTML ?? ""
                     return a_label.localeCompare(b_label)
                 })
-                locations.querySelector("ul").innerHTML = ""
                 for(const li of lis){
-                    locations.querySelector("ul").appendChild(li)
+                    ul.appendChild(li)
                 }
-                LR.utils.drawInterface(event, "places")
+                experiences.querySelector("ul").replaceWith(ul)
+                LR.utils.drawInterface(event, "adminUpgrade")
             }
-        }, false)            
+        }, false)       
         
         /**
          * Handle Login and Logout across tabs
