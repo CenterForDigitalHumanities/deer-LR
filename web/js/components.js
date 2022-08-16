@@ -148,13 +148,8 @@ customElements.define("lr-global-feedback", LrGlobalFeedback)
 class FieldNotes extends HTMLElement {
     constructor() {
         super()
-        let entityName = location.pathname.split("/").pop().replace(".html", "")
-        if(entityName){
-            entityName = entityName[0].toUpperCase() + entityName.substring(1)
-        }
-        else{
-            entityName = "Entity"
-        }
+        let entityName = location.pathname.split("/").pop().replace(".html", "") ?? "Entity"
+        entityName = entityName[0].toUpperCase() + entityName.substring(1)
         this.innerHTML = `
         <div class="card" id="fieldNotesFloater" expanded="false">
             <div class="card_body">

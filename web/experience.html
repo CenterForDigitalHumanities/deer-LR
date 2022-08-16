@@ -485,10 +485,7 @@
                     let locDropdown = event.target.querySelector(".locDropdown")
                     let locName = locDropdown.options[locDropdown.selectedIndex].text
                     expName = 
-                        (event.detail.hasOwnProperty("name")) ? event.detail.name : 
-                        (event.detail.hasOwnProperty("label")) ?  event.detail.label : 
-                        (event.detail.hasOwnProperty("title")) ? event.detail.title : 
-                        expLabel.innerHTML
+                        event.detail.name ?? event.detail.label ?? event.detail.title ?? expLabel.innerHTML
             
                     let expID = event.detail["@id"] ? event.detail["@id"] : ""
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = expName)
