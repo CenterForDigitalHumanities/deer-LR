@@ -47,10 +47,10 @@
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
-            if (event.target.getAttribute("id") === "experiences") {
-                let lis = Array.from(experiences.querySelectorAll("li"))
+            if (event.target.getAttribute("id") === "locations") {
+                let lis = Array.from(locations.querySelectorAll("li"))
                 let ul = document.createElement("ul")
-                //Sort the experiences by label alphabetically
+                //Sort the people by label alphabetically
                 lis.sort((a, b) => {
                     let a_label = a.querySelector("a").innerHTML ?? ""
                     let b_label = b.querySelector("a").innerHTML ?? ""
@@ -59,10 +59,10 @@
                 for(const li of lis){
                     ul.appendChild(li)
                 }
-                experiences.querySelector("ul").replaceWith(ul)
+                locations.querySelector("ul").replaceWith(ul)
                 LR.utils.drawInterface(event, "places")
             }
-        }, false)       
+        }, false)      
         
         /**
          * Handle Login and Logout across tabs
