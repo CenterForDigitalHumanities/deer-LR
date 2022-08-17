@@ -327,6 +327,9 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
             if (user.roles.administrator) {
                 for (let elem of event.target.querySelectorAll('.removeCollectionItem')) elem.style.display = 'inline-block'
             }
+            else{
+                document.querySelector(".button.primary").addClass("is-hidden")
+            }
         break
         case "userManagement":
             if (user.roles.administrator) {
