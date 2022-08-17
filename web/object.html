@@ -6,14 +6,27 @@
 <html>
 
 <head>
-    <title>Lived Religion Objects</title>
+    <title>Object</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Object</h2>
         <div class="card bd-primary">
@@ -22,7 +35,8 @@
                     deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading"> <!-- Object I am entering -->
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionObjects">
-                    <!-- into this collection -->
+                    <input type="hidden" deer-key="fieldNotes" />
+                    <h4 class="text-primary">General Details</h4>
                     <label>Name:</label>
                     <input type="text" deer-key="name">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType">
@@ -86,13 +100,20 @@
                             <option value="Found" >Found</option>
                             <option value="Spoken">Spoken</option>
                             <option value="Other">Other</option>
+                            <option value="None">None</option>
                         </select>
                     </div>
-                    <h4>History of this Object</h4>
+                    <h4 class="text-primary">History of this Object</h4>
                     <label>Select Former Location(s):</label>
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" />
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <option disabled selected value=""> Loading... </option>
+                        </select>
+                    </deer-view>
                     <label>Select Former Use(s):</label>
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <input type="hidden" deer-key="formerUses" deer-input-type="Set">
                     <!-- Looking at these as "former types", so just reuse the type values -->
                     <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
@@ -107,12 +128,13 @@
                         <option value="Manuscript">Written Text</option>
                         <option value="Spoken">Spoken</option>
                         <option value="Other">Other</option>
+                        <option value="None">None</option>
                     </select>
                     <div class="selectedEntities"></div>
-                    <h4>Descriptive Information</h4>
+                    <h4 class="text-primary">Descriptive Information</h4>
                     <label>Material(s) this object is made of:</label>
                     <!-- This should probably be a Set -->
-                    <textarea deer-key="material"> </textarea>
+                    <textarea deer-key="material"></textarea>
                     <label>Typical Use: </label>
                     <select deer-key="purpose">
                         <option disabled selected value> Not Supplied </option>
@@ -121,21 +143,54 @@
                         <option value="educational">Educational</option>
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
+                        <option value="None">None Noted</option>
                     </select>
-                    <!-- TODO -->
-                    <!--<h3> Upload Media </h3>-->
-                    <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" >
-                    <label>Link audio: </label>
-                    <input type="url" deer-key="audio" >
-                    <label>Link a video: </label>
-                    <input type="url" deer-key="video" >
-                    <label
-                        title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">Brief
-                        Description</label>
+                    <h4 class="text-primary">Media</h4>
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload new media or supply an URI to existing media to associate with this object.
+                                    Even though your files are uploaded and URIs appear in the media you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the URIs to be saved to this object.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this object.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+                    <h4 class="text-primary">Additional Details</h4>
+                    <label title="Provide a short decription of this object with otherwise unprovided or disambiguating details.">
+                        Brief Description
+                    </label>
                     <textarea id="further_object" type="text" deer-key="description"></textarea>
-                    <label>Tags separated by ',':</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">
+                    
+                    <label title="Provide any general notes in relation to this object.">Notes</label>
+                    <textarea type="text" title="Provide any general notes in relation to this object." deer-key="notes"></textarea>
+
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -192,6 +247,8 @@
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations"], event.target)
                     LR.utils.preSelectType(annotationData, event.target)
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
                     break
                 default:
 
@@ -203,7 +260,7 @@
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function (obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function (obj) {

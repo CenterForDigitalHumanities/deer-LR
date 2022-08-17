@@ -144,3 +144,102 @@ class LrGlobalFeedback extends HTMLElement {
     }
 }
 customElements.define("lr-global-feedback", LrGlobalFeedback)
+
+class FieldNotes extends HTMLElement {
+    constructor() {
+        super()
+        let entityName = location.pathname.split("/").pop().replace(".html", "") ?? "Entity"
+        entityName = entityName[0].toUpperCase() + entityName.substring(1)
+        this.innerHTML = `
+        <div class="card" id="fieldNotesFloater" expanded="false">
+            <div class="card_body">
+                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" >Field Notes for This ${entityName}</h6>
+                <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
+                <p id="notesInfoShort" class="fieldNotesInnards is-hidden">
+                    Enter field notes for this ${entityName}.  You must submit the form for the field notes to be recorded, just like filling out any other piece of the form.
+                </p>
+                <p id="notesInfoLong" class="fieldNotesInnards is-hidden">
+                    Enter field notes for this ${entityName}.  You can continue to update these as you upload more information.
+                    You must submit the form for the field notes to be recorded, just like filling out any other piece of the form.
+                    During Experience review, you can click 'Save Notes' to record the notes without submitting the form.
+                </p>
+                <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
+                    <textarea id="fieldNotesEntry" type="text">Please Wait.  Loading...</textarea>
+                    <div id="fieldNotesSaveBtn" class="row is-hidden">
+                        <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotes(event)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+    }
+    connectedCallback() {
+        //Need to take the text from this textarea and put it into the hidden deer input for fieldNotes
+        //That deer-input needs to fire an input event for $isDirty
+        this.querySelector('textarea').addEventListener("input",event=>{
+            let notesSoFar = document.querySelector("input[deer-key='fieldNotes']").value
+            let newNotes = this.querySelector('textarea').value
+            if(newNotes !== notesSoFar){
+                document.querySelector("input[deer-key='fieldNotes']").value = newNotes
+                let inputEvent = new Event('input', {
+                    bubbles: false,
+                    cancelable: true
+                })
+               document.querySelector("input[deer-key='fieldNotes']").dispatchEvent(inputEvent)
+            }
+        })
+        
+        if(!LR.utils.getEntityIdFromURL()){
+            this.querySelector("textarea").value = ""
+        }
+    }
+}
+customElements.define("lr-field-notes", FieldNotes)
+
+class LrMediaUpload extends HTMLElement {
+    constructor() {
+        super()
+       let dk = this.getAttribute("media-key")
+       this.innerHTML = `
+        <input type="hidden" deer-input-type="Set" deer-key="${dk}" value="" originalValue="" >
+        <div class="supplyURI" >
+            <header class="text-primary">Provide Media URI</header>
+            <input type="url" class="mediaURI"/>
+            <input type="button" class="button secondary" onclick="LR.media.addMediaURI(event)" value="Add" />
+            <div class="uristatus"></div>
+        </div>
+        <div class="mediaUploadForm" >
+            <header class="text-primary">Select a File to Upload</header>
+            <input type="file" name="file" onchange="LR.media.fileSelected(event)"/>
+            <div class="fileName"></div>
+            <div class="fileSize"></div>
+            <div class="fileType"></div>
+            <input type="button" class="button secondary" onclick="LR.media.uploadFile(event)" value="Upload" />
+            <div class="mediastatus"></div>
+        </div>
+        <header class="text-primary">Connected Media</header>
+       `
+        //Make sure to put <ul media-key="{dk}" class="connectedMedia"></ul> after the lr-media element.
+        //It will show the file names for the list of connected media.
+    }
+    connectedCallback() {
+        //When a file upload is complete, add it to the list of files attached to this entity.
+        this.addEventListener("fileUploadSuccess",event=>{
+            let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${event.detail.uri}', true)">&#x274C;</a>`
+            let media_component = event.target
+            let mediaList = media_component.nextElementSibling
+            let mediaFileName = event.detail.uri.split('/').pop()
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a><b class="removeme">(MUST submit!)</b>${removeBtn}</li>`
+        })
+        
+        //When a user supplies a URI and clicks ADD, put it in the list of files attached to this entity.
+        this.addEventListener("addMediaURISuccess",event=>{
+            let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${event.detail.uri}', true)">&#x274C;</a>`
+            let media_component = event.target
+            let mediaList = media_component.nextElementSibling
+            let mediaFileName = event.detail.uri.split('/').pop()
+            mediaList.innerHTML += `<li><a target="_blank" href="${event.detail.uri}">${mediaFileName}</a> <b class="removeme">(MUST submit!)</b>${removeBtn}</li>`
+        })
+    }
+}
+customElements.define("lr-media-upload", LrMediaUpload)

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>LRDA Media Upload</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/lr.css">
+    </head>
+    <body>
+        <div class="container">
+            <!-- <lr-media-upload></lr-media-upload> -->
+            <div class="row">
+                <input type="hidden" deer-key="url" deer-input-type="Set" />
+                <form id="form1" class="mediaUploadForm" enctype="multipart/form-data" method="post">
+                    <div class="row">
+                      <label for="file">Select a File to Upload</label><br />
+                      <input type="file" name="file" onchange="LR.UTILS.fileSelected(event)"/>
+                    </div>
+                    <div class="fileName"></div>
+                    <div class="fileSize"></div>
+                    <div class="fileType"></div>
+                    <div class="row">
+                      <input type="button" onclick="uploadFile()" value="Upload" />
+                    </div>
+                    <div id="status">. . .</div>
+                </form>
+            </div>
+            
+            <div class="row">
+                <p>Below are all the files in the bucket.  Click one to resolve the URI.</p>
+                <ul id="availableS3Files">
+                    
+                </ul>
+            </div>
+        </div>
+        <script src="./js/app.js" type="text/javascript"></script>
+        <script src="./js/components.js" type="text/javascript"></script>
+    </body>
+    <script>
+        const S3_URI_PREFIX = "https://livedreligion.s3.amazonaws.com/"
+        const S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+        //const S3_PROXY_PREFIX = "http://localhost:8080/S3/"
+        
+        window.onload = function() {
+            listFilesForDownload()
+        }
+        
+        async function listFilesForDownload(){
+            document.getElementById("availableS3Files").innerHTML = ""
+            fetch(S3_PROXY_PREFIX+"listFiles")
+            .then(resp => resp.text())
+            .then(respText => {
+                let text = String(respText)
+                text = text.slice(1, -1)
+                let arr = text.split(", ")
+                let html = ""
+                arr.forEach(file => {
+                    // Note that file is the S3 'key' for the item in the bucket.
+                    let li = `<li><a href="${S3_URI_PREFIX+file}" target="_blank"> ${file} </a></li>`
+                    html += li
+                })
+                document.getElementById("availableS3Files").innerHTML = html
+                return arr
+            })
+            .catch(err => {
+                console.error(err);
+                return []
+            })
+        }
+        
+        async function uploadFile() {
+            let form_data = new FormData(document.getElementById('form1'))
+            fetch(S3_PROXY_PREFIX+"uploadFile", {
+                method: "POST",
+                mode: "cors",
+                body: form_data
+            })
+            .then(resp => {
+                console.log("Got the response from the upload file servlet");
+                if(resp.ok) uploadComplete(resp.headers.get("Location"))
+                else uploadFailed(resp)
+            })
+            .catch(err => {
+                console.error(err)
+                uploadFailed(err)
+            })
+        }
+          
+        function uploadProgress(evt) {
+            if (evt.lengthComputable) {
+              var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+              document.getElementById('status').innerHTML = percentComplete.toString() + '%';
+            }
+            else {
+              document.getElementById('status').innerHTML = 'unable to compute';
+            }
+        }
+
+        function uploadComplete(uri) {
+            /* This event is raised when the server send back a response */
+            document.getElementById('status').innerHTML = `<a href="${S3_URI_PREFIX+uri}" target="_blank"> ${uri} </a>`
+        }
+
+        function uploadFailed(evt) {
+            alert("There was an error attempting to upload the file.");
+        }
+
+        function uploadCanceled(evt) {
+            alert("The upload has been canceled by the user or the browser dropped the connection.");
+        }  
+    </script>
+</html>

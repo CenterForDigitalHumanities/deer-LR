@@ -45,6 +45,9 @@
 ## formerLocations
 - Places a particular Object has been in the past.  See http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasArtefactRelatedLocation
 
+## notes
+- Descriptive notes about an entity.  More generalized than field notes.  See http://id.worldcat.org/fast/1039599/.
+
 ## fieldNotes
 - Notes taken by a researcher during some experience.  See http://id.worldcat.org/fast/2007231.
 
@@ -56,6 +59,9 @@
 
 ## purpose
 - The purpose for which an Object or Place exists, if any.
+
+## startDate
+- The starting date and time for an Event (or Experience).  See https://schema.org/startDate.
 
 ## attendee-org
 - A mimicing of https://schema.org/attendee.  It tracks the Organizations that are a part of an Experience separate from the People.

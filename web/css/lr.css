@@ -27,7 +27,7 @@ textarea {
     margin-left: -125px;
     text-align: center;
     position: fixed; 
-    z-index: 9; 
+    z-index: 2; 
     left: 50%;
     bottom: 30px;
 }
@@ -39,7 +39,7 @@ textarea {
 }
 
 #leafletInstanceContainer{
-    height: 50em;
+    height: 70em;
     background-image: url(../images/earth.gif);
     background-repeat: no-repeat;
     background-attachment: local;
@@ -86,7 +86,7 @@ textarea {
 }
 
 .pageShade{
-    z-index: 1;
+    z-index: 2;
     background-color: rgba(0, 0, 0, .8);
     position: fixed;
     top: 0;
@@ -97,6 +97,10 @@ textarea {
 
 .removeCollectionItem {
     display: none;
+}
+
+.disassociate{
+    text-decoration: line-through wavy red 3px;
 }
 
 .viewCollectionItem{
@@ -142,4 +146,106 @@ a.tag{
   
   input, textarea, select {
     margin: 3px 0px;
+}
+
+#fieldNotesFloater{
+    position: fixed;
+    left: 0;
+    top: 3.5em;
+    width: 40px;
+    height: 40px;
+    transition: width 0.5s, box-shadow 1s;
+    -webkit-transition: width 0.5s, box-shadow 1s;
+    -moz-transition: width 0.5s, box-shadow 1s;
+    background-color: lightgray;
+    z-index: 1;
+}
+.fieldNotesInnards{
+    transition: width 0.5s, box-shadow 1s;
+    -webkit-transition: width 0.5s, box-shadow 1s;
+    -moz-transition: width 0.5s, box-shadow 1s;
+}
+.fieldNotesInnards input{
+    margin: .6em;
+}
+
+#notesIcon{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+#notesIcon:hover{
+    border: 2px solid black;
+}
+#notesInfoShort, #notesInfoLong{
+    position: relative;
+}
+#notesTitle{
+    text-align:center;
+}
+#fieldNotes textarea{
+    height: 185px;
+    max-width: 500px;
+    max-height: 41em;
+    font-size: 90%;
+}
+div[media-key="image"] img{
+    max-height: 200px;
+    max-width: 400px;
+    position: relative;
+    display: inline-block;
+}
+div[media-key="audio"] audio{
+    position: relative;
+    display: inline-block;
+}
+div[media-key="video"] video{
+    max-height: 200px;
+    max-width: 400px;
+    position: relative;
+    display: inline-block;
+}
+ul.scrollableMedia {
+   white-space: nowrap;
+   overflow-x: scroll;
+   margin: 3em 0px 0px 0px;
+}
+ul.scrollableMedia li {
+   display:inline;
+   margin-right: 10px
+}
+li img{
+    max-height: 200px;
+    max-width: 400px;
+}
+li audio{
+
+}
+li video{
+    max-height: 200px;
+    max-width: 400px;
+}
+div[assigned-media-image] img{
+    max-height: 400px;
+    max-width: 800px;
+}
+div[assigned-media-audio] audio{
+    
+}
+div[assigned-media-video] video{
+    max-height: 400px;
+    max-width: 800px;
+}
+.undo{
+    font-size: 21pt;
+    color: green;
+    line-height:1;
+    margin-left:3px;
+}
+
+.removeAssociatedMedia {
+    margin-left: 3px;
 }

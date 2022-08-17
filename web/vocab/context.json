@@ -46,22 +46,6 @@
                "@type":"@id",
                "@container":"@set"
             },
-            "image":{
-               "@id":"schema:image",
-               "@type":"@id"
-            },
-            "audio":{
-               "@id":"schema:audio",
-               "@type":"@id"
-            },
-            "video":{
-               "@id":"schema:video",
-               "@type":"@id"
-            },
-            "associatedMedia":{
-               "@id":"schema:associatedMedia",
-               "@type":"@id"
-            },
             "additionalType":{
                "@id":"schema:additionalType",
                "@type":"@vocab",
@@ -75,22 +59,6 @@
       "Place":{
          "@id":"schema:Place",
          "@context":{
-            "image":{
-               "@id":"schema:image",
-               "@type":"@id"
-            },
-            "audio":{
-               "@id":"schema:audio",
-               "@type":"@id"
-            },
-            "video":{
-               "@id":"schema:video",
-               "@type":"@id"
-            },
-            "associatedMedia":{
-               "@id":"schema:associatedMedia",
-               "@type":"@id"
-            },
             "purpose":{
                "@id":"lr:purpose",
                "@type":"@vocab",
@@ -108,10 +76,10 @@
                "@context":{
                   "Imagined":"loc:afset009298",
                   "Neighborhood":"loc:afset012412",
-                  "School" : "schema:School",
+                  "School":"schema:School",
                   "Accommodation":"schema:Accommodation",
-                  "AdministrativeArea" : "schema:AdministrativeArea",
-                  "CivicStructure": "schema:CivicStructure",
+                  "AdministrativeArea":"schema:AdministrativeArea",
+                  "CivicStructure":"schema:CivicStructure",
                   "Landform":"schema:Landform",
                   "LandmarksOrHistoricBuildings":"schema:LandmarksOrHistoricBuildings",
                   "LocalBuisness":"schema:LocalBuisness",
@@ -137,22 +105,6 @@
       "Object":{
          "@id":"ebu:PhysicalResource",
          "@context":{
-            "image":{
-               "@id":"schema:image",
-               "@type":"@id"
-            },
-            "audio":{
-               "@id":"schema:audio",
-               "@type":"@id"
-            },
-            "video":{
-               "@id":"schema:video",
-               "@type":"@id"
-            },
-            "associatedMedia":{
-               "@id":"schema:associatedMedia",
-               "@type":"@id"
-            },
             "additionalType":{
                "@id":"schema:additionalType",
                "@type":"@vocab",
@@ -250,10 +202,28 @@
          "@id":"ebu:hasArtefactRelatedLocation",
          "@container":"@set"
       },
+      "image":{
+         "@id":"schema:image",
+         "@type":"@id"
+      },
+      "audio":{
+         "@id":"schema:audio",
+         "@type":"@id"
+      },
+      "video":{
+         "@id":"schema:video",
+         "@type":"@id"
+      },
+      "associatedMedia":{
+         "@id":"schema:associatedMedia",
+         "@type":"@id"
+      },
+      "notes":"fast:1039599",
       "fieldNotes":"fast:2007231",
       "religiousTradition":"lr:religiousTradition",
       "secondaryFunction":"lr:secondaryFunction",
       "attendee-org":"schema:attendee",
+      "startDate":"schema:startDate",
       "Action":"schema:Action"
    }
 }

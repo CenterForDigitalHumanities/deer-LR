@@ -5,24 +5,33 @@
 <html>
 
 <head>
-    <title>Religion in Place Dashboard</title>
+    <title>Dashboard</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
-    <!-- Yes.  If admin, entries can be edited -->
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
     <div id="dashboard" class="container">
         <h1 id="userDashboard" class="text-primary"> My Experiences </h1>
-
-            <ul id="previousEntries">
-                <p class="text-error">You must be logged in to use this dashboard.</p>
-            </ul>
-            <a class="button primary is-full-width" href="experience.html"> Record a New Experience </a>
-        
+        <ul id="previousEntries">
+            <p class="text-error">You must be logged in to use this dashboard.</p>
+            <p>Please wait while we gather your experiences.</p>
+        </ul>
+        <a class="button primary is-full-width" href="experience.html"> Record a New Experience </a>
     </div>
     <div class="pageShade is-hidden"></div>
     <lr-global-feedback></lr-global-feedback>
@@ -42,7 +51,7 @@
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

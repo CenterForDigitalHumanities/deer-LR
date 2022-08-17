@@ -6,30 +6,29 @@
 
 const LR = {}
 LR.VERSION = "1.0.1"
-//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
-LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
-//LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
+//LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
 ///For dev-01
 
-LR.URLS = {
-    LOGIN: "login",
-    LOGOUT: "logout",
-    BASE_ID: "http://devstore.rerum.io/v1",
-    DELETE: "http://tinydev.rerum.io/app/delete",
-    CREATE: "http://tinydev.rerum.io/app/create",
-    UPDATE: "http://tinydev.rerum.io/app/update",
-    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-    QUERY: "http://tinydev.rerum.io/app/query",
-    SINCE: "http://devstore.rerum.io/v1/since",
-}
-
+//LR.URLS = {
+//    LOGIN: "login",
+//    LOGOUT: "logout",
+//    BASE_ID: "http://devstore.rerum.io/v1",
+//    DELETE: "http://tinydev.rerum.io/app/delete",
+//    CREATE: "http://tinydev.rerum.io/app/create",
+//    UPDATE: "http://tinydev.rerum.io/app/update",
+//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+//    QUERY: "http://tinydev.rerum.io/app/query",
+//    SINCE: "http://devstore.rerum.io/v1/since",
+//}
 
 //For prd-01
-/*
+
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
@@ -41,7 +40,7 @@ LR.URLS = {
     QUERY: "query",
     SINCE: "http://store.rerum.io/v1/since"
 }
-*/
+
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
 if (typeof(Storage) !== "undefined") {
@@ -51,6 +50,133 @@ if (typeof(Storage) !== "undefined") {
 }
 LR.ui = {}
 LR.utils = {}
+LR.media = {}
+LR.media.S3_URI_PREFIX = "https://livedreligion.s3.amazonaws.com/"
+LR.media.S3_PROXY_PREFIX = "http://s3-proxy.rerum.io/S3/"
+//LR.media.S3_PROXY_PREFIX = "http://localhost:8080/S3/"
+
+//Stop 'Enter' from submitting forms
+document.querySelectorAll("form").forEach(f => {
+    f.addEventListener("keydown", (event) => {
+        if(event.key === "Enter" && event.target.tagName !== "TEXTAREA"){
+            event.preventDefault()
+            event.stopPropagation()
+            return false
+        }
+    })
+})
+
+//Event listeners for top-level media designations.  This updates the preview for the provided media, and checks if it has changed.
+//Limit the fetches by only fetching under certain conditions, like if the input is a URI or different than the URI for the preview already showing.
+let image = document.querySelector('input[deer-key="image"]')
+let audio = document.querySelector('input[deer-key="audio"]')
+let video = document.querySelector('input[deer-key="video"]')
+if(image){
+    image.addEventListener("change", async (e)=>{
+        let uri = e.target.value
+        let area = e.target.nextElementSibling
+        let originalURI = area.querySelector("img") ? area.querySelector("img").getAttribute("originalValue") : ""
+        let currentPreviewURI = area.querySelector("img") ? area.querySelector("img").getAttribute("src") : ""
+        if(uri === originalURI){
+            e.target.$isDirty = false
+        }
+        if(uri !== currentPreviewURI && (uri.indexOf("http://") || uri.indexOf("https://"))){
+            let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                return resp.headers.get("content-type") ?? "Unknown"
+            })
+            .catch(err => {
+                console.error("Could not get HEAD information for file '"+uri+"'")
+                return "Error"
+            })
+            let basicType = fileType.split("/")[0] ?? fileType
+            if(basicType === "image"){
+                if(area.querySelector("img")){
+                    area.querySelector("img").setAttribute("src", uri)
+                }
+                else{
+                    area.innerHTML = `<img class="imgPreview" originalValue="" src="${uri}"/>`
+                }
+            }
+            else{
+                area.innerHTML = "Preview not available..."
+            }
+        }
+    })    
+}
+if(audio){
+    audio.addEventListener("change", async (e)=>{
+        let uri = event.target.value
+        let area = event.target.nextElementSibling
+        let originalURI = area.querySelector("audio") ? area.querySelector("audio").querySelector("source").getAttribute("originalValue") : ""
+        let currentPreviewURI = area.querySelector("audio") ? area.querySelector("audio").querySelector("source").getAttribute("src") : ""
+        if(uri === originalURI){
+            e.target.$isDirty = false
+        }
+        if(uri !== currentPreviewURI && (uri.indexOf("http://") || uri.indexOf("https://"))){
+            let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                return resp.headers.get("content-type") ?? "Unknown"
+            })
+            .catch(err => {
+                console.error("Could not get HEAD information for file '"+uri+"'")
+                return "Error"
+            })
+            let basicType = fileType.split("/")[0] ?? fileType
+            if(basicType === "audio"){
+                if(area.querySelector("audio")){
+                    area.querySelector("audio").querySelector("source").setAttribute("src", uri)
+                    area.querySelector("audio").querySelector("source").setAttribute("type", fileType)
+                }
+                else{
+                    area.innerHTML = `
+                    <audio controls class="audioPreview">
+                        <source originalValue="" src="${uri}" type="${fileType}"></source>
+                        Audio Not Supported
+                    </audio>`
+                }
+            }
+            else{
+               area.innerHTML = "Preview Not Available..." 
+            }
+        }
+    })    
+}
+if(video){
+    video.addEventListener("change", async (e)=>{
+        let uri = event.target.value
+        let area = event.target.nextElementSibling
+        let originalURI = area.querySelector("video") ? area.querySelector("video").querySelector("source").getAttribute("originalValue") : ""
+        let currentPreviewURI = area.querySelector("video") ? area.querySelector("video").querySelector("source").getAttribute("src") : ""
+        if(uri === originalURI){
+            e.target.$isDirty = false
+        }
+        if(uri !== currentPreviewURI && (uri.indexOf("http://") || uri.indexOf("https://"))){
+            let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                return resp.headers.get("content-type") ?? "Unknown"
+            })
+            .catch(err => {
+                console.error("Could not get HEAD information for file '"+uri+"'")
+                return "Error"
+            })
+            let basicType = fileType.split("/")[0] ?? fileType
+            if(basicType === "video"){
+                if(area.querySelector("video")){
+                    area.querySelector("video").querySelector("source").setAttribute("src", uri)
+                    area.querySelector("video").querySelector("source").setAttribute("type", fileType)
+                }
+                else{
+                    area.innerHTML = `
+                    <video controls class="videoPreview">
+                        <source originalValue="" src="${uri}" type="${fileType}"></source>
+                        Video Not Supported
+                    </video>`
+                }
+            }
+            else{
+               area.innerHTML = "Preview Not Available..." 
+            }
+        }
+    })    
+}
 
 LR.utils.getAnnoValue = function (property, alsoPeek = [], asType) {
     // TODO: There must be a best way to do this...
@@ -136,7 +262,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     document.getElementById("theExperience").setAttribute("deer-id", entityID)
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                 }
                 else{
                     //Determine if the current user is the creator of this entity.  If so, they can view it.
@@ -149,7 +274,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                             document.getElementById("theExperience").setAttribute("deer-id", entityID)
                             document.getElementById("startExperience").classList.add("is-hidden")
                             document.getElementById("experienceReview").classList.remove("is-hidden")
-                            document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                         }
                         else{
                             alert("Only an administrator can review this experience.  If this is your experience, contact an administrator.")
@@ -189,6 +313,10 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                     alert("Only administrators can review and edit entity details at this time.")
                     document.location.href="dashboard.html"
                 }
+            }
+            else{
+                //Get rid of loading message in field notes widget
+                document.getElementById("fieldNotesEntry").value = ""
             }
         break
         case "objects":
@@ -276,9 +404,15 @@ LR.ui.getUserEntries = async function(user) {
     })
     .then(response => response.json())
     .catch(err => {return []})
+    //Sort the experiences by label alphabetically
+    experiences.sort((a, b) => {
+        let a_label = a.label ?? a.name ?? "Unlabeled Upload"
+        let b_label = b.label ?? b.name ?? "Unlabeled Upload"
+        return a_label.localeCompare(b_label)
+    })
     previousEntries.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>{
         let obj = (b.value) ? b.value : b
-        let label = (obj.label) ? obj.label : (obj.name) ? obj.name : "Unlabeled Upload"
+        let label = obj.label ?? obj.name ?? "Unlabeled Upload"
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
@@ -300,6 +434,7 @@ LR.ui.customToggles = function(event){
         case "startExperience":
             document.getElementById("experienceReview").classList.add("is-hidden")
             document.getElementById("experienceArtifacts").classList.add("is-hidden")
+            document.getElementById("experienceMedia").classList.add("is-hidden")
             document.getElementById("startExperience").classList.remove("is-hidden")
             if(!document.getElementById("artifactContent").classList.contains("is-hidden")){
                 document.getElementById("toggleArtifactArea").click()
@@ -355,6 +490,39 @@ LR.ui.customToggles = function(event){
             }
             document.querySelector("div[tog='practices']").classList.add("is-hidden")
         break
+        case "mediaArea":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+                event.target.title = "Hide the associated media area"
+                event.target.innerHTML = "Collapse Media Area"
+            }  
+            else{
+                elem.classList.add("is-hidden")
+                event.target.title = "Expand the area to view associated media"
+                event.target.innerHTML = "View Media"
+            }
+        break
+        case "associated":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+            document.querySelector("div[tog='assigned']").classList.add("is-hidden")
+        break
+        case "assigned":
+            elem = document.querySelector("div[tog='"+area+"']")
+            if(elem.classList.contains("is-hidden")){
+                elem.classList.remove("is-hidden")
+            }  
+            else{
+                elem.classList.add("is-hidden")
+            }
+            document.querySelector("div[tog='associated']").classList.add("is-hidden")
+        break
         
         default:
     }
@@ -367,19 +535,32 @@ LR.ui.customToggles = function(event){
  */
 LR.ui.toggleFieldNotes = function(event){
     let floater = document.getElementById("fieldNotesFloater")
+    
     if(floater.getAttribute("expanded") === "true"){
         floater.setAttribute("expanded", "false")
+        floater.style.minHeight = "0px"
         floater.style.width = "40px"
         floater.style.height = "40px"
+        floater.querySelector(".card_body").style.width= "40px"
         floater.style["box-shadow"] = "none"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.add("is-hidden"))
     }
     else{
         floater.setAttribute("expanded", "true")
+        floater.querySelector(".card_body").style.width= "500px"
         floater.style.width = "550px"
-        floater.style.height = "400px"
+        floater.style.minHeight = "450px"
         floater.style["box-shadow"] = "1px 1px 18px black"
         document.querySelectorAll(".fieldNotesInnards").forEach(elem => elem.classList.remove("is-hidden"))
+        if(document.getElementById("startExperience") && document.getElementById("startExperience").classList.contains("is-hidden")){
+            document.getElementById("fieldNotesSaveBtn").classList.remove("is-hidden")
+            document.getElementById("notesInfoLong").classList.remove("is-hidden")
+            document.getElementById("notesInfoShort").classList.add("is-hidden")
+        }
+        else{
+            document.getElementById("fieldNotesSaveBtn").classList.add("is-hidden")
+            document.getElementById("notesInfoLong").classList.add("is-hidden")
+        }
     }
     
 }
@@ -558,6 +739,7 @@ LR.utils.login = async function(loginWidget, data, submitEvent){
         else{
             //TODO maybe handle special?  
             throw new Error("There was a server error logging in.")
+            return {}
         }
     })
     .catch(err => {
@@ -578,7 +760,7 @@ LR.utils.login = async function(loginWidget, data, submitEvent){
     else {
         localStorage.removeItem("lr-user")
         local_socket.broadcast('loginError', {message:"Login Error"})
-        return null
+        alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
     }
 }
 
@@ -647,15 +829,18 @@ LR.utils.handleMultiSelect = function(event, fromTemplate){
  */
 LR.utils.setTrackedHiddenValues = function(annotationData, keys, form){
     keys.forEach(key =>{
-        let data_arr = 
-        (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
-        let input = form.querySelector("input[deer-key='"+key+"']")
-        //Set the value of the hidden input that tracks this for DEER
-        //Check if we need a different delimeter.  The input will tell us.
-        let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
-        //Generate the value for the input that DEER supports - "uri,uri..."
-        let str_arr = (data_arr.length > 1) ? data_arr.join(delim) : (data_arr.length === 1 ) ? data_arr[0] : ""
-        input.value = str_arr
+        if(annotationData.hasOwnProperty(key)){
+            let data_arr = 
+            (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : annotationData[key].hasOwnProperty("items") ? annotationData[key].items : [ LR.utils.getAnnoValue(annotationData[key]) ]
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            //Set the value of the hidden input that tracks this for DEER
+            //Check if we need a different delimeter.  The input will tell us.
+            let delim = (input.hasAttribute("deer-array-delimeter")) ? input.getAttribute("deer-array-delimeter") : ","
+            //Generate the value for the input that DEER supports - "uri,uri..."
+            let str_arr = (data_arr.length > 1) ? data_arr.join(delim) : (data_arr.length === 1 ) ? data_arr[0] : ""
+            input.value = str_arr
+        }
+
     })
 }
 
@@ -745,7 +930,10 @@ LR.utils.preSelectSelects = function(annotationData, keys, form){
  */
 LR.utils.preSelectType = function(object, form){
     let type = object.hasOwnProperty("additionalType") ? object.additionalType : ""
-    type = type[0] // It is saving twice right now, so this handles the bug for DEMO purposes.  TODO FIXME
+    if(type.value){
+        type = type.value
+    }
+    //type = type[0] // It is saving twice right now, so this handles the bug for DEMO purposes.  TODO FIXME
     if(type){
         var data_key_elements = form.querySelectorAll("[data-rdf]")
         Array.from(data_key_elements).forEach(el => {
@@ -804,26 +992,23 @@ LR.utils.prePopulateFieldNotes = function(fieldNotesFromData){
         let notes_str = LR.utils.getAnnoValue(fieldNotesFromData, [], "string")
         document.getElementById("fieldNotesEntry").value = notes_str
     }
+    else{
+        document.getElementById("fieldNotesEntry").value = ""
+    }
 }
 
 /**
- * A helper function that saves the field notes from the field notes widget as a fieldNotes annotation on the experiences.  
+ * Actually save the field notes by submitting the form with the new fields notes.
+ * DURING EXPERIENCE REVIEW ONLY!  The button should not be visible.  Make this function dependent upon being on experience.html and reviewing.
  * @param {type} event
  * @return {undefined}
  */
-LR.utils.saveFieldNotesInExperience = function(event){
-    let notesSoFar = document.getElementById("experienceFieldNotes").value
-    let newNotes = document.getElementById("fieldNotesEntry").value
-    if(newNotes !== notesSoFar){
-        document.getElementById("experienceFieldNotes").value = newNotes
-        let inputEvent = new Event('input', {
-            bubbles: false,
-            cancelable: true
-        })
-        document.getElementById("experienceFieldNotes").dispatchEvent(inputEvent)
+LR.utils.saveFieldNotes = function(event, real=false){
+    if(document.querySelector("input[deer-key='fieldNotes']").$isDirty){
+        if(document.getElementById("startExperience") && document.getElementById("startExperience").classList.contains("is-hidden")){
+            document.getElementById("theExperience").querySelector("input[type='submit']").click()         
+        }
     }
-     //NOTE form.submit() does not create/fire the submit event.  This is a problem for our 3rd party software, DEER.
-    document.getElementById("theExperience").querySelector("input[type='submit']").click() //Experience form has a new value for field notes, trigger the update.            
 }
 
 /**
@@ -1056,3 +1241,432 @@ LR.utils.isCreator = async function(agentID, item){
     }
     return ((agentID && creatorID) && agentID === creatorID)
 }
+
+/**
+ * Media upload component functionality.  
+ * Perhaps this could be abstracted to DEER.
+ */
+
+LR.media.uploadFile = function(event){
+    let media_component = event.target.closest("lr-media-upload")
+    media_component.querySelector('.mediastatus').innerHTML = "Uploading, please wait..."
+    let file = media_component.querySelector("input[type='file']").files[0]
+    var data = new FormData()
+    data.append('file', file)
+    fetch(LR.media.S3_PROXY_PREFIX+"uploadFile", {
+        method: "POST",
+        mode: "cors",
+        body: data
+    })
+    .then(resp => {
+        console.log("Got the response from the upload file servlet");
+        if(resp.ok) LR.media.uploadComplete(resp.headers.get("Location"), media_component)
+        else resp.text().then(text => LR.media.uploadFailed(text, media_component))
+    })
+    .catch(err => {
+        console.error(err)
+        LR.media.uploadFailed(err, media_component)
+    })
+}
+
+/**
+ * User has chosen and confirmed the file.  Let's upload it.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.fileSelected = function(event) {
+    let file = event.target.files[0]
+    let media_component = event.target.closest("lr-media-upload")
+    if (file) {
+      var fileSize = 0;
+      if (file.size > 1024 * 1024)
+        fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+      else
+        fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+      media_component.querySelector('.fileName').innerHTML = 'Name: ' + file.name;
+      media_component.querySelector('.fileSize').innerHTML = 'Size: ' + fileSize;
+      media_component.querySelector('.fileType').innerHTML = 'Type: ' + file.type;
+      media_component.querySelector('.mediastatus').innerHTML = "File chosen.  Click 'Upload' to upload."
+    }
+}
+/**
+ * The file upload was successful.  Make sure the list of connected media files includes this new one.
+ * @param {type} uri
+ * @param {type} form_elem
+ * @return {undefined}
+ */
+LR.media.uploadComplete = function(uri, media_component){
+    //The form_elem is inside lr-media-upload.  The input[deer-key] to place a value on and make dirty is the next element.
+    let key = media_component.getAttribute("media-key")
+    let deer_input = media_component.querySelector("input[deer-key='"+key+"']")
+    //let deer_input = media_component.nextElementSibling //maybe we can just do this?  I think we can make it a convention to say it is alway the next sibling.
+    
+    //It is a Set, so make sure to add commas when you need to
+    deer_input.value = (deer_input.value) ? deer_input.value+","+uri : uri
+    deer_input.setAttribute("value", deer_input.value)
+    deer_input.$isDirty = true
+    
+    // Create the event.
+    let event = document.createEvent('Event')
+    event.initEvent('media-upload-success', true, true);
+    event.target = media_component
+    LR.utils.broadcastEvent(event, "fileUploadSuccess", media_component, { message: "File upload Successful!", 'uri':uri})
+    media_component.querySelector('.mediastatus').innerHTML = "Upload Complete.  Don't forget to submit!"
+    //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
+}
+
+LR.media.uploadFailed = function(message, media_component){
+    media_component.querySelector('.mediastatus').innerHTML = message
+    console.error("upload failed")
+    console.error(message)
+    let deer_input = media_component.querySelector("input[deer-key]")
+    deer_input.$isDirty = false
+    // Create the event.
+    let event = document.createEvent('Event')
+    event.initEvent('media-upload-fail', true, true);
+    event.target = media_component
+    LR.utils.broadcastEvent(event, "fileUploadFailed", media_component, { message: message })
+    media_component.querySelector('.mediastatus').innerHTML = "Upload Failed."
+}
+
+ LR.media.uploadCancelled = function(message="Upload Cancelled", media_component) {
+    media_component.querySelector('.mediastatus').innerHTML = message
+    console.error("upload failed")
+    console.error(message)
+    let deer_input = media_component.querySelector("input[deer-key]")
+    deer_input.$isDirty = false
+        // Create the event.
+    let event = document.createEvent('Event')
+    event.initEvent('media-upload-cancelled', true, true);
+    event.target = media_component
+    LR.utils.broadcastEvent(event, "fileUploadCancelled", media_component, { message: message })
+    media_component.querySelector('.mediastatus').innerHTML = "Upload Cancelled"
+}
+
+/**
+ * Assigned media is an image, audio, or video file and just one for which there needs to be a preview.
+ */
+LR.media.populateAssignedMedia = async function(annotationData, keys){
+    for await (const key of keys){
+        let uri = annotationData[key].value ?? ""
+        let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+            return resp.headers.get("content-type") ?? "Unknown"
+        })
+        .catch(err => {
+            console.error("Could not get HEAD information for file '"+uri+"'")
+            return "Error"
+        })
+        let areasToPopulate = document.querySelectorAll("div[assigned-media-"+key+"]")
+        areasToPopulate.forEach(area => {area.innerHTML = ""})
+        switch(key){
+            case "image":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML = `<img originalValue="${uri}" class="imgPreview" src="${uri}"/>`
+                })
+            break
+            case "audio":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML = `
+                    <audio controls class="audioPreview">
+                        <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
+                        Audio Not Supported
+                    </audio>`
+                })
+            break
+            case"video":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML = `
+                    <video controls class="videoPreview">
+                        <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
+                        Video Not Supported
+                    </video>`
+                })
+            break
+            default:
+                console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML = `Preview Not Available...`
+                })
+        }
+    }
+}
+
+/**
+ * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.
+ * Can be as simple as the array of URIs.  Could be as complex as preview areas and thumbnails, depending on media type. 
+ * 
+ * @param {type} mediaList  The expanded items associatedMedia key
+ * @return {undefined}
+ */
+LR.media.populateMediaPreview = async function(mediaList){
+    let media_arr = 
+        (mediaList.hasOwnProperty("value") && mediaList.value.hasOwnProperty("items")) ? mediaList.value.items : 
+        mediaList.hasOwnProperty("items") ? mediaList.items : 
+        [ LR.utils.getAnnoValue(mediaList) ]
+    let areasToPopulate = document.querySelectorAll(".scrollableMedia")
+    areasToPopulate.forEach(area => {area.innerHTML=""})
+    for await (const uri of media_arr){
+        let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+            return resp.headers.get("content-type") ?? "Unknown"
+        })
+        .catch(err => {
+            console.error("Could not get HEAD information for file '"+uri+"'")
+            return "Error"
+        })
+        let basicType = fileType.split("/")[0] ?? fileType
+        switch(basicType){
+            case "image":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `<li><img class="imgPreview scrollable" src="${uri}"/></li>`
+                })
+            break
+            case "audio":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `
+                    <li><audio controls class="audioPreview scrollable">
+                        <source src="${uri}" type="${fileType}"></source>
+                        Audio Not Supported
+                    </audio></li>`
+                })
+            break
+            case"video":
+                areasToPopulate.forEach(area =>{
+                    area.innerHTML += `
+                    <li><video controls class="videoPreview scrollable">
+                        <source src="${uri}" type="${fileType}"></source>
+                        Video Not Supported
+                    </video></li>`
+                })
+            break
+            default:
+//                areasToPopulate.forEach(area =>{
+//                    area.innerHTML += `<li>Preview Not Available...</li>`
+//                })
+                console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+        }
+    }
+}
+
+/**
+ * For media already associated and newly added, diassociate by striking the media and removing it from the deer-input.
+ * @param {type} ev  The click event from the diassociate icon
+ * @param {type} uri  The uri to disassociate
+ * @param {type} nosubmit  A flag to control whether or not to show the "Must Submit" message.                                                                                                                     
+ */
+LR.media.disassociateMedia = function(ev, uri, nosubmit=false){
+    ev.preventDefault()
+    let li = ev.target.closest("li")
+    let labelToStrike = li.firstChild
+    let associatedURIs = ev.target.closest("ul[media-key='associatedMedia']")
+    let media_component = associatedURIs.previousElementSibling
+    let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
+    let e = document.createEvent('Event')
+    let originalValue = deer_input.getAttribute("originalValue")
+    let originalValueArr = originalValue ? originalValue.split(",") : []
+    let origIndex = originalValueArr.indexOf(uri)
+    if(uri){
+        if(deer_input.value.indexOf(uri) > -1){
+            let orig = deer_input.value
+            let orig_arr = orig.split(",")
+            let index = orig_arr.indexOf(uri)
+            orig_arr.splice(index, 1)
+            let newVal = orig_arr.join(",")
+            deer_input.value = newVal
+            deer_input.setAttribute("value", newVal)
+            deer_input.$isDirty = true
+            if(newVal === deer_input.getAttribute("originalValue")){
+                deer_input.$isDirty = false
+            }
+            labelToStrike.classList.add("disassociate")
+            let undoElem = `<a class="undo" href="#" title="Undo Media Disassociation" onclick="LR.media.reassociateMedia(event, ${origIndex}, '${uri}', ${nosubmit})">&#9100;</a>`
+            ev.target.classList.add("is-hidden")
+            if(nosubmit){
+                //This is taking back to the previous state where the change does not need to be submitted.  Remove the MUST submit message
+                li.querySelector("b").remove()
+            }
+            else{
+                //This is a state of change that must be submitted.  Add the MUST submit message.
+                undoElem = `<b>(MUST submit!)</b>${undoElem}`
+            }
+            li.innerHTML += (undoElem)
+            e.initEvent('disassociate-uri-success', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "disassociate-uri-success", media_component, { message: "Media (URI) disassociated.", 'uri':uri})
+            //media_component.querySelector('.uristatus').innerHTML = "Media (URI) disassociated.  Don't forget to submit!"
+        }
+        else{
+            e.initEvent('disassociate-uri-warning', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "disassociate-uri-warning", media_component, { message: "This media could not be disassociated.", 'uri':uri})
+            //media_component.querySelector('.uristatus').innerHTML = "Unassociation issue."
+        }
+    }
+}
+
+/**
+ * Put a disassociated media URI back into its place.  Put it back at the same index it was spliced, if possible. 
+ */
+LR.media.reassociateMedia = function (ev, index, uri, nosubmit=false){
+    ev.preventDefault()
+    let associatedURIs = ev.target.closest("ul[media-key='associatedMedia']")
+    let media_component = associatedURIs.previousElementSibling
+    let deer_input = media_component.querySelector("input[deer-key='associatedMedia']")
+    let li = ev.target.parentElement
+    let labelToUnstrike = li.firstChild
+    labelToUnstrike.classList.remove("disassociate")
+    let orig = deer_input.value
+    let orig_arr = []
+    if(orig !== ""){
+        orig_arr = orig.split(",")
+    }
+    if(index === -1){
+        //It was not in the original, add to the end not the beginning
+        orig_arr.push(uri)
+    }
+    else{
+        //Try to put it back in its place in relation to the original value.
+        orig_arr.splice(index, 0, uri)
+    }
+    let newVal = orig_arr.join(",")
+    deer_input.value = newVal
+    deer_input.setAttribute("value", newVal)
+    deer_input.$isDirty = true
+    if(newVal === deer_input.getAttribute("originalValue")){
+        deer_input.$isDirty = false
+    }
+    //Do we need an event for this?
+    if(nosubmit){
+         //This is a state of change that must be submitted.  Restore the MUST submit message.
+        let elem = document.createElement("b")
+        elem.innerHTML = "(MUST submit!)"
+        ev.target.previousElementSibling.classList.remove("is-hidden")
+        ev.target.previousElementSibling.before(elem)
+    }
+    else{
+         ev.target.previousElementSibling.previousElementSibling.classList.remove("is-hidden")
+         ev.target.previousElementSibling.remove()
+    }
+    ev.target.remove()
+}
+
+/**
+ * There is media for an LRDA Archtype tracked in annotation data.  Get that value and show the media objects.
+ * Can be as simple as the array of URIs.  Could be as complex as preview areas and thumbnails, depending on media type. 
+ * 
+ * @param {type} annotationData
+ * @param {type} keys
+ * @param {type} form
+ * @return {undefined}
+ */
+LR.media.showConnectedMedia = async function(annotationData, keys, form){
+    for await (const key of keys){  
+        if(annotationData.hasOwnProperty(key)){
+            let input = form.querySelector("input[deer-key='"+key+"']")
+            let mediaURIs = []
+            let areaToPopulate
+            if(key === "associatedMedia"){
+                //Then there is a Set with a bunch of media and we need it all to show in a list.
+                //The items in this list should be removable
+                
+                areaToPopulate = form.querySelector("ul[media-key='"+key+"']")
+                areaToPopulate.innerHTML = ""
+                let data_arr = 
+                (annotationData[key].hasOwnProperty("value") && annotationData[key].value.hasOwnProperty("items")) ? annotationData[key].value.items : 
+                annotationData[key].hasOwnProperty("items") ? annotationData[key].items : 
+                [ LR.utils.getAnnoValue(annotationData[key]) ]
+
+                data_arr.forEach(uri => {
+                    //Although we probably want it to be possible to remove blanks in they end up in here...
+                    if(uri !== ""){
+                        let removeBtn = `<a href="#" title="Disassociate this media" class="removeAssociatedMedia" onclick="LR.media.disassociateMedia(event, '${uri}')">&#x274C;</a>`
+                        let elem = `<li><a target="_blank" href="${uri}">${uri.split("/").pop()}</a>${removeBtn}</li>`
+                        areaToPopulate.innerHTML += elem
+                        mediaURIs.push(uri)
+                    }
+                })
+                input.value = mediaURIs.join(",")
+                input.setAttribute("value", mediaURIs.join(","))
+                input.setAttribute("originalValue", mediaURIs.join(","))
+            }
+            else{
+                //Then there is a single URI value to show a preview for
+                //We can show a preview for image - audio - video. but nothing else.
+                areaToPopulate = form.querySelector("div[media-key='"+key+"']")
+                areaToPopulate.innerHTML = ""
+                let uri = annotationData[key].value
+                let fileType = await fetch(uri, {"method":"HEAD", "mode":"cors"}).then(resp => {
+                    return resp.headers.get("content-type") ?? "Unknown"
+                })
+                .catch(err => {
+                    console.error("Could not get HEAD information for file '"+uri+"'")
+                    return "Error"
+                })
+                let basicType = fileType.split("/")[0] ?? fileType
+                switch(basicType){
+                    case "image":
+                        areaToPopulate.innerHTML = `<img class="imgPreview" originalValue="${uri}" src="${uri}"/>`
+                    break
+                    case "audio":
+                        areaToPopulate.innerHTML = `
+                            <audio controls class="audioPreview">
+                                <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
+                                Audio Not Supported
+                            </audio>`
+                    break
+                    case"video":
+                        areaToPopulate.innerHTML = `
+                            <video controls class="videoPreview">
+                                <source originalValue="${uri}" src="${uri}" type="${fileType}"></source>
+                                Video Not Supported
+                            </video>`
+                    break
+                    default:
+                        areaToPopulate.innerHTML = "Preview Not Available..."
+                        console.warn("Cannot generate preview for this file type: '"+fileType+"'")
+                }
+                
+            }
+        }
+        else{
+            //set the original value to blank for associatedMeda
+            if(key === "associatedMedia"){
+                form.querySelector("input[deer-key='"+key+"']").setAttribute("value", "")
+                form.querySelector("input[deer-key='"+key+"']").setAttribute("originalValue", "")
+                form.querySelector("input[deer-key='"+key+"']").value = ""
+            }
+        }
+    }
+}
+
+/**
+ * User has typed in a URI instead of doing a file upload to produce one.  Add this URI to the set of connected media.
+ * @param {type} event
+ * @return {undefined}
+ */
+LR.media.addMediaURI = function(event){
+    let media_component = event.target.closest("lr-media-upload")
+    let key = media_component.getAttribute("media-key")
+    let deer_input = media_component.querySelector("input[deer-key='"+key+"']")
+    let uri = media_component.querySelector(".mediaURI").value
+    let e = document.createEvent('Event')
+    if(uri){
+        if(deer_input.value.indexOf(uri) === -1){
+            deer_input.value = (deer_input.value) ? deer_input.value+","+uri : uri
+            deer_input.setAttribute("value", deer_input.value)
+            deer_input.$isDirty = true
+            e.initEvent('add-uri-success', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "addMediaURISuccess", media_component, { message: "Media (URI) Added.", 'uri':uri})
+            //media_component.querySelector('.uristatus').innerHTML = "Media (URI) Added.  Don't forget to submit!"
+        }
+        else{
+            e.initEvent('duplicate-media-warning', true, true);
+            e.target = media_component
+            LR.utils.broadcastEvent(e, "duplicateURIWarning", media_component, { message: "This media is already associated with this entity.", 'uri':uri})
+            //media_component.querySelector('.uristatus').innerHTML = "Duplicate URI was not added."
+        }
+    }
+    //Note this is not actually saved to an annotation until the user submits the archtype form!  All they have done is changed an input tracking these values!!
+}
+

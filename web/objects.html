@@ -5,22 +5,33 @@
 <html>
 
 <head>
-    <title>Religion in Place Objects</title>
+    <title>Objects</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
-    <!-- Yes.  If admin, entries can be edited -->
-
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
     <div class="container">
         <h1 class="text-primary"> Objects </h1>
         <a class="button primary" href="object.html"> &#xFF0B; Object </a>
         <div class="row">
-            <div id="objects" deer-collection="LivedReligionObjects" class="deer-view col" deer-link="object.html?id=">No objects.</div>
+            <div id="objects" deer-collection="LivedReligionObjects" class="deer-view col" deer-link="object.html?id=">
+                Please wait while we find objects...
+            </div>
         </div>
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -29,16 +40,27 @@
     <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
         /**
-         * Determine what to do with the items in the Lived Religion Locations collection based on a users roles
+         * Determine what to do with the items in the Lived Religion Objects collection based on a users roles
          * @param {type} event
          * @returns {undefined}
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "objects") {
+                let lis = Array.from(objects.querySelectorAll("li"))
+                let ul = document.createElement("ul")
+                //Sort the objects by label alphabetically
+                lis.sort((a, b) => {
+                    let a_label = a.querySelector("a").innerHTML ?? ""
+                    let b_label = b.querySelector("a").innerHTML ?? ""
+                    return a_label.localeCompare(b_label)
+                })
+                for(const li of lis){
+                    ul.appendChild(li)
+                }
+                objects.querySelector("ul").replaceWith(ul)
                 LR.utils.drawInterface(event, "objects")
             }
         }, false)
-        
         /**
          * A hack to force redraw by refreshing the page.
          */
@@ -50,7 +72,7 @@
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

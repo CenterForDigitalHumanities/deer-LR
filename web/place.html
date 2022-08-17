@@ -5,12 +5,16 @@
 <html>
 
 <head>
-    <title>Lived Religion Location</title>
+    <title>Location</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <!--     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" accesskey=""crossorigin=""></script>
     <style>
         #leafletPreview {
             height: 30rem;
@@ -21,19 +25,32 @@
 </head>
 
 <body>
-    <lr-nav></lr-nav>
-
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Location</h2>
         <div class="card bd-primary">
             <div class="card_body">
                 <form id="locationForm" deer-type="Place" deer-creator deer-motivation="supplementing" 
                 deer-context="[http://lived-religion.rerum.io/deer-lr/vocab/context.json][https://geojson.org/geojson-ld/geojson-context.jsonld]">
-                    <label>Name or Label</label>
+                    <label>Name or Label:</label>
                     <input type="text" deer-key="name" title="Enter a name for the Location to be known by in simple lists.">
                     <input type="hidden" deer-key="creator" value="loading">
+                    <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionLocations">
                     <input id="additionalTypeInput" type="hidden" deer-key="additionalType" >
+                    <h4 class="text-primary">Contact  Details</h4>
                     <h4 title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually.">Map Information</h4>
                     <div title="Use the map below to pan around.  Click to be given the option to use coordinates, or enter coordinates manually." id="leafletPreview" class="col"></div>
                     <input type="hidden" deer-key="geometry" value="{}">
@@ -45,15 +62,8 @@
                         <input id="leafLong" step=".000000001" type="number">
                     </div>
 
-                    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
-                    <!--<script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>-->
-
                     <script>
                         var previewMap = L.map('leafletPreview').setView([38.628009, -90.201101], 16)
-//                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//                            maxZoom: 19,
-//                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//                        }).addTo(previewMap);
                         
                         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ', {
                             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -61,7 +71,6 @@
                             id: 'mapbox.satellite', //mapbox.streets
                             accessToken: 'pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ'
                         }).addTo(previewMap);
-                        //var osmb = new OSMBuildings(previewMap).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json')
 
                         leafLat.oninput = updateGeometry
                         leafLong.oninput = updateGeometry
@@ -79,6 +88,7 @@
                             let long = parseInt(leafLong.value * 1000000) / 1000000
                             if (lat && long) {
                                 previewMap.setView([lat, long], 18)
+                                //Perhaps we should build some properties into here?  Especially if they want a thumbnail if an image is available.
                                 let geometry = {
                                     type: "Point",
                                     coordinates: [long, lat]
@@ -90,10 +100,7 @@
                     </script>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    
-                    <h4>Descriptive Properties </h4>
-                    <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
-                    <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
+                    <h4 class="text-primary">General Details</h4>
                     <label title="The primary function of this location should determine its type.">Primary Specification</label>
                     <div class="row">
                         <div data-rdf="Accommodation" class="bd-primary text-center card col" title="Accommodation">
@@ -132,7 +139,7 @@
                         </div>
                     </div>
                     <label>More Options</label>
-                    <select oninput="setPrimaryType(this)">
+                    <select class="otherPrimaryTypes" oninput="setPrimaryType(this)">
                         <option disabled selected value> Specific Types By Group </option>
                         <optgroup label="Accomodations">
                             <option value="Apartment">Apartment</option>
@@ -216,7 +223,8 @@
                         </optgroup>
                         
                         <option disabled selected value> General </option>
-                            <option value="Edifice">Edifice</option>
+                        <option value="Edifice">Edifice</option>
+                        <option value="None">None Noted</option>
                     </select>
 
                     <script>
@@ -237,7 +245,7 @@
                         }
                     </script>
                     <label title="If there are secondary functions for this location, note them here.">Additional Types (if any)</label>
-                    Hold <kbd>CTRL</kbd> to make multiple selections.
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <!-- We are already using additionalType... -->
                     <input type="hidden" deer-input-type="Set" deer-key="secondaryFunction" >
                     <select multiple oninput="LR.utils.handleMultiSelect(event, false)">
@@ -268,13 +276,20 @@
                         <optgroup label="Other">
                             <option value="OtherBuilding" >Other Building</option>
                         </optgroup>
+                        <option value="None">None Noted</option>
                     </select>
                     <div class="selectedEntities"></div>
-                    <h4>Historical Information</h4>
+                    <h4 class="text-primary">Historical Information</h4>
                     <label id="formerLocation">Former Location(s):</label>
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <input type="hidden" deer-input-type="Set" deer-key="formerLocations" value="">
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <option disabled selected value=""> Loading... </option>
+                        </select>
+                    </deer-view>
                     <label>Former Use(s)</label>
+                    Hold <kbd>CTRL</kbd> to make multiple selections or unselect.
                     <input type="hidden" deer-input-type="Set" deer-key="formerUses" value="">
                     <select multiple oninput="LR.utils.handleMultiSelect(event,false)">
                         <optgroup label="General Categories"> 
@@ -304,6 +319,7 @@
                         <optgroup label="Other">
                             <option value="OtherBuilding" >Other Building</option>
                         </optgroup>
+                        <option value="None">None Noted</option>
                     </select>
                     <div class="selectedEntities"></div>
                     <label title="The materials this location is comprised of.">Material(s), if applicable:</label>
@@ -316,13 +332,51 @@
                         <option value="educational">Educational</option>
                         <option value="civic">Civic</option>
                         <option value="otherPublic">Other Public</option>
+                        <option value="None">None Noted</option>
                     </select>
-                    <!--<h3> Upload Media </h3>-->
-                    <label>Link a photograph or depiction </label>
-                    <input type="url" deer-key="image" id="depiction" >
-                    <p id="depictionPreview" class="text-center"></p>
-                    <label>Tags separated by ','</label>
-                    <input disabled type="text" deer-key-x="LR:Tags">
+                    <h4 class="text-primary">Media</h4>
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload new media or supply an URI to existing media to associate with this place.
+                                    Even though your files are uploaded and URIs appear in the media you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the URIs to be saved to this place.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this location.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+                    <h4 class="text-primary">Additional Details</h4>
+                    <label title="Provide a short decription of this Location with otherwise unprovided or disambiguating details.">Brief Description</label>
+                    <textarea title="Provide a short decription of this Location with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
+                    
+                    <label title="Provide any general notes in relation to this location.">Notes</label>
+                    <textarea type="text" title="Provide any general notes in relation to this location." deer-key="notes"></textarea>
                     <div class="row">
                         <input class="button primary col" type="submit">
                     </div>
@@ -369,18 +423,20 @@
                     LR.utils.setTrackedHiddenValues(annotationData, ["formerUses", "formerLocations", "secondaryFunction"], event.target)
                     LR.utils.populateCoordinates(annotationData, event.target)
                     LR.utils.preSelectType(annotationData, event.target)
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
                 break
                 
                 default:
                     
             }
         })
-        
+              
         /**
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {
@@ -398,20 +454,6 @@
             document.location.href="dashboard.html"
         })
 
-        depiction.addEventListener("input",event=>{
-            let url = event.target.value
-            if(url) {
-                try {
-                    fetch(url).then(res=>{
-                        depictionPreview.innerHTML = `<img style="max-height:20rem;" src="${url}">`
-                    })
-                } catch(err){
-                    depictionPreview.innerHTML = ``
-                }
-            } else {
-                depictionPreview.innerHTML = ``
-            }
-        })
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>

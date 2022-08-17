@@ -70,6 +70,7 @@ DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
         for (let item of allItemsInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${item['@id']}" value="${item['@id']}">${UTILS.getLabel(item)}</option>`
         }
+        tmpl += `<option value="None">None</option>`
         tmpl += `</select>`
         return tmpl
     } catch (err) {
@@ -148,7 +149,7 @@ DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
 
 DEER.TEMPLATES.Event = function (experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> 
+        let tmpl = `<h2 id="expLabel">${UTILS.getLabel(experienceData)}</h2> 
         <a id="toggleExpReviewContent" area="experienceContent" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Show the details of this experience">Review</a>
         <dl tog="experienceContent" class="eventContentWrapper is-hidden">
             <a class="button primary pull-right" area="startExperience" onclick="LR.ui.customToggles(event)" title="Edit the base information about this experience">Edit Data</a>
@@ -163,6 +164,9 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
         let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
         let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
+        let notes = experienceData.notes ? UTILS.getValue(experienceData.notes) : ""
+        
+        //When setting the names, we should pass the citation source along the name came from.  Sometimes, the value is just bad and needs checked. 
 
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = setNamesTemplate([place])
@@ -179,7 +183,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = setNamesTemplate(relatedObjects.items,
             `<li>
-                <deer-view deer-id="$itemURI" deer-template="label"></deer-view>
+                <deer-view deer-id="$itemURI" deer-template="label">loading...</deer-view>
                 <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '$itemURI', '${experienceData["@id"]}', 'object')">Remove</a>
             </li>`)
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
@@ -194,7 +198,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = setNamesTemplate(relatedPractices.items,
             `<li>
-                <deer-view deer-id="$itemURI" deer-template="label"></deer-view>
+                <deer-view deer-id="$itemURI" deer-template="label">loading...</deer-view>
                 <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '$itemURI', '${experienceData["@id"]}', 'relatedPractices')">Remove</a>
             </li>`)
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
@@ -209,7 +213,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = setNamesTemplate(relatedSenses.items,
             `<li>
-                <deer-view deer-id="$itemURI" deer-template="label"></deer-view>
+                <deer-view deer-id="$itemURI" deer-template="label">loading...</deer-view>
                 <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociate(event, '$itemURI', '${experienceData["@id"]}', 'relatedSenses')">Remove</a>
             </li>`)
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
@@ -220,15 +224,19 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 ${relatedSensesByName}
             </ul>
         `
+        if(date){
+            date = new Date(date).toLocaleString()
+        }
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let orgHTML = `<dt>Organizations Involved</dt><dd><ul id="organizationsInExperience">${organizationsByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
-        let dateHTML = `<dt>Associated Date</dt><dd>${date}</dd>`
+        let dateHTML = `<dt>Associated Date and Time</dt><dd>${date}</dd>`
         let descriptionHTML = `<dt>Description</dt><dd>${description}</dd>`
+        let notesHTML = `<dt>General Notes</dt><dd>${notes}</dd>`
         let artifactsHTML = objectsHTML + practicesHTML + sensesHTML
 
-        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + orgHTML + descriptionHTML + artifactsHTML + `</div>`
+        tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + orgHTML + descriptionHTML + notesHTML + artifactsHTML + `</div>`
         return tmpl
     } catch (err) {
         console.log("Could not build Event or ExperienceUpload template.")
@@ -286,7 +294,6 @@ DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
     }
 }
 
-
 /**
  * A sense is being listed somewhere.  List it by additionalType with the description as a tooltip.
  * Note we could probably build something a little better to show.  We would need to put limits on the description. 
@@ -335,6 +342,7 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
             <option value="TradeAction">Trading</option>
             <option value="GiveAction">Donating</option>
             <option value="Other">Other</option>
+            <option value="None">None Noted</option>
         `
         tmpl += "</select>"
         return tmpl
@@ -351,15 +359,15 @@ let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 //Comment this out for dev-01 deploys
-//DEER.URLS = {
-//    BASE_ID: "http://store.rerum.io/v1",
-//    CREATE: "create",
-//    UPDATE: "update",
-//    QUERY: "query",
-//    OVERWRITE: "overwrite",
-//    DELETE: "delete",
-//    SINCE: "http://store.rerum.io/v1/since"
-//}
+DEER.URLS = {
+    BASE_ID: "http://store.rerum.io/v1",
+    CREATE: "create",
+    UPDATE: "update",
+    QUERY: "query",
+    OVERWRITE: "overwrite",
+    DELETE: "delete",
+    SINCE: "http://store.rerum.io/v1/since"
+}
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://deer.rerum.io/releases/
@@ -390,13 +398,19 @@ function URIisValid(uriString) {
 }
 
 function setNamesTemplate(items,
-    trueTemplate = `<li><deer-view deer-id="$itemURI" deer-template="label"></deer-view></li>`,
+    trueTemplate = `<li><deer-view deer-id="$itemURI" deer-template="label">loading...</deer-view></li>`,
     falseTemplate = `<li> $itemURI </li>`) {
     let nameText = ``
     items.forEach((val) => {
-        const itemURI = UTILS.getValue(val)
-        const name = URIisValid(itemURI) ? trueTemplate.replaceAll("$itemURI",itemURI) : falseTemplate.replaceAll("$itemURI",itemURI)
-        nameText += name
+        //This should always be either the string value for the label or an item URI.  
+        //In most cases, we expect it will be a URI.
+        //If the item is blank or undefined, ignore it.  It is not real and should not be considered.  The citation source should be checked, it's value is off.
+        if(val && UTILS.getValue(val)){
+            const itemURI = UTILS.getValue(val)
+            const itemLabel = UTILS.getLabel(val) ? UTILS.getLabel(val) : URIisValid(itemURI) ? itemURI : "Entity Not Labeled"
+            const name = URIisValid(itemURI) ? trueTemplate.replaceAll("$itemURI",itemURI) : falseTemplate.replaceAll("$itemURI", itemLabel)
+            nameText += name
+        }
     })
     return nameText
 }

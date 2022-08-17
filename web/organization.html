@@ -6,15 +6,27 @@
 <html>
 
 <head>
-    <title>Religion In Place Organization</title>
+    <title>Organization</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <lr-nav></lr-nav>
-
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Organization</h2>
         <div class="card bd-primary">
@@ -22,7 +34,8 @@
                 <form id="organizationForm" class="hidden" deer-type="Organization" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionOrganizations">
-                    <h4>Contact Details</h4>
+                    <input type="hidden" deer-key="fieldNotes" />
+                    <h4 class="text-primary">Contact Details</h4>
                     <div class="grouped">
                         <label>Name</label>
                         <input type="text" deer-key="name">
@@ -37,11 +50,49 @@
                     </div>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    <h4 title="This information is not required.">Additional Details</h4>
+                    <h4 class="text-primary">Media</h4>
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload new media or supply an URI to existing media to associate with this organization.
+                                    Even though your files are uploaded and URIs appear in the media you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the URIs to be saved to this organization.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this organization.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+                    <h4 class="text-primary">Additional Details</h4>
                     <label title="Provide a short decription of this organization with otherwise unprovided or disambiguating details.">Brief Description</label>
                     <textarea  title="Provide a short decription of this organization with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
-                    <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" >
+                    
+                    <label title="Provide any general notes in relation to this organization.">Notes</label>
+                    <textarea type="text" title="Provide any general notes in relation to this organization." deer-key="notes"></textarea>
                     <footer>
                         <input class="button primary" type="submit">
                     </footer>
@@ -73,11 +124,30 @@
             window.location = document.referrer
         })   
         
+         /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all deer-view-rendered events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
+        addEventListener('deer-form-rendered', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch (whatRecordForm) {
+                case "organizationForm":
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
+                    break
+                default:
+
+            }
+        })
+        
         /**
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

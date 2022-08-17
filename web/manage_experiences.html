@@ -6,17 +6,26 @@
 <html>
 
 <head>
-    <title>Lived Religion User Experiences</title>
+    <title>Manage Experiences</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <!-- Is there a difference between the admin dashboard and the regular user dashboard -->
-    <!-- Yes.  If admin, entries can be edited -->
-
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
     <div class="container">
         <h1 class="text-primary"> Managing Lived Religion Experiences </h1>
         <button id="saveExperiences" class="is-hidden button primary" role="button" onclick="saveList()">Save List</button>
@@ -34,8 +43,20 @@
          * @param {type} event
          * @returns {undefined}
          */
-        addEventListener("deer-loaded", event => {
+         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "experiences") {
+                let lis = Array.from(experiences.querySelectorAll("li"))
+                let ul = document.createElement("ul")
+                //Sort the experiences by label alphabetically
+                lis.sort((a, b) => {
+                    let a_label = a.querySelector("a").innerHTML ?? ""
+                    let b_label = b.querySelector("a").innerHTML ?? ""
+                    return a_label.localeCompare(b_label)
+                })
+                for(const li of lis){
+                    ul.appendChild(li)
+                }
+                experiences.querySelector("ul").replaceWith(ul)
                 LR.utils.drawInterface(event, "experienceManagement")
             }
         }, false)
@@ -52,7 +73,7 @@
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

@@ -6,15 +6,27 @@
 <html>
 
 <head>
-    <title>Religion In Place Person</title>
+    <title>Person</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <lr-nav></lr-nav>
-
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <h2 class="text-primary">Create a New Person</h2>
         <div class="card bd-primary">
@@ -22,12 +34,15 @@
                 <form id="personForm" class="hidden" deer-type="Person" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" value="loading">
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionPeople">
-                    <h4>Contact Details</h4>
+                    <input type="hidden" deer-key="fieldNotes" />
+                    <h4 class="text-primary">Contact Details</h4>
                     <div class="grouped">
                         <label>Name</label>
                         <input type="text" deer-key="name">
-                        <label>Birth Date</label>
+                        <label>Date of Birth</label>
                         <input type="date" deer-key="birthDate">
+                        <label>Date of Passing</label>
+                        <input type="date" deer-key="deathDate">
                     </div>
                     <div class="grouped">
                         <label>E‑mail</label>
@@ -37,9 +52,7 @@
                     </div>
                     <label>Address</label>
                     <textarea type="text" deer-key="address"></textarea>
-                    <h4 title="This information is more personal and sensitive information and is not required.">Additional Details</h4>
-                    <label title="Provide a short decription of this person with otherwise unprovided or disambiguating details.">Brief Description</label>
-                    <textarea  title="Provide a short decription of this person with otherwise unprovided or disambiguating details."deer-key="description"></textarea>
+                    <h4 class="text-primary">General Details</h4>
                     <div class="row">
                         <div class="traditionWrapper col">
                             <label>Religious Tradition</label>
@@ -77,7 +90,7 @@
                                 <option value="Atheist">Atheist</option>
                                 <option value="Agnostic">Agnostic</option>
                                 <option value="Humanist">Humanist</option>
-                                <option value="Nothing in particular">Nothing in particular</option>
+                                <option value="None">Nothing in particular</option>
                             </select>
                         </div>
                         <div class="col">
@@ -87,15 +100,17 @@
                                 <option value="African American/Black/African">African American/Black/African</option>
                                 <option value="Bosniak">Bosniak</option>
                                 <option value="Caribbean">Caribbean</option>
+                                <option value="Caucasian">Caucasian</option>
                                 <option value="East Asian">East Asian</option>
                                 <option value="Hispanic/Latin">Hispanic/Latin</option>
                                 <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Mixed-Race">Mixed-race</option>
                                 <option value="Bosniak">Native American/indigenous American</option>
                                 <option value="Native American/indigenous American">North African/Mediterranean</option>
+                                <option value="Other">Other</option>
                                 <option value="Pacific Islander">Pacific Islander</option>
                                 <option value="South Asian">South Asian</option>
-                                <option value="Mixed-Race">Mixed-race</option>
-                                <option value="Other">Other</option>
+                                <option value="None">N/A</option>
                             </select>
                         </div>
                         <div class="col">
@@ -110,7 +125,7 @@
                                 <option value="Genders are intermingled">Genders are intermingled</option>
                                 <option value="Genders are separated">Genders are separated</option>
                                 <option value="Other">Other</option>
-                                <option value="Not applicable">Not applicable</option>
+                                <option value="None">N/A</option>
                             </select>
                         </div>
                         <div class="col">
@@ -122,13 +137,54 @@
                                 <option value="Some college">Some college</option>
                                 <option value="College Degree">College degree</option>
                                 <option value="Post-baccalaureate degree">Post-baccalaureate degree</option>
+                                <option value="None">N/A</option>
                             </select>
                         </div>
                     </div>
                     <label>National Origin</label>
                     <input type="text" deer-key="nationality">
-                    <label>Link a photograph or depiction: </label>
-                    <input type="url" deer-key="image" >
+                    <h4 class="text-primary">Media</h4>
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload new media or supply an URI to existing media to associate with this person.
+                                    Even though your files are uploaded and URIs appear in the media you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the URIs to be saved to this person.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this person.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+                    <h4 class="text-primary">Additional Details</h4>
+                    <label title="Provide a short decription of this person with otherwise unprovided or disambiguating details.">Brief Description</label>
+                    <textarea  title="Provide a short decription of this person with otherwise unprovided or disambiguating details." deer-key="description"></textarea>
+                    <label title="Provide any general notes in relation to this person.">Notes</label>
+                    <textarea type="text" title="Provide any general notes in relation to this person." deer-key="notes"></textarea>
                     <footer>
                         <input class="button primary" type="submit">
                     </footer>
@@ -161,10 +217,30 @@
         })   
         
         /**
+         * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
+         * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 
+         * This event will come after all deer-view-rendered events have finished.
+         * @see deer-record.js DeerReport.constructor()  
+         */
+        addEventListener('deer-form-rendered', event => {
+            let whatRecordForm = event.target.id
+            let annotationData = event.detail
+            switch (whatRecordForm) {
+                case "personForm":
+                    LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
+                    break
+                default:
+
+            }
+        })
+        
+        
+        /**
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

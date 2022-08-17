@@ -5,20 +5,34 @@
 <html>
 
 <head>
-    <title>Religion In Place Organizations</title>
+    <title>Organizations</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
 </head>
 
 <body>
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
     <div class="container">
         <h1 class="text-primary"> Organizations </h1>
         <a class="button primary" href="organization.html"> &#xFF0B; Organization </a>
 
         <div class="row">
-            <div id="organizations" class="deer-view col" deer-collection="LivedReligionOrganizations" deer-list="itemListElement" deer-link="organization.html?id="></div>
+            <div id="organizations" class="deer-view col" deer-collection="LivedReligionOrganizations" deer-list="itemListElement" deer-link="organization.html?id=">
+                Please wait while we find organizations...
+            </div>
         </div>
     </div>
     <lr-global-feedback></lr-global-feedback>
@@ -33,7 +47,19 @@
          */
         addEventListener("deer-loaded", event => {
             if (event.target.getAttribute("id") === "organizations") {
-               LR.utils.drawInterface(event, "organizations")
+                let lis = Array.from(organizations.querySelectorAll("li"))
+                let ul = document.createElement("ul")
+                //Sort the organizations by label alphabetically
+                lis.sort((a, b) => {
+                    let a_label = a.querySelector("a").innerHTML ?? ""
+                    let b_label = b.querySelector("a").innerHTML ?? ""
+                    return a_label.localeCompare(b_label)
+                })
+                for(const li of lis){
+                    ul.appendChild(li)
+                }
+                organizations.querySelector("ul").replaceWith(ul)
+                LR.utils.drawInterface(event, "organizations")
             }
         }, false)
                
@@ -48,7 +74,7 @@
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {

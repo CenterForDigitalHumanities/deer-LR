@@ -5,7 +5,8 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Experience</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
@@ -29,7 +30,7 @@
             margin: 0px;
             max-width: 36em;
         }
-        #experienceArtifacts{
+        #experienceArtifacts, #experienceMedia{
             border-top : 1px solid black;
             min-height: 3.5em;
         }
@@ -39,43 +40,8 @@
         #experienceContent, #artifactContent{
             height: auto;
         }
-        #fieldNotesFloater{
-            position: fixed;
-            left: 0;
-            top: 3.5em;
-            width: 40px;
-            height: 40px;
-            transition: width 0.5s, box-shadow 1s;
-            -webkit-transition: width 0.5s, box-shadow 1s;
-            -moz-transition: width 0.5s, box-shadow 1s;
-            background-color: lightgray;
-        }
-        .fieldNotesInnards input{
-            margin: .6em;
-        }
-        #notesIcon{
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 40px;
-            width: 40px;
-            cursor: pointer;
-        }
-        #notesIcon:hover{
-            border: 2px solid black;
-        }
-        #notesInfo{
-            position: relative;
-        }
-        #notesTitle{
-            text-align:center;
-        }
-        #fieldNotes textarea{
-            height: 185px;
-            max-width: 500px;
-            max-height: 300px;
-            font-size: 90%;
-        }
+
+        
         .backdrop{
             z-index: 2;
         }
@@ -112,77 +78,125 @@
 </head>
 
 <body>
-    <lr-nav></lr-nav>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
+    <lr-field-notes></lr-field-notes>
     <div class="container">
         <!-- Make this show-hide in a corner or something. -->
         <h2 class="text-primary">Lived Religion Experience</h2>
-        <div class="card is-hidden" id="fieldNotesFloater" expanded="false">
-            <div class="card_body">
-                <h6 id="notesTitle" class="fieldNotesInnards is-hidden" ><span class="theUserName"></span> 's Field Notes </h6>
-                <img id="notesIcon" src="https://icongr.am/material/note-text-outline.svg?size=40" title="Field Notes" alt="Field Notes" onclick="LR.ui.toggleFieldNotes(event)"/>
-                <p id="notesInfo" class="fieldNotesInnards is-hidden">Enter field notes from your experience here.  You can continue to update these as you upload more information.</p>
-                <!--These are additional notes about the event, not user X's field notes.  They happen to be user x's because it is user x's experience. -->
-                <div id="fieldNotes" class="fieldNotesInnards is-hidden" >
-                    <textarea id="fieldNotesEntry" type="text"> </textarea>
-                    <div class="row">
-                        <input class="button primary" type="submit" value="Save Notes" onclick="LR.utils.saveFieldNotesInExperience(event)" />
-                    </div>
-                </div>
-            </div>
-        </div>
         <div id="startExperience" class="card bd-primary" tog="startExperience">
             <div class="card_body">
                 <form id="theExperience" class="experience" deer-type="Event" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                     <input type="hidden" deer-key="creator" />
                     <input type="hidden" deer-key="additionalType" value="ExperienceUpload"/> <!-- https://github.com/CenterForDigitalHumanities/deer-LR/blob/master/web/vocab/TERMS.md#ExperienceUpload -->
-                    <input id="experienceFieldNotes" type="hidden" deer-key="fieldNotes" />
+                    <input type="hidden" deer-key="fieldNotes" />
                     <input type="hidden" deer-key="targetCollection" value="LivedReligionExperiences"> <!-- into this collection -->
                     <input id="senses" type="hidden" deer-key="relatedSenses" deer-input-type="Set" />
                     <input id="practices" type="hidden" deer-key="relatedPractices" deer-input-type="Set" />
-                    
+                    <h4 class="text-primary">General Details</h4>
                     <label>Provide a label if desired.</label>
                     <input id="uploadLabel" type="text" deer-key="name" />
-                    
                     <label>Select which location this data entry is concerned with.</label>
                     <input type="hidden" deer-key="location" />
-                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown"></deer-view>
+                    <deer-view deer-collection="LivedReligionLocations" deer-template="itemsAsDropdown">
+                        <select>
+                            <option disabled selected value=""> Loading... </option>
+                        </select>
+                    </deer-view>
                     <!--TODO allow time range??-->
-                    <label> On what date was this data gathered?</label>
-                    <input type="date" deer-key="startDate" />
+                    <label> Field work start date and time:</label>
+                    <input type="datetime-local" deer-key="startDate" />
                     
-                    <label> Select the Lived Religion researchers involved, if any. Hold <kbd>CTRL</kbd> to make multiple selections.</label>
+                    <label> Field work end date and time:</label>
+                    <input type="datetime-local" deer-key="endDate" />
+                    
+                    <h4 class="text-primary">Involved People, Places, and Things</h4>
+                    
+                    <label> Select the Lived Religion researchers that were involved. Hold <kbd>CTRL</kbd> to make multiple selections or unselect.  You may also create a new researcher with the the &#x2b; to the right.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="contributor" />
-                    <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="researchers" deer-collection="LivedReligionResearchers" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
-                    <label> Select other people involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new person with the &#x2b; below. </a> </label>
+                    <label> Select other people that were involved. Hold <kbd>CTRL</kbd> to make multiple selections or unselect. You may also create a new person with the the &#x2b; to the right.</label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee" />
-                    <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="people" deer-collection="LivedReligionPeople" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
-                    <label> Select organizations that were involved. Hold <kbd>CTRL</kbd> to make multiple selections. You may also create a new organization with the &#x2b; below. </a> </label>
+                    <label> Select organizations that were involved. Hold <kbd>CTRL</kbd> to make multiple selections or unselect. You may also create a new organization with the the &#x2b; to the right. </label>
                     <input deer-input-type="Set" type="hidden" deer-key="attendee-org" />
-                    <deer-view id="organizations" deer-collection="LivedReligionOrganizations" deer-template="itemsAsMultiSelect"></deer-view>
+                    <deer-view id="organizations" deer-collection="LivedReligionOrganizations" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
                     
-                    <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections.  You may also create a new object with the &#x2b; below. </a> </label>
+                    <label> Select any objects that were a part of the event. Hold <kbd>CTRL</kbd> to make multiple selections or unselect.  You may also create a new object with the the &#x2b; to the right. </label>
                     <input deer-input-type="Set" type="hidden" deer-key="object" />
-                    <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect"></deer-view>
-                    
-                    <label> Provide other details or a description if desired</label>
-                    <textarea deer-key="description"></textarea>
-
+                    <deer-view id="objects" deer-collection="LivedReligionObjects" deer-template="itemsAsMultiSelect">
+                        <select multiple>
+                            <optgroup label="Loading..."></optgroup>
+                        </select>
+                    </deer-view>
+                    <h4 class="text-primary">Media</h4>
                     <div class="card bg-light" style="margin-top: 3px;">
-                        <header class="text-primary">Linked Media</header>
-                        <p class="text-primary"><small>Optionally link to media from this event. 
-                            Media specific to an object, person, or organization should not be added here.</small></p>
-                        <label>Link a photograph or depiction: </label>
-                        <input type="url" deer-key="image" >
-                        <label>Link audio: </label>
-                        <input type="url" deer-key="audio" >
-                        <label>Link a video: </label>
-                        <input type="url" deer-key="video" >
+                        <header class="text-primary">Upload New Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Upload new media or supply an URI to existing media to associate with this experience.
+                                    Even though your files are uploaded and URIs appear in the media you still <b>MUST click Save or Update</b> 
+                                    at the bottom of this form for the media changes to be saved to this experience.
+                                </small>
+                            </p>
+                            <lr-media-upload media-key="associatedMedia"> </lr-media-upload>
+                            <ul media-key="associatedMedia" class="connectedMedia"></ul>
+                        </div>
                     </div>
 
-                    <label>Tags separated by ',':</label>
-                    <input disabled type="text" deer-key-x="Tags">   
+                    <div class="card bg-light" style="margin-top: 3px;">
+                        <header class="text-primary">Set Top Level Media</header>
+                        <div class="card_body">
+                            <p class="text-primary">
+                                <small>
+                                    Link singular pieces of media that should always be present in views for this experience.  You MUST submit the form
+                                    for the URI changes to be saved, even if you see the media preview.  If you do not see a preview, the media was
+                                    not the expected type (image - audio - video) or did not resolve.  The URI can still be saved.
+                                </small>
+                            </p>
+                            <label>Link a photograph or depiction: </label>
+                            <input type="url" deer-key="image" id="depiction">
+                            <div media-key="image"></div>
+                            <label>Link audio: </label>
+                            <input type="url" deer-key="audio" >
+                            <div media-key="audio"></div>
+                            <label>Link a video: </label>
+                            <input type="url" deer-key="video" >
+                            <div media-key="video"></div>
+                        </div>
+                    </div>
+                    <h4 class="text-primary">Additional Details</h4>
+                    <label> Provide other details or a description if desired</label>
+                    <textarea deer-key="description"></textarea>
+                    
+                    <label> Provide any other general notes if desired</label>
+                    <textarea deer-key="notes"></textarea>
+
                     <input type="submit" value="Save Data and Review" />
                 </form>
             </div>
@@ -191,6 +205,26 @@
             <p id="expLoadMessage"> Please wait while we bring the pieces together... </p>
             <div class="card_body">
                 <deer-view id="experienceContent" deer-listening="theExperience" deer-template="Event"></deer-view>
+            </div>
+        </div>
+        <div id="experienceMedia" class="card is-hidden"> 
+            <a id="toggleMediaArea" area="mediaArea" class="button primary pull-right" onclick="LR.ui.customToggles(event)" title="Expand the area to see associated media">View Media</a>
+            <div id="mediaContent" class="card_body is-hidden" tog="mediaArea" title="View associated media in this section">
+                <div class="row">
+                    <a class="button primary" area="associated" onclick="LR.ui.customToggles(event)" title="View Associated Media">Associated Media</a>
+                    <a class="button primary" area="assigned" onclick="LR.ui.customToggles(event)" title="View Top Level Media">Top Level Media</a>
+                </div>
+                <div tog="associated" class="kind is-hidden">
+                    <ul class="scrollableMedia"></ul>
+                </div>
+                <div tog="assigned" class="kind is-hidden">
+                    <h4> Image </h4>
+                    <div assigned-media-image></div>
+                    <h4> Audio </h4>
+                    <div assigned-media-audio></div>
+                    <h4> Video </h4>
+                    <div assigned-media-video></div>
+                </div>
             </div>
         </div>
         <div id="experienceArtifacts" class="card is-hidden">
@@ -203,12 +237,11 @@
                     <a class="button primary" area="bodies" onclick="LR.ui.customToggles(event)" title="Record more intimate information about what you are perceiving in your immediate vicinity.">Senses</a>
                 </div>
                 <div tog="bodies" class="kind is-hidden">
-                    <h2>Bodies</h2>
-                    <p> More intimate information about what you are feeling and perceiving. </p>
+                    <h4 class="text-primary">What are your sensing?  Add one at a time.</h4>
                     <div class="card bd-primary">
                         <div class="card_body">
                             <form id="senseForm" deer-type="Sense" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
-                                <h4>What senses are prominent?  Add one at a time.</h4>
+                                <h4 class="text-primary">What senses are prominent?  Add one at a time.</h4>
                                 <input type="hidden" deer-key="creator"/>
                                 <input class="expReference" type="hidden" deer-key="event">
                                 <select deer-key="additionalType">
@@ -221,15 +254,27 @@
                                 </select>
                                 <label>Was there a specific object at the experience connected with this sense?  Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-key="object" value="">
-                                <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown"></div>
+                                <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown">
+                                    <select>
+                                        <option disabled selected value=""> Loading... </option>
+                                    </select>
+                                </div>
 
                                 <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee" value="">
-                                <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect">
+                                    <select multiple>
+                                        <option disabled selected value=""> Loading... </option>
+                                    </select>
+                                </div>
                                 
                                 <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                                 <input type="hidden" deer-input-type="Set" deer-key="attendee-org" value="">
-                                <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                                <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect">
+                                    <select multiple>
+                                        <optgroup label="Loading..."></optgroup>
+                                    </select>
+                                </div>
 
                                 <label title="Provide a short decription of this sense with otherwise unprovided or disambiguating details.">Brief Description</label>
                                 <textarea id="further_sense" type="text" deer-key="description"></textarea>
@@ -241,14 +286,13 @@
                     </div>                    
                 </div>
                 <div tog="practices" class="kind is-hidden">
-                    <h4>What practices are occurring? Add one at a time.</h4>
+                    <h4 class="text-primary">What practices are occurring? Add one at a time.</h4>
                     <form id="practiceForm" deer-type="Practice" deer-creator deer-motivation="supplementing" deer-context="http://lived-religion.rerum.io/deer-lr/vocab/context.json">
                         <input type="hidden" deer-key="creator" /> 
                         <input class="expReference" type="hidden" deer-key="event"> 
                         <input type="hidden" deer-key="name"/>
                         <select deer-key="additionalType" onchange="this.previousElementSibling.value=this.options[this.selectedIndex].text">
                             <option disabled selected value> Required </option>
-                            <option value="None">None Noted</option>
                             <option value="EatAction">Eating</option>
                             <option value="DrinkAction">Drinking</option>
                             <option value="PlayAction">Playing</option>
@@ -268,6 +312,7 @@
                             <option value="TradeAction">Trading</option>
                             <option value="GiveAction">Donating</option>
                             <option value="Other">Other</option>
+                            <option value="None">None Noted</option>
                         </select>
                         <label title="Provide some context around why this practice was occurring.">Context of Practice</label>
                         <select deer-key="practiceContext">
@@ -283,19 +328,32 @@
                             <option value="individual">Individual</option>
                             <option value="collective">Collective</option>
                             <option value="other">Other</option>
+                             <option value="None">None Noted</option>
                         </select>
                         <label title="Provide a short decription of this practice with otherwise unprovided or disambiguating details.">Brief Description</label>
                         <textarea id="further_practice" type="text" deer-key="description"></textarea>
                         <label>Is there a particular object this practice is associated with? Choose from available objects or quickly create a new one with the <a>+</a>.</label>
                         <input type="hidden" deer-key="object" value=""> 
-                        <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown"></div>
+                        <div deer-collection="LivedReligionObjects" class="deer-view" deer-template="itemsAsDropdown">
+                            <select>
+                                <optgroup label="Loading..."></optgroup>
+                            </select>
+                        </div>
 
                         <label>Were there specific people at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
                         <input deer-input-type="Set" type="hidden" deer-key="attendee" value="">
-                        <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionPeople" class="deer-view" deer-template="itemsAsMultiSelect">
+                            <select multiple>
+                                <optgroup label="Loading..."></optgroup>
+                            </select>
+                        </div>
                         
                         <label>Were there specific organizations at the experience connected with this sense?  Choose from available people or quickly create a new one with the <a>+</a>.</label>
-                        <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect"></div>
+                        <div deer-collection="LivedReligionOrganizations" class="deer-view" deer-template="itemsAsMultiSelect">
+                            <select multiple>
+                                <optgroup label="Loading..."></optgroup>
+                            </select>
+                        </div>
                         
                         <div class="row">
                             <input class="button primary col" type="submit" value="Save Practice">
@@ -316,6 +374,7 @@
             bubbles: false,
             cancelable: true
         })
+       
 
         /**
         * Catch user detection and trigger draw() for interfaces.
@@ -337,8 +396,9 @@
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceMedia").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+//                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let e = event.target.querySelector(".locDropdown")
                     let locName = e.options[e.selectedIndex].text
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = newObjName)
@@ -414,15 +474,19 @@
         
         addEventListener('deer-updated', event => {
             let what = event.target.id
+            let expName = ""
             switch(what){
                 case "theExperience":
                     document.getElementById("startExperience").classList.add("is-hidden")
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceMedia").classList.remove("is-hidden")
                     document.getElementById("experienceReview").classList.remove("is-hidden")
-                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
+//                    document.getElementById("fieldNotesFloater").classList.remove("is-hidden")
                     let locDropdown = event.target.querySelector(".locDropdown")
                     let locName = locDropdown.options[locDropdown.selectedIndex].text
-                    let expName = event.target.querySelector("input[deer-key='name']").value
+                    expName = 
+                        event.detail.name ?? event.detail.label ?? event.detail.title ?? expLabel.innerHTML
+            
                     let expID = event.detail["@id"] ? event.detail["@id"] : ""
                     document.querySelectorAll(".theExperienceName").forEach(elem => elem.innerHTML = expName)
                     document.querySelectorAll(".theLocationName").forEach(elem => elem.innerHTML = locName)
@@ -430,7 +494,8 @@
                 break
                 default:
             }
-            LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
+            //note event.detail.name could be blank, and it could instead have a label via an annotation.
+            LR.ui.globalFeedbackBlip(event, `Saving '${expName}' successful!`, true)
         })
         
         addEventListener('deer-loaded', event => {
@@ -454,6 +519,7 @@
                     document.getElementById("experienceReview").style.filter = "none"
                     document.getElementById("experienceReview").style.backgroundColor = "transparent"
                     document.getElementById("experienceArtifacts").classList.remove("is-hidden")
+                    document.getElementById("experienceMedia").classList.remove("is-hidden")
                     document.getElementById("toggleExpReviewContent").click()
                     document.getElementById("expLoadMessage").style.display = "none"
                 break
@@ -476,7 +542,11 @@
                     LR.utils.preSelectSelects(annotationData, ["contributor", "attendee", "attendee-org", "object", "location"], event.target)
                     LR.utils.setTrackedHiddenValues(annotationData, ["contributor", "attendee", "attendee-org", "object", "location", "relatedSenses", "relatedPractices"], event.target)
                     LR.utils.prePopulateFieldNotes(annotationData.fieldNotes)
-                    
+                    LR.media.showConnectedMedia(annotationData, ["image", "audio", "video", "associatedMedia"], event.target)
+                    LR.media.populateAssignedMedia(annotationData, ["image", "audio", "video"])
+                    if(annotationData.hasOwnProperty("associatedMedia")){
+                        LR.media.populateMediaPreview(annotationData.associatedMedia)
+                    }
                 break
                 case "objectForm":
                     LR.utils.preSelectSelects(annotationData, ["formerUses", "formerLocations"], event.target)
@@ -491,13 +561,13 @@
                 
                 default:
             }
-        })
+        })  
         
         /**
          * Handle Login and Logout across tabs
          */
         local_socket.on('loginError', function(obj) {
-            alert("There was a problem logging in.  Refresh the page and try again.")
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
         })
 
         local_socket.on('loginFinished', function(obj) {
@@ -514,6 +584,7 @@
             //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
             document.location.href="dashboard.html"
         })
+        
     </script>
     <script src="./js/deerInitializer.js" type="module"></script>
     <script src="./js/app.js" type="text/javascript"></script>
