@@ -433,6 +433,7 @@ UM.ui.showUserAddition = function(){
     document.getElementById("popoverShade").classList.remove("is-hidden")
     document.getElementById("addUser").classList.remove("is-hidden")
     document.getElementById("addUser").style.top = "15%"
+    document.getElementById("addUser").querySelector(".action").setAttribute("onclick", "UM.interaction.addUser(event)")
 }
 
 /**
