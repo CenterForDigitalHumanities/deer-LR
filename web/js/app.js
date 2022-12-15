@@ -11,8 +11,8 @@ LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
-LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
-//LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
+//LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
 ///For dev-01
 
 //LR.URLS = {
