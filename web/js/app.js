@@ -479,10 +479,10 @@ LR.ui.getUserNotes = async function(user) {
         let label = b["__rerum"]["createdAt"]
         let noteText = b.value
         let shortText = noteText.length > 50 ? noteText.substring(0, 50)+"..." : noteText
-        let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeNote" title="Delete This Entry"
-            onclick="LR.utils.removeNote(event, '${b["@id"]}', this.parentElement)">&#x274C</a>`
+        let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeNote" title="Delete This Note"
+            onclick="LR.utils.removeNote(event, '${b["@id"]}', this.parentElement, true)">&#x274C</a>`
         let selectBtn = `<a href="#" class="tag is-rounded is-small selectNote" title="Assign This Note"
-            onclick="LR.ui.chooseNote(event, '${b["@id"]}', this.parentElement)">&#9734</a>`
+            onclick="LR.ui.chooseNote(event, '${b["@id"]}', this.parentElement)">&#9733</a>`
         return a += `<li title="${label}" fullText="${noteText}"> ${shortText} ${selectBtn} ${removeBtn}</li>`               
     },``):`<p class="text-error">No Mobile Notes</p>`
     
@@ -493,13 +493,21 @@ LR.ui.getUserNotes = async function(user) {
 }
 
 LR.ui.chooseNote = function(event, noteID, elem){
-    document.querySelectorAll(".selectNote").forEach(elem =>{
-        elem.classList.remove("selected")
+    document.querySelectorAll(".selectNote").forEach(e =>{
+        e.classList.remove("selected")
     })
-    event.target.classList.add("selected")
-    elem.classList.add("selected")
-    elem.setAttribute("noteid", noteID)
-    assignNoteWrapper.classList.remove("is-hidden")
+    if(elem.classList.contains("selected")){
+        elem.classList.remove("selected")
+        assignNoteWrapper.classList.add("is-hidden")
+        event.target.classList.remove("selected")
+        elem.setAttribute("noteid", "")
+    }
+    else{
+        elem.classList.add("selected")
+        assignNoteWrapper.classList.remove("is-hidden")
+        event.target.classList.add("selected")
+        elem.setAttribute("noteid", noteID)
+    }
 }
 
 /**
@@ -1292,7 +1300,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
 }
 
 // Make the note deleted, which means it will not be assigned to anything and can be forgotten.
-LR.utils.removeNote = async function(event, noteID, noteElem) {
+LR.utils.removeNote = async function(event, noteID, noteElem, conf) {
 //    fetch(LR.URLS.DELETE, {
 //        method: "DELETE",
 //        mode: "cors",
@@ -1310,7 +1318,14 @@ LR.utils.removeNote = async function(event, noteID, noteElem) {
 //        alert("There was an error deleting your note")
 //        return err
 //    })
-    noteElem.remove()
+    if(conf){
+        if(confirm("If you really want to remove this note, click OK.")){
+            noteElem.remove()
+        }
+    }
+    else{
+        noteElem.remove()
+    }
     const remainingElems = notesInQueue.querySelector("li")
     if(!remainingElems){
         notesInQueue.innerHTML = `<option disabled>Your notes queue is empty!  Have a nice day</option>`
@@ -1330,7 +1345,7 @@ LR.utils.assignNote = async function() {
     alert("Hooray we assigned the note!")
     assignNoteWrapper.classList.add("is-hidden")
     //Once assigned, it can be deleted
-    LR.utils.removeNote(null, "", noteElem)
+    LR.utils.removeNote(null, "", noteElem, false)
 }
 
 /**
