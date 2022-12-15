@@ -493,9 +493,6 @@ LR.ui.getUserNotes = async function(user) {
 }
 
 LR.ui.chooseNote = function(event, noteID, elem){
-    document.querySelectorAll(".selectNote").forEach(e =>{
-        e.classList.remove("selected")
-    })
     if(elem.classList.contains("selected")){
         elem.classList.remove("selected")
         assignNoteWrapper.classList.add("is-hidden")
@@ -503,6 +500,9 @@ LR.ui.chooseNote = function(event, noteID, elem){
         elem.setAttribute("noteid", "")
     }
     else{
+        document.querySelectorAll(".selectNote").forEach(e =>{
+            e.classList.remove("selected")
+        })
         elem.classList.add("selected")
         assignNoteWrapper.classList.remove("is-hidden")
         event.target.classList.add("selected")
@@ -1333,19 +1333,95 @@ LR.utils.removeNote = async function(event, noteID, noteElem, conf) {
 }
 
 LR.utils.assignNote = async function() {
-    //Check if the experience already has this annotation
+    let user = JSON.parse(localStorage.getItem("lr-user"))
     //If so, update by adding the text in
     //If not, generate the annotation with this as the initial text. 
     const expID = expChooser.value
     const noteType = noteTypes.value
     const noteElem = document.querySelector("li.selected")
     const noteID = noteElem.getAttribute("noteid")
+    const noteText = noteElem.getAttribute("fulltext")
     console.log("Experience that gets note is "+expID)
     console.log("Type of note that it is (the Annotation key name) "+noteType)
-    alert("Hooray we assigned the note!")
-    assignNoteWrapper.classList.add("is-hidden")
-    //Once assigned, it can be deleted
-    LR.utils.removeNote(null, "", noteElem, false)
+    //Check if the experience already has this annotation
+    const historyWildcard = {"$exists":true, "$size":0}
+    let bodyPropValue = `body.${noteType}.value`
+    const queryObj = {
+        "type" : "Annotation",
+        "target" : expID,
+        "__rerum.history.next" : historyWildcard,
+    }
+    queryObj[bodyPropValue] = {"$exists":true}
+    const existingAssertion = await fetch(LR.URLS.QUERY, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(queryObj)
+    })
+    .then(response => response.json())
+    .catch(err => {return []})
+    if(existingAssertion.length){
+        let assertionToUpdate = existingAssertion[0]
+        assertionToUpdate.body[noteType].value += " "+noteText
+        assertionToUpdate.creator = user["@id"]
+        console.log("update this assertion, which should have the note added in now")
+        console.log(assertionToUpdate)
+//        await fetch(LR.URLS.UPDATE, {
+//            method: "PUT",
+//            headers: {
+//                'Content-Type': 'application/json'
+//            },
+//            body: JSON.stringify(assertionToUpdate)
+//        })
+//        .then(resp => {
+//            if(resp.ok){
+//                LR.utils.removeNote(null, "", noteElem, false)
+//                assignNoteWrapper.classList.add("is-hidden")
+//            }
+//            else{
+//                alert("Could not assign note.")
+//            }
+//        })
+//        .catch(err => {
+//            alert("Could not assign note")
+//            return err
+//        })
+    }
+    else{
+        let newAssertion = {
+            "@context": "http://lived-religion.rerum.io/deer-lr/vocab/context.json",
+            "type": "Annotation",
+            "target": expID,
+            "body": {},
+            "creator": user["@id"],
+            "motivation": "supplementing",
+        }
+        newAssertion.body[noteType] = {}
+        newAssertion.body[noteType].value = noteText
+        console.log("create this new assertion")
+        console.log(newAssertion)
+//        await fetch(LR.URLS.CREATE, {
+//            method: "POST",
+//            headers: {
+//                'Content-Type': 'application/json'
+//            },
+//            body: JSON.stringify(assertionToUpdate)
+//        })
+//        .then(resp => {
+//            if(resp.ok){
+//                LR.utils.removeNote(null, "", noteElem, false)
+//                assignNoteWrapper.classList.add("is-hidden")
+//            }
+//            else{
+//                alert("Could not assign note.")
+//            }
+//        })
+//        .catch(err => {
+//            alert("Could not assign note")
+//            return err
+//        })
+    }
 }
 
 /**
