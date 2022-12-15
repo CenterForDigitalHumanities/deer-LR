@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--
+    author: Bryan Haberberger <bryan.j.haberberger@slu.edu>
+    -->
+<html>
+
+<head>
+    <title>Scratch Notes</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/lr.css">
+</head>
+
+<body>
+    <lr-nav>
+        <div class="nav-left">
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="organizations.html">Organizations</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>
+    </lr-nav>
+    <div id="fieldnotes_wraper" class="container">
+        <h1 id="userDashboard" class="text-primary"> My Notes </h1>
+        <ul id="notesInQueue">
+            <p class="text-error">You must be logged in to see your scratch notes.</p>
+            <p>Please wait while we gather your scratch notes.</p>
+        </ul>
+    </div>
+    <div id="assignNoteWrapper" class="container is-hidden" noteid=""> 
+        <p> Select which experience to assign this note to </p>
+        <select id="expChooser"> </select>
+        <p> Select which note type to assign the noteas </p>
+        <select id="noteTypes"> 
+            <option selected value="notes">Experience General Notes</option>
+            <option value="description">Experience Description</option>
+            <option value="fieldNotes">Experience Field Notes</option>
+        </select>
+        <a class="button primary is-full-width" onclick="LR.utils.assignNote(event)"> Assign This Note </a>
+    </div>
+    <div class="pageShade is-hidden"></div>
+    <lr-global-feedback></lr-global-feedback>
+    <lr-footer></lr-footer>
+    <!-- Need to force some authorization for this page -->
+    <!-- Add ins -->
+    <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
+    <script>
+        /**
+        * Catch user detection and trigger draw() for interfaces.
+        */
+        addEventListener('lrUserKnown', event => {
+            LR.utils.drawInterface(event, "fieldnotes")
+        }, false) 
+        
+        /**
+         * Handle Login and Logout across tabs
+         */
+        local_socket.on('loginError', function(obj) {
+            alert("There was a problem logging in.  Check the username and password.  If this problem persist, contact the administrator to reset your username and/or password.")
+        })
+
+        local_socket.on('loginFinished', function(obj) {
+            //Perhaps it could be more elegant to dispatch the lrUserKnown event.  Socket events are not caught on the page they are generated...
+            //Reload does everything we want inside the framework we already built in <lr-login> elements
+            document.location.reload()
+        })
+
+        local_socket.on('logoutError', function(obj) {
+            alert("There was a problem logging out.  Refresh the page and try again.")
+        })
+
+        local_socket.on('logoutFinished', function(obj) {
+            //obj.fn() would be neat if obj.fn = function(){return LR.utils.logout()} would work...see logout.html
+            document.location.href="dashboard.html"
+        })
+    </script>
+    <script src="./js/deerInitializer.js" type="module"></script>
+    <script src="./js/app.js" type="text/javascript"></script>
+    <script src="./js/components.js" type="text/javascript"></script>
+</body>
+
+</html>

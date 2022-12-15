@@ -6,40 +6,40 @@
 
 const LR = {}
 LR.VERSION = "1.0.1"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
-//LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
-LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
+LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+//LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
 ///For dev-01
-
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    SINCE: "http://devstore.rerum.io/v1/since",
-//}
-
-//For prd-01
 
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "http://store.rerum.io/v1",
-    DELETE: "delete",
-    CREATE: "create",
-    UPDATE: "update",
-    OVERWRITE: "overwrite",
-    QUERY: "query",
-    SINCE: "http://store.rerum.io/v1/since"
+    BASE_ID: "http://devstore.rerum.io/v1",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
+    SINCE: "http://devstore.rerum.io/v1/since",
 }
+
+//For prd-01
+
+//LR.URLS = {
+//    LOGIN: "login",
+//    LOGOUT: "logout",
+//    BASE_ID: "http://store.rerum.io/v1",
+//    DELETE: "delete",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    OVERWRITE: "overwrite",
+//    QUERY: "query",
+//    SINCE: "http://store.rerum.io/v1/since"
+//}
 
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
@@ -371,6 +371,16 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                 <a href="all_experiences.html">Experiences</a>`
                 document.querySelector('.tabs').innerHTML += adminTabs
             }
+            document.querySelector('.tabs').innerHTML += `<a href="fieldnotes.html">My Notes</a>`
+        break
+        case "fieldnotes":
+            LR.ui.getUserNotes(user)
+            if (user.roles.administrator) {
+                let adminTabs = `<a href="users.html">Users</a>
+                <a href="researchers.html">Researchers</a>
+                <a href="all_experiences.html">Experiences</a>`
+                document.querySelector('.tabs').innerHTML += adminTabs
+            }
         break
         default:
             alert("This interface is not yet supported")
@@ -412,10 +422,84 @@ LR.ui.getUserEntries = async function(user) {
         let removeBtn = ``
         if(user.roles.administrator){
             removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiencesTest')">&#x274C</a>`
+            onclick="LR.utils.removeCollectionEntry(event, '${b["@id"]}', this.parentElement, 'LivedReligionExperiences')">&#x274C</a>`
         }
         return a += `<li> <a target="_blank" title="View Item Details" href="experience.html?id=${b["@id"]}">${label}</a> ${removeBtn}</li>`               
     },``):`<p class="text-error">No experiences found for this user</p>`
+}
+
+/**
+ * Get the MobileNotes for this specific user and draw them to the UI.
+ * 
+ * @param {JSONObject} user The user from localStorage
+ * @return {undefined}
+ */
+LR.ui.getUserNotes = async function(user) {
+    let historyWildcard = {"$exists":true, "$size":0}
+    let notes = await fetch(LR.URLS.QUERY, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "type": "MobileNote",
+            "target": user['@id'],
+            "__rerum.history.next" : historyWildcard
+        })
+    })
+    .then(response => response.json())
+    .catch(err => {return []})
+    let experiences = await fetch(LR.URLS.QUERY, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "@type": "Event",
+            "creator": user['@id'],
+            "__rerum.generatedBy": LR.APPAGENT,
+            "__rerum.history.next" : historyWildcard
+        })
+    })
+    .then(response => response.json())
+    .catch(err => {return []})
+    //Sort the notes by date
+    notes.sort((a, b) => {
+        let a_label = a["__rerum"]["createdAt"] ?? ""
+        let b_label = b["__rerum"]["createdAt"] ?? ""
+        return a_label.localeCompare(b_label)
+    })
+    experiences.sort((a, b) => {
+        let a_label = a.label ?? a.name ?? "Unlabeled Upload"
+        let b_label = b.label ?? b.name ?? "Unlabeled Upload"
+        return a_label.localeCompare(b_label)
+    })
+    
+    notesInQueue.innerHTML = (notes.length) ? notes.reduce((a, b) =>{
+        let label = b["__rerum"]["createdAt"]
+        let noteText = b.value
+        let shortText = noteText.length > 50 ? noteText.substring(0, 50)+"..." : noteText
+        let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeNote" title="Delete This Entry"
+            onclick="LR.utils.removeNote(event, '${b["@id"]}', this.parentElement)">&#x274C</a>`
+        let selectBtn = `<a href="#" class="tag is-rounded is-small selectNote" title="Assign This Note"
+            onclick="LR.ui.chooseNote(event, '${b["@id"]}', this.parentElement)">&#9734</a>`
+        return a += `<li title="${label}" fullText="${noteText}"> ${shortText} ${selectBtn} ${removeBtn}</li>`               
+    },``):`<p class="text-error">No Mobile Notes</p>`
+    
+    expChooser.innerHTML = (experiences.length) ? experiences.reduce((a, b) =>{
+        let label = b.label ?? b.name ?? "Unlabeled Upload"
+        return a += `<option value='${b["@id"]}'> ${label} </option>`               
+    },``):`<option disabled>"Your notes queue is empty!  Have a nice day"</option>`
+}
+
+LR.ui.chooseNote = function(event, noteID, elem){
+    document.querySelectorAll(".selectNote").forEach(elem =>{
+        elem.classList.remove("selected")
+    })
+    event.target.classList.add("selected")
+    elem.classList.add("selected")
+    elem.setAttribute("noteid", noteID)
+    assignNoteWrapper.classList.remove("is-hidden")
 }
 
 /**
@@ -1205,6 +1289,48 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         console.error("There was an error gathering information to remove an item from the collection")
         console.log(itemElem)
     })  
+}
+
+// Make the note deleted, which means it will not be assigned to anything and can be forgotten.
+LR.utils.removeNote = async function(event, noteID, noteElem) {
+//    fetch(LR.URLS.DELETE, {
+//        method: "DELETE",
+//        mode: "cors",
+//        body: noteID
+//    })
+//    .then(resp => {
+//        if(resp.ok){
+//            noteElem.remove()
+//        }
+//        else{
+//            alert("There was an error deleting your note.")
+//        }
+//    })
+//    .catch(err => {
+//        alert("There was an error deleting your note")
+//        return err
+//    })
+    noteElem.remove()
+    const remainingElems = notesInQueue.querySelector("li")
+    if(!remainingElems){
+        notesInQueue.innerHTML = `<option disabled>Your notes queue is empty!  Have a nice day</option>`
+    }
+}
+
+LR.utils.assignNote = async function() {
+    //Check if the experience already has this annotation
+    //If so, update by adding the text in
+    //If not, generate the annotation with this as the initial text. 
+    const expID = expChooser.value
+    const noteType = noteTypes.value
+    const noteElem = document.querySelector("li.selected")
+    const noteID = noteElem.getAttribute("noteid")
+    console.log("Experience that gets note is "+expID)
+    console.log("Type of note that it is (the Annotation key name) "+noteType)
+    alert("Hooray we assigned the note!")
+    assignNoteWrapper.classList.add("is-hidden")
+    //Once assigned, it can be deleted
+    LR.utils.removeNote(null, "", noteElem)
 }
 
 /**

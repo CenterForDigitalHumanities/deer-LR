@@ -63,6 +63,10 @@ public class Login extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             jo_return.element("error", "Unauthorized");
         }
+        if(!response.containsHeader("Access-Control-Allow-Origin")){
+            response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+        }
+        response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
         response.addHeader("Content-Type", "application/json; charset=utf-8");
         response.setContentType("UTF-8");
         response.getWriter().print(jo_return);
@@ -96,6 +100,24 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+    }
+    
+    /**
+     * Handles the HTTP <code>OPTIONS</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Headers", "*");
+        response.addHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
+        response.setStatus(200);
     }
 
     /**
