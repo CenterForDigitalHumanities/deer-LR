@@ -1332,7 +1332,7 @@ LR.utils.removeNote = async function(event, noteID, noteElem, conf) {
     }
 }
 
-LR.utils.assignNote = async function() {
+LR.utils.assignNote = async function(event) {
     let user = JSON.parse(localStorage.getItem("lr-user"))
     //If so, update by adding the text in
     //If not, generate the annotation with this as the initial text. 
@@ -1365,28 +1365,27 @@ LR.utils.assignNote = async function() {
         let assertionToUpdate = existingAssertion[0]
         assertionToUpdate.body[noteType].value += " "+noteText
         assertionToUpdate.creator = user["@id"]
-        console.log("update this assertion, which should have the note added in now")
-        console.log(assertionToUpdate)
-//        await fetch(LR.URLS.UPDATE, {
-//            method: "PUT",
-//            headers: {
-//                'Content-Type': 'application/json'
-//            },
-//            body: JSON.stringify(assertionToUpdate)
-//        })
-//        .then(resp => {
-//            if(resp.ok){
-//                LR.utils.removeNote(null, "", noteElem, false)
-//                assignNoteWrapper.classList.add("is-hidden")
-//            }
-//            else{
-//                alert("Could not assign note.")
-//            }
-//        })
-//        .catch(err => {
-//            alert("Could not assign note")
-//            return err
-//        })
+        await fetch(LR.URLS.UPDATE, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(assertionToUpdate)
+        })
+        .then(resp => {
+            if(resp.ok){
+                LR.ui.globalFeedbackBlip(null, `Note Assigned`, true)
+                LR.utils.removeNote(event, "", noteElem, false)
+                assignNoteWrapper.classList.add("is-hidden")
+            }
+            else{
+                alert("Could not assign note.")
+            }
+        })
+        .catch(err => {
+            alert("Could not assign note")
+            return err
+        })
     }
     else{
         let newAssertion = {
@@ -1399,28 +1398,27 @@ LR.utils.assignNote = async function() {
         }
         newAssertion.body[noteType] = {}
         newAssertion.body[noteType].value = noteText
-        console.log("create this new assertion")
-        console.log(newAssertion)
-//        await fetch(LR.URLS.CREATE, {
-//            method: "POST",
-//            headers: {
-//                'Content-Type': 'application/json'
-//            },
-//            body: JSON.stringify(assertionToUpdate)
-//        })
-//        .then(resp => {
-//            if(resp.ok){
-//                LR.utils.removeNote(null, "", noteElem, false)
-//                assignNoteWrapper.classList.add("is-hidden")
-//            }
-//            else{
-//                alert("Could not assign note.")
-//            }
-//        })
-//        .catch(err => {
-//            alert("Could not assign note")
-//            return err
-//        })
+        await fetch(LR.URLS.CREATE, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(assertionToUpdate)
+        })
+        .then(resp => {
+            if(resp.ok){
+                LR.ui.globalFeedbackBlip(event, `Note Assigned`, true)
+                LR.utils.removeNote(null, "", noteElem, false)
+                assignNoteWrapper.classList.add("is-hidden")
+            }
+            else{
+                alert("Could not assign note.")
+            }
+        })
+        .catch(err => {
+            alert("Could not assign note")
+            return err
+        })
     }
 }
 
