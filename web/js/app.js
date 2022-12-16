@@ -370,7 +370,6 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
                 <a href="all_experiences.html">Experiences</a>`
                 document.querySelector('.tabs').innerHTML += adminTabs
             }
-            document.querySelector('.tabs').innerHTML += `<a href="fieldnotes.html">My Notes</a>`
         break
         case "fieldnotes":
             LR.ui.getUserNotes(user)
