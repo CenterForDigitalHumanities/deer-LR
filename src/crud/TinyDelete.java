@@ -129,7 +129,10 @@ public class TinyDelete extends HttpServlet {
             connection.disconnect();
         }
         if(manager.getAPISetting().equals("true")){
-            response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+            if(!response.containsHeader("Access-Control-Allow-Origin")){
+                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+            }
+            response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
         }
         response.setStatus(codeOverwrite);
         response.setHeader("Content-Type", "text/plain; charset=utf-8");

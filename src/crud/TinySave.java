@@ -119,7 +119,10 @@ public class TinySave extends HttpServlet {
             connection.disconnect();
             //Hand back rerumserver response as this API's response.
             if(manager.getAPISetting().equals("true")){
-                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                if(!response.containsHeader("Access-Control-Allow-Origin")){
+                    response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                }
+                response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
             }
             response.setStatus(codeOverwrite);
             response.setHeader("Content-Type", "application/json; charset=utf-8");

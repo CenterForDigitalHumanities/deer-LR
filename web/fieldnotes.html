@@ -5,11 +5,24 @@
 <html>
 
 <head>
-    <title>Dashboard</title>
+    <title>Scratch Notes</title>
     <link rel="shortcut icon" type="image/x-icon" href="./images/favicon/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/lr.css">
+    <style>
+        .selectNote{
+            font-size: 11pt !important;
+            line-height: 10pt;
+        }
+        .selectNote.selected{
+            background-color: green;
+            color: white;
+        }
+        .button.primary{
+            margin-top: 3em;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,17 +35,35 @@
                 <a href="people.html">People</a>
                 <a href="organizations.html">Organizations</a>
                 <a href="map.html">Map View</a>
-                <a href="fieldnotes.html">My Notes</a>
             </div>
         </div>
     </lr-nav>
-    <div id="dashboard" class="container">
-        <h1 id="userDashboard" class="text-primary"> My Experiences </h1>
-        <ul id="previousEntries">
-            <p class="text-error">You must be logged in to use this dashboard.</p>
-            <p>Please wait while we gather your experiences.</p>
+    <div id="fieldnotes_wraper" class="container">
+        <h1 id="userDashboard" class="text-primary"> My Notes </h1>
+        <p>
+            Below you will see all your submitted notes.  Click the <span class="tag is-rounded is-small selectNote" title="Assign This Note"
+            >&#9733</span> to select the note and begin to assign it.  You will need to pick an Experience and a descriptor to assign the note text to.
+            Once you assign the note, it will be removed from your queue.
+            
+            If you decide you do not need the note, click <span class="tag is-rounded is-small removeNote" title="Remove This Note"
+            >&#x274C</span> to remove it from your queue.
+        </p>
+        <ul id="notesInQueue">
+            <p class="text-error">You must be logged in to see your scratch notes.</p>
+            <p>Please wait while we gather your scratch notes.</p>
         </ul>
-        <a class="button primary is-full-width" href="experience.html"> Record a New Experience </a>
+    </div>
+    <div id="assignNoteWrapper" class="container is-hidden" noteid=""> 
+        <label> Select which experience to assign this note to </label>
+        <select id="expChooser"> </select>
+        <br>
+        <label> Select which note type to assign the note as </label>
+        <select id="noteTypes"> 
+            <option selected value="notes">General Notes</option>
+            <option value="description">Description</option>
+            <option value="fieldNotes">Field Notes</option>
+        </select>
+        <a class="button primary is-full-width" onclick="LR.utils.assignNote(event)"> Assign This Note </a>
     </div>
     <div class="pageShade is-hidden"></div>
     <lr-global-feedback></lr-global-feedback>
@@ -45,7 +76,7 @@
         * Catch user detection and trigger draw() for interfaces.
         */
         addEventListener('lrUserKnown', event => {
-            LR.utils.drawInterface(event, "dashboard")
+            LR.utils.drawInterface(event, "fieldnotes")
         }, false) 
         
         /**

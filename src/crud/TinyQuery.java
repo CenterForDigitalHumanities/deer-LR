@@ -21,6 +21,7 @@ import net.sf.json.JSONObject;
 import tokens.TinyTokenManager;
 import java.util.List;
 import java.util.Map;
+import net.sf.json.JSONArray;
 
 
 /**
@@ -112,7 +113,6 @@ public class TinyQuery extends HttpServlet {
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-                //Pass in the user provided JSON for the body of the rerumserver v1 request
                 requestJSON.element("__rerum.generatedBy", Constant.RERUM_AGENT);
                 byte[] toWrite = requestJSON.toString().getBytes("UTF-8");
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
@@ -147,7 +147,9 @@ public class TinyQuery extends HttpServlet {
             }
             connection.disconnect();
             if(manager.getAPISetting().equals("true")){
-                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                if(!response.containsHeader("Access-Control-Allow-Origin")){
+                    response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                }
                 response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
             }
             response.setStatus(codeOverwrite);
