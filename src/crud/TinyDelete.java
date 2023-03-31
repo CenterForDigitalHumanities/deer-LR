@@ -99,14 +99,11 @@ public class TinyDelete extends HttpServlet {
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
                 byte[] toWrite = requestString.getBytes("UTF-8");
                 //out.writeBytes(requestJSON.toString());
-                System.out.println("Add request body to delete.action");
                 out.write(toWrite);
                 out.flush();
                 out.close(); 
                 codeOverwrite = connection.getResponseCode();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));
-                System.out.println("RERUM CODE");
-                System.out.println(codeOverwrite);
                 while ((line = reader.readLine()) != null){
                     //Gather rerum server v1 response
                     sb.append(line);
