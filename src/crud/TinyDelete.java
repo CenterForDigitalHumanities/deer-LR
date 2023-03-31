@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -42,6 +43,7 @@ public class TinyDelete extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
         request.setCharacterEncoding("UTF-8");
+        System.out.println("LR Dev Delete");
         TinyTokenManager manager = new TinyTokenManager();
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
@@ -55,6 +57,8 @@ public class TinyDelete extends HttpServlet {
           bodyString.append(line);
         }
         requestString = bodyString.toString();
+        System.out.println("Body??");
+        System.out.println(requestString);
         String pubTok = manager.getAccessToken();
         boolean expired = manager.checkTokenExpiry();
         if(expired){
@@ -84,6 +88,8 @@ public class TinyDelete extends HttpServlet {
         
         if(moveOn){
             //Point to rerum server v1
+            System.out.println("Moving on to delete.action...");
+            
             URL postUrl = new URL(Constant.RERUM_API_ADDR + "/delete.action");
             HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
             connection.setDoOutput(true);
@@ -92,17 +98,21 @@ public class TinyDelete extends HttpServlet {
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Authorization", "Bearer "+pubTok);
+            System.out.println("connect to delete.action...");
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
                 //Pass in the user provided JSON for the body of the rerumserver v1 request
                 byte[] toWrite = requestString.getBytes("UTF-8");
                 //out.writeBytes(requestJSON.toString());
+                System.out.println("Add request body to delete.action");
                 out.write(toWrite);
                 out.flush();
                 out.close(); 
                 codeOverwrite = connection.getResponseCode();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));
+                System.out.println("RERUM CODE");
+                System.out.println(codeOverwrite);
                 while ((line = reader.readLine()) != null){
                     //Gather rerum server v1 response
                     sb.append(line);
@@ -124,13 +134,19 @@ public class TinyDelete extends HttpServlet {
                 while ((errorLine = error.readLine()) != null){  
                     sb.append(errorLine);
                 } 
+                System.out.println("ERROR DELETEING");
+                System.out.println(sb.toString());
                 error.close();
             }
             connection.disconnect();
         }
         if(manager.getAPISetting().equals("true")){
             response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+            response.setHeader("Access-Control-Expose-Headers", "*"); //Headresponse.setHeader("Access-Control-Allow-Methods", "DELETE");ers are restricted, unless you explicitly expose them.  Darn Browsers.
+            response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setHeader("Access-Control-Allow-Methods", "DELETE");
         }
+        
         response.setStatus(codeOverwrite);
         response.setHeader("Content-Type", "text/plain; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
@@ -167,6 +183,7 @@ public class TinyDelete extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            System.out.println("doDelete()");
             processRequest(request, response);
         } catch (Exception ex) {
             Logger.getLogger(TinyDelete.class.getName()).log(Level.SEVERE, null, ex);
