@@ -19,11 +19,11 @@ LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
     BASE_ID: "http://devstore.rerum.io/v1",
-    DELETE: "http://vlcdhp02:3002/app/delete",
-    CREATE: "http://vlcdhp02:3002/app/create",
-    UPDATE: "http://vlcdhp02:3002/app/update",
-    OVERWRITE: "http://vlcdhp02:3002/app/overwrite",
-    QUERY: "http://vlcdhp02:3002/app/query",
+    DELETE: "http://tinydev.rerum.io/app/delete",
+    CREATE: "http://tinydev.rerum.io/app/create",
+    UPDATE: "http://tinydev.rerum.io/app/update",
+    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
+    QUERY: "http://tinydev.rerum.io/app/query",
     SINCE: "http://devstore.rerum.io/v1/since",
 }
 

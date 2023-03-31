@@ -10,7 +10,7 @@ UM.URLS = {
     SETSECRET: "setUserSecret",
     ADDUSER : "addUser",
     REMOVEUSER : "removeUser",
-    CREATE : "http://vlcdhp02:3002/app/create"
+    CREATE : "http://tinydev.rerum.io/app/create"
 }
 
 /**
