@@ -43,7 +43,6 @@ public class TinyDelete extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
         request.setCharacterEncoding("UTF-8");
-        System.out.println("LR Dev Delete");
         TinyTokenManager manager = new TinyTokenManager();
         BufferedReader bodyReader = request.getReader();
         StringBuilder bodyString = new StringBuilder();
@@ -57,8 +56,6 @@ public class TinyDelete extends HttpServlet {
           bodyString.append(line);
         }
         requestString = bodyString.toString();
-        System.out.println("Body??");
-        System.out.println(requestString);
         String pubTok = manager.getAccessToken();
         boolean expired = manager.checkTokenExpiry();
         if(expired){
@@ -87,9 +84,6 @@ public class TinyDelete extends HttpServlet {
         }
         
         if(moveOn){
-            //Point to rerum server v1
-            System.out.println("Moving on to delete.action...");
-            
             URL postUrl = new URL(Constant.RERUM_API_ADDR + "/delete.action");
             HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
             connection.setDoOutput(true);
@@ -98,7 +92,7 @@ public class TinyDelete extends HttpServlet {
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Authorization", "Bearer "+pubTok);
-            System.out.println("connect to delete.action...");
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
@@ -134,8 +128,6 @@ public class TinyDelete extends HttpServlet {
                 while ((errorLine = error.readLine()) != null){  
                     sb.append(errorLine);
                 } 
-                System.out.println("ERROR DELETEING");
-                System.out.println(sb.toString());
                 error.close();
             }
             connection.disconnect();
