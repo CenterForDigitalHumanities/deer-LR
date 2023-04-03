@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -83,7 +84,6 @@ public class TinyDelete extends HttpServlet {
         }
         
         if(moveOn){
-            //Point to rerum server v1
             URL postUrl = new URL(Constant.RERUM_API_ADDR + "/delete.action");
             HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
             connection.setDoOutput(true);
@@ -92,6 +92,7 @@ public class TinyDelete extends HttpServlet {
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Authorization", "Bearer "+pubTok);
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
@@ -130,7 +131,11 @@ public class TinyDelete extends HttpServlet {
         }
         if(manager.getAPISetting().equals("true")){
             response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+            response.setHeader("Access-Control-Expose-Headers", "*"); //Headresponse.setHeader("Access-Control-Allow-Methods", "DELETE");ers are restricted, unless you explicitly expose them.  Darn Browsers.
+            response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setHeader("Access-Control-Allow-Methods", "DELETE");
         }
+        
         response.setStatus(codeOverwrite);
         response.setHeader("Content-Type", "text/plain; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
@@ -167,6 +172,7 @@ public class TinyDelete extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            System.out.println("doDelete()");
             processRequest(request, response);
         } catch (Exception ex) {
             Logger.getLogger(TinyDelete.class.getName()).log(Level.SEVERE, null, ex);

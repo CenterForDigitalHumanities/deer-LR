@@ -148,7 +148,9 @@ public class TinyQuery extends HttpServlet {
             connection.disconnect();
             if(manager.getAPISetting().equals("true")){
                 response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
-                response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
+                response.setHeader("Access-Control-Expose-Headers", "*"); //Headresponse.setHeader("Access-Control-Allow-Methods", "DELETE");ers are restricted, unless you explicitly expose them.  Darn Browsers.
+                response.setHeader("Access-Control-Allow-Headers", "*");
+                response.setHeader("Access-Control-Allow-Methods", "POST");
             }
             response.setStatus(codeOverwrite);
             response.setHeader("Content-Type", "application/json; charset=utf-8");
