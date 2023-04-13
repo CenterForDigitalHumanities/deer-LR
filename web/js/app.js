@@ -386,6 +386,8 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
  */
 LR.ui.getUserEntries = async function(user) {
     let historyWildcard = {"$exists":true, "$size":0}
+    let creatorID = user['@id']
+    let creatorVariant = creatorID.indexOf("https://") > -1 ? creatorID.replace("https://", "http://") : creatorID.replace("http://", "https://")
     let experiences = await fetch(LR.URLS.QUERY, {
         method: "POST",
         headers: {
@@ -393,7 +395,10 @@ LR.ui.getUserEntries = async function(user) {
         },
         body: JSON.stringify({
             "@type": "Event",
-            "creator": user['@id'],
+            "$or":[
+                {"creator":creatorID},
+                {"creator":creatorVariant}
+            ],
             "__rerum.generatedBy": LR.APPAGENT,
             "__rerum.history.next" : historyWildcard
         })
