@@ -11,20 +11,20 @@ LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
-//LR.PUBLIC_EXPERIENCE_LIST = "http://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
-LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
+//LR.PUBLIC_EXPERIENCE_LIST = "https://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
 ///For dev-01
 
 //LR.URLS = {
 //    LOGIN: "login",
 //    LOGOUT: "logout",
-//    BASE_ID: "http://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
-//    SINCE: "http://devstore.rerum.io/v1/since",
+//    BASE_ID: "https://devstore.rerum.io/v1",
+//    DELETE: "//tinydev.rerum.io/app/delete",
+//    CREATE: "//tinydev.rerum.io/app/create",
+//    UPDATE: "//tinydev.rerum.io/app/update",
+//    OVERWRITE: "//tinydev.rerum.io/app/overwrite",
+//    QUERY: "//tinydev.rerum.io/app/query",
+//    SINCE: "https://devstore.rerum.io/v1/since",
 //}
 
 //For prd-01
@@ -32,13 +32,13 @@ LR.PUBLIC_EXPERIENCE_LIST = "http://store.rerum.io/v1/id/60831f5811aeb54ed01e8cc
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "http://store.rerum.io/v1",
+    BASE_ID: "https://store.rerum.io/v1",
     DELETE: "delete",
     CREATE: "create",
     UPDATE: "update",
     OVERWRITE: "overwrite",
     QUERY: "query",
-    SINCE: "http://store.rerum.io/v1/since"
+    SINCE: "https://store.rerum.io/v1/since"
 }
 
 
@@ -386,6 +386,8 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
  */
 LR.ui.getUserEntries = async function(user) {
     let historyWildcard = {"$exists":true, "$size":0}
+    let creatorID = user['@id']
+    let creatorVariant = creatorID.indexOf("https://") > -1 ? creatorID.replace("https://", "http://") : creatorID.replace("http://", "https://")
     let experiences = await fetch(LR.URLS.QUERY, {
         method: "POST",
         headers: {
@@ -393,7 +395,10 @@ LR.ui.getUserEntries = async function(user) {
         },
         body: JSON.stringify({
             "@type": "Event",
-            "creator": user['@id'],
+            "$or":[
+                {"creator":creatorID},
+                {"creator":creatorVariant}
+            ],
             "__rerum.generatedBy": LR.APPAGENT,
             "__rerum.history.next" : historyWildcard
         })
