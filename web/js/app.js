@@ -19,11 +19,11 @@ LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8c
 //    LOGIN: "login",
 //    LOGOUT: "logout",
 //    BASE_ID: "https://devstore.rerum.io/v1",
-//    DELETE: "http://tinydev.rerum.io/app/delete",
-//    CREATE: "http://tinydev.rerum.io/app/create",
-//    UPDATE: "http://tinydev.rerum.io/app/update",
-//    OVERWRITE: "http://tinydev.rerum.io/app/overwrite",
-//    QUERY: "http://tinydev.rerum.io/app/query",
+//    DELETE: "//tinydev.rerum.io/app/delete",
+//    CREATE: "//tinydev.rerum.io/app/create",
+//    UPDATE: "//tinydev.rerum.io/app/update",
+//    OVERWRITE: "//tinydev.rerum.io/app/overwrite",
+//    QUERY: "//tinydev.rerum.io/app/query",
 //    SINCE: "https://devstore.rerum.io/v1/since",
 //}
 

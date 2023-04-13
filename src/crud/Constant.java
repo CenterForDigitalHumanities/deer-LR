@@ -15,7 +15,7 @@ public class Constant {
 //    public static String RERUM_API_ADDR = "http://vlcdhp02:3001/v1/api";
 //    public static String RERUM_ACCESS_TOKEN_URL = "http://vlcdhp02:3001/v1/api/accessToken.action";
 //    public static String RERUM_REFRESH_TOKEN_URL = "http://vlcdhp02:3001/v1/api/refreshToken.action";
-//    public static String RERUM_AGENT = "https://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90";
+//    public static String RERUM_AGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90";
     
     //new prod
     public static String RERUM_REGISTRATION_URL = "http://vlcdhprdp02:3001/v1/";
