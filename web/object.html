@@ -222,6 +222,13 @@
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
         })
+        
+        /**
+         * Go back to the entities pack once this entity is delted.
+         */
+        addEventListener('lrCollectionItemDeleted', event => {
+            window.location = "objects.html"
+        })
 
         /**
          * Detects that HTML has finished drawing in the DOM and can be interacted with.

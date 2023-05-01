@@ -210,11 +210,11 @@
         })
         
         /**
-         * A hack to force redraw by refreshing the page.
+         * Go back to the entities pack once this entity is delted.
          */
-        addEventListener('globalFeedbackFinished', event => {
-            window.location = document.referrer
-        })   
+        addEventListener('lrCollectionItemDeleted', event => {
+            window.location = "people.html"
+        }) 
         
         /**
          * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.

@@ -25,6 +25,12 @@ let MAP = {}
 
 MAP.mymap = {}
 
+function httpsIdArray(id,justArray) {
+    if (!id.startsWith("http")) return justArray ? [ id ] : id
+    if (id.startsWith("https://")) return justArray ? [ id, id.replace('https','http') ] : { $in: [ id, id.replace('https','http') ] }
+    return justArray ? [ id, id.replace('http','https') ] : { $in: [ id, id.replace('http','https') ] }
+}
+
 MAP.init =  async function(){
     let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
     let latlong = [38.6360699, -90.2348349] //default starting coords
@@ -36,7 +42,7 @@ MAP.init =  async function(){
         .then(expandedLocation => {
             if(expandedLocation.hasOwnProperty("geometry")){
                 let targetProps = {
-                    "targetID": UTILS.getValue(expandedLocation["@id"]), 
+                    "targetID": httpsIdArray(UTILS.getValue(expandedLocation["@id"])), 
                     "label": UTILS.getLabel(expandedLocation), 
                     "description":UTILS.getValue(expandedLocation.description), 
                     "madeByApp" : "Lived_Religion",

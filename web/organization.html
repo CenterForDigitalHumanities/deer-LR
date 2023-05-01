@@ -124,6 +124,13 @@
             window.location = document.referrer
         })   
         
+        /**
+         * Go back to the entities pack once this entity is delted.
+         */
+        addEventListener('lrCollectionItemDeleted', event => {
+            window.location = "organizations.html"
+        })
+        
          /**
          * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
          * This is important for pre-filling or pre-selecting values of multi select areas, dropdown, checkboxes, etc. 

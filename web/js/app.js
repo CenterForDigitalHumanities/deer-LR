@@ -387,18 +387,14 @@ LR.ui.setInterfaceBasedOnRole = function(interfaceType, user, entityID){
 LR.ui.getUserEntries = async function(user) {
     let historyWildcard = {"$exists":true, "$size":0}
     let creatorID = user['@id']
-    let creatorVariant = creatorID.indexOf("https://") > -1 ? creatorID.replace("https://", "http://") : creatorID.replace("http://", "https://")
     let experiences = await fetch(LR.URLS.QUERY, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json; charset=utf-8'
         },
         body: JSON.stringify({
             "@type": "Event",
-            "$or":[
-                {"creator":creatorID},
-                {"creator":creatorVariant}
-            ],
+            "creator": LR.utils.httpsIdArray(creatorID),
             "__rerum.generatedBy": LR.APPAGENT,
             "__rerum.history.next" : historyWildcard
         })
@@ -1150,6 +1146,7 @@ LR.utils.quicklyAddToCollection = async function(event, collectionName, multiOrD
  * @param {HTMLElement} itemElement : The HTML element representing the item that needs to be removed from the DOM.
  */
 LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collectionName) {
+    if(!confirm("This item will be deleted and will no longer appear.  This can not be undone.\nPress 'OK' to continue.")) return
     let historyWildcard = { "$exists": true, "$size": 0 }
     //We want to get rid of the view and remove buttons from this text.  Could probably do this more elegantly, but works for now.
     let name = itemElem.innerText.substring(0, itemElem.innerText.length - 3)
@@ -1161,7 +1158,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         }],
         "__rerum.history.next": historyWildcard,
         "__rerum.generatedBy": LR.APPAGENT,
-        "target": itemID
+        "target": LR.utils.httpsIdArray(itemID)
     }
     fetch(LR.URLS.QUERY, {
         method: "POST",
@@ -1180,7 +1177,10 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
                 fetch(LR.URLS.DELETE, {
                     method: "DELETE",
                     mode: "cors",
-                    body: ta["@id"] || ta.id
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    body: JSON.stringify(ta)
                 })
             )
         })
@@ -1194,8 +1194,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         } else {
             if (deletedList.length === resultList.length) {
                 itemElem.remove()
-                LR.ui.globalFeedbackBlip(event, `'${itemElem.firstElementChild.innerText||"Item"}' removed!`, false)
-                //LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
+                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", document.body, {})
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.
@@ -1241,6 +1240,12 @@ LR.utils.isCreator = async function(agentID, item){
         return false
     }
     return ((agentID && creatorID) && agentID === creatorID)
+}
+
+LR.utils.httpsIdArray = function(id,justArray) {
+    if (!id.startsWith("http")) return justArray ? [ id ] : id
+    if (id.startsWith("https://")) return justArray ? [ id, id.replace('https','http') ] : { $in: [ id, id.replace('https','http') ] }
+    return justArray ? [ id, id.replace('http','https') ] : { $in: [ id, id.replace('http','https') ] }
 }
 
 /**

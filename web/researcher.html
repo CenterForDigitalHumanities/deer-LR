@@ -106,6 +106,13 @@
         addEventListener('deer-updated', event => {
             LR.ui.globalFeedbackBlip(event, `Saving '${event.detail.name}' successful!`, true)
         })
+        
+        /**
+         * Go back to the entities pack once this entity is delted.
+         */
+        addEventListener('lrCollectionItemDeleted', event => {
+            window.location = "researchers.html"
+        })
 
         /**
          * A hack to force redraw by refreshing the page.
