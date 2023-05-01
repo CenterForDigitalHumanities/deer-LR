@@ -6,40 +6,40 @@
 
 const LR = {}
 LR.VERSION = "1.0.1"
-LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-//LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
+//LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
+LR.APPAGENT = "http://devstore.rerum.io/v1/id/5afeebf3e4b0b0d588705d90"
 
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
-//LR.PUBLIC_EXPERIENCE_LIST = "https://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
-LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
+LR.PUBLIC_EXPERIENCE_LIST = "https://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
+//LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
 ///For dev-01
-
-//LR.URLS = {
-//    LOGIN: "login",
-//    LOGOUT: "logout",
-//    BASE_ID: "https://devstore.rerum.io/v1",
-//    DELETE: "//tinydev.rerum.io/app/delete",
-//    CREATE: "//tinydev.rerum.io/app/create",
-//    UPDATE: "//tinydev.rerum.io/app/update",
-//    OVERWRITE: "//tinydev.rerum.io/app/overwrite",
-//    QUERY: "//tinydev.rerum.io/app/query",
-//    SINCE: "https://devstore.rerum.io/v1/since",
-//}
-
-//For prd-01
 
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
-    BASE_ID: "https://store.rerum.io/v1",
-    DELETE: "delete",
-    CREATE: "create",
-    UPDATE: "update",
-    OVERWRITE: "overwrite",
-    QUERY: "query",
-    SINCE: "https://store.rerum.io/v1/since"
+    BASE_ID: "https://devstore.rerum.io/v1",
+    DELETE: "//tinydev.rerum.io/app/delete",
+    CREATE: "//tinydev.rerum.io/app/create",
+    UPDATE: "//tinydev.rerum.io/app/update",
+    OVERWRITE: "//tinydev.rerum.io/app/overwrite",
+    QUERY: "//tinydev.rerum.io/app/query",
+    SINCE: "https://devstore.rerum.io/v1/since",
 }
+
+//For prd-01
+
+//LR.URLS = {
+//    LOGIN: "login",
+//    LOGOUT: "logout",
+//    BASE_ID: "https://store.rerum.io/v1",
+//    DELETE: "delete",
+//    CREATE: "create",
+//    UPDATE: "update",
+//    OVERWRITE: "overwrite",
+//    QUERY: "query",
+//    SINCE: "https://store.rerum.io/v1/since"
+//}
 
 
 LR.INPUTS = ["input", "textarea", "dataset", "select"]
@@ -1180,7 +1180,10 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
                 fetch(LR.URLS.DELETE, {
                     method: "DELETE",
                     mode: "cors",
-                    body: ta["@id"] || ta.id
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    body: JSON.stringify(ta)
                 })
             )
         })

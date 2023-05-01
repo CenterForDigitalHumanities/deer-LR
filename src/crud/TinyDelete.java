@@ -92,7 +92,7 @@ public class TinyDelete extends HttpServlet {
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Authorization", "Bearer "+pubTok);
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             connection.connect();
             try{
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
