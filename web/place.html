@@ -406,7 +406,14 @@
          */
         addEventListener('globalFeedbackFinished', event => {
             window.location = document.referrer
-        })       
+        })    
+        
+        /**
+         * Go back to the entities pack once this entity is delted.
+         */
+        addEventListener('lrCollectionItemDeleted', event => {
+            window.location = "places.html"
+        })
         
         /**
          * Detects that all annotation data is gathered and all HTML of the form is in the DOM and can be interacted with.
