@@ -1194,7 +1194,7 @@ LR.utils.removeCollectionEntry = async function(event, itemID, itemElem, collect
         } else {
             if (deletedList.length === resultList.length) {
                 itemElem.remove()
-                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", itemElem, { collection: collectionName, name:name })
+                LR.utils.broadcastEvent(event, "lrCollectionItemDeleted", document.body, {})
             } else {
                 //We could broadcast an event to say this failed, it depends what we want to trigger in interface.
                 //This should suffice for now.
