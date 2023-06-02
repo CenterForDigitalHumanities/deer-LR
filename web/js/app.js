@@ -23,7 +23,7 @@ LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8c
 //    CREATE: "//tinydev.rerum.io/app/create",
 //    UPDATE: "//tinydev.rerum.io/app/update",
 //    OVERWRITE: "//tinydev.rerum.io/app/overwrite",
-//    QUERY: "//tinydev.rerum.io/app/query",
+//    QUERY: "//tinydev.rerum.io/app/query?limit=150&skip=0",
 //    SINCE: "https://devstore.rerum.io/v1/since",
 //}
 

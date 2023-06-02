@@ -120,7 +120,7 @@ public class TinyOverwrite extends HttpServlet {
             }
             connection.disconnect();
             if(manager.getAPISetting().equals("true")){
-                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                response.setHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
                 response.setHeader("Access-Control-Expose-Headers", "*"); //Headresponse.setHeader("Access-Control-Allow-Methods", "DELETE");ers are restricted, unless you explicitly expose them.  Darn Browsers.
                 response.setHeader("Access-Control-Allow-Headers", "*");
                 response.setHeader("Access-Control-Allow-Methods", "PUT");
@@ -131,6 +131,36 @@ public class TinyOverwrite extends HttpServlet {
             response.getWriter().print(sb.toString());
         }
         
+    }
+        
+    /**
+     * Handles the HTTP <code>OPTIONS</code> preflight method.
+     * This should be a configurable option.  Turning this on means you
+     * intend for this version of Tiny Things to work like an open API.  
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            TinyTokenManager manager = new TinyTokenManager();
+            String openAPI = manager.getAPISetting();
+            if(openAPI.equals("true")){
+                //These headers must be present to pass browser preflight for CORS
+                response.setHeader("Access-Control-Allow-Origin", "*");
+                response.setHeader("Access-Control-Allow-Headers", "*");
+                response.setHeader("Access-Control-Allow-Methods", "*");
+                response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
+            }
+            response.setStatus(200);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(TinyOverwrite.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

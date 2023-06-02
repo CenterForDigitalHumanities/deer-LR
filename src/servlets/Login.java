@@ -33,7 +33,12 @@ public class Login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.addHeader("Content-Type", "application/json; charset=utf-8");
+        response.setHeader("Content-Type", "application/json; charset=utf-8");
+        response.setHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+        response.setHeader("Access-Control-Expose-Headers", "*"); //Headresponse.setHeader("Access-Control-Allow-Methods", "DELETE");ers are restricted, unless you explicitly expose them.  Darn Browsers.
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST");
+            
         String requestBody;
         ServletInputStream input = request.getInputStream();
         InputStreamReader reader = new InputStreamReader(input, "utf-8");
@@ -63,26 +68,10 @@ public class Login extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             jo_return.element("error", "Unauthorized");
         }
-        response.addHeader("Content-Type", "application/json; charset=utf-8");
-        response.setContentType("UTF-8");
         response.getWriter().print(jo_return);
         
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -96,6 +85,32 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+    }
+    
+    /**
+     * Handles the HTTP <code>OPTIONS</code> preflight method.
+     * This should be a configurable option.  Turning this on means you
+     * intend for this version of Tiny Things to work like an open API.  
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setHeader("Access-Control-Allow-Methods", "*");
+            response.setHeader("Access-Control-Expose-Headers", "*"); //Headers are restricted, unless you explicitly expose them.  Darn Browsers.
+            response.setStatus(200);
+            
+        } catch (Exception ex) {
+            System.out.println("ex");
+            response.sendError(500, ex.getMessage());
+        }
     }
 
     /**

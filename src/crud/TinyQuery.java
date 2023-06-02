@@ -47,7 +47,7 @@ public class TinyQuery extends HttpServlet {
         TinyTokenManager manager = new TinyTokenManager();
         String l = request.getParameter("limit");
         String s = request.getParameter("skip");
-        int lim = 50;
+        int lim = 150;
         int skip = 0;
         if(null != l){
             try{
@@ -147,7 +147,7 @@ public class TinyQuery extends HttpServlet {
             }
             connection.disconnect();
             if(manager.getAPISetting().equals("true")){
-                response.addHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
+                response.setHeader("Access-Control-Allow-Origin", "*"); //To use this as an API, it must contain CORS headers
                 response.setHeader("Access-Control-Expose-Headers", "*"); //Headresponse.setHeader("Access-Control-Allow-Methods", "DELETE");ers are restricted, unless you explicitly expose them.  Darn Browsers.
                 response.setHeader("Access-Control-Allow-Headers", "*");
                 response.setHeader("Access-Control-Allow-Methods", "POST");
@@ -196,9 +196,9 @@ public class TinyQuery extends HttpServlet {
             String openAPI = manager.getAPISetting();
             if(openAPI.equals("true")){
                 //These headers must be present to pass browser preflight for CORS
-                response.addHeader("Access-Control-Allow-Origin", "*");
-                response.addHeader("Access-Control-Allow-Headers", "*");
-                response.addHeader("Access-Control-Allow-Methods", "*");
+                response.setHeader("Access-Control-Allow-Origin", "*");
+                response.setHeader("Access-Control-Allow-Headers", "*");
+                response.setHeader("Access-Control-Allow-Methods", "*");
             }
             response.setStatus(200);
             
