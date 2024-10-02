@@ -13,8 +13,8 @@ LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 
 //LR.PUBLIC_EXPERIENCE_LIST = "https://devstore.rerum.io/v1/id/6081ee59a0e7066822d87e6c"
 LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8ccb"
-///For dev-01
 
+///For dev-01
 //LR.URLS = {
 //    LOGIN: "login",
 //    LOGOUT: "logout",
@@ -26,9 +26,8 @@ LR.PUBLIC_EXPERIENCE_LIST = "https://store.rerum.io/v1/id/60831f5811aeb54ed01e8c
 //    QUERY: "//tinydev.rerum.io/app/query?limit=150&skip=0",
 //    SINCE: "https://devstore.rerum.io/v1/since",
 //}
-
+//
 //For prd-01
-
 LR.URLS = {
     LOGIN: "login",
     LOGOUT: "logout",
